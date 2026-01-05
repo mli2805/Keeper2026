@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="KeeperDomain/KeeperDomain.csproj" Id="afcb2b46-76b1-4d85-8e60-c3681f34a207" />
+  <Project Path="KeeperWpf/KeeperWpf.csproj" />
+</Solution>

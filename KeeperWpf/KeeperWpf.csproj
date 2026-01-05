@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<AssemblyName>KeeperWpf</AssemblyName>
+		<RootNamespace>KeeperWpf</RootNamespace>
+		<Authors>Leanid Marholin</Authors>
+		<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Autofac" Version="9.0.0" />
+		<PackageReference Include="Caliburn.Micro" Version="5.0.258" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\KeeperDomain\KeeperDomain.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ApplicationDefinition Update="App.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</ApplicationDefinition>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="App.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+	</ItemGroup>
+
+</Project>
