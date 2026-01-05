@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace KeeperDomain.Basket
+﻿namespace KeeperDomain.Basket
 {
     public class BelCurrency
     {

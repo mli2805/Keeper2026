@@ -14,10 +14,14 @@
 	<ItemGroup>
 		<PackageReference Include="Autofac" Version="9.0.0" />
 		<PackageReference Include="Caliburn.Micro" Version="5.0.258" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\KeeperDomain\KeeperDomain.csproj" />
+	  <ProjectReference Include="..\KeeperInfrastructure\KeeperInfrastructure.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -31,6 +35,12 @@
 		<Compile Update="App.xaml.cs">
 			<SubType>Code</SubType>
 		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

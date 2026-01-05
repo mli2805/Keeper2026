@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace KeeperDomain
+﻿namespace KeeperDomain
 {
     [Serializable]
     public class ButtonCollection : IDumpable, IParsable<ButtonCollection>

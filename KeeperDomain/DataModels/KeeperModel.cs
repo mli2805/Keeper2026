@@ -11,7 +11,7 @@
     }
 
     [Serializable]
-    public class KeeperBin
+    public class KeeperModel
     {
         public List<OfficialRates> OfficialRates { get; set; }
         public List<ExchangeRates> ExchangeRates { get; set; }

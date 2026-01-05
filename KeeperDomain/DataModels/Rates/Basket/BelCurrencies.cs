@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace KeeperDomain.Basket
+﻿namespace KeeperDomain.Basket
 {
     public static class BelCurrencies
     {

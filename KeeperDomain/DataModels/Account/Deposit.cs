@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace KeeperDomain
+﻿namespace KeeperDomain
 {
     [Serializable]
     public class Deposit : IDumpable, IParsable<Deposit>

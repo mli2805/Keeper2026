@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace KeeperDomain.Basket
+﻿namespace KeeperDomain.Basket
 {
     public static class BelBaskets
     {
