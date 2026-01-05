@@ -5,31 +5,30 @@ using KeeperInfrastructure;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
-namespace KeeperWpf
+namespace KeeperWpf;
+
+public sealed class AutofacWpf : Module
 {
-    public sealed class AutofacWpf : Module
+    protected override void Load(ContainerBuilder builder)
     {
-        protected override void Load(ContainerBuilder builder)
+        builder.RegisterType<ShellViewModel>().As<IShell>();
+        builder.RegisterType<WindowManager>().As<IWindowManager>().InstancePerLifetimeScope();
+
+        // Register DbContext with SQLite
+        builder.Register(c =>
         {
-            builder.RegisterType<ShellViewModel>().As<IShell>();
-            builder.RegisterType<WindowManager>().As<IWindowManager>().InstancePerLifetimeScope();
+            var configuration = c.Resolve<IConfiguration>();
+            var dbFolder = configuration["DataFolder"] ?? "";
+            var dbPath = Path.Combine(dbFolder, "db/keeper.db");
 
-            // Register DbContext with SQLite
-            builder.Register(c =>
-            {
-                var configuration = c.Resolve<IConfiguration>();
-                var dbFolder = configuration["Database:Folder"] ?? "";
-                var dbPath = Path.Combine(dbFolder, "keeper.db");
+            var optionsBuilder = new DbContextOptionsBuilder<KeeperDbContext>();
+            optionsBuilder.UseSqlite($"Data Source={dbPath}");
+            return new KeeperDbContext(optionsBuilder.Options);
+        }).AsSelf().InstancePerLifetimeScope();
 
-                var optionsBuilder = new DbContextOptionsBuilder<KeeperDbContext>();
-                optionsBuilder.UseSqlite($"Data Source={dbPath}");
-                return new KeeperDbContext(optionsBuilder.Options);
-            }).AsSelf().InstancePerLifetimeScope();
+        // Register DbContext Initializer
+        builder.RegisterType<KeeperDbContextInitializer>().AsSelf();
 
-            // Register DbContext Initializer
-            builder.RegisterType<KeeperDbContextInitializer>().AsSelf();
-
-            builder.RegisterType<CarRepository>().InstancePerLifetimeScope();
-        }
+        builder.RegisterType<CarRepository>().InstancePerLifetimeScope();
     }
 }

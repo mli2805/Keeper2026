@@ -1,10 +1,9 @@
-﻿namespace KeeperDomain
+﻿namespace KeeperDomain;
+
+public enum OperationType
 {
-    public enum OperationType
-    {
-        Доход,
-        Расход,
-        Перенос,
-        Обмен,
-    };
-}
+    Доход,
+    Расход,
+    Перенос,
+    Обмен,
+};

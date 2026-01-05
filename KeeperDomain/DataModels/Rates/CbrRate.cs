@@ -1,9 +1,8 @@
-﻿namespace KeeperDomain
+﻿namespace KeeperDomain;
+
+[Serializable]
+public class CbrRate
 {
-    [Serializable]
-    public class CbrRate
-    {
-        public int Id { get; set; } //PK
-        public OneRate Usd { get; set; } = new OneRate();
-    }
+    public int Id { get; set; } //PK
+    public OneRate Usd { get; set; } = new OneRate();
 }

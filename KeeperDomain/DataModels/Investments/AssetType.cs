@@ -1,9 +1,8 @@
-﻿namespace KeeperDomain
+﻿namespace KeeperDomain;
+
+public enum AssetType
 {
-    public enum AssetType
-    {
-        Bond, // облигации, возможен купонный доход, есть дата погашения
-        Stock, // акции
-        Cash
-    }
+    Bond, // облигации, возможен купонный доход, есть дата погашения
+    Stock, // акции
+    Cash
 }

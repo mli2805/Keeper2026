@@ -1,12 +1,11 @@
 ﻿using KeeperDomain;
 
-namespace KeeperInfrastructure
+namespace KeeperInfrastructure;
+
+public class AccountRepository(KeeperDbContext keeperDbContext)
 {
-    public class AccountRepository(KeeperDbContext keeperDbContext)
+    public async Task<List<Account>> GetAllAccounts()
     {
-        public async Task<List<Account>> GetAllAccounts()
-        {
-            return keeperDbContext.Accounts.Select(a=>a.FromEf()).ToList();
-        }
+        return keeperDbContext.Accounts.Select(a=>a.FromEf()).ToList();
     }
 }

@@ -1,11 +1,10 @@
 ﻿// ReSharper disable InconsistentNaming
 
-namespace KeeperDomain
+namespace KeeperDomain;
+
+public enum PeriodUnit
 {
-    public enum PeriodUnit
-    {
-        days,
-        months,
-        years,
-    }
+    days,
+    months,
+    years,
 }

@@ -1,12 +1,11 @@
-﻿namespace KeeperDomain.Basket
+﻿namespace KeeperDomain.Basket;
+
+public class BasketWeights
 {
-    public class BasketWeights
-    {
-        public int Index { get; set; }
-        public DateTime DateFrom { get; set; }
-        public double Usd { get; set; }
-        public double Euro { get; set; }
-        public double Rur { get; set; }
-        public double Cny { get; set; }
-    }
+    public int Index { get; set; }
+    public DateTime DateFrom { get; set; }
+    public double Usd { get; set; }
+    public double Euro { get; set; }
+    public double Rur { get; set; }
+    public double Cny { get; set; }
 }

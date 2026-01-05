@@ -1,61 +1,60 @@
-﻿namespace KeeperInfrastructure
+﻿namespace KeeperInfrastructure;
+
+public static class CarMapper
 {
-    public static class CarMapper
+    public static CarEf ToEf(this KeeperDomain.Car car)
     {
-        public static CarEf ToEf(this KeeperDomain.Car car)
+        return new CarEf
         {
-            return new CarEf
-            {
-                CarAccountId = car.CarAccountId,
-                Title = car.Title,
-                IssueYear = car.IssueYear,
-                Vin = car.Vin,
-                StateRegNumber = car.StateRegNumber,
-                PurchaseDate = car.PurchaseDate,
-                PurchaseMileage = car.PurchaseMileage,
-                SaleDate = car.SaleDate,
-                SaleMileage = car.SaleMileage,
-                SupposedSalePrice = car.SupposedSalePrice,
-                Comment = car.Comment
-            };
-        }
+            CarAccountId = car.CarAccountId,
+            Title = car.Title,
+            IssueYear = car.IssueYear,
+            Vin = car.Vin,
+            StateRegNumber = car.StateRegNumber,
+            PurchaseDate = car.PurchaseDate,
+            PurchaseMileage = car.PurchaseMileage,
+            SaleDate = car.SaleDate,
+            SaleMileage = car.SaleMileage,
+            SupposedSalePrice = car.SupposedSalePrice,
+            Comment = car.Comment
+        };
+    }
 
-        public static KeeperDomain.Car FromEf(this CarEf carEf)
+    public static KeeperDomain.Car FromEf(this CarEf carEf)
+    {
+        return new KeeperDomain.Car
         {
-            return new KeeperDomain.Car
-            {
-                Id = carEf.Id,
-                CarAccountId = carEf.CarAccountId,
-                Title = carEf.Title,
-                IssueYear = carEf.IssueYear,
-                Vin = carEf.Vin,
-                StateRegNumber = carEf.StateRegNumber,
-                PurchaseDate = carEf.PurchaseDate,
-                PurchaseMileage = carEf.PurchaseMileage,
-                SaleDate = carEf.SaleDate,
-                SaleMileage = carEf.SaleMileage,
-                SupposedSalePrice = carEf.SupposedSalePrice,
-                Comment = carEf.Comment
-            };
-        }
+            Id = carEf.Id,
+            CarAccountId = carEf.CarAccountId,
+            Title = carEf.Title,
+            IssueYear = carEf.IssueYear,
+            Vin = carEf.Vin,
+            StateRegNumber = carEf.StateRegNumber,
+            PurchaseDate = carEf.PurchaseDate,
+            PurchaseMileage = carEf.PurchaseMileage,
+            SaleDate = carEf.SaleDate,
+            SaleMileage = carEf.SaleMileage,
+            SupposedSalePrice = carEf.SupposedSalePrice,
+            Comment = carEf.Comment
+        };
+    }
 
-        public static CarYearMileageEf ToEf(this KeeperDomain.CarYearMileage carYearMileage)
+    public static CarYearMileageEf ToEf(this KeeperDomain.CarYearMileage carYearMileage)
+    {
+        return new CarYearMileageEf
         {
-            return new CarYearMileageEf
-            {
-                CarId = carYearMileage.CarId,
-                Odometer = carYearMileage.Odometer
-            };
-        }
+            CarId = carYearMileage.CarId,
+            Odometer = carYearMileage.Odometer
+        };
+    }
 
-        public static KeeperDomain.CarYearMileage FromEf(this CarYearMileageEf carYearMileageEf)
+    public static KeeperDomain.CarYearMileage FromEf(this CarYearMileageEf carYearMileageEf)
+    {
+        return new KeeperDomain.CarYearMileage
         {
-            return new KeeperDomain.CarYearMileage
-            {
-                Id = carYearMileageEf.Id,
-                CarId = carYearMileageEf.CarId,
-                Odometer = carYearMileageEf.Odometer
-            };
-        }
+            Id = carYearMileageEf.Id,
+            CarId = carYearMileageEf.CarId,
+            Odometer = carYearMileageEf.Odometer
+        };
     }
 }

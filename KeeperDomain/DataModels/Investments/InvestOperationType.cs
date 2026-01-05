@@ -1,43 +1,41 @@
-﻿namespace KeeperDomain
+﻿namespace KeeperDomain;
+
+public enum InvestOperationType
 {
-    public enum InvestOperationType
-    {
-        TopUpTrustAccount,
+    TopUpTrustAccount,
 
-        BuyBonds,
-        BuyStocks,
+    BuyBonds,
+    BuyStocks,
 
-        PayBuySellFee,
-        PayBaseCommission,
+    PayBuySellFee,
+    PayBaseCommission,
 
-        SellBonds,
-        SellStocks,
+    SellBonds,
+    SellStocks,
 
-        EnrollCouponOrDividends,
+    EnrollCouponOrDividends,
 
-        WithdrawFromTrustAccount,
-        PayWithdrawalTax,
-    }
-
-    public static class InvestOperationTypeExt
-    {
-        public static bool IsBuySell(this InvestOperationType opType)
-        {
-            return opType == InvestOperationType.BuyBonds || opType == InvestOperationType.SellBonds ||
-                opType == InvestOperationType.BuyStocks || opType == InvestOperationType.SellStocks ;
-        }
-
-        public static bool IsBond(this InvestOperationType opType)
-        {
-            return opType == InvestOperationType.BuyBonds || opType == InvestOperationType.SellBonds ;
-        }
-
-        public static bool IsStock(this InvestOperationType opType)
-        {
-            return opType == InvestOperationType.BuyStocks || opType == InvestOperationType.SellStocks ;
-        }
-
-    }
-
-   
+    WithdrawFromTrustAccount,
+    PayWithdrawalTax,
 }
+
+public static class InvestOperationTypeExt
+{
+    public static bool IsBuySell(this InvestOperationType opType)
+    {
+        return opType == InvestOperationType.BuyBonds || opType == InvestOperationType.SellBonds ||
+            opType == InvestOperationType.BuyStocks || opType == InvestOperationType.SellStocks ;
+    }
+
+    public static bool IsBond(this InvestOperationType opType)
+    {
+        return opType == InvestOperationType.BuyBonds || opType == InvestOperationType.SellBonds ;
+    }
+
+    public static bool IsStock(this InvestOperationType opType)
+    {
+        return opType == InvestOperationType.BuyStocks || opType == InvestOperationType.SellStocks ;
+    }
+
+}
+

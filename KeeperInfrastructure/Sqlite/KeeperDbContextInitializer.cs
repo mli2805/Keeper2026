@@ -1,10 +1,9 @@
-﻿namespace KeeperInfrastructure
+﻿namespace KeeperInfrastructure;
+
+public class KeeperDbContextInitializer(KeeperDbContext keeperDbContext)
 {
-    public class KeeperDbContextInitializer(KeeperDbContext keeperDbContext)
+    public async Task InitializeAsync()
     {
-        public async Task InitializeAsync()
-        {
-            await keeperDbContext.Database.EnsureCreatedAsync();
-        }
+        await keeperDbContext.Database.EnsureCreatedAsync();
     }
 }

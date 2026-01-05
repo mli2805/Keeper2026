@@ -16,8 +16,4 @@
     <ProjectReference Include="..\KeeperDomain\KeeperDomain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TextFiles\" />
-  </ItemGroup>
-
 </Project>

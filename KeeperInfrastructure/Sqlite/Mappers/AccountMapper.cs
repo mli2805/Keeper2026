@@ -1,21 +1,20 @@
-﻿namespace KeeperInfrastructure
-{
-    public static class AccountMapper
-    {
-        public static AccountEf ToEf(this KeeperDomain.Account account)
-        {
-            return new AccountEf
-            {
-                
-            };
-        }
+﻿namespace KeeperInfrastructure;
 
-        public static KeeperDomain.Account FromEf(this AccountEf accountEf)
+public static class AccountMapper
+{
+    public static AccountEf ToEf(this KeeperDomain.Account account)
+    {
+        return new AccountEf
         {
-            return new KeeperDomain.Account
-            {
-                
-            };
-        }
+            
+        };
+    }
+
+    public static KeeperDomain.Account FromEf(this AccountEf accountEf)
+    {
+        return new KeeperDomain.Account
+        {
+            
+        };
     }
 }

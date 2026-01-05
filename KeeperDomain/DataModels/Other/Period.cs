@@ -1,42 +1,39 @@
-﻿namespace KeeperDomain
+﻿namespace KeeperDomain;
+
+public class Period
 {
-    public class Period
+    public DateTime StartDate { get; set; }
+    public DateTime FinishMoment { get; set; }
+
+    public Period()
     {
-        public DateTime StartDate { get; set; }
-        public DateTime FinishMoment { get; set; }
-
-        public Period()
-        {
-            
-        }
-
-        public Period(DateTime startDate, DateTime finishMoment)
-        {
-            StartDate = startDate;
-            FinishMoment = finishMoment;
-        }
-
-        public bool Includes(DateTime timestamp)
-        {
-            return timestamp > StartDate && timestamp < FinishMoment;
-        }
-
-        public int ToDays()
-        {
-            return (FinishMoment - StartDate).Days;
-        }
-
-        public override string ToString()
-        {
-            return $"{StartDate} - {FinishMoment}";
-        }
-
-        public string ToStringD()
-        {
-            return $"{StartDate:d} - {FinishMoment:d}";
-        }
-
+        
     }
 
+    public Period(DateTime startDate, DateTime finishMoment)
+    {
+        StartDate = startDate;
+        FinishMoment = finishMoment;
+    }
+
+    public bool Includes(DateTime timestamp)
+    {
+        return timestamp > StartDate && timestamp < FinishMoment;
+    }
+
+    public int ToDays()
+    {
+        return (FinishMoment - StartDate).Days;
+    }
+
+    public override string ToString()
+    {
+        return $"{StartDate} - {FinishMoment}";
+    }
+
+    public string ToStringD()
+    {
+        return $"{StartDate:d} - {FinishMoment:d}";
+    }
 
 }
