@@ -63,6 +63,15 @@ public class ToSqlite(KeeperDbContext keeperDbContext)
             keeperDbContext.DepositRateLines.Add(item.ToEf());
         }
 
+        foreach (var item in keeperModel.Transactions)
+        {
+            keeperDbContext.Transactiones.Add(item.ToEf());
+        }
+        foreach (var item in keeperModel.Fuellings)
+        {
+            keeperDbContext.Fuellings.Add(item.ToEf());
+        }
+
         await keeperDbContext.SaveChangesAsync();
     }
 }

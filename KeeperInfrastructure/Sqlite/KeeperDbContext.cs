@@ -21,6 +21,9 @@ public class KeeperDbContext : DbContext
     public DbSet<DepositConditionsEf> DepositConditions { get; set; }
     public DbSet<DepositRateLineEf> DepositRateLines { get; set; }
 
+    public DbSet<TransactionEf> Transactiones { get; set; }
+    public DbSet<FuellingEf> Fuellings { get; set; }
+
 
     public KeeperDbContext(DbContextOptions<KeeperDbContext> options) : base(options)
     {

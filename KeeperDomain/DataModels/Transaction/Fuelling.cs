@@ -11,7 +11,6 @@ public class Fuelling : IDumpable, IParsable<Fuelling>
     public int CarAccountId { get; set; }
     public double Volume { get; set; }
     public FuelType FuelType { get; set; }
-    [MaxLength(100)] public string Comment { get; set; }
 
     public string Dump()
     {
