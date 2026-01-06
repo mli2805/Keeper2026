@@ -5,6 +5,9 @@ namespace KeeperInfrastructure;
 public class KeeperDbContext : DbContext
 {
     public DbSet<AccountEf> Accounts { get; set; }
+    public DbSet<BankAccountEf> BankAccounts { get; set; }
+    public DbSet<DepositEf> Deposits { get; set; }
+    public DbSet<PayCardEf> PayCards { get; set; }
 
     public DbSet<OfficialRatesEf> OfficialRates { get; set; }
     public DbSet<ExchangeRatesEf> ExchangeRates { get; set; }

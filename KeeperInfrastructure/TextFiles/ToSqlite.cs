@@ -7,6 +7,23 @@ public class ToSqlite(KeeperDbContext keeperDbContext)
 
     public async Task SaveModelToDb(KeeperModel keeperModel)
     {
+        foreach (var item in keeperModel.AccountPlaneList)
+        {
+            keeperDbContext.Accounts.Add(item.ToEf());
+        }
+        foreach (var item in keeperModel.BankAccounts)
+        {
+            keeperDbContext.BankAccounts.Add(item.ToEf());
+        }
+        foreach (var item in keeperModel.Deposits)
+        {
+            keeperDbContext.Deposits.Add(item.ToEf());
+        }
+        foreach (var item in keeperModel.PayCards)
+        {
+            keeperDbContext.PayCards.Add(item.ToEf());
+        }
+
         foreach (var item in keeperModel.OfficialRates)
         {
             keeperDbContext.OfficialRates.Add(item.ToEf());
