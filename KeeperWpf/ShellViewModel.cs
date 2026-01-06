@@ -10,34 +10,44 @@ namespace KeeperWpf;
 public class ShellViewModel : Screen, IShell
 {
     private readonly IConfiguration _configuration;
-
-    public int CarCount { get; private set; }
-
-    public ShellViewModel(IConfiguration configuration, CarRepository carRepository)
+    private readonly KeeperDbContext _keeperDbContext;
+    private string _message = "Loading data";
+    public string Message
     {
-        _configuration = configuration;
-        var backupFolder = Path.Combine(_configuration["DataFolder"] ?? "", "backup");
-
-        ConvertFromTextFiles(backupFolder, carRepository).Wait();
-
-        // Example usage of carRepository
-        var cars = carRepository.GetAllCars().Result;
-        CarCount = cars.Count;
+        get => _message; set
+        {
+            if (value == _message) return;
+            _message = value;
+            NotifyOfPropertyChange();
+        }
     }
 
-    private async Task ConvertFromTextFiles(string backupFolder, CarRepository carRepository)
+    public ShellViewModel(IConfiguration configuration, KeeperDbContext keeperDbContext)
     {
-        KeeperModel? model = TxtLoader.LoadAllFromTextFiles(backupFolder);
-        if (model == null)
-        {
-            // Handle loading error
-            return;
-        }
+        _configuration = configuration;
+        _keeperDbContext = keeperDbContext;
+    }
 
-        foreach (var item in model.Cars)
-        {
-            await carRepository.AddCar(item);
-        }
+    protected override void OnViewLoaded(object view)
+    {
+        DisplayName = "Keeper 2026";
 
+    }
+
+    protected override async void OnViewReady(object view)
+    {
+        base.OnViewReady(view);
+        
+        var backupFolder = Path.Combine(_configuration["DataFolder"] ?? "", "backup");
+
+        // просто await функции морозит программу
+        KeeperModel? model = await Task.Run(() => TxtLoader.LoadAllFromTextFiles(backupFolder));
+
+        Message = model != null ? "Data loaded" : "Failed to load";
+
+        if (model != null)
+            await new ToSqlite(_keeperDbContext).SaveModelToDb(model);
+
+        Message = "Ready";
     }
 }

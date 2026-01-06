@@ -6,7 +6,7 @@
     <StackPanel Background="White">
              <!-- если русские буквы билдятся с ошибкой убедиться, что файл сохранён в UTF-8 -->
         <TextBlock Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">Привет, Caliburn Micro!</TextBlock>
-        <TextBlock Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Text="{Binding CarCount}"></TextBlock>
+        <TextBlock Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Text="{Binding Message}"></TextBlock>
     </StackPanel>
 
 </Window>

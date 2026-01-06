@@ -5,9 +5,25 @@ namespace KeeperInfrastructure;
 public class ToSqlite(KeeperDbContext keeperDbContext)
 {
 
-    public async Task ConvertFromTextFiles(KeeperModel keeperModel)
+    public async Task SaveModelToDb(KeeperModel keeperModel)
     {
-       
+        foreach (var item in keeperModel.OfficialRates)
+        {
+            keeperDbContext.OfficialRates.Add(item.ToEf());
+        }
+        foreach (var item in keeperModel.ExchangeRates)
+        {
+            keeperDbContext.ExchangeRates.Add(item.ToEf());
+        }
+        foreach (var item in keeperModel.RefinancingRates)
+        {
+            keeperDbContext.RefinancingRates.Add(item.ToEf());
+        }
+        foreach (var item in keeperModel.MetalRates)
+        {
+            keeperDbContext.MetalRates.Add(item.ToEf());
+        }
+
         foreach (var item in keeperModel.Cars)
         {
             keeperDbContext.Cars.Add(item.ToEf());

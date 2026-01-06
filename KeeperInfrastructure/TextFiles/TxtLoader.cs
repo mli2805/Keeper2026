@@ -6,7 +6,7 @@ public static class TxtLoader
 {
     private static string _backupFolder;
 
-    public static KeeperModel? LoadAllFromTextFiles(string backupFolder)
+    public static async Task<KeeperModel?> LoadAllFromTextFiles(string backupFolder)
     {
         _backupFolder = backupFolder;
 
@@ -14,34 +14,34 @@ public static class TxtLoader
         {
             var keeperModel = new KeeperModel
             {
-                ExchangeRates = ReadFileLines<ExchangeRates>(),
-                OfficialRates = ReadFileLines<OfficialRates>(),
-                MetalRates = ReadFileLines<MetalRate>(),
-                RefinancingRates = ReadFileLines<RefinancingRate>(),
+                ExchangeRates = await ReadFileLines<ExchangeRates>(),
+                OfficialRates = await ReadFileLines<OfficialRates>(),
+                MetalRates = await ReadFileLines<MetalRate>(),
+                RefinancingRates = await ReadFileLines<RefinancingRate>(),
 
-                TrustAssets = ReadFileLines<TrustAsset>(),
-                TrustAssetRates = ReadFileLines<TrustAssetRate>(),
-                TrustAccounts = ReadFileLines<TrustAccount>(),
-                TrustTransactions = ReadFileLines<TrustTransaction>(),
+                TrustAssets = await ReadFileLines<TrustAsset>(),
+                TrustAssetRates = await ReadFileLines<TrustAssetRate>(),
+                TrustAccounts = await ReadFileLines<TrustAccount>(),
+                TrustTransactions = await ReadFileLines<TrustTransaction>(),
 
-                AccountPlaneList = ReadFileLines<Account>(),
-                BankAccounts = ReadFileLines<BankAccount>(),
-                Deposits = ReadFileLines<Deposit>(),
-                PayCards = ReadFileLines<PayCard>(),
-                ButtonCollections = ReadFileLines<ButtonCollection>(),
+                AccountPlaneList = await ReadFileLines<Account>(),
+                BankAccounts = await ReadFileLines<BankAccount>(),
+                Deposits = await ReadFileLines<Deposit>(),
+                PayCards = await ReadFileLines<PayCard>(),
+                ButtonCollections = await ReadFileLines<ButtonCollection>(),
 
-                DepositRateLines = ReadFileLines<DepositRateLine>(),
-                DepositConditions = ReadFileLines<DepositConditions>(),
-                DepositOffers = ReadFileLines<DepositOffer>(),
+                DepositRateLines = await ReadFileLines<DepositRateLine>(),
+                DepositConditions = await ReadFileLines<DepositConditions>(),
+                DepositOffers = await ReadFileLines<DepositOffer>(),
 
-                Transactions = ReadFileLines<Transaction>(),
-                Fuellings = ReadFileLines<Fuelling>(),
-                Cars = ReadFileLines<Car>(),
-                CarYearMileages = ReadFileLines<CarYearMileage>(),
+                Transactions = await ReadFileLines<Transaction>(),
+                Fuellings = await ReadFileLines<Fuelling>(),
+                Cars = await ReadFileLines<Car>(),
+                CarYearMileages = await ReadFileLines<CarYearMileage>(),
 
-                CardBalanceMemos = ReadFileLines<CardBalanceMemo>("MemosCardBalance.txt"),
-                SalaryChanges = ReadFileLines<SalaryChange>(),
-                LargeExpenseThresholds = ReadFileLines<LargeExpenseThreshold>(),
+                CardBalanceMemos = await ReadFileLines<CardBalanceMemo>("MemosCardBalance.txt"),
+                SalaryChanges = await ReadFileLines<SalaryChange>(),
+                LargeExpenseThresholds = await ReadFileLines<LargeExpenseThreshold>(),
             };
 
             return keeperModel;
@@ -52,10 +52,12 @@ public static class TxtLoader
         }
     }
 
-    private static List<T> ReadFileLines<T>(string filename = "") where T : KeeperDomain.IParsable<T>, new()
+    private static async Task<List<T>> ReadFileLines<T>(string filename = "") where T : KeeperDomain.IParsable<T>, new()
     {
         if (filename == "")
             filename = typeof(T).Name + "s.txt";
-        return File.ReadAllLines(Path.Combine(_backupFolder, filename)).Select(l => new T().FromString(l)).ToList();
+
+        string[] fileContent = await File.ReadAllLinesAsync(Path.Combine(_backupFolder, filename));
+        return fileContent.Select(l => new T().FromString(l)).ToList();
     }
 }

@@ -23,6 +23,7 @@ public sealed class AutofacWpf : Module
 
             var optionsBuilder = new DbContextOptionsBuilder<KeeperDbContext>();
             optionsBuilder.UseSqlite($"Data Source={dbPath}");
+            optionsBuilder.EnableSensitiveDataLogging();
             return new KeeperDbContext(optionsBuilder.Options);
         }).AsSelf().InstancePerLifetimeScope();
 

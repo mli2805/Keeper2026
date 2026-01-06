@@ -92,7 +92,6 @@ public static class DepositOfferMapper
     {
         return new DepositRateLineEf
         {
-            Id = depositRateLine.Id,
             DepositOfferConditionsId = depositRateLine.DepositOfferConditionsId,
             DateFrom = depositRateLine.DateFrom,
             AmountFrom = depositRateLine.AmountFrom,

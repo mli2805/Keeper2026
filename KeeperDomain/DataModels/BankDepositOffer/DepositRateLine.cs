@@ -22,7 +22,8 @@ public class DepositRateLine : IDumpable, IParsable<DepositRateLine>
     }
 
     public DepositRateLine FromString(string s)
-    { var substrings = s.Split(';'); 
+    { 
+        var substrings = s.Split(';'); 
         Id = int.Parse(substrings[0].Trim());
         DepositOfferConditionsId = int.Parse(substrings[1].Trim());
         DateFrom = DateTime.ParseExact(substrings[2].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
