@@ -16,6 +16,20 @@ public class ToSqlite(KeeperDbContext keeperDbContext)
         {
             keeperDbContext.CarYearMileages.Add(item.ToEf());
         }
+
+        foreach (var item in keeperModel.DepositOffers)
+        {
+            keeperDbContext.DepositOffers.Add(item.ToEf());
+        }
+        foreach (var item in keeperModel.DepositConditions)
+        {
+            keeperDbContext.DepositConditions.Add(item.ToEf());
+        }
+        foreach (var item in keeperModel.DepositRateLines)
+        {
+            keeperDbContext.DepositRateLines.Add(item.ToEf());
+        }
+
         await keeperDbContext.SaveChangesAsync();
     }
 }

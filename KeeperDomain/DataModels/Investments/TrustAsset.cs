@@ -16,7 +16,7 @@ public class TrustAsset : IDumpable, IParsable<TrustAsset>
     #region Bonds special properties
 
     public decimal Nominal { get; set; }
-    public CalendarPeriod BondCouponPeriod { get; set; } = new CalendarPeriod();
+    public Duration BondCouponPeriod { get; set; }
     public double CouponRate { get; set; } // if fixed and known
     public DateTime PreviousCouponDate { get; set; }
     public DateTime BondExpirationDate { get; set; } = DateTime.MaxValue;
@@ -27,10 +27,11 @@ public class TrustAsset : IDumpable, IParsable<TrustAsset>
 
     public string Dump()
     {
-        return Id + " ; " + TrustAccountId + " ; " + Ticker.Trim() + " ; " + Title.Trim() + " ; " + 
+        var durationDump = BondCouponPeriod != null ? BondCouponPeriod.Dump() : new Duration().Dump();
+        return Id + " ; " + TrustAccountId + " ; " + Ticker.Trim() + " ; " + Title.Trim() + " ; " +
                StockMarket + " ; " + AssetType + " ; " +
-               Nominal + " ; " + BondCouponPeriod.Dump() + " ; " +
-               CouponRate.ToString(new CultureInfo("en-US")) + " ; " + PreviousCouponDate.ToString("dd/MM/yyyy") + " ; " + 
+               Nominal + " ; " + durationDump + " ; " +
+           CouponRate.ToString(new CultureInfo("en-US")) + " ; " + PreviousCouponDate.ToString("dd/MM/yyyy") + " ; " +
                BondExpirationDate.ToString("dd/MM/yyyy") + " ; " + Comment.Trim();
     }
 
@@ -44,7 +45,7 @@ public class TrustAsset : IDumpable, IParsable<TrustAsset>
         StockMarket = (StockMarket)Enum.Parse(typeof(StockMarket), substrings[4]);
         AssetType = (AssetType)Enum.Parse(typeof(AssetType), substrings[5]);
         Nominal = decimal.Parse(substrings[6], new CultureInfo("en-US"));
-        BondCouponPeriod = CalendarPeriod.Parse(substrings[7]);
+        BondCouponPeriod = new Duration().FromString(substrings[7].Trim());
         CouponRate = double.Parse(substrings[8], new CultureInfo("en-US"));
         PreviousCouponDate = DateTime.ParseExact(substrings[9].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
         BondExpirationDate = DateTime.ParseExact(substrings[10].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
