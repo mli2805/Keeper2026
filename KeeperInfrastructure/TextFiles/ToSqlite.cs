@@ -24,6 +24,26 @@ public class ToSqlite(KeeperDbContext keeperDbContext)
             keeperDbContext.PayCards.Add(item.ToEf());
         }
 
+        foreach (var item in keeperModel.TrustAccounts)
+        {
+            keeperDbContext.TrustAccounts.Add(item.ToEf());
+        }
+        foreach (var item in keeperModel.TrustAssets)
+        {
+            keeperDbContext.TrustAssets.Add(item.ToEf());
+        }
+        await keeperDbContext.SaveChangesAsync();
+        foreach (var item in keeperModel.TrustAssetRates)
+        {
+            keeperDbContext.TrustAssetRates.Add(item.ToEf());
+        }
+        await keeperDbContext.SaveChangesAsync();
+        foreach (var item in keeperModel.TrustTransactions)
+        {
+            keeperDbContext.TrustTransactions.Add(item.ToEf());
+        }
+        await keeperDbContext.SaveChangesAsync();
+
         foreach (var item in keeperModel.OfficialRates)
         {
             keeperDbContext.OfficialRates.Add(item.ToEf());

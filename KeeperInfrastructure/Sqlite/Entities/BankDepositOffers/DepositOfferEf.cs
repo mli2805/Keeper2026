@@ -17,7 +17,7 @@ public class DepositOfferEf
 
     public bool IsPerpetual { get; set; }
     public int DepositTermValue { get; set; }
-    public Durations DepositTermDurations { get; set; }
+    public Durations DepositTermDuration { get; set; }
 
     public int MonthPaymentsMinimum { get; set; }
     public int MonthPaymentsMaximum { get; set; }

@@ -1,5 +1,4 @@
 ﻿using KeeperDomain;
-using System.ComponentModel.DataAnnotations;
 
 namespace KeeperInfrastructure;
 

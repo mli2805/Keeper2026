@@ -6,7 +6,7 @@ namespace KeeperDomain;
 public class TrustAssetRate : IDumpable, IParsable<TrustAssetRate>
 {
     public int Id { get; set; }
-    public int TickerId { get; set; } = 1;
+    public int TrustAssetId { get; set; }
     public DateTime Date { get; set; } = DateTime.Today;
     public decimal Value { get; set; }
     public int Unit { get; set; } = 1;
@@ -15,7 +15,7 @@ public class TrustAssetRate : IDumpable, IParsable<TrustAssetRate>
 
     public string Dump()
     {
-        return Id + " ; " + TickerId + " ; " + Date.ToString("dd/MM/yyyy") + " ; " + Unit + " ; " +
+        return Id + " ; " + TrustAssetId + " ; " + Date.ToString("dd/MM/yyyy") + " ; " + Unit + " ; " +
                Value.ToString(new CultureInfo("en-US")) + " ; " + Currency;
     }
 
@@ -23,7 +23,7 @@ public class TrustAssetRate : IDumpable, IParsable<TrustAssetRate>
     {
         var substrings = s.Split(';');
         Id = int.Parse(substrings[0]);
-        TickerId = int.Parse(substrings[1]);
+        TrustAssetId = int.Parse(substrings[1]);
         Date = DateTime.ParseExact(substrings[2].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
         Unit = int.Parse(substrings[3]);
         Value = decimal.Parse(substrings[4], new CultureInfo("en-US"));

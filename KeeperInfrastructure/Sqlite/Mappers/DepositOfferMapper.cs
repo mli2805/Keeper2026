@@ -18,7 +18,7 @@ public static class DepositOfferMapper
             MainCurrency = depositOffer.MainCurrency,
             IsPerpetual = depositOffer.DepositTerm?.IsPerpetual ?? true,
             DepositTermValue = depositOffer.DepositTerm?.Value ?? 0,
-            DepositTermDurations = depositOffer.DepositTerm?.Scale ?? Durations.Days,
+            DepositTermDuration = depositOffer.DepositTerm?.Scale ?? Durations.Days,
             MonthPaymentsMinimum = depositOffer.MonthPaymentsMinimum,
             MonthPaymentsMaximum = depositOffer.MonthPaymentsMaximum,
             Comment = depositOffer.Comment
@@ -39,7 +39,7 @@ public static class DepositOfferMapper
             MainCurrency = depositOfferEf.MainCurrency,
             DepositTerm = depositOfferEf.IsPerpetual 
                 ? new Duration() 
-                : new Duration(depositOfferEf.DepositTermValue, depositOfferEf.DepositTermDurations),
+                : new Duration(depositOfferEf.DepositTermValue, depositOfferEf.DepositTermDuration),
             MonthPaymentsMinimum = depositOfferEf.MonthPaymentsMinimum,
             MonthPaymentsMaximum = depositOfferEf.MonthPaymentsMaximum,
             Comment = depositOfferEf.Comment

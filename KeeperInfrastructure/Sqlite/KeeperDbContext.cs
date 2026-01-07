@@ -9,6 +9,11 @@ public class KeeperDbContext : DbContext
     public DbSet<DepositEf> Deposits { get; set; }
     public DbSet<PayCardEf> PayCards { get; set; }
 
+    public DbSet<TrustAccountEf> TrustAccounts { get; set; }
+    public DbSet<TrustAssetEf> TrustAssets { get; set; }
+    public DbSet<TrustAssetRateEf> TrustAssetRates { get; set; }
+    public DbSet<TrustTransactionEf> TrustTransactions { get; set; }
+
     public DbSet<OfficialRatesEf> OfficialRates { get; set; }
     public DbSet<ExchangeRatesEf> ExchangeRates { get; set; }
     public DbSet<RefinancingRateEf> RefinancingRates { get; set; }
