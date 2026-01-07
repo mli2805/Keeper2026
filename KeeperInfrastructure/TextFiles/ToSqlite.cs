@@ -32,17 +32,14 @@ public class ToSqlite(KeeperDbContext keeperDbContext)
         {
             keeperDbContext.TrustAssets.Add(item.ToEf());
         }
-        await keeperDbContext.SaveChangesAsync();
         foreach (var item in keeperModel.TrustAssetRates)
         {
             keeperDbContext.TrustAssetRates.Add(item.ToEf());
         }
-        await keeperDbContext.SaveChangesAsync();
         foreach (var item in keeperModel.TrustTransactions)
         {
             keeperDbContext.TrustTransactions.Add(item.ToEf());
         }
-        await keeperDbContext.SaveChangesAsync();
 
         foreach (var item in keeperModel.OfficialRates)
         {
@@ -90,6 +87,19 @@ public class ToSqlite(KeeperDbContext keeperDbContext)
         foreach (var item in keeperModel.Fuellings)
         {
             keeperDbContext.Fuellings.Add(item.ToEf());
+        }
+        
+        foreach (var item in keeperModel.SalaryChanges)
+        {
+            keeperDbContext.SalaryChanges.Add(item.ToEf());
+        }
+        foreach (var item in keeperModel.LargeExpenseThresholds)
+        {
+            keeperDbContext.LargeExpenseThresholds.Add(item.ToEf());
+        }
+        foreach (var item in keeperModel.CardBalanceMemos)
+        {
+            keeperDbContext.CardBalanceMemos.Add(item.ToEf());
         }
 
         await keeperDbContext.SaveChangesAsync();

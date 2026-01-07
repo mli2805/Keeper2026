@@ -29,6 +29,10 @@ public class KeeperDbContext : DbContext
     public DbSet<TransactionEf> Transactiones { get; set; }
     public DbSet<FuellingEf> Fuellings { get; set; }
 
+    public DbSet<SalaryChangeEf> SalaryChanges { get; set; }
+    public DbSet<CardBalanceMemoEf> CardBalanceMemos { get; set; }
+    public DbSet<LargeExpenseThresholdEf> LargeExpenseThresholds { get; set; }
+
 
     public KeeperDbContext(DbContextOptions<KeeperDbContext> options) : base(options)
     {
