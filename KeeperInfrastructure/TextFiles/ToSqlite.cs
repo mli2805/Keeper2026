@@ -101,6 +101,10 @@ public class ToSqlite(KeeperDbContext keeperDbContext)
         {
             keeperDbContext.CardBalanceMemos.Add(item.ToEf());
         }
+        foreach (var item in keeperModel.ButtonCollections)
+        {
+            keeperDbContext.ButtonCollections.Add(item.ToEf());
+        }
 
         await keeperDbContext.SaveChangesAsync();
     }

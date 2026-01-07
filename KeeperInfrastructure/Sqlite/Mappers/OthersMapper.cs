@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using KeeperDomain;
+﻿using KeeperDomain;
 
 namespace KeeperInfrastructure;
 
@@ -70,6 +67,28 @@ public static class OthersMapper
             FirstReceived = ef.FirstReceived,
             Amount = ef.Amount,
             Comment = ef.Comment
+        };
+    }
+
+    public static ButtonCollectionEf ToEf(this ButtonCollection bc)
+    {
+        return new ButtonCollectionEf
+        {
+            Id = bc.Id,
+            Name = bc.Name,
+            AccountIdsString = bc.AccountIds.Count > 0 ? string.Join(";", bc.AccountIds) : ""
+        };
+    }
+
+    public static ButtonCollection FromEf(this ButtonCollectionEf bcEf)
+    {
+        return new ButtonCollection
+        {
+            Id = bcEf.Id,
+            Name = bcEf.Name,
+            AccountIds = !string.IsNullOrEmpty(bcEf.AccountIdsString)
+                ? bcEf.AccountIdsString.Split(';').Select(s => int.Parse(s.Trim())).ToList()
+                : new List<int>()
         };
     }
 }
