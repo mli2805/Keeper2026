@@ -30,6 +30,23 @@ public sealed class AutofacWpf : Module
         // Register DbContext Initializer
         builder.RegisterType<KeeperDbContextInitializer>().AsSelf();
 
+        builder.RegisterType<OfficialRatesRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<ExchangeRatesRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<MetalRatesRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<RefinancingRatesRepository>().InstancePerLifetimeScope();
+
         builder.RegisterType<CarRepository>().InstancePerLifetimeScope();
+
+        // глобальная модель данных приложения
+        builder.RegisterType<KeeperDataModel>().InstancePerLifetimeScope();
+        builder.RegisterType<KeeperDataModelInitializer>().InstancePerLifetimeScope();
+
+
+        // Register ViewModels
+        builder.RegisterType<RatesViewModel>();
+        builder.RegisterType<ExchangeRatesViewModel>();
+        builder.RegisterType<OfficialRatesViewModel>();
+        builder.RegisterType<GoldRatesViewModel>();
+        builder.RegisterType<RefinancingRatesViewModel>();
     }
 }

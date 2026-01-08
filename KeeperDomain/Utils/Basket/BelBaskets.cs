@@ -1,4 +1,4 @@
-﻿namespace KeeperDomain.Basket;
+﻿namespace KeeperDomain;
 
 public static class BelBaskets
 {

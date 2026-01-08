@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="KeeperWpf.GoldRatesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
+             xmlns:cal="http://www.caliburnproject.org"
+             cal:Bind.ModelWithoutContext="{Binding .}"
+             mc:Ignorable="d" 
+             >
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" Margin="10">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Ввести дату и цену золота 900-й пробы и нажать " VerticalAlignment="Center"/>
+                <Button Name="Recount" Content="рассчитать" Margin="5,0" Width="80" Height="24"></Button>
+            </StackPanel>
+            <TextBlock>
+                <Hyperlink NavigateUri="http://www.minfin.gov.by/ru/activities_jewels/fund/pokupka/fizlic/archive/" RequestNavigate="HandleLinkClick"> 
+                    Архив скупочных цен на драгметаллы на сайте Минфина
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock Text="Цены на монеты исходя из веса 5-ки - 3.87 г и 10-ки - 7.74 г"/>
+            <TextBlock Text="Цены в рублях фиксированы. "/>
+            <TextBlock Text="Для определения цены в долларах в произвольный день рублевая цена переводится в доллары по `моему` курсу "/>
+        </StackPanel>
+    <DataGrid ItemsSource="{Binding Rows}" AutoGenerateColumns="False" Margin="5">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="30">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                        <Setter Property="Margin" Value="0,0,5,0" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+            <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat='{}{0:d MMM yyyy}', 
+                ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" Width="100">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                        <Setter Property="Margin" Value="0,0,5,0" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+            <DataGridTextColumn Header="Minfin (byn)" Binding="{Binding MinfinGold900Rate}" Width="80">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                        <Setter Property="Margin" Value="0,0,5,0" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+            <DataGridTextColumn Header="НБ byn / usd" Binding="{Binding BynUsd, StringFormat='{}{0:0.0000}'}" Width="80">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                        <Setter Property="Margin" Value="0,0,5,0" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+            <DataGridTextColumn Header="Minfin (usd)" Binding="{Binding MinfinUsd, StringFormat='{}{0:0.00}'}" Width="80">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                        <Setter Property="Margin" Value="0,0,5,0" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+            <DataGridTextColumn Header="5-ка (byn)" Binding="{Binding G5RubRate, StringFormat='{}{0:0.00}'}" Width="80">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                        <Setter Property="Margin" Value="0,0,5,0" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+            <DataGridTextColumn Header="5-ка (usd)" Binding="{Binding G5RubUsd, StringFormat='{}{0:0.00}'}" Width="80">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                        <Setter Property="Margin" Value="0,0,5,0" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+            <DataGridTextColumn Header="10-ка (byn)" Binding="{Binding G10RubRate, StringFormat='{}{0:0,0.00}', 
+                ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" Width="80">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                        <Setter Property="Margin" Value="0,0,5,0" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+            <DataGridTextColumn Header="10-ка (usd)" Binding="{Binding G10RubUsd, StringFormat='{}{0:0.00}'}" Width="80">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                        <Setter Property="Margin" Value="0,0,5,0" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+        </DataGrid.Columns>
+    </DataGrid>
+    </DockPanel>
+</UserControl>

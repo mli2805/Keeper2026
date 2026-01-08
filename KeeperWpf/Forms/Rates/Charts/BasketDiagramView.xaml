@@ -1,0 +1,36 @@
+﻿<Window x:Class="KeeperWpf.BasketDiagramView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:cal="http://www.caliburnproject.org"
+        mc:Ignorable="d"
+        WindowState="Maximized" 
+        d:DataContext="{d:DesignInstance keeperWpf:BasketDiagramViewModel}">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="PreviewKeyDown">
+            <cal:ActionMessage MethodName="TransformChart">
+                <cal:Parameter Value="$eventArgs" />
+            </cal:ActionMessage>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <oxy:PlotView Grid.Row="0" Grid.Column="0" Grid.RowSpan="{Binding RowSpan}" Grid.ColumnSpan="{Binding ColumnSpan}" 
+                      Model="{Binding BasketPlotModel}"/>
+        <oxy:PlotView Grid.Row="{Binding RowB}" Grid.Column="{Binding ColumnB}" 
+                      Grid.RowSpan="{Binding RowSpan}" Grid.ColumnSpan="{Binding ColumnSpan}" Model="{Binding BasketDeltaPlotModel}"/>
+    </Grid>
+</Window>

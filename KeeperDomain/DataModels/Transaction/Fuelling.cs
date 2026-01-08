@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace KeeperDomain;
+﻿namespace KeeperDomain;
 
 [Serializable]
 public class Fuelling : IDumpable, IParsable<Fuelling>

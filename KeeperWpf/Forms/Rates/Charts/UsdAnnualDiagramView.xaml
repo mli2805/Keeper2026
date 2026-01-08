@@ -1,0 +1,22 @@
+﻿<Window x:Class="KeeperWpf.UsdAnnualDiagramView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        mc:Ignorable="d"
+        WindowState="Maximized" d:DataContext="{d:DesignInstance keeperWpf:UsdAnnualDiagramViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <oxy:PlotView Grid.Row="0" Model="{Binding MyPlotModel2019}"/>
+        <oxy:PlotView Grid.Row="1" Model="{Binding MyPlotModel2020}"/>
+        <oxy:PlotView Grid.Row="2" Model="{Binding MyPlotModel2021}"/>
+        <oxy:PlotView Grid.Row="3" Model="{Binding MyPlotModel2022}"/>
+    </Grid>
+</Window>

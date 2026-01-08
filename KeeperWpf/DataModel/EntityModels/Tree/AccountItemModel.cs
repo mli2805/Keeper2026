@@ -1,0 +1,70 @@
+﻿using System;
+
+namespace KeeperWpf;
+
+public class AccountItemModel : TreeViewItemModel
+{
+    public string Img => GetIconPath();
+    public bool IsFolder { get; set; }
+
+    public BankAccountModel BankAccount { get; set; }
+    public bool IsBankAccount => BankAccount != null;
+
+    public bool IsDeposit => BankAccount != null && BankAccount.Deposit != null;
+    public bool IsCard => BankAccount != null && BankAccount.PayCard != null; // in XAML
+
+    // my accounts do not use associations
+    public int AssociatedIncomeId { get; set; } // for counterparty
+    public int AssociatedExpenseId { get; set; } // for counterparty
+    public int AssociatedExternalId { get; set; } // for category
+    public int AssociatedTagId { get; set; } // for counterparty or category
+
+    public string ShortName { get; set; }
+    public string ButtonName { get; set; } // face of shortcut button (if exists)
+    public string Comment { get; set; }
+
+    public override string ToString() => Name;
+
+    public string ToolTip => GetToolTip();
+    public bool IsTooltipEnabled => !string.IsNullOrEmpty(ToolTip);
+    private string GetToolTip()
+    {
+        if (!IsCard) return !string.IsNullOrEmpty(Comment) ? Comment : null;
+
+        var result = BankAccount.PayCard.CardNumber;
+        if (!string.IsNullOrEmpty(Comment)) result += Environment.NewLine + Comment;
+        return result;
+    }
+
+    public AccountItemModel(int id, string name, TreeViewItemModel parent) : base(id, name, parent)
+    {
+    }
+
+    private string GetIconPath()
+    {
+        if (IsFolder)
+            return "../../Resources/tree16/yellow_folder.png";
+        if (Is(NickNames.Closed))
+            return "../../Resources/tree16/cross.png";
+        if (IsCard)
+            return "../../Resources/tree16/paycard4.png";
+        if (IsDeposit)
+            return "../../Resources/tree16/deposit7.png";
+        if (Is(NickNames.Debts))
+            return "../../Resources/tree16/hand_point_left.png";
+        if (Is(NickNames.Trusts))
+            return "../../Resources/tree16/trust.png";
+        if (Is(NickNames.BankAccounts))
+            return "../../Resources/tree16/account4.png";
+        if (Is(NickNames.MyAccounts))
+            return "../../Resources/tree16/wallet2.png";
+        if (Is(NickNames.IncomeCategoriesRoot))
+            return "../../Resources/tree16/plus3.png";
+        if (Is(NickNames.ExpenseCategoriesRoot))
+            return "../../Resources/tree16/minus3.png";
+        if (Is(NickNames.TagsRoot))
+            return "../../Resources/tree16/tag.png";
+
+        return "../../Resources/tree16/counterparty.png";
+    }
+}
