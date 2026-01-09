@@ -23,13 +23,13 @@
             <TabItem Header="Обменные курсы банков РБ" Width="200">
                 <keeperWpf:ExchangeRatesView DataContext="{Binding ExchangeRatesViewModel}"/>
             </TabItem>
-            <TabItem Header="Официальные курсы НБ РБ" Width="200">
+            <TabItem Header="{Binding OfficialRatesTabHeader}" Width="200">
                 <keeperWpf:OfficialRatesView DataContext="{Binding OfficialRatesViewModel}"/>
             </TabItem>
-            <TabItem Header="Золото, закупока минфина" Width="200">
+            <TabItem Header="{Binding MetalRatesTabHeader}" Width="200">
                 <keeperWpf:GoldRatesView DataContext="{Binding GoldRatesViewModel}"/>
             </TabItem>
-            <TabItem Header="Ставка рефинансирования НБ РБ" Width="200">
+            <TabItem Header="{Binding RefinancingRatesTabHeader}" Width="200">
                 <keeperWpf:RefinancingRatesView DataContext="{Binding RefinancingRatesViewModel}"/>
             </TabItem>
         </TabControl>

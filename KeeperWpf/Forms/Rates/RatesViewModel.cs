@@ -15,6 +15,43 @@ public class RatesViewModel : Screen
     public GoldRatesViewModel GoldRatesViewModel { get; }
     public RefinancingRatesViewModel RefinancingRatesViewModel { get; }
 
+    private string _officialRatesTabHeader = "loading...";
+    public string OfficialRatesTabHeader
+    {
+        get => _officialRatesTabHeader;
+        set
+        {
+            if (Equals(_officialRatesTabHeader, value)) return;
+            _officialRatesTabHeader = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
+    private string _metalRatesTabHeader = "loading...";
+    public string MetalRatesTabHeader
+    {
+        get => _metalRatesTabHeader;
+        set
+        {
+            if (Equals(_metalRatesTabHeader, value)) return;
+            _metalRatesTabHeader = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
+
+    private string _refinancingRatesTabHeader = "loading...";
+    public string RefinancingRatesTabHeader
+    {
+        get => _refinancingRatesTabHeader;
+        set
+        {
+            if (Equals(_refinancingRatesTabHeader, value)) return;
+            _refinancingRatesTabHeader = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
 
 
 
@@ -35,6 +72,7 @@ public class RatesViewModel : Screen
     public async Task Initialize()
     {
         // эта страница открывается первой
+        _keeperDataModelInitializer.GetExchangeRatesFromDb();
         ExchangeRatesViewModel.Initialize();
 
         // остальные страницы инициализируем в фоне
@@ -43,14 +81,21 @@ public class RatesViewModel : Screen
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
     }
 
+    // происходит быстро, можно было и не заморачиваться с названиями на табиках
     private async Task InitializeOtherPages()
     {
-        _keeperDataModelInitializer.InitializeOfficialRates();
+        _keeperDataModelInitializer.GetRefinancingRatesFromDb();
+        RefinancingRatesViewModel.Initialize();
+        RefinancingRatesTabHeader = "Ставка рефинансирования НБ РБ";
+        
+        _keeperDataModelInitializer.GetOfficialRatesFromDb();
         await OfficialRatesViewModel.Initialize();
-        _keeperDataModelInitializer.InitializeMetalRates();
+        OfficialRatesTabHeader = "Официальные курсы НБ РБ";
+        
+        _keeperDataModelInitializer.GetMetalRatesFromDb();
         GoldRatesViewModel.Initialize();
-        _keeperDataModelInitializer.InitializeRefinancingRates();
-        RefinancingRatesViewModel.Initialize(); 
+        MetalRatesTabHeader = "Золото, закупока минфина";
+      
     }
 
     protected override void OnViewLoaded(object view)

@@ -7,27 +7,27 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     ExchangeRatesRepository exchangeRatesRepository, OfficialRatesRepository officialRatesRepository,
     MetalRatesRepository metalRatesRepository, RefinancingRatesRepository refinancingRatesRepository)
 {
-    public void InitializeExchangeRates()
+    public void GetExchangeRatesFromDb()
     {
         var exchangeRates = exchangeRatesRepository.GetAllExchangeRates();
         var dict = exchangeRates.ToDictionary(r => r.Date);
         keeperDataModel.ExchangeRates = dict;
     }
 
-    public void InitializeOfficialRates()
+    public void GetOfficialRatesFromDb()
     {
         var officialRates = officialRatesRepository.GetAllOfficialRates();
         var dict = officialRates.ToDictionary(r => r.Date);
         keeperDataModel.OfficialRates = dict;
     }
 
-    public void InitializeMetalRates()
+    public void GetMetalRatesFromDb()
     {
         var metalRates = metalRatesRepository.GetAllMetalRates();
         keeperDataModel.MetalRates = metalRates;
     }
 
-    public void InitializeRefinancingRates()
+    public void GetRefinancingRatesFromDb()
     {
         var refinancingRates = refinancingRatesRepository.GetAllRefinancingRates();
         keeperDataModel.RefinancingRates = refinancingRates;

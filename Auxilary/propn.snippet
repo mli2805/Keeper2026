@@ -1,0 +1,37 @@
+<CodeSnippet Format="1.0.0">
+  <Header>
+    <Title>propn</Title>
+    <Shortcut>propn</Shortcut>
+    <Description>Property with backing field and notification</Description>
+    <Author>Leanid</Author>
+  </Header>
+  <Snippet>
+    <Declarations>
+      <Literal>
+        <ID>type</ID>
+        <Default>string</Default>
+      </Literal>
+      <Literal>
+        <ID>property</ID>
+        <Default>MyProperty</Default>
+      </Literal>
+      <Literal>
+        <ID>field</ID>
+        <Default>_myProperty</Default>
+      </Literal>
+    </Declarations>
+    <Code Language="csharp"><![CDATA[
+private $type$ $field$;
+public $type$ $property$
+{
+    get => $field$;
+    set
+    {
+        if (Equals($field$, value)) return;
+        $field$ = value;
+        NotifyOfPropertyChange();
+    }
+}
+]]></Code>
+  </Snippet>
+</CodeSnippet>

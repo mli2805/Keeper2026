@@ -5,8 +5,11 @@
 
     <StackPanel Background="White">
              <!-- если русские буквы билдятся с ошибкой убедиться, что файл сохранён в UTF-8 -->
-        <TextBlock Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">Привет, Caliburn Micro!</TextBlock>
-        <Button  Name="ShowRatesForm" Margin="10" Width="120" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Content="Rates"/>
+        <TextBlock Margin="10, 25, 10, 0" HorizontalAlignment="Center" VerticalAlignment="Center">Подложи файлы из Keeper2018 и раскомментируй строку EnsureDeletedAsync</TextBlock>
+        <Button  Name="LoadFromTextFiles" Margin="10" Width="240" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Content="Load from text files"/>
+        <TextBlock TextAlignment="Center" Width="180" Text="{Binding LoadMessage}"></TextBlock>
+        <Button  Name="ShowRatesForm" Margin="10, 100, 10, 10" Width="240" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Content="Show RatesView"/>
+        <Button  Name="ShowCarsForm" Margin="10, 20, 10, 10" Width="240" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Content="Show CarsView"/>
     </StackPanel>
 
 </Window>
