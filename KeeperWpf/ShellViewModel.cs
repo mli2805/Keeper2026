@@ -12,6 +12,7 @@ public class ShellViewModel : Screen, IShell
     private readonly IConfiguration _configuration;
     private readonly IWindowManager _windowManager;
     private readonly KeeperDbContext _keeperDbContext;
+    private readonly KeeperDataModelInitializer _dataModelInitializer;
     private readonly RatesViewModel _ratesViewModel;
 
 
@@ -28,19 +29,27 @@ public class ShellViewModel : Screen, IShell
         }
     }
 
+    public AccountTreeViewModel AccountTreeViewModel { get; }
+
 
     public ShellViewModel(IConfiguration configuration, IWindowManager windowManager,
-        KeeperDbContext keeperDbContext, RatesViewModel ratesViewModel)
+        KeeperDbContext keeperDbContext, KeeperDataModelInitializer dataModelInitializer,
+
+        RatesViewModel ratesViewModel, AccountTreeViewModel accountTreeViewModel)
     {
         _configuration = configuration;
         _windowManager = windowManager;
         _keeperDbContext = keeperDbContext;
+        _dataModelInitializer = dataModelInitializer;
         _ratesViewModel = ratesViewModel;
+        AccountTreeViewModel = accountTreeViewModel;
     }
 
-    protected override void OnViewLoaded(object view)
+    protected override async void OnViewLoaded(object view)
     {
         DisplayName = "Keeper 2026";
+        await _dataModelInitializer.GetAccountTreeFromDb();
+
     }
 
     public async void LoadFromTextFiles()

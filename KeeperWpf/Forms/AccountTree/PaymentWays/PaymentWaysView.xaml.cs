@@ -1,0 +1,12 @@
+﻿namespace KeeperWpf;
+
+/// <summary>
+/// Interaction logic for PaymentWaysView.xaml
+/// </summary>
+public partial class PaymentWaysView
+{
+    public PaymentWaysView()
+    {
+        InitializeComponent();
+    }
+}

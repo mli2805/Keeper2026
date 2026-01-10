@@ -1,0 +1,159 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using KeeperDomain;
+
+namespace KeeperWpf;
+
+public static class ModelsToEntities
+{
+    public static Transaction Map(this TransactionModel transactionModel)
+    {
+        return new Transaction()
+        {
+            Id = transactionModel.Id,
+            Timestamp = transactionModel.Timestamp,
+            Receipt = transactionModel.Receipt,
+            Operation = transactionModel.Operation,
+            PaymentWay = transactionModel.PaymentWay,
+            MyAccount = transactionModel.MyAccount.Id,
+            MySecondAccount = transactionModel.MySecondAccount?.Id ?? -1,
+            Counterparty = transactionModel.Counterparty?.Id ?? -1,
+            Category = transactionModel.Category?.Id ?? -1,
+            Amount = transactionModel.Amount,
+            AmountInReturn = transactionModel.AmountInReturn,
+            Currency = transactionModel.Currency,
+            CurrencyInReturn = transactionModel.CurrencyInReturn,
+            Tags = transactionModel.Tags.MapTags(),
+            Comment = transactionModel.Comment,
+        };
+    }
+
+    private static string MapTags(this List<AccountItemModel> tags)
+    {
+        if (tags == null || tags.Count == 0) return " ";
+        string result = "";
+        foreach (var t in tags)
+        {
+            result = result + t.Id + " | ";
+        }
+        result = result.Substring(0, result.Length - 3);
+        return result;
+    }
+
+    public static Account FromModel(this AccountItemModel model)
+    {
+        return new Account()
+        {
+            Id = model.Id,
+            ParentId = model.Parent?.Id ?? 0,
+            Name = model.Name,
+            IsFolder = model.IsFolder,
+            IsExpanded = model.IsExpanded,
+            AssociatedIncomeId = model.AssociatedIncomeId,
+            AssociatedExpenseId = model.AssociatedExpenseId,
+            AssociatedExternalId = model.AssociatedExternalId,
+            AssociatedTagId = model.AssociatedTagId,
+            ShortName = model.ShortName,
+            ButtonName = model.ButtonName,
+            Comment = model.Comment,
+        };
+    }
+
+    public static DepositOffer Map(this DepositOfferModel depositOfferModel)
+    {
+        return new DepositOffer()
+        {
+            Id = depositOfferModel.Id,
+            BankId = depositOfferModel.Bank.Id,
+            Title = depositOfferModel.Title,
+            IsNotRevocable = depositOfferModel.IsNotRevocable,
+            RateType = depositOfferModel.RateType,
+            IsAddLimited = depositOfferModel.IsAddLimited,
+            AddLimitInDays = depositOfferModel.AddLimitInDays,
+            MainCurrency = depositOfferModel.MainCurrency,
+            DepositTerm = depositOfferModel.DepositTerm.Map(),
+            MonthPaymentsMinimum = depositOfferModel.MonthPaymentsMinimum,
+            MonthPaymentsMaximum = depositOfferModel.MonthPaymentsMaximum,
+            Comment = depositOfferModel.Comment,
+        };
+    }
+
+    private static Duration Map(this DurationModel durationModel)
+    {
+        return durationModel.IsPerpetual ? new Duration() : new Duration(durationModel.Value, durationModel.Scale);
+    }
+
+   
+    public static Fuelling Map(this FuellingModel fuellingModel)
+    {
+        return new Fuelling()
+        {
+            Id = fuellingModel.Id,
+            TransactionId = fuellingModel.Transaction.Id,
+            CarAccountId = fuellingModel.CarAccountId,
+            Volume = fuellingModel.Volume,
+            FuelType = fuellingModel.FuelType,
+        };
+    }
+
+    public static CardBalanceMemo FromModel(this CardBalanceMemoModel cardBalanceMemoModel)
+    {
+        return new CardBalanceMemo()
+        {
+            Id = cardBalanceMemoModel.Id,
+            AccountId = cardBalanceMemoModel.Account.Id,
+            BalanceThreshold = cardBalanceMemoModel.BalanceThreshold,
+        };
+    }
+
+    public static TrustAsset Map(this TrustAssetModel asset)
+    {
+        return new TrustAsset()
+        {
+            Id = asset.Id,
+            TrustAccountId = asset.TrustAccount?.Id ?? 0,
+            Ticker = asset.Ticker,
+            Title = asset.Title,
+            StockMarket = asset.StockMarket,
+            AssetType = asset.AssetType,
+            Nominal = asset.Nominal,
+            BondCouponPeriod = asset.BondCouponPeriod,
+            CouponRate = asset.CouponRate,
+            PreviousCouponDate = asset.PreviousCouponDate,
+            BondExpirationDate = asset.BondExpirationDate,
+            Comment = asset.Comment,
+        };
+    }
+
+    public static TrustTransaction Map(this TrustTranModel transaction)
+    {
+        return new TrustTransaction()
+        {
+            Id = transaction.Id,
+            InvestOperationType = transaction.InvestOperationType,
+            Timestamp = transaction.Timestamp,
+            AccountId = transaction.AccountItemModel?.Id ?? 0,
+            TrustAccountId = transaction.TrustAccount?.Id ?? 0,
+            CurrencyAmount = transaction.CurrencyAmount,
+            CouponAmount = transaction.CouponAmount,
+            Currency = transaction.Currency,
+            AssetAmount = transaction.AssetAmount,
+            AssetId = transaction.Asset?.Id ?? 0,
+            PurchaseFee = transaction.BuySellFee,
+            PurchaseFeeCurrency = transaction.BuySellFeeCurrency,
+            FeePaymentOperationId = transaction.FeePaymentOperationId,
+            Comment = transaction.Comment,
+        };
+    }
+
+    public static ButtonCollection Map(this ButtonCollectionModel model)
+    {
+        return new ButtonCollection()
+        {
+            Id = model.Id,
+            Name = model.Name,
+            AccountIds = model.AccountModels.Select(m => m.Id).ToList(),
+        };
+    }
+
+}

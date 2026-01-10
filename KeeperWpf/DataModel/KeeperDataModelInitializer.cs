@@ -1,12 +1,24 @@
 ﻿using KeeperInfrastructure;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
 public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
+    AccountRepository accountRepository,
     ExchangeRatesRepository exchangeRatesRepository, OfficialRatesRepository officialRatesRepository,
     MetalRatesRepository metalRatesRepository, RefinancingRatesRepository refinancingRatesRepository)
 {
+
+    public async Task GetAccountTreeFromDb()
+    {
+        var accounts = await accountRepository.GetAllAccounts();
+        var bankAccounts = await accountRepository.GetAllBankAccounts();
+        var deposits = await accountRepository.GetAllDeposits();
+        var payCards = await accountRepository.GetAllPayCards();
+        keeperDataModel.FillInAccountTreeAndDict(accounts, bankAccounts, deposits, payCards);
+    }
+
     public void GetExchangeRatesFromDb()
     {
         var exchangeRates = exchangeRatesRepository.GetAllExchangeRates();

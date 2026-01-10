@@ -36,8 +36,8 @@ public class KeeperDataModel : PropertyChangedBase
     public Dictionary<int, AccountItemModel> AcMoDict { get; set; } =
         new Dictionary<int, AccountItemModel>();
 
-    public List<DepositOfferModel> DepositOffers { get; set; }
-    public List<CarModel> Cars { get; set; }
+    public List<DepositOfferModel>? DepositOffers { get; set; }
+    public List<CarModel>? Cars { get; set; }
     public List<FuellingModel> FuellingVms { get; set; }
 
     public List<CardBalanceMemoModel> CardBalanceMemoModels { get; set; }

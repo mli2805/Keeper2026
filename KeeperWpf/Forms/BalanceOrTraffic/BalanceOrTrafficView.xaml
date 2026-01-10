@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="KeeperWpf.BalanceOrTrafficView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:keeperWpf="clr-namespace:KeeperWpf"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="400" 
+             cal:Bind.ModelWithoutContext="{Binding .}"
+             d:DataContext="{d:DesignInstance keeperWpf:BalanceOrTrafficViewModel}">
+    <UserControl.Resources>
+        <Style x:Key="MyHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Visibility" Value="Collapsed" />
+        </Style>
+    </UserControl.Resources>
+    <Border BorderBrush="Gray" BorderThickness="1">
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Bottom" Text="{Binding Total}"  Margin="5"/>
+            <DataGrid Width="Auto" ItemsSource="{Binding ColoredLines}" 
+                      SelectedItem="{Binding SelectedColoredLine}" 
+                      Background="White" IsReadOnly="True"
+                      HorizontalGridLinesBrush="LavenderBlush" VerticalGridLinesBrush="LavenderBlush"
+                      AutoGenerateColumns="False" CanUserSortColumns="False" BorderThickness="0,0,0,1" Margin="5,5,5,5">
+                <DataGrid.Resources>
+                    <DataTemplate x:Key="LineTemplate" DataType="{x:Type keeperWpf:ListLine}">
+                        <TextBlock Text="{Binding Line}" ToolTipService.ShowDuration="60000"  
+                                   ToolTipService.IsEnabled="{Binding IsTooltipEnabled}"
+                                   Foreground="{Binding Foreground}">
+                            <TextBlock.ToolTip>
+                                <ToolTip Background="AliceBlue">
+                                    <ListView ItemsSource="{Binding TooltipLines}" 
+                                          Background="AliceBlue" BorderThickness="0" Margin="0">
+                                        <ListView.View>
+                                            <GridView ColumnHeaderContainerStyle="{StaticResource MyHeaderStyle}">
+                                                <GridViewColumn DisplayMemberBinding="{Binding Label}" Width="100"/>
+                                                <GridViewColumn DisplayMemberBinding="{Binding Value}">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding }"  
+                                                                         Width="200" TextWrapping="Wrap"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                    </DataTemplate>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                                     Color="#B6E6FF"/>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn CellTemplate="{StaticResource LineTemplate}" Width="*">
+                        <DataGridTemplateColumn.Header>
+                            <TextBlock Text="{Binding DataContext.AccountName, 
+                                RelativeSource={RelativeSource AncestorType={x:Type keeperWpf:BalanceOrTrafficView}}}"/>
+                        </DataGridTemplateColumn.Header>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    </Border>
+</UserControl>

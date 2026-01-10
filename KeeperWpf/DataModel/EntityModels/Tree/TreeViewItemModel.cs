@@ -13,13 +13,13 @@ public class TreeViewItemModel : PropertyChangedBase
     bool _isExpanded;
     private bool _isSelected;
     private string _name;
-    private TreeViewItemModel _parent;
+    private TreeViewItemModel? _parent;
 
     #endregion // Data
 
     #region Constructors
 
-    protected TreeViewItemModel(int id, string name, TreeViewItemModel parent)
+    protected TreeViewItemModel(int id, string name, TreeViewItemModel? parent)
     {
         Id = id;
         _name = name;

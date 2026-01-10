@@ -47,8 +47,8 @@ public class BankAccountModel : PropertyChangedBase
 
     public bool IsMine { get; set; } 
 
-    public Deposit Deposit { get; set; }
-    public PayCard PayCard { get; set; }
+    public Deposit? Deposit { get; set; }
+    public PayCard? PayCard { get; set; }
 
     public BankAccountModel Clone()
     {

@@ -25,9 +25,9 @@ public class AccountItemModel : TreeViewItemModel
 
     public override string ToString() => Name;
 
-    public string ToolTip => GetToolTip();
+    public string? ToolTip => GetToolTip();
     public bool IsTooltipEnabled => !string.IsNullOrEmpty(ToolTip);
-    private string GetToolTip()
+    private string? GetToolTip()
     {
         if (!IsCard) return !string.IsNullOrEmpty(Comment) ? Comment : null;
 
@@ -36,7 +36,7 @@ public class AccountItemModel : TreeViewItemModel
         return result;
     }
 
-    public AccountItemModel(int id, string name, TreeViewItemModel parent) : base(id, name, parent)
+    public AccountItemModel(int id, string name, TreeViewItemModel? parent) : base(id, name, parent)
     {
     }
 

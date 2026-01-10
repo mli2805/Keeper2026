@@ -25,7 +25,7 @@ public class TransactionModel : PropertyChangedBase
     public OperationType Operation { get; set; }
     public PaymentWay PaymentWay { get; set; }
 
-    private AccountItemModel _myAccount;
+    private AccountItemModel _myAccount = null!;
     public AccountItemModel MyAccount
     {
         get => _myAccount;
@@ -37,8 +37,8 @@ public class TransactionModel : PropertyChangedBase
         }
     }
 
-    private AccountItemModel _mySecondAccount;
-    public AccountItemModel MySecondAccount
+    private AccountItemModel? _mySecondAccount;
+    public AccountItemModel? MySecondAccount
     {
         get => _mySecondAccount;
         set
@@ -49,8 +49,8 @@ public class TransactionModel : PropertyChangedBase
         }
     }
 
-    private AccountItemModel _counterparty;
-    public AccountItemModel Counterparty
+    private AccountItemModel? _counterparty;
+    public AccountItemModel? Counterparty
     {
         get => _counterparty;
         set
@@ -61,8 +61,8 @@ public class TransactionModel : PropertyChangedBase
         }
     }
 
-    private AccountItemModel _category;
-    public AccountItemModel Category
+    private AccountItemModel? _category;
+    public AccountItemModel? Category
     {
         get => _category;
         set

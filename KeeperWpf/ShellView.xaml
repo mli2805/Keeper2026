@@ -1,15 +1,27 @@
 <Window x:Class="KeeperWpf.ShellView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Width="1087" Height="777" WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance keeperWpf:ShellViewModel}"
         >
 
-    <StackPanel Background="White">
-             <!-- если русские буквы билдятся с ошибкой убедиться, что файл сохранён в UTF-8 -->
-        <TextBlock Margin="10, 25, 10, 0" HorizontalAlignment="Center" VerticalAlignment="Center">Подложи файлы из Keeper2018 и раскомментируй строку EnsureDeletedAsync</TextBlock>
-        <Button  Name="LoadFromTextFiles" Margin="10" Width="240" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Content="Load from text files"/>
-        <TextBlock TextAlignment="Center" Width="180" Text="{Binding LoadMessage}"></TextBlock>
-        <Button  Name="ShowRatesForm" Margin="10, 100, 10, 10" Width="240" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Content="Show RatesView"/>
-        <Button  Name="ShowCarsForm" Margin="10, 20, 10, 10" Width="240" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Content="Show CarsView"/>
-    </StackPanel>
+    <DockPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="5" >
+            <Button Width="180" Margin="5" x:Name="LoadFromTextFiles" Content="Load from text files" IsEnabled="False"></Button>
+            <Button Width="180" Margin="5" x:Name="ShowRatesForm" Content="Show rates"></Button>
+        </StackPanel>
+        <Border DockPanel.Dock="Bottom" Height="30"></Border>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.55*"/>
+                <ColumnDefinition Width="0.45*" MinWidth="350"/>
+            </Grid.ColumnDefinitions>
+            <keeperWpf:AccountTreeView Grid.Column="0" Margin="3,3,0,0" DataContext="{Binding AccountTreeViewModel}" DockPanel.Dock="Left"/>
 
+        </Grid>
+    </DockPanel>
 </Window>

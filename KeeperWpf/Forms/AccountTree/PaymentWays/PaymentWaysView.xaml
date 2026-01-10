@@ -1,0 +1,38 @@
+﻿<Window x:Class="KeeperWpf.PaymentWaysView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        mc:Ignorable="d"
+        Height="550" Width="840">
+    <DockPanel Margin="0,0,3,0">
+        <DockPanel DockPanel.Dock="Bottom" Margin="5">
+            <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="1">
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="5">
+                    <Button Name="StepMonthBefore" Content="Назад" Width="60" Margin="5"/>
+                    <TextBlock Text="{Binding CurrentPeriodName}" Margin="5,7,5,5"/>
+                    <Button Name="StepMonthAfter" Content="Вперед" Width="60" Margin="5"/>
+                </StackPanel>
+            </Border>
+            <TextBlock Text="{Binding Total}" Margin="50,13,5,5"/>
+
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="5">
+                <Button Name="Export" Width="150" HorizontalAlignment="Right" Margin="5">Выгрузка в csv (ETF-8)</Button>
+                <Button Name="Close" Width="150" HorizontalAlignment="Right" Margin="5">Закрыть</Button>
+            </StackPanel>
+            <StackPanel></StackPanel>
+        </DockPanel>
+        <Grid DockPanel.Dock="Bottom" Height="108">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <keeperWpf:BorderedListView DataContext="{Binding TotalFrom}"/>
+            <keeperWpf:BorderedListView Grid.Column="1" DataContext="{Binding TotalTo}"/> 
+        </Grid>
+        <ScrollViewer>
+            <keeperWpf:BorderedListView DataContext="{Binding Transactions}" />
+        </ScrollViewer>
+    </DockPanel>
+</Window>

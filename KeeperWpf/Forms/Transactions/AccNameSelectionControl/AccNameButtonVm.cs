@@ -1,0 +1,15 @@
+﻿namespace KeeperWpf;
+
+public class AccNameButtonVm
+{
+    public string Name { get; }
+    public AccName AccName { get; }
+    public string Tooltip { get; }
+
+    public AccNameButtonVm(string name, AccName accName)
+    {
+        Name = name;
+        AccName = accName;
+        Tooltip = accName.Tooltip;
+    }
+}

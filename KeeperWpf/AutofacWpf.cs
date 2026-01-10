@@ -30,6 +30,7 @@ public sealed class AutofacWpf : Module
         // Register DbContext Initializer
         builder.RegisterType<KeeperDbContextInitializer>().AsSelf();
 
+        builder.RegisterType<AccountRepository>().InstancePerLifetimeScope();
         builder.RegisterType<OfficialRatesRepository>().InstancePerLifetimeScope();
         builder.RegisterType<ExchangeRatesRepository>().InstancePerLifetimeScope();
         builder.RegisterType<MetalRatesRepository>().InstancePerLifetimeScope();
@@ -43,6 +44,22 @@ public sealed class AutofacWpf : Module
 
 
         // Register ViewModels
+        builder.RegisterType<ShellPartsBinder>().SingleInstance();
+
+        builder.RegisterType<AccountTreeViewModel>().SingleInstance();
+        builder.RegisterType<ComboTreesProvider>().SingleInstance();
+        builder.RegisterType<AccNameSelector>().SingleInstance();
+        builder.RegisterType<AskDragAccountActionViewModel>().SingleInstance();
+        builder.RegisterType<OneAccountViewModel>().SingleInstance();
+        builder.RegisterType<OneBankAccountViewModel>().SingleInstance();
+        builder.RegisterType<DepositReportViewModel>().SingleInstance();
+        builder.RegisterType<ExpensesOnAccountViewModel>().SingleInstance();
+        builder.RegisterType<BalanceVerificationViewModel>().SingleInstance();
+        builder.RegisterType<FolderSummaryViewModel>().SingleInstance();
+        builder.RegisterType<DepositInterestViewModel>().SingleInstance();
+        builder.RegisterType<CardFeeViewModel>().SingleInstance();
+        builder.RegisterType<PaymentWaysViewModel>().SingleInstance();
+
         builder.RegisterType<RatesViewModel>();
         builder.RegisterType<ExchangeRatesViewModel>();
         builder.RegisterType<OfficialRatesViewModel>();
