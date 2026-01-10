@@ -45,28 +45,28 @@ public class AccountItemModel : TreeViewItemModel
     private string GetIconPath()
     {
         if (IsFolder)
-            return "../../Resources/tree16/yellow_folder.png";
+            return "/KeeperWpf;component/Resources/tree16/yellow_folder.png";
         if (Is(NickNames.Closed))
-            return "../../Resources/tree16/cross.png";
+            return "/KeeperWpf;component/Resources/tree16/cross.png";
         if (IsCard)
-            return "../../Resources/tree16/paycard4.png";
+            return "/KeeperWpf;component/Resources/tree16/paycard4.png";
         if (IsDeposit)
-            return "../../Resources/tree16/deposit7.png";
+            return "/KeeperWpf;component/Resources/tree16/deposit7.png";
         if (Is(NickNames.Debts))
-            return "../../Resources/tree16/hand_point_left.png";
+            return "/KeeperWpf;component/Resources/tree16/hand_point_left.png";
         if (Is(NickNames.Trusts))
-            return "../../Resources/tree16/trust.png";
+            return "/KeeperWpf;component/Resources/tree16/trust.png";
         if (Is(NickNames.BankAccounts))
-            return "../../Resources/tree16/account4.png";
+            return "/KeeperWpf;component/Resources/tree16/account4.png";
         if (Is(NickNames.MyAccounts))
-            return "../../Resources/tree16/wallet2.png";
+            return "/KeeperWpf;component/Resources/tree16/wallet2.png";
         if (Is(NickNames.IncomeCategoriesRoot))
-            return "../../Resources/tree16/plus3.png";
+            return "/KeeperWpf;component/Resources/tree16/plus3.png";
         if (Is(NickNames.ExpenseCategoriesRoot))
-            return "../../Resources/tree16/minus3.png";
+            return "/KeeperWpf;component/Resources/tree16/minus3.png";
         if (Is(NickNames.TagsRoot))
-            return "../../Resources/tree16/tag.png";
+            return "/KeeperWpf;component/Resources/tree16/tag.png";
 
-        return "../../Resources/tree16/counterparty.png";
+        return "/KeeperWpf;component/Resources/tree16/counterparty.png";
     }
 }

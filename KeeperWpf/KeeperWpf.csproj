@@ -12,6 +12,48 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\accountmenu16\add_folder.png" />
+	  <None Remove="Resources\accountmenu16\edit16.ico" />
+	  <None Remove="Resources\accountmenu16\minus16.ico" />
+	  <None Remove="Resources\accountmenu16\plus16.ico" />
+	  <None Remove="Resources\keeper2018.ico" />
+	  <None Remove="Resources\mainmenu\bank_offer.png" />
+	  <None Remove="Resources\mainmenu\calculator.png" />
+	  <None Remove="Resources\mainmenu\car.png" />
+	  <None Remove="Resources\mainmenu\chart.png" />
+	  <None Remove="Resources\mainmenu\deposits.png" />
+	  <None Remove="Resources\mainmenu\exchange3.png" />
+	  <None Remove="Resources\mainmenu\gsk.png" />
+	  <None Remove="Resources\mainmenu\loading.png" />
+	  <None Remove="Resources\mainmenu\month_analysis.png" />
+	  <None Remove="Resources\mainmenu\paycard.png" />
+	  <None Remove="Resources\mainmenu\salary1.png" />
+	  <None Remove="Resources\mainmenu\save.png" />
+	  <None Remove="Resources\mainmenu\settings.png" />
+	  <None Remove="Resources\mainmenu\stock.png" />
+	  <None Remove="Resources\mainmenu\transactions.png" />
+	  <None Remove="Resources\mainmenu\white-bell.png" />
+	  <None Remove="Resources\mainmenu\yellow-bell.png" />
+	  <None Remove="Resources\misc\filter.png" />
+	  <None Remove="Resources\misc\goto.png" />
+	  <None Remove="Resources\misc\to_end.png" />
+	  <None Remove="Resources\nbrb.png" />
+	  <None Remove="Resources\tree16\account4.png" />
+	  <None Remove="Resources\tree16\counterparty.png" />
+	  <None Remove="Resources\tree16\cross.png" />
+	  <None Remove="Resources\tree16\deposit6.png" />
+	  <None Remove="Resources\tree16\deposit7.png" />
+	  <None Remove="Resources\tree16\hand_point_left.png" />
+	  <None Remove="Resources\tree16\minus3.png" />
+	  <None Remove="Resources\tree16\paycard4.png" />
+	  <None Remove="Resources\tree16\plus3.png" />
+	  <None Remove="Resources\tree16\tag.png" />
+	  <None Remove="Resources\tree16\trust.png" />
+	  <None Remove="Resources\tree16\wallet2.png" />
+	  <None Remove="Resources\tree16\yellow_folder.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Autofac" Version="9.0.0" />
 		<PackageReference Include="Caliburn.Micro" Version="5.0.258" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
@@ -25,6 +67,126 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\KeeperDomain\KeeperDomain.csproj" />
 	  <ProjectReference Include="..\KeeperInfrastructure\KeeperInfrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\accountmenu16\add_folder.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\accountmenu16\edit16.ico">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\accountmenu16\minus16.ico">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\accountmenu16\plus16.ico">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\keeper2018.ico">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\bank_offer.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\calculator.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\car.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\chart.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\deposits.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\exchange3.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\gsk.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\loading.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\month_analysis.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\paycard.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\salary1.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\save.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\settings.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\stock.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\transactions.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\white-bell.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\yellow-bell.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\misc\filter.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\misc\goto.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\misc\to_end.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\nbrb.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\tree16\account4.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\tree16\counterparty.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\tree16\cross.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\tree16\deposit6.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\tree16\deposit7.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\tree16\hand_point_left.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\tree16\minus3.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\tree16\paycard4.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\tree16\plus3.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\tree16\tag.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\tree16\trust.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\tree16\wallet2.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\tree16\yellow_folder.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
 	</ItemGroup>
 
 	<ItemGroup>
