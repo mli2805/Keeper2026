@@ -17,13 +17,13 @@ public class OneRate : IDumpable, IParsable<OneRate>
 
     public string Dump()
     {
-        return Value.ToString(new CultureInfo("en-US")) + " / " + Unit;
+        return Value.ToString(CultureInfo.GetCultureInfo("en-US")) + " / " + Unit;
     }
 
     public OneRate FromString(string s)
     {
         var substrings = s.Split('/');
-        Value = double.Parse(substrings[0], new CultureInfo("en-US"));
+        Value = double.Parse(substrings[0], CultureInfo.GetCultureInfo("en-US"));
         Unit = int.Parse(substrings[1]);
         return this;
     }

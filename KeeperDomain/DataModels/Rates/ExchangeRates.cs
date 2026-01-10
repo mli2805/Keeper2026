@@ -15,6 +15,10 @@ namespace KeeperDomain;
 [Serializable]
 public class ExchangeRates : IDumpable, IParsable<ExchangeRates>
 {
+    // Кешируем CultureInfo на уровне класса
+    private static readonly CultureInfo _enUsCulture = CultureInfo.GetCultureInfo("en-US");
+    private static readonly CultureInfo _invariantCulture = CultureInfo.InvariantCulture;
+
     public int Id { get; set; }
     public DateTime Date { get; set; }
 
@@ -50,24 +54,23 @@ public class ExchangeRates : IDumpable, IParsable<ExchangeRates>
     
     public double EurToRub { get; set; }
     public double RubToEur { get; set; }
-
     public string EurRub => $"{EurToRub} - {RubToEur}";
     
     public string Dump()
     {
         return Id + " ; " + Date.ToString("dd/MM/yyyy") + " ; " +
-               UsdToByn.ToString(new CultureInfo("en-Us")) + " ; " +
-               BynToUsd.ToString(new CultureInfo("en-Us")) + " ; " +
-               EurToByn.ToString(new CultureInfo("en-Us")) + " ; " +
-               BynToEur.ToString(new CultureInfo("en-Us")) + " ; " +
-               RubToByn.ToString(new CultureInfo("en-Us")) + " ; " +
-               BynToRub.ToString(new CultureInfo("en-Us")) + " ; " +
-               EurToUsd.ToString(new CultureInfo("en-Us")) + " ; " +
-               UsdToEur.ToString(new CultureInfo("en-Us")) + " ; " +
-               UsdToRub.ToString(new CultureInfo("en-Us")) + " ; " +
-               RubToUsd.ToString(new CultureInfo("en-Us")) + " ; " +
-               EurToRub.ToString(new CultureInfo("en-Us")) + " ; " +
-               RubToEur.ToString(new CultureInfo("en-Us"));
+               UsdToByn.ToString(_enUsCulture) + " ; " +
+               BynToUsd.ToString(_enUsCulture) + " ; " +
+               EurToByn.ToString(_enUsCulture) + " ; " +
+               BynToEur.ToString(_enUsCulture) + " ; " +
+               RubToByn.ToString(_enUsCulture) + " ; " +
+               BynToRub.ToString(_enUsCulture) + " ; " +
+               EurToUsd.ToString(_enUsCulture) + " ; " +
+               UsdToEur.ToString(_enUsCulture) + " ; " +
+               UsdToRub.ToString(_enUsCulture) + " ; " +
+               RubToUsd.ToString(_enUsCulture) + " ; " +
+               EurToRub.ToString(_enUsCulture) + " ; " +
+               RubToEur.ToString(_enUsCulture);
     }
 
     public ExchangeRates Clone()
@@ -75,24 +78,26 @@ public class ExchangeRates : IDumpable, IParsable<ExchangeRates>
         return (ExchangeRates)MemberwiseClone();
     }
 
-
     public ExchangeRates FromString(string s)
     {
         var substrings = s.Split(';');
         Id = int.Parse(substrings[0]);
-        Date = DateTime.ParseExact(substrings[1].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
-        UsdToByn = double.Parse(substrings[2], new CultureInfo("en-US"));
-        BynToUsd = double.Parse(substrings[3], new CultureInfo("en-US"));
-        EurToByn = double.Parse(substrings[4], new CultureInfo("en-US"));
-        BynToEur = double.Parse(substrings[5], new CultureInfo("en-US"));
-        RubToByn = double.Parse(substrings[6], new CultureInfo("en-US"));
-        BynToRub = double.Parse(substrings[7], new CultureInfo("en-US"));
-        EurToUsd = double.Parse(substrings[8], new CultureInfo("en-US"));
-        UsdToEur = double.Parse(substrings[9], new CultureInfo("en-US"));
-        UsdToRub = double.Parse(substrings[10], new CultureInfo("en-US"));
-        RubToUsd = double.Parse(substrings[11], new CultureInfo("en-US"));
-        EurToRub = double.Parse(substrings[12], new CultureInfo("en-US"));
-        RubToEur = double.Parse(substrings[13], new CultureInfo("en-US"));
+        Date = DateTime.ParseExact(substrings[1].Trim(), "dd.MM.yyyy", _invariantCulture);
+        
+        // Используем кешированный CultureInfo вместо создания нового каждый раз
+        UsdToByn = double.Parse(substrings[2], _enUsCulture);
+        BynToUsd = double.Parse(substrings[3], _enUsCulture);
+        EurToByn = double.Parse(substrings[4], _enUsCulture);
+        BynToEur = double.Parse(substrings[5], _enUsCulture);
+        RubToByn = double.Parse(substrings[6], _enUsCulture);
+        BynToRub = double.Parse(substrings[7], _enUsCulture);
+        EurToUsd = double.Parse(substrings[8], _enUsCulture);
+        UsdToEur = double.Parse(substrings[9], _enUsCulture);
+        UsdToRub = double.Parse(substrings[10], _enUsCulture);
+        RubToUsd = double.Parse(substrings[11], _enUsCulture);
+        EurToRub = double.Parse(substrings[12], _enUsCulture);
+        RubToEur = double.Parse(substrings[13], _enUsCulture);
+        
         return this;
     }
 }

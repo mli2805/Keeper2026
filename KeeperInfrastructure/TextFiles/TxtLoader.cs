@@ -40,7 +40,6 @@ public static class TxtLoader
             SalaryChanges = await ReadFileLines<SalaryChange>(),
             LargeExpenseThresholds = await ReadFileLines<LargeExpenseThreshold>(),
         };
-
         return keeperModel;
     }
 
@@ -50,6 +49,13 @@ public static class TxtLoader
             filename = typeof(T).Name + "s.txt";
 
         string[] fileContent = await File.ReadAllLinesAsync(Path.Combine(_backupFolder, filename));
-        return fileContent.Select(l => new T().FromString(l)).ToList();
+
+        // Используем явное выделение памяти для списка, т.к. известен размер
+        List<T> result = new List<T>(fileContent.Length);
+        foreach (string line in fileContent)
+        {
+            result.Add(new T().FromString(line));
+        }
+        return result;
     }
 }

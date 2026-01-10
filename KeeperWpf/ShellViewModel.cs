@@ -88,21 +88,6 @@ public class ShellViewModel : Screen, IShell
         return true;
     }
 
-    public async Task LoadFromTextFiles()
-    {
-        var backupFolder = Path.Combine(_configuration["DataFolder"] ?? "", "backup");
-
-        // просто await функции морозит программу
-        KeeperModel? model = await Task.Run(() => TxtLoader.LoadAllFromTextFiles(backupFolder));
-
-        LoadMessage = model != null ? "Data loaded" : "Failed to load";
-
-        if (model != null)
-            await new ToSqlite(_keeperDbContext).SaveModelToDb(model);
-
-        LoadMessage = "Ready";
-    }
-
     public async void ShowRatesForm()
     {
         await _ratesViewModel.Initialize();

@@ -6,6 +6,10 @@ namespace KeeperDomain;
 [Serializable]
 public class Transaction : IDumpable, IParsable<Transaction>
 {
+    // Кешируем CultureInfo на уровне класса
+    private static readonly CultureInfo _enUsCulture = CultureInfo.GetCultureInfo("en-US");
+    private static readonly CultureInfo _invariantCulture = CultureInfo.InvariantCulture;
+
     public int Id { get; set; } //PK
     public DateTime Timestamp { get; set; }
     public OperationType Operation { get; set; }
@@ -29,8 +33,8 @@ public class Transaction : IDumpable, IParsable<Transaction>
                Operation + " ; " + PaymentWay + " ; " + Receipt + " ; " +
                MyAccount + " ; " + MySecondAccount + " ; " +
                Counterparty + " ; " + Category + " ; " +
-               Amount.ToString(new CultureInfo("en-US")) + " ; " + Currency + " ; " +
-               AmountInReturn.ToString(new CultureInfo("en-US")) + " ; " + CurrencyInReturn + " ; " +
+               Amount.ToString(_enUsCulture) + " ; " + Currency + " ; " +
+               AmountInReturn.ToString(_enUsCulture) + " ; " + CurrencyInReturn + " ; " +
                Tags + " ; " + Comment;
     }
 
@@ -38,7 +42,7 @@ public class Transaction : IDumpable, IParsable<Transaction>
     {
         var substrings = s.Split(';');
         Id = int.Parse(substrings[0].Trim());
-        Timestamp = DateTime.ParseExact(substrings[1].Trim(), "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+        Timestamp = DateTime.ParseExact(substrings[1].Trim(), "dd.MM.yyyy HH:mm", _invariantCulture);
         Operation = (OperationType)Enum.Parse(typeof(OperationType), substrings[2]);
         PaymentWay = (PaymentWay)Enum.Parse(typeof(PaymentWay), substrings[3]);
         Receipt = int.Parse(substrings[4].Trim());
@@ -46,9 +50,9 @@ public class Transaction : IDumpable, IParsable<Transaction>
         MySecondAccount = int.Parse(substrings[6].Trim());
         Counterparty = int.Parse(substrings[7].Trim());
         Category = int.Parse(substrings[8].Trim());
-        Amount = Convert.ToDecimal(substrings[9], new CultureInfo("en-US"));
+        Amount = Convert.ToDecimal(substrings[9], _enUsCulture);
         Currency = (CurrencyCode)Enum.Parse(typeof(CurrencyCode), substrings[10]);
-        AmountInReturn = Convert.ToDecimal(substrings[11], new CultureInfo("en-US"));
+        AmountInReturn = Convert.ToDecimal(substrings[11], _enUsCulture);
         CurrencyInReturn = substrings[12].Trim() != ""
             ? (CurrencyCode?)Enum.Parse(typeof(CurrencyCode), substrings[12])
             : null;
