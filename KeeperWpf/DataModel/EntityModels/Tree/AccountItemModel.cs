@@ -4,6 +4,8 @@ namespace KeeperWpf;
 
 public class AccountItemModel : TreeViewItemModel
 {
+    public int ChildNumber { get; set; } // какой по счету ребенок у родителя
+
     public string Img => GetIconPath();
     public bool IsFolder { get; set; }
 

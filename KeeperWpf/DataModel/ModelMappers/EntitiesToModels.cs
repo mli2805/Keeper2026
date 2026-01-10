@@ -10,6 +10,7 @@ public static class EntitiesToModels
     {
         return new AccountItemModel(account.Id, account.Name, null)
         {
+            ChildNumber = account.ChildNumber,
             Id = account.Id,
             IsFolder = account.IsFolder,
             IsExpanded = account.IsExpanded,

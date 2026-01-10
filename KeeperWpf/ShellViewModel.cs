@@ -48,11 +48,12 @@ public class ShellViewModel : Screen, IShell
     protected override async void OnViewLoaded(object view)
     {
         DisplayName = "Keeper 2026";
+        //await LoadFromTextFiles();
         await _dataModelInitializer.GetAccountTreeFromDb();
 
     }
 
-    public async void LoadFromTextFiles()
+    public async Task LoadFromTextFiles()
     {
         var backupFolder = Path.Combine(_configuration["DataFolder"] ?? "", "backup");
 

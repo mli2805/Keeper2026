@@ -46,6 +46,7 @@ public static class ModelsToEntities
         {
             Id = model.Id,
             ParentId = model.Parent?.Id ?? 0,
+            ChildNumber = model.ChildNumber,
             Name = model.Name,
             IsFolder = model.IsFolder,
             IsExpanded = model.IsExpanded,

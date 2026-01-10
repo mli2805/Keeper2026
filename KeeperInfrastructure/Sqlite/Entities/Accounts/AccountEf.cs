@@ -7,6 +7,7 @@ public class AccountEf
     public int Id { get; set; }
     [MaxLength(50)] public string Name { get; set; }
     public int ParentId { get; set; }
+    public int ChildNumber { get; set; }
 
     public bool IsFolder;
     public bool IsExpanded;

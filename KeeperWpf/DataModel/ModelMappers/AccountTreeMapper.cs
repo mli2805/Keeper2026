@@ -15,7 +15,7 @@ public static class AccountTreeMapper
         dataModel.AccountsTree = new ObservableCollection<AccountItemModel>();
 
         // идем по списку accounts, но дерево строим из моделей
-        foreach (var account in accountPlaneList)
+        foreach (var account in accountPlaneList.OrderBy(a=> a.ParentId).ThenBy(a=>a.ChildNumber))
         {
             AccountItemModel accountItemModel = dataModel.AcMoDict[account.Id];
 
