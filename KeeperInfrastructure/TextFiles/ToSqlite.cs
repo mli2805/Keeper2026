@@ -1,6 +1,4 @@
 ﻿using KeeperDomain;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace KeeperInfrastructure;
 
@@ -9,9 +7,6 @@ public class ToSqlite(KeeperDbContext keeperDbContext)
 
     public async Task SaveModelToDb(KeeperModel keeperModel)
     {
-
-        Stopwatch sw = new Stopwatch();
-        sw.Restart();
         // Disable change tracking for bulk inserts
         keeperDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
         
@@ -44,8 +39,5 @@ public class ToSqlite(KeeperDbContext keeperDbContext)
         
         // Re-enable change tracking
         keeperDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
-
-        sw.Stop();
-        Debug.WriteLine($"loaded in {sw.ElapsedMilliseconds} ms");
     }
 }
