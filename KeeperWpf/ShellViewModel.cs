@@ -2,6 +2,7 @@ using Caliburn.Micro;
 using KeeperDomain;
 using KeeperInfrastructure;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ public class ShellViewModel : Screen, IShell
     private readonly IWindowManager _windowManager;
     private readonly KeeperDbContext _keeperDbContext;
     private readonly KeeperDataModelInitializer _dataModelInitializer;
+    private readonly LoadingProgressViewModel _loadingProgressViewModel;
     private readonly RatesViewModel _ratesViewModel;
 
 
@@ -33,14 +35,14 @@ public class ShellViewModel : Screen, IShell
 
 
     public ShellViewModel(IConfiguration configuration, IWindowManager windowManager,
-        KeeperDbContext keeperDbContext, KeeperDataModelInitializer dataModelInitializer,
-
+        KeeperDbContext keeperDbContext, KeeperDataModelInitializer dataModelInitializer, LoadingProgressViewModel loadingProgressViewModel,
         RatesViewModel ratesViewModel, AccountTreeViewModel accountTreeViewModel)
     {
         _configuration = configuration;
         _windowManager = windowManager;
         _keeperDbContext = keeperDbContext;
         _dataModelInitializer = dataModelInitializer;
+        _loadingProgressViewModel = loadingProgressViewModel;
         _ratesViewModel = ratesViewModel;
         AccountTreeViewModel = accountTreeViewModel;
     }
@@ -48,9 +50,42 @@ public class ShellViewModel : Screen, IShell
     protected override async void OnViewLoaded(object view)
     {
         DisplayName = "Keeper 2026";
-        //await LoadFromTextFiles();
-        await _dataModelInitializer.GetAccountTreeFromDb();
+        var success = await LoadAccountsTree();
+        if (!success)
+        {
+            await TryCloseAsync();
+            return;
+        }
+    }
 
+    public async Task<bool> LoadAccountsTree()
+    {
+        // если БД удалили, она будет создана в AppBootstrapper еще до ShellViewModel
+        // GetAccountTreeFromDb вернет false, если в БД нет данных
+        if (await _dataModelInitializer.GetAccountTreeFromDb())
+        {
+            return true;    
+        }
+
+        var mb = new MyMessageBoxViewModel(MessageType.Confirmation,
+            new List<string>()
+            {
+                "База данных пуста!", "Загрузить данные из текстовых файлов?"
+            });
+        var confirmation = await _windowManager.ShowDialogAsync(mb);
+        if (confirmation == null || confirmation.Value == false)
+        {
+            return false;
+        }
+
+        var success2 = await _windowManager.ShowDialogAsync(_loadingProgressViewModel);
+        if (success2 == null || success2.Value == false)
+        {
+            return false;
+        }
+
+        var success = await _dataModelInitializer.GetAccountTreeFromDb();
+        return true;
     }
 
     public async Task LoadFromTextFiles()

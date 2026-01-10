@@ -56,11 +56,11 @@ public class AppBootstrapper : BootstrapperBase
         builder.RegisterModule<AutofacWpf>();
         _container = builder.Build();
 
-        await DisplayRootViewForAsync<IShell>();
-
-        // Initialize database
         var initializer = _container.Resolve<KeeperDbContextInitializer>();
+        // создаст базу данных, если её нет до ShellViewModel, чтобы было куда зачитывать из текстовых файлов
         await initializer.InitializeAsync();
+
+        await DisplayRootViewForAsync<IShell>();
     }
 
     protected override IEnumerable<Assembly> SelectAssemblies()

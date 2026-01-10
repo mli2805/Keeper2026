@@ -49,8 +49,8 @@ public static class AccountTreeExt
                         $"<<{accountModel.Name}>>", "",
                         "Удалить?"
                     });
-                await windowManager.ShowDialogAsync(myMessageBoxViewModel);
-                if (myMessageBoxViewModel.IsAnswerPositive)
+                var answer = await windowManager.ShowDialogAsync(myMessageBoxViewModel);
+                if (answer.Value)
                     RemoveAccountLowLevel(dataModel, accountModel);
                 break;
             case AccountCantBeDeletedReasons.IsRoot:

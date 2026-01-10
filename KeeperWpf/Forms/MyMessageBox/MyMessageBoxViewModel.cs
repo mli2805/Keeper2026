@@ -14,7 +14,6 @@ public class MyMessageBoxViewModel : Screen
     public List<ListLine> Lines { get; set; }
     public Visibility OkVisibility { get; set; }
     public Visibility CancelVisibility { get; set; }
-    public bool IsAnswerPositive { get; set; }
 
 
     public MyMessageBoxViewModel(MessageType messageType, string message)
@@ -27,7 +26,6 @@ public class MyMessageBoxViewModel : Screen
         _caption = messageType.GetLocalizedString();
         OkVisibility = messageType.ShouldOkBeVisible();
         CancelVisibility = messageType.ShouldCancelBeVisible();
-        IsAnswerPositive = false;
     }
 
     public MyMessageBoxViewModel(MessageType messageType, List<string> strs, int focusedString = Int32.MaxValue)
@@ -41,7 +39,6 @@ public class MyMessageBoxViewModel : Screen
         _caption = messageType.GetLocalizedString();
         OkVisibility = messageType.ShouldOkBeVisible();
         CancelVisibility = messageType.ShouldCancelBeVisible();
-        IsAnswerPositive = false;
     }
 
     public MyMessageBoxViewModel(MessageType messageType, List<ListLine> lines)
@@ -51,7 +48,6 @@ public class MyMessageBoxViewModel : Screen
         _caption = messageType.GetLocalizedString();
         OkVisibility = messageType.ShouldOkBeVisible();
         CancelVisibility = messageType.ShouldCancelBeVisible();
-        IsAnswerPositive = false;
     }
 
     protected override void OnViewLoaded(object view)
@@ -60,14 +56,12 @@ public class MyMessageBoxViewModel : Screen
     }
     public async void OkButton()
     {
-        IsAnswerPositive = true;
-        await TryCloseAsync();
+        await TryCloseAsync(true);
     }
 
     public async void CancelButton()
     {
-        IsAnswerPositive = false;
-        await TryCloseAsync();
+        await TryCloseAsync(false);
     }
 
     /// <summary>Just for debug purposes </summary>

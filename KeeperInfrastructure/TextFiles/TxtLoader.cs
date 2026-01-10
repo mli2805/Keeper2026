@@ -9,47 +9,39 @@ public static class TxtLoader
     public static async Task<KeeperModel?> LoadAllFromTextFiles(string backupFolder)
     {
         _backupFolder = backupFolder;
-
-        try
+        var keeperModel = new KeeperModel
         {
-            var keeperModel = new KeeperModel
-            {
-                ExchangeRates = await ReadFileLines<ExchangeRates>(),
-                OfficialRates = await ReadFileLines<OfficialRates>(),
-                MetalRates = await ReadFileLines<MetalRate>(),
-                RefinancingRates = await ReadFileLines<RefinancingRate>(),
+            ExchangeRates = await ReadFileLines<ExchangeRates>(),
+            OfficialRates = await ReadFileLines<OfficialRates>(),
+            MetalRates = await ReadFileLines<MetalRate>(),
+            RefinancingRates = await ReadFileLines<RefinancingRate>(),
 
-                TrustAssets = await ReadFileLines<TrustAsset>(),
-                TrustAssetRates = await ReadFileLines<TrustAssetRate>(),
-                TrustAccounts = await ReadFileLines<TrustAccount>(),
-                TrustTransactions = await ReadFileLines<TrustTransaction>(),
+            TrustAssets = await ReadFileLines<TrustAsset>(),
+            TrustAssetRates = await ReadFileLines<TrustAssetRate>(),
+            TrustAccounts = await ReadFileLines<TrustAccount>(),
+            TrustTransactions = await ReadFileLines<TrustTransaction>(),
 
-                AccountPlaneList = await ReadFileLines<Account>(),
-                BankAccounts = await ReadFileLines<BankAccount>(),
-                Deposits = await ReadFileLines<Deposit>(),
-                PayCards = await ReadFileLines<PayCard>(),
-                ButtonCollections = await ReadFileLines<ButtonCollection>(),
+            AccountPlaneList = await ReadFileLines<Account>(),
+            BankAccounts = await ReadFileLines<BankAccount>(),
+            Deposits = await ReadFileLines<Deposit>(),
+            PayCards = await ReadFileLines<PayCard>(),
+            ButtonCollections = await ReadFileLines<ButtonCollection>(),
 
-                DepositRateLines = await ReadFileLines<DepositRateLine>(),
-                DepositConditions = await ReadFileLines<DepositConditions>(),
-                DepositOffers = await ReadFileLines<DepositOffer>(),
+            DepositRateLines = await ReadFileLines<DepositRateLine>(),
+            DepositConditions = await ReadFileLines<DepositConditions>(),
+            DepositOffers = await ReadFileLines<DepositOffer>(),
 
-                Transactions = await ReadFileLines<Transaction>(),
-                Fuellings = await ReadFileLines<Fuelling>(),
-                Cars = await ReadFileLines<Car>(),
-                CarYearMileages = await ReadFileLines<CarYearMileage>(),
+            Transactions = await ReadFileLines<Transaction>(),
+            Fuellings = await ReadFileLines<Fuelling>(),
+            Cars = await ReadFileLines<Car>(),
+            CarYearMileages = await ReadFileLines<CarYearMileage>(),
 
-                CardBalanceMemos = await ReadFileLines<CardBalanceMemo>("MemosCardBalance.txt"),
-                SalaryChanges = await ReadFileLines<SalaryChange>(),
-                LargeExpenseThresholds = await ReadFileLines<LargeExpenseThreshold>(),
-            };
+            CardBalanceMemos = await ReadFileLines<CardBalanceMemo>("MemosCardBalance.txt"),
+            SalaryChanges = await ReadFileLines<SalaryChange>(),
+            LargeExpenseThresholds = await ReadFileLines<LargeExpenseThreshold>(),
+        };
 
-            return keeperModel;
-        }
-        catch (Exception e)
-        {
-            return null;
-        }
+        return keeperModel;
     }
 
     private static async Task<List<T>> ReadFileLines<T>(string filename = "") where T : KeeperDomain.IParsable<T>, new()

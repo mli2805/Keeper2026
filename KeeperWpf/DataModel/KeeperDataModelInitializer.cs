@@ -10,13 +10,18 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     MetalRatesRepository metalRatesRepository, RefinancingRatesRepository refinancingRatesRepository)
 {
 
-    public async Task GetAccountTreeFromDb()
+    public async Task<bool> GetAccountTreeFromDb()
     {
         var accounts = await accountRepository.GetAllAccounts();
+        if (accounts == null || accounts.Count == 0)
+        {
+            return false;
+        }
         var bankAccounts = await accountRepository.GetAllBankAccounts();
         var deposits = await accountRepository.GetAllDeposits();
         var payCards = await accountRepository.GetAllPayCards();
         keeperDataModel.FillInAccountTreeAndDict(accounts, bankAccounts, deposits, payCards);
+        return true;
     }
 
     public void GetExchangeRatesFromDb()

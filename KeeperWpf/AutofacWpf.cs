@@ -29,6 +29,8 @@ public sealed class AutofacWpf : Module
 
         // Register DbContext Initializer
         builder.RegisterType<KeeperDbContextInitializer>().AsSelf();
+        builder.RegisterType<LoadingProgressViewModel>().InstancePerLifetimeScope();
+        builder.RegisterType<ToSqlite>().InstancePerLifetimeScope();
 
         builder.RegisterType<AccountRepository>().InstancePerLifetimeScope();
         builder.RegisterType<OfficialRatesRepository>().InstancePerLifetimeScope();
