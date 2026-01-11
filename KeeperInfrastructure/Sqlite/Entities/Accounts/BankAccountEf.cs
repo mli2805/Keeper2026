@@ -10,8 +10,8 @@ public class BankAccountEf
     public int DepositOfferId { get; set; } // не только по депозиту, но и по карте и даже расчетному счету могут начисляться %%
     public CurrencyCode MainCurrency { get; set; }
 
-    public string AgreementNumber { get; set; } // номер договора, где он есть
-    public string ReplenishDetails { get; set; } // реквизиты для пополнения
+    public string AgreementNumber { get; set; } = ""; // номер договора, где он есть
+    public string ReplenishDetails { get; set; } = ""; // реквизиты для пополнения
     public bool IsReplenishStopped { get; set; } // перенести сюда из Deposit
 
 
