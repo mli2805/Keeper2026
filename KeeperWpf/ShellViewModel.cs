@@ -1,50 +1,42 @@
 using Caliburn.Micro;
-using KeeperDomain;
 using KeeperInfrastructure;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
 public class ShellViewModel : Screen, IShell
 {
-    private readonly IConfiguration _configuration;
     private readonly IWindowManager _windowManager;
-    private readonly KeeperDbContext _keeperDbContext;
+    private readonly KeeperDataModel _keeperDataModel;
+    private readonly ShellPartsBinder _shellPartsBinder;
     private readonly KeeperDataModelInitializer _dataModelInitializer;
     private readonly LoadingProgressViewModel _loadingProgressViewModel;
     private readonly RatesViewModel _ratesViewModel;
 
 
-
-    private string _loadMessage;
-    public string LoadMessage
-    {
-        get => _loadMessage;
-        set
-        {
-            if (Equals(_loadMessage, value)) return;
-            _loadMessage = value;
-            NotifyOfPropertyChange();
-        }
-    }
-
     public AccountTreeViewModel AccountTreeViewModel { get; }
+    public BalanceOrTrafficViewModel BalanceOrTrafficViewModel { get; }
+    public TwoSelectorsViewModel TwoSelectorsViewModel { get; }
 
-
-    public ShellViewModel(IConfiguration configuration, IWindowManager windowManager,
-        KeeperDbContext keeperDbContext, KeeperDataModelInitializer dataModelInitializer, LoadingProgressViewModel loadingProgressViewModel,
-        RatesViewModel ratesViewModel, AccountTreeViewModel accountTreeViewModel)
+    public ShellViewModel(IWindowManager windowManager,
+        KeeperDataModel keeperDataModel, ShellPartsBinder shellPartsBinder,
+        KeeperDataModelInitializer dataModelInitializer, LoadingProgressViewModel loadingProgressViewModel,
+        RatesViewModel ratesViewModel, 
+        AccountTreeViewModel accountTreeViewModel, BalanceOrTrafficViewModel balanceOrTrafficViewModel,
+        TwoSelectorsViewModel twoSelectorsViewModel)
     {
-        _configuration = configuration;
         _windowManager = windowManager;
-        _keeperDbContext = keeperDbContext;
+        _keeperDataModel = keeperDataModel;
+        _shellPartsBinder = shellPartsBinder;
         _dataModelInitializer = dataModelInitializer;
         _loadingProgressViewModel = loadingProgressViewModel;
         _ratesViewModel = ratesViewModel;
         AccountTreeViewModel = accountTreeViewModel;
+        BalanceOrTrafficViewModel = balanceOrTrafficViewModel;
+        TwoSelectorsViewModel = twoSelectorsViewModel;
     }
 
     protected override async void OnViewLoaded(object view)
@@ -56,13 +48,24 @@ public class ShellViewModel : Screen, IShell
             await TryCloseAsync();
             return;
         }
+
+        // нужны транзакции для расчета остатков на счетах
+        _dataModelInitializer.GetTransactionsFromDb();
+        // и курсы для отображения остатков в разных валютах
+        _dataModelInitializer.GetOfficialRatesFromDb(); 
+        _dataModelInitializer.GetExchangeRatesFromDb(); 
+        _dataModelInitializer.GetMetalRatesFromDb();
+
+        var account = _keeperDataModel.AccountsTree.First(r => r.Name == "Мои");
+        account.IsSelected = true;
+        _shellPartsBinder.SelectedAccountItemModel = account;
     }
 
     public async Task<bool> LoadAccountsTree()
     {
         // если БД удалили, она будет создана в AppBootstrapper еще до ShellViewModel
         // GetAccountTreeFromDb вернет false, если в БД нет данных
-        if (await _dataModelInitializer.GetAccountTreeFromDb())
+        if (await _dataModelInitializer.GetAccountTreeAndDictionaryFromDb())
         {
             return true;    
         }
@@ -84,7 +87,7 @@ public class ShellViewModel : Screen, IShell
             return false;
         }
 
-        var success = await _dataModelInitializer.GetAccountTreeFromDb();
+        var success = await _dataModelInitializer.GetAccountTreeAndDictionaryFromDb();
         return true;
     }
 

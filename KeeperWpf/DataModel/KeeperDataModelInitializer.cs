@@ -7,11 +7,13 @@ namespace KeeperWpf;
 public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     AccountRepository accountRepository,
     ExchangeRatesRepository exchangeRatesRepository, OfficialRatesRepository officialRatesRepository,
-    MetalRatesRepository metalRatesRepository, RefinancingRatesRepository refinancingRatesRepository)
+    MetalRatesRepository metalRatesRepository, RefinancingRatesRepository refinancingRatesRepository,
+    TransactionsRepository transactionsRepository)
 {
 
-    public async Task<bool> GetAccountTreeFromDb()
+    public async Task<bool> GetAccountTreeAndDictionaryFromDb()
     {
+        // со счетов начинаем поэтому добавил проверку на наличие счетов
         var accounts = await accountRepository.GetAllAccounts();
         if (accounts == null || accounts.Count == 0)
         {
@@ -48,5 +50,11 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     {
         var refinancingRates = refinancingRatesRepository.GetAllRefinancingRates();
         keeperDataModel.RefinancingRates = refinancingRates;
+    }
+
+    public void GetTransactionsFromDb()
+    {
+        var transactions = transactionsRepository.GetAllTransactions();
+        keeperDataModel.Transactions = transactions.Select(t=>t.ToModel(keeperDataModel.AcMoDict)).ToDictionary(t=>t.Id, t=>t);
     }
 }

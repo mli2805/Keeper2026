@@ -28,7 +28,7 @@ public class ToSqlite(KeeperDbContext keeperDbContext)
         keeperDbContext.DepositOffers.AddRange(keeperModel.DepositOffers.Select(item => item.ToEf()));
         keeperDbContext.DepositConditions.AddRange(keeperModel.DepositConditions.Select(item => item.ToEf()));
         keeperDbContext.DepositRateLines.AddRange(keeperModel.DepositRateLines.Select(item => item.ToEf()));
-        keeperDbContext.Transactiones.AddRange(keeperModel.Transactions.Select(item => item.ToEf()));
+        keeperDbContext.Transactions.AddRange(keeperModel.Transactions.Select(item => item.ToEf()));
         keeperDbContext.Fuellings.AddRange(keeperModel.Fuellings.Select(item => item.ToEf()));
         keeperDbContext.SalaryChanges.AddRange(keeperModel.SalaryChanges.Select(item => item.ToEf()));
         keeperDbContext.LargeExpenseThresholds.AddRange(keeperModel.LargeExpenseThresholds.Select(item => item.ToEf()));

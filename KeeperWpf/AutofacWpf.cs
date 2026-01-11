@@ -37,6 +37,19 @@ public sealed class AutofacWpf : Module
         builder.RegisterType<ExchangeRatesRepository>().InstancePerLifetimeScope();
         builder.RegisterType<MetalRatesRepository>().InstancePerLifetimeScope();
         builder.RegisterType<RefinancingRatesRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<TransactionsRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<FuellingsRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<DepositOffersRepository>().InstancePerLifetimeScope();
+
+        builder.RegisterType<TrustAccountsRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<TrustAssetsRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<TrustAssetRatesRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<TrustTransactionsRepository>().InstancePerLifetimeScope();
+
+        builder.RegisterType<SalaryChangesRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<CardBalanceMemosRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<LargeExpenseThresholdsRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<ButtonCollectionsRepository>().InstancePerLifetimeScope();
 
         builder.RegisterType<CarRepository>().InstancePerLifetimeScope();
 
@@ -61,6 +74,9 @@ public sealed class AutofacWpf : Module
         builder.RegisterType<DepositInterestViewModel>().SingleInstance();
         builder.RegisterType<CardFeeViewModel>().SingleInstance();
         builder.RegisterType<PaymentWaysViewModel>().SingleInstance();
+
+        builder.RegisterType<BalanceOrTrafficViewModel>().SingleInstance();
+        builder.RegisterType<TwoSelectorsViewModel>().SingleInstance();
 
         builder.RegisterType<RatesViewModel>();
         builder.RegisterType<ExchangeRatesViewModel>();

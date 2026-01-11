@@ -21,7 +21,14 @@
                 <ColumnDefinition Width="0.45*" MinWidth="350"/>
             </Grid.ColumnDefinitions>
             <keeperWpf:AccountTreeView Grid.Column="0" Margin="3,3,0,0" DataContext="{Binding AccountTreeViewModel}" DockPanel.Dock="Left"/>
-
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <keeperWpf:BalanceOrTrafficView Margin="3,3,3,3" DataContext="{Binding BalanceOrTrafficViewModel}"/>
+                <keeperWpf:TwoSelectorsView Grid.Row="1" Margin="3,0,3,0" DataContext="{Binding TwoSelectorsViewModel}"/>
+            </Grid>
         </Grid>
     </DockPanel>
 </Window>
