@@ -106,7 +106,7 @@ public class ShellPartsBinder : PropertyChangedBase
         }
     }
 
-    private Visibility _footerVisibility = Visibility.Collapsed;
+    private Visibility _footerVisibility = Visibility.Hidden;
 
     public Visibility FooterVisibility
     {

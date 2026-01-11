@@ -11,29 +11,30 @@ public class ShellViewModel : Screen, IShell
 {
     private readonly IWindowManager _windowManager;
     private readonly KeeperDataModel _keeperDataModel;
-    private readonly ShellPartsBinder _shellPartsBinder;
     private readonly KeeperDataModelInitializer _dataModelInitializer;
     private readonly LoadingProgressViewModel _loadingProgressViewModel;
     private readonly RatesViewModel _ratesViewModel;
 
 
+    public ShellPartsBinder ShellPartsBinder { get; }
     public AccountTreeViewModel AccountTreeViewModel { get; }
     public BalanceOrTrafficViewModel BalanceOrTrafficViewModel { get; }
     public TwoSelectorsViewModel TwoSelectorsViewModel { get; }
 
     public ShellViewModel(IWindowManager windowManager,
-        KeeperDataModel keeperDataModel, ShellPartsBinder shellPartsBinder,
+        KeeperDataModel keeperDataModel,
         KeeperDataModelInitializer dataModelInitializer, LoadingProgressViewModel loadingProgressViewModel,
-        RatesViewModel ratesViewModel, 
+        RatesViewModel ratesViewModel,
+        ShellPartsBinder shellPartsBinder,
         AccountTreeViewModel accountTreeViewModel, BalanceOrTrafficViewModel balanceOrTrafficViewModel,
         TwoSelectorsViewModel twoSelectorsViewModel)
     {
         _windowManager = windowManager;
         _keeperDataModel = keeperDataModel;
-        _shellPartsBinder = shellPartsBinder;
         _dataModelInitializer = dataModelInitializer;
         _loadingProgressViewModel = loadingProgressViewModel;
         _ratesViewModel = ratesViewModel;
+        ShellPartsBinder = shellPartsBinder;
         AccountTreeViewModel = accountTreeViewModel;
         BalanceOrTrafficViewModel = balanceOrTrafficViewModel;
         TwoSelectorsViewModel = twoSelectorsViewModel;
@@ -52,13 +53,13 @@ public class ShellViewModel : Screen, IShell
         // нужны транзакции для расчета остатков на счетах
         _dataModelInitializer.GetTransactionsFromDb();
         // и курсы для отображения остатков в разных валютах
-        _dataModelInitializer.GetOfficialRatesFromDb(); 
-        _dataModelInitializer.GetExchangeRatesFromDb(); 
+        _dataModelInitializer.GetOfficialRatesFromDb();
+        _dataModelInitializer.GetExchangeRatesFromDb();
         _dataModelInitializer.GetMetalRatesFromDb();
 
         var account = _keeperDataModel.AccountsTree.First(r => r.Name == "Мои");
         account.IsSelected = true;
-        _shellPartsBinder.SelectedAccountItemModel = account;
+        ShellPartsBinder.SelectedAccountItemModel = account;
     }
 
     public async Task<bool> LoadAccountsTree()
@@ -67,7 +68,7 @@ public class ShellViewModel : Screen, IShell
         // GetAccountTreeFromDb вернет false, если в БД нет данных
         if (await _dataModelInitializer.GetAccountTreeAndDictionaryFromDb())
         {
-            return true;    
+            return true;
         }
 
         var mb = new MyMessageBoxViewModel(MessageType.Confirmation,

@@ -14,7 +14,14 @@
             <Button Width="180" Margin="5" x:Name="LoadFromTextFiles" Content="Load from text files" IsEnabled="False"></Button>
             <Button Width="180" Margin="5" x:Name="ShowRatesForm" Content="Show rates"></Button>
         </StackPanel>
-        <Border DockPanel.Dock="Bottom" Height="30"></Border>
+        <Border DockPanel.Dock="Bottom" Height="30">
+            <DockPanel Visibility="{Binding ShellPartsBinder.FooterVisibility}">
+                <TextBlock Text="Writing..." Margin="10,7,0,0"/>
+                <ProgressBar Height="16" Width="200" Margin="10,0,10,0" IsIndeterminate="True" 
+                     Background="Blue" Foreground="White" BorderBrush="White"/>
+                <TextBlock></TextBlock>
+            </DockPanel>
+        </Border>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.55*"/>
