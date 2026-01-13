@@ -23,4 +23,7 @@ public class DepositOfferEf
     public int MonthPaymentsMaximum { get; set; }
 
     [MaxLength(250)] public string Comment { get; set; }
+
+    // Навигационное свойство
+    public List<DepositConditionsEf> Conditions { get; set; } = new List<DepositConditionsEf>();
 }

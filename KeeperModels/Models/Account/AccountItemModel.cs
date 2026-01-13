@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public class AccountItemModel : TreeViewItemModel
 {
     public int ChildNumber { get; set; } // какой по счету ребенок у родителя
 
-    public string Img => GetIconPath();
+    //public string Img => this.GetIconPath();
     public bool IsFolder { get; set; }
 
     public BankAccountModel BankAccount { get; set; }
@@ -42,31 +42,31 @@ public class AccountItemModel : TreeViewItemModel
     {
     }
 
-    private string GetIconPath()
-    {
-        if (IsFolder)
-            return "/KeeperWpf;component/Resources/tree16/yellow_folder.png";
-        if (Is(NickNames.Closed))
-            return "/KeeperWpf;component/Resources/tree16/cross.png";
-        if (IsCard)
-            return "/KeeperWpf;component/Resources/tree16/paycard4.png";
-        if (IsDeposit)
-            return "/KeeperWpf;component/Resources/tree16/deposit7.png";
-        if (Is(NickNames.Debts))
-            return "/KeeperWpf;component/Resources/tree16/hand_point_left.png";
-        if (Is(NickNames.Trusts))
-            return "/KeeperWpf;component/Resources/tree16/trust.png";
-        if (Is(NickNames.BankAccounts))
-            return "/KeeperWpf;component/Resources/tree16/account4.png";
-        if (Is(NickNames.MyAccounts))
-            return "/KeeperWpf;component/Resources/tree16/wallet2.png";
-        if (Is(NickNames.IncomeCategoriesRoot))
-            return "/KeeperWpf;component/Resources/tree16/plus3.png";
-        if (Is(NickNames.ExpenseCategoriesRoot))
-            return "/KeeperWpf;component/Resources/tree16/minus3.png";
-        if (Is(NickNames.TagsRoot))
-            return "/KeeperWpf;component/Resources/tree16/tag.png";
+    //private string GetIconPath()
+    //{
+    //    if (IsFolder)
+    //        return "/KeeperWpf;component/Resources/tree16/yellow_folder.png";
+    //    if (Is(NickNames.Closed))
+    //        return "/KeeperWpf;component/Resources/tree16/cross.png";
+    //    if (IsCard)
+    //        return "/KeeperWpf;component/Resources/tree16/paycard4.png";
+    //    if (IsDeposit)
+    //        return "/KeeperWpf;component/Resources/tree16/deposit7.png";
+    //    if (Is(NickNames.Debts))
+    //        return "/KeeperWpf;component/Resources/tree16/hand_point_left.png";
+    //    if (Is(NickNames.Trusts))
+    //        return "/KeeperWpf;component/Resources/tree16/trust.png";
+    //    if (Is(NickNames.BankAccounts))
+    //        return "/KeeperWpf;component/Resources/tree16/account4.png";
+    //    if (Is(NickNames.MyAccounts))
+    //        return "/KeeperWpf;component/Resources/tree16/wallet2.png";
+    //    if (Is(NickNames.IncomeCategoriesRoot))
+    //        return "/KeeperWpf;component/Resources/tree16/plus3.png";
+    //    if (Is(NickNames.ExpenseCategoriesRoot))
+    //        return "/KeeperWpf;component/Resources/tree16/minus3.png";
+    //    if (Is(NickNames.TagsRoot))
+    //        return "/KeeperWpf;component/Resources/tree16/tag.png";
 
-        return "/KeeperWpf;component/Resources/tree16/counterparty.png";
-    }
+    //    return "/KeeperWpf;component/Resources/tree16/counterparty.png";
+    //}
 }

@@ -23,4 +23,8 @@ public class DepositConditionsEf
     public double AdditionalPercent { get; set; }
 
     [MaxLength(100)] public string Comment { get; set; }
+
+    // Навигационные свойства
+    public DepositOfferEf DepositOffer { get; set; }
+    public List<DepositRateLineEf> RateLines { get; set; } = new List<DepositRateLineEf>();
 }

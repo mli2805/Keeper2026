@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Caliburn.Micro;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public class TreeViewItemModel : PropertyChangedBase
 {

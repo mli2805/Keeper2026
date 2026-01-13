@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Media;
 using Caliburn.Micro;
 using KeeperDomain;
+using KeeperModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Win32;
 

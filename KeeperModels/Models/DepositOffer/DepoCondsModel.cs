@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using KeeperDomain;
+﻿using KeeperDomain;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 [Serializable]
 public class DepoCondsModel

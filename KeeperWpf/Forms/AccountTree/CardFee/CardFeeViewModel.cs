@@ -3,6 +3,7 @@ using KeeperDomain;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using KeeperModels;
 
 namespace KeeperWpf;
 

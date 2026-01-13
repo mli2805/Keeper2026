@@ -38,4 +38,22 @@ public class KeeperDbContext : DbContext
     public KeeperDbContext(DbContextOptions<KeeperDbContext> options) : base(options)
     {
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<CarEf>()
+            .HasMany(c => c.YearMileages)
+            .WithOne(m => m.Car)
+            .HasForeignKey(m => m.CarId);
+
+        modelBuilder.Entity<DepositOfferEf>()
+            .HasMany(o => o.Conditions)
+            .WithOne(c => c.DepositOffer)
+            .HasForeignKey(c => c.DepositOfferId);
+
+        modelBuilder.Entity<DepositConditionsEf>()
+            .HasMany(c => c.RateLines)
+            .WithOne(rl => rl.DepositConditions)
+            .HasForeignKey(rl => rl.DepositOfferConditionsId);
+    }
 }

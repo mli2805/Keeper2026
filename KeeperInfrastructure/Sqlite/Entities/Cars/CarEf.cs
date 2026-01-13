@@ -20,5 +20,6 @@ public class CarEf
     public int SupposedSalePrice { get; set; }
     [MaxLength(100)] public string Comment { get; set; }
 
-
+    // Навигационное свойство
+    public List<CarYearMileageEf> YearMileages { get; set; } = new List<CarYearMileageEf>();
 }

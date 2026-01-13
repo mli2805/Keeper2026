@@ -3,7 +3,7 @@ using System.Windows;
 using Caliburn.Micro;
 using KeeperDomain;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public class BankAccountModel : PropertyChangedBase
 {

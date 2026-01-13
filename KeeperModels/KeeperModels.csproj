@@ -9,11 +9,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\KeeperDomain\KeeperDomain.csproj" />
+	  <PackageReference Include="Caliburn.Micro" Version="5.0.258" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="ModelMappers\" />
+		<ProjectReference Include="..\KeeperDomain\KeeperDomain.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using KeeperDomain;
+using KeeperModels;
 
 namespace KeeperWpf;
 

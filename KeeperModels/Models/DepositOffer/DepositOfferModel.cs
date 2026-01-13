@@ -4,7 +4,7 @@ using System.Windows.Media;
 using Caliburn.Micro;
 using KeeperDomain;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public class DepositOfferModel : PropertyChangedBase
 {

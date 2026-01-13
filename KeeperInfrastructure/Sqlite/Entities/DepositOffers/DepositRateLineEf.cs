@@ -8,4 +8,7 @@ public class DepositRateLineEf
     public decimal AmountFrom { get; set; }
     public decimal AmountTo { get; set; }
     public decimal Rate { get; set; }
+
+    // Навигационное свойство
+    public DepositConditionsEf DepositConditions { get; set; }
 }

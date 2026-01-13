@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Caliburn.Micro;
 using KeeperDomain;
+using KeeperModels;
 
 namespace KeeperWpf;
 

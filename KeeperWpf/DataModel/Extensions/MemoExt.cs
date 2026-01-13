@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using KeeperDomain;
+using KeeperModels;
 
 namespace KeeperWpf;
 

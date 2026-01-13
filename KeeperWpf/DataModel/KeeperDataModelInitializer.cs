@@ -1,4 +1,6 @@
 ﻿using KeeperInfrastructure;
+using KeeperModels;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,7 +8,7 @@ using System.Threading.Tasks;
 namespace KeeperWpf;
 
 public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
-    AccountRepository accountRepository,
+    AccountRepository accountRepository, CarRepository carRepository, DepositOffersRepository depositOffersRepository,
     ExchangeRatesRepository exchangeRatesRepository, OfficialRatesRepository officialRatesRepository,
     MetalRatesRepository metalRatesRepository, RefinancingRatesRepository refinancingRatesRepository,
     TrustAccountsRepository trustAccountsRepository, TrustAssetsRepository trustAssetsRepository,
@@ -38,9 +40,15 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
         Debug.WriteLine($"Loaded {keeperDataModel.ExchangeRates.Count} exchange rates from DB");
     }
 
-    public void GetDepositOffersFromDb()
+    public async Task GetCarsFromDb()
     {
+        keeperDataModel.Cars = await carRepository.GetAllCarsWithMileages();
+    }
 
+
+    public async Task GetDepositOffersFromDb(Dictionary<int, AccountItemModel> acMoDict)
+    {
+        keeperDataModel.DepositOffers = await depositOffersRepository.GetDepositOffersWithConditionsAndRates(acMoDict);
     }
 
     public void GetTrustDataFromDb()

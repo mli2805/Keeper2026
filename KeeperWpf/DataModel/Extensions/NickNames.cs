@@ -1,4 +1,6 @@
-﻿namespace KeeperWpf;
+﻿using KeeperModels;
+
+namespace KeeperWpf;
 
 public static class NickNames
 {
@@ -49,7 +51,7 @@ public static class NickNames
         return dataModel.AcMoDict[189];
     }
 
-   
+
 
     public static AccountItemModel MoneyBackCategory(this KeeperDataModel dataModel)
     {
@@ -63,5 +65,33 @@ public static class NickNames
     public static AccountItemModel CardFeeCategory(this KeeperDataModel dataModel)
     {
         return dataModel.AcMoDict[847];
+    }
+
+    public static string GetIconPath(this AccountItemModel accountItemModel)
+    {
+        if (accountItemModel.IsFolder)
+            return "/KeeperWpf;component/Resources/tree16/yellow_folder.png";
+        if (accountItemModel.Is(NickNames.Closed))
+            return "/KeeperWpf;component/Resources/tree16/cross.png";
+        if (accountItemModel.IsCard)
+            return "/KeeperWpf;component/Resources/tree16/paycard4.png";
+        if (accountItemModel.IsDeposit)
+            return "/KeeperWpf;component/Resources/tree16/deposit7.png";
+        if (accountItemModel.Is(NickNames.Debts))
+            return "/KeeperWpf;component/Resources/tree16/hand_point_left.png";
+        if (accountItemModel.Is(NickNames.Trusts))
+            return "/KeeperWpf;component/Resources/tree16/trust.png";
+        if (accountItemModel.Is(NickNames.BankAccounts))
+            return "/KeeperWpf;component/Resources/tree16/account4.png";
+        if (accountItemModel.Is(NickNames.MyAccounts))
+            return "/KeeperWpf;component/Resources/tree16/wallet2.png";
+        if (accountItemModel.Is(NickNames.IncomeCategoriesRoot))
+            return "/KeeperWpf;component/Resources/tree16/plus3.png";
+        if (accountItemModel.Is(NickNames.ExpenseCategoriesRoot))
+            return "/KeeperWpf;component/Resources/tree16/minus3.png";
+        if (accountItemModel.Is(NickNames.TagsRoot))
+            return "/KeeperWpf;component/Resources/tree16/tag.png";
+
+        return "/KeeperWpf;component/Resources/tree16/counterparty.png";
     }
 }

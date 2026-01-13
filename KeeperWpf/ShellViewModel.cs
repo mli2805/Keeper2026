@@ -56,7 +56,8 @@ public class ShellViewModel : Screen, IShell
         // нужны транзакции для расчета остатков на счетах
         _dataModelInitializer.GetTransactionsFromDb();
 
-
+        await _dataModelInitializer.GetCarsFromDb();
+        await _dataModelInitializer.GetDepositOffersFromDb(_keeperDataModel.AcMoDict);
         var account = _keeperDataModel.AccountsTree.First(r => r.Name == "Мои");
         account.IsSelected = true;
         ShellPartsBinder.SelectedAccountItemModel = account;

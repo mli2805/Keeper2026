@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Media;
 using KeeperDomain;
+using KeeperModels;
 
 namespace KeeperWpf;
 

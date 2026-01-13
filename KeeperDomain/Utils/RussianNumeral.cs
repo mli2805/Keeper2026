@@ -1,4 +1,4 @@
-﻿namespace KeeperWpf;
+﻿namespace KeeperDomain;
 
 public static class RussianNumeral
 {
