@@ -1,6 +1,4 @@
 using Caliburn.Micro;
-using KeeperInfrastructure;
-using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +15,7 @@ public class ShellViewModel : Screen, IShell
 
 
     public ShellPartsBinder ShellPartsBinder { get; }
+    public MainMenuViewModel MainMenuViewModel { get; }
     public AccountTreeViewModel AccountTreeViewModel { get; }
     public BalanceOrTrafficViewModel BalanceOrTrafficViewModel { get; }
     public TwoSelectorsViewModel TwoSelectorsViewModel { get; }
@@ -25,7 +24,7 @@ public class ShellViewModel : Screen, IShell
         KeeperDataModel keeperDataModel,
         KeeperDataModelInitializer dataModelInitializer, LoadingProgressViewModel loadingProgressViewModel,
         RatesViewModel ratesViewModel,
-        ShellPartsBinder shellPartsBinder,
+        ShellPartsBinder shellPartsBinder, MainMenuViewModel mainMenuViewModel,
         AccountTreeViewModel accountTreeViewModel, BalanceOrTrafficViewModel balanceOrTrafficViewModel,
         TwoSelectorsViewModel twoSelectorsViewModel)
     {
@@ -35,6 +34,7 @@ public class ShellViewModel : Screen, IShell
         _loadingProgressViewModel = loadingProgressViewModel;
         _ratesViewModel = ratesViewModel;
         ShellPartsBinder = shellPartsBinder;
+        MainMenuViewModel = mainMenuViewModel;
         AccountTreeViewModel = accountTreeViewModel;
         BalanceOrTrafficViewModel = balanceOrTrafficViewModel;
         TwoSelectorsViewModel = twoSelectorsViewModel;
@@ -50,12 +50,12 @@ public class ShellViewModel : Screen, IShell
             return;
         }
 
+       
+        // и курсы для отображения остатков в разных валютах
+        _dataModelInitializer.GetRatesFromDb();
         // нужны транзакции для расчета остатков на счетах
         _dataModelInitializer.GetTransactionsFromDb();
-        // и курсы для отображения остатков в разных валютах
-        _dataModelInitializer.GetOfficialRatesFromDb();
-        _dataModelInitializer.GetExchangeRatesFromDb();
-        _dataModelInitializer.GetMetalRatesFromDb();
+
 
         var account = _keeperDataModel.AccountsTree.First(r => r.Name == "Мои");
         account.IsSelected = true;

@@ -27,7 +27,7 @@ public class LongTermChartViewModel : Screen
 
     public void ToggleLogarithm(KeyEventArgs e)
     {
-        if (e.Key != Key.L) return;
+        if (e != null && e.Key != Key.L) return;
 
         var currentIsLogarithmic = Model.LongTermModel.Axes[1].GetType() == typeof(LogarithmicAxis);
         if (currentIsLogarithmic)

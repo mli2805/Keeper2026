@@ -1,0 +1,74 @@
+﻿<Window x:Class="KeeperWpf.CardsAndAccountsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        mc:Ignorable="d"
+        Height="920" Width="1142" WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance keeperWpf:CardsAndAccountsViewModel}">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Right"  Width="150">
+            <StackPanel>
+                <GroupBox Header="" Margin="10, 0, 10, 10">
+                    <StackPanel Margin="0,5,0,0">
+                        <RadioButton Margin="0,2" GroupName="Group1" IsChecked="{Binding Filter.AccountsAndCards}">Всё</RadioButton>
+                        <RadioButton Margin="0,2" GroupName="Group1" IsChecked="{Binding Filter.CardsOnly}">Карты</RadioButton>
+                        <RadioButton Margin="0,2" GroupName="Group1" IsChecked="{Binding Filter.AccountsOnly}">Счета</RadioButton>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Владелец" Margin="10, 0">
+                    <StackPanel Margin="0,5,0,0">
+                        <RadioButton Margin="0,2" GroupName="Owner" IsChecked="{Binding Filter.OwnerAll}">Все</RadioButton>
+                        <RadioButton Margin="0,2" GroupName="Owner" IsChecked="{Binding Filter.OwnerMine}">Мои</RadioButton>
+                        <RadioButton Margin="0,2" GroupName="Owner" IsChecked="{Binding Filter.OwnerYuliya}">Юлины</RadioButton>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Валюта" Margin="10">
+                    <ComboBox Margin="5" ItemsSource="{Binding Filter.Currencies}"
+                             SelectedItem="{Binding Filter.SelectedCurrency}"/>
+                </GroupBox>
+
+                <GroupBox Header="Остаток" Margin="10, 0">
+                    <StackPanel Margin="0,5" Orientation="Horizontal">
+                        <TextBlock>Не менее</TextBlock>
+                        <TextBox Margin="5, 0" Width="60" Text="{Binding Filter.BalanceStr, 
+                            ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <Button Margin="10, 30, 10, 0" Height="40" Name="ShowAll">Всё</Button>
+                <Button Margin="10, 10, 10, 0" Height="40" Name="ShowAllByn5">Все белки</Button>
+                <Button Margin="10, 10, 10, 0" Height="40" Name="ShowMineByn5">Мои белки</Button>
+            </StackPanel>
+
+
+        </StackPanel>
+
+        <DockPanel Height="80" DockPanel.Dock="Bottom">
+            <ListBox Margin="5" Width="470" BorderThickness="0" ItemsSource="{Binding Totals}"/>
+            <ListBox  Margin="5" BorderThickness="0" ItemsSource="{Binding Balance}"/>
+            <Button Content="Close" Width="120" Height="22" Margin="5,10,22,10" HorizontalAlignment="Right" IsCancel="True" IsDefault="True"/>
+        </DockPanel>
+
+
+        <DataGrid  ItemsSource="{Binding Rows}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Header="Моя" Width="40" Binding="{Binding IsMine, Mode=OneWay}"/>
+                <DataGridTextColumn Header="Название" Width="200" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Номер" Width="160" Binding="{Binding CardNumber}"/>
+                <DataGridTextColumn Header="Банк" Width="75" Binding="{Binding AccountItemOfBank.Name}"/>
+                <DataGridTextColumn Header="Остаток" Width="75" Binding="{Binding Amount}"/>
+                <DataGridTextColumn Header="Валюта" Width="75" Binding="{Binding MainCurrency}"/>
+                <DataGridTextColumn Header="Старт" Width="75" Binding="{Binding StartDate, StringFormat='dd/MM/yy'}"/>
+                <DataGridTextColumn Header="Финиш" Width="75" Binding="{Binding FinishDate, StringFormat='dd/MM/yy'}"/>
+                <DataGridTextColumn Header="Платежная система" Width="135" Binding="{Binding PaymentSystemStr}"/>
+                <DataGridCheckBoxColumn Header="Вирт" Width="40" Binding="{Binding IsVirtual, Mode=OneWay}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+    </DockPanel>
+</Window>

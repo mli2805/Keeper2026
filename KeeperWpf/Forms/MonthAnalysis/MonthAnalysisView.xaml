@@ -1,0 +1,36 @@
+﻿<Window x:Class="KeeperWpf.MonthAnalysisView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        mc:Ignorable="d"
+        Title="{Binding Model.MonthAnalysisViewCaption}" 
+        SizeToContent="WidthAndHeight" ResizeMode="NoResize" 
+        TextOptions.TextFormattingMode="Display" 
+        d:DataContext="{d:DesignInstance keeperWpf:MonthAnalysisViewModel}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="PreviewKeyDown">
+            <cal:ActionMessage MethodName="OnPreviewKeyDown">
+                <cal:Parameter Value="$eventArgs" />
+            </cal:ActionMessage>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <DockPanel>
+        <Border DockPanel.Dock="Bottom" Margin="2,0,2,5" BorderThickness="1" BorderBrush="Silver">
+            <TextBlock Text=" стрелки - месяц ;   +Shift - квартал ;   +Ctrl - год ;  Home/End - в начало/конец;  Esc - выход  "
+                           Margin="2" Foreground="DarkGray" HorizontalAlignment="Right"/>
+        </Border>
+        <keeperWpf:BorderedListView DataContext="{Binding Model.BeforeViewModel}"/>
+        <keeperWpf:BorderedListView DataContext="{Binding Model.IncomeViewModel}"/>
+        <keeperWpf:BorderedListView DataContext="{Binding Model.ExpenseViewModel}"/>
+        <keeperWpf:BorderedListView DataContext="{Binding Model.AfterViewModel}"/>
+        <keeperWpf:BorderedListView DataContext="{Binding Model.FinResultViewModel}"/>
+        <DockPanel Visibility="{Binding Model.ForecastListVisibility}">
+            <keeperWpf:BorderedListView DataContext="{Binding Model.ForecastViewModel}"/>
+        </DockPanel>
+        <Button Name="CloseView" IsCancel="True" Height="1" Width="1"/>
+    </DockPanel>
+</Window>

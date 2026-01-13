@@ -10,10 +10,7 @@
         >
 
     <DockPanel>
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="5" >
-            <Button Width="180" Margin="5" x:Name="LoadFromTextFiles" Content="Load from text files" IsEnabled="False"></Button>
-            <Button Width="180" Margin="5" x:Name="ShowRatesForm" Content="Show rates"></Button>
-        </StackPanel>
+        <keeperWpf:MainMenuView DockPanel.Dock="Top" DataContext="{Binding MainMenuViewModel}"/>
         <Border DockPanel.Dock="Bottom" Height="30">
             <DockPanel Visibility="{Binding ShellPartsBinder.FooterVisibility}">
                 <TextBlock Text="Writing..." Margin="10,7,0,0"/>

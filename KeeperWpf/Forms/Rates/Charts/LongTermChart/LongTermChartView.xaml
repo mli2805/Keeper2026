@@ -6,8 +6,6 @@
         xmlns:oxy="http://oxyplot.org/wpf"
         xmlns:keeperWpf="clr-namespace:KeeperWpf"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
         WindowState="Maximized" d:DataContext="{d:DesignInstance keeperWpf:LongTermChartViewModel}">

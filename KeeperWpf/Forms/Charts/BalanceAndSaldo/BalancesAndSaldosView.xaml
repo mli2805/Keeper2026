@@ -1,0 +1,25 @@
+﻿<Window x:Class="KeeperWpf.BalancesAndSaldosView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:cal="http://www.caliburnproject.org"
+        mc:Ignorable="d"
+        WindowState="Maximized" 
+        d:DataContext="{d:DesignInstance keeperWpf:BalancesAndSaldosViewModel}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="PreviewKeyDown">
+            <cal:ActionMessage MethodName="ToggleModel">
+                <cal:Parameter Value="$eventArgs" />
+            </cal:ActionMessage>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <oxy:PlotView Model="{Binding DailyBalancesModel}" Visibility="{Binding DailyBalancesModelVisibility}"/>
+        <oxy:PlotView Model="{Binding MonthlySaldoModel}" Visibility="{Binding MonthlySaldoModelVisibility}"/>
+        <oxy:PlotView Model="{Binding AnnualSaldoModel}" Visibility="{Binding AnnualSaldoModelVisibility}"/>
+    </Grid>
+</Window>

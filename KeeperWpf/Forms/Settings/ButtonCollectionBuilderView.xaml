@@ -1,0 +1,59 @@
+﻿<Window x:Class="KeeperWpf.ButtonCollectionBuilderView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        xmlns:cal="http://www.caliburnproject.org"
+        mc:Ignorable="d"
+        Height="450" Width="600" WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance keeperWpf:ButtonCollectionBuilderViewModel}">
+    <StackPanel>
+        <TextBlock Text="Коллекция кнопок:" Margin="5"/>
+        <ComboBox Margin="5"  ItemsSource="{Binding Collections}" 
+                          SelectedItem="{Binding SelectedCollection, Mode=TwoWay}"/>
+
+        <ListView Margin="5" Height="250" ItemsSource="{Binding Buttons}"
+                  SelectedItem="{Binding SelectedButton}" d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="300" DisplayMemberBinding="{Binding Path=Name}">account</GridViewColumn>
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=ButtonName}">button</GridViewColumn>
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Id}">id</GridViewColumn>
+                    <GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button cal:Message.Attach="MoveLineUp" Content="Up" Width="50"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Удалить" cal:Message.Attach="RemoveButtonFromCollection"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+        </ListView>
+
+        <TextBlock Text="Выберите:" Margin="5"/>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel Width="300">
+                <TextBlock Text="Счет:" Margin="5"/>
+                <keeperWpf:ComboBoxTreeView DockPanel.Dock="Bottom" 
+                                             Background="White" Margin="5"
+                                             VerticalAlignment="Top" Height="25" IsBranchSelectionEnabled="False"
+                                             ItemTemplate="{StaticResource ComboBoxTreeViewDataTemplate}"
+                                             ItemsSource="{Binding AccNames}" 
+                                             SelectedItem="{Binding SelectedAccName, Mode=TwoWay}" />
+            </StackPanel>
+            <StackPanel Width="150">
+                <TextBlock Text="Название кнопки:" Margin="7,4"/>
+                <TextBox Height="22" Margin="7,9,7,0" 
+                         Text="{Binding SelectedAccName.ButtonName}"/>
+            </StackPanel>
+            <Button Name="AddButtonToCollection" Height="22" Width="120" Margin="5,26, 0,0" Content="Добавить"/>
+        </StackPanel>
+
+    </StackPanel>
+</Window>

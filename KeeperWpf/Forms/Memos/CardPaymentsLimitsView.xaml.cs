@@ -1,0 +1,12 @@
+﻿namespace KeeperWpf;
+
+/// <summary>
+/// Interaction logic for CardPaymentsLimitsView.xaml
+/// </summary>
+public partial class CardPaymentsLimitsView
+{
+    public CardPaymentsLimitsView()
+    {
+        InitializeComponent();
+    }
+}

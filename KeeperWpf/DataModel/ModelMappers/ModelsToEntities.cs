@@ -6,7 +6,7 @@ namespace KeeperWpf;
 
 public static class ModelsToEntities
 {
-    public static Transaction Map(this TransactionModel transactionModel)
+    public static Transaction FromModel(this TransactionModel transactionModel)
     {
         return new Transaction()
         {
@@ -60,7 +60,23 @@ public static class ModelsToEntities
         };
     }
 
-    public static DepositOffer Map(this DepositOfferModel depositOfferModel)
+    public static BankAccount FromModel(this BankAccountModel bankAccountModel)
+    {
+        return new BankAccount()
+        {
+            Id = bankAccountModel.Id,
+            BankId = bankAccountModel.BankId,
+            MainCurrency = bankAccountModel.MainCurrency,
+            DepositOfferId = bankAccountModel.DepositOfferId,   
+            AgreementNumber = bankAccountModel.AgreementNumber,
+            ReplenishDetails = bankAccountModel.ReplenishDetails,
+            StartDate = bankAccountModel.StartDate,
+            FinishDate = bankAccountModel.FinishDate,
+            IsMine = bankAccountModel.IsMine,
+        };
+    }
+
+    public static DepositOffer FromModel(this DepositOfferModel depositOfferModel)
     {
         return new DepositOffer()
         {
@@ -72,20 +88,42 @@ public static class ModelsToEntities
             IsAddLimited = depositOfferModel.IsAddLimited,
             AddLimitInDays = depositOfferModel.AddLimitInDays,
             MainCurrency = depositOfferModel.MainCurrency,
-            DepositTerm = depositOfferModel.DepositTerm.Map(),
+            DepositTerm = depositOfferModel.DepositTerm.FromModel(),
             MonthPaymentsMinimum = depositOfferModel.MonthPaymentsMinimum,
             MonthPaymentsMaximum = depositOfferModel.MonthPaymentsMaximum,
             Comment = depositOfferModel.Comment,
         };
     }
 
-    private static Duration Map(this DurationModel durationModel)
+    public static DepositConditions FromModel(this DepoCondsModel depoCondsModel)
+    {
+        return new DepositConditions()
+        {
+            Id = depoCondsModel.Id,
+            DepositOfferId = depoCondsModel.DepositOfferId,
+            DateFrom = depoCondsModel.DateFrom,
+            RateFormula = depoCondsModel.RateFormula,
+            IsFactDays = depoCondsModel.IsFactDays,
+            EveryStartDay = depoCondsModel.EveryStartDay,
+            EveryFirstDayOfMonth = depoCondsModel.EveryFirstDayOfMonth,
+            EveryLastDayOfMonth = depoCondsModel.EveryLastDayOfMonth,
+            EveryNDays = depoCondsModel.EveryNDays,
+            NDays = depoCondsModel.NDays,
+            IsCapitalized = depoCondsModel.IsCapitalized,
+
+            HasAdditionalPercent = depoCondsModel.HasAdditionalPercent,
+            AdditionalPercent = depoCondsModel.AdditionalPercent,
+            Comment = depoCondsModel.Comment,
+        };
+    }
+
+    private static Duration FromModel(this DurationModel durationModel)
     {
         return durationModel.IsPerpetual ? new Duration() : new Duration(durationModel.Value, durationModel.Scale);
     }
 
    
-    public static Fuelling Map(this FuellingModel fuellingModel)
+    public static Fuelling FromModel(this FuellingModel fuellingModel)
     {
         return new Fuelling()
         {
@@ -107,7 +145,7 @@ public static class ModelsToEntities
         };
     }
 
-    public static TrustAsset Map(this TrustAssetModel asset)
+    public static TrustAsset FromModel(this TrustAssetModel asset)
     {
         return new TrustAsset()
         {
@@ -126,7 +164,7 @@ public static class ModelsToEntities
         };
     }
 
-    public static TrustTransaction Map(this TrustTranModel transaction)
+    public static TrustTransaction FromModel(this TrustTranModel transaction)
     {
         return new TrustTransaction()
         {
@@ -147,7 +185,7 @@ public static class ModelsToEntities
         };
     }
 
-    public static ButtonCollection Map(this ButtonCollectionModel model)
+    public static ButtonCollection FromModel(this ButtonCollectionModel model)
     {
         return new ButtonCollection()
         {

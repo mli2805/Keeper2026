@@ -1,0 +1,55 @@
+﻿<Window x:Class="KeeperWpf.ReceiptView"
+        xml:lang="ru-RU"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        Height="{Binding Height, Mode=TwoWay}" Top="{Binding Top, Mode=TwoWay}" Left="{Binding Left, Mode=TwoWay}"
+        SizeToContent="Width">
+    <Window.Resources>
+        <ResourceDictionary>
+            <keeperWpf:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="85"/>
+            <RowDefinition Height="45"/>
+        </Grid.RowDefinitions>
+
+        <!--    рисунок чека-->
+        <Label Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="{Binding ReceiptFigure}"/>
+
+        <!--    сумма чека-->
+        <TextBlock Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="160,0,0,0">Сумма по чеку</TextBlock>
+        <TextBox Grid.Row="1" Margin="250,0,0,0" Width="70" Height="22" HorizontalAlignment="Left" VerticalContentAlignment="Center" 
+                 BorderBrush="#555555" VerticalAlignment="Top" TextAlignment="Right"
+             Text="{Binding TotalAmount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleToStringConverter}}" />
+        <ComboBox Grid.Row="1" Name="ExpenseCurrency" HorizontalAlignment="Left" Margin="325,0,10,0" 
+              Background="White" VerticalAlignment="top" Width="50"
+              ItemsSource="{Binding CurrencyList}"
+              SelectedItem="{Binding Currency}" Height="22" />
+        <!--    поля ввода-->
+        <TextBlock Grid.Row="2" HorizontalAlignment="Left" Margin="20,5,0,0" Text="Осталось"/>
+        <TextBox Grid.Row="2" Name="Amount" HorizontalAlignment="Left" Margin="10,-11,0,0" 
+                 Width="70" BorderBrush="#555555" TextAlignment="Right" VerticalContentAlignment="Center" Height="22"
+                 Text="{Binding PartialAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                 Converter={StaticResource DoubleToStringConverter}}"  />
+        <TextBlock Grid.Row="2" HorizontalAlignment="Left" Margin="82,29,0,0" Width="30" 
+                   Text="{Binding Currency}" VerticalAlignment="Top"/>
+        <keeperWpf:AccNameSelectorView Grid.Row="2" DataContext="{Binding MyAccNameSelectorVm}" Width="260" 
+                                    Margin="116,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox Name="Comment" HorizontalAlignment="Left" Margin="116,58,0,0" Grid.Row="2" VerticalAlignment="Top" 
+                 Width="260" BorderBrush="#555555" Height="22" Text="{Binding PartialComment, Mode=TwoWay}" />
+        <!--    кнопки-->
+        <Button Grid.Row="3" Content="Еще" Name="OnceMore" Margin="120,12,  0,12" Width="70" 
+                HorizontalAlignment="Left" Style="{StaticResource MyButtonStyle}"/>
+        <Button Grid.Row="3" Content="Вернуть" Name="DeleteOne" Margin="  0,12,120,12" Width="70" 
+                HorizontalAlignment="Right" Style="{StaticResource MyButtonStyle}"/>
+        <Button Grid.Row="3" Content="Принять" Name="AcceptReceipt" Margin=" 10,10,  0,10" Width="100" 
+                HorizontalAlignment="Left" Style="{StaticResource MyButtonStyle}" />
+        <Button Grid.Row="3" Content="Отменить" Name="CancelReceipt" IsCancel="True" Margin="  0,10, 10,10" 
+                Width="100" HorizontalAlignment="Right" Style="{StaticResource MyButtonStyle}" />
+    </Grid>
+</Window>

@@ -1,0 +1,22 @@
+﻿<Window x:Class="KeeperWpf.OwnershipCostView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:cal="http://www.caliburnproject.org"
+        mc:Ignorable="d"
+        WindowState="Maximized" d:DataContext="{d:DesignData OwnershipCostViewModel}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="PreviewKeyDown">
+            <cal:ActionMessage MethodName="OnPreviewKeyDown">
+                <cal:Parameter Value="$eventArgs" />
+            </cal:ActionMessage>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <oxy:PlotView Model="{Binding MonthlyOwnershipCostPlotModel}" Visibility="{Binding MonthlyVisibility}"/>
+        <oxy:PlotView Model="{Binding AnnualOwnershipCostPlotModel}" Visibility="{Binding YearVisibility}"/>
+    </Grid>
+</Window>

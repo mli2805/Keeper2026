@@ -1,0 +1,12 @@
+﻿namespace KeeperWpf;
+
+/// <summary>
+/// Interaction logic for OperationTypeView.xaml
+/// </summary>
+public partial class OperationTypeView
+{
+    public OperationTypeView()
+    {
+        InitializeComponent();
+    }
+}

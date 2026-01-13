@@ -1,0 +1,25 @@
+﻿<Window x:Class="KeeperWpf.DepoCurrResultView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:cal="http://www.caliburnproject.org"
+        WindowState="Maximized" 
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance keeperWpf:DepoCurrResultViewModel}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="PreviewKeyDown">
+            <cal:ActionMessage MethodName="ToggleModel">
+                <cal:Parameter Value="$eventArgs" />
+            </cal:ActionMessage>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <TextBlock Text="Идет обработка данных..." HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <oxy:PlotView Model="{Binding MonthlyDepoCurrModel}" Visibility="{Binding MonthlyDepoCurrModelVisibility}"/>
+        <oxy:PlotView Model="{Binding MonthlySaldoModel}" Visibility="{Binding MonthlySaldoModelVisibility}"/>
+        <oxy:PlotView Model="{Binding AnnualSaldoModel}" Visibility="{Binding AnnualSaldoModelVisibility}"/>
+    </Grid>
+</Window>

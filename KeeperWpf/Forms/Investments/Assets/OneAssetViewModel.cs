@@ -1,0 +1,64 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Caliburn.Micro;
+using KeeperDomain;
+
+namespace KeeperWpf;
+
+public class OneAssetViewModel : Screen
+{
+    private readonly KeeperDataModel _keeperDataModel;
+    private string _aim;
+    public List<Durations> DurationPeriods { get; set; }
+    public List<StockMarket> StockMarkets { get; set; }
+    public List<AssetType> AssetTypes { get; set; }
+
+    public TrustAssetModel AssetInWork { get; set; }
+
+    public OneAssetViewModel(KeeperDataModel keeperDataModel)
+    {
+        _keeperDataModel = keeperDataModel;
+        DurationPeriods = Enum.GetValues(typeof(Durations)).OfType<Durations>().ToList();
+        StockMarkets = Enum.GetValues(typeof(StockMarket)).OfType<StockMarket>().ToList();
+        AssetTypes = Enum.GetValues(typeof(AssetType)).OfType<AssetType>().Take(2).ToList();
+    }
+
+    protected override void OnViewLoaded(object view)
+    {
+        DisplayName = _aim;
+    }
+
+    public void Initialize(int id)
+    {
+        _aim = "Добавить бумагу";
+        AssetInWork = new TrustAssetModel()
+        {
+            Id = id,
+            StockMarket = StockMarket.Russia,
+            AssetType = AssetType.Stock,
+
+            PreviousCouponDate = DateTime.Today.AddDays(-1),
+            BondCouponPeriod = new Duration(182, Durations.Days),
+            BondExpirationDate = DateTime.Today.AddYears(1),
+        };
+    }
+
+    public void Initialize(TrustAssetModel assetModel)
+    {
+        _aim = "Изменить бумагу";
+        AssetInWork = assetModel.Clone();
+    }
+
+    public async Task Save()
+    {
+        AssetInWork.TrustAccount = _keeperDataModel.TrustAccounts.First(t => t.StockMarket == AssetInWork.StockMarket);
+        await TryCloseAsync(true);
+    }
+
+    public async Task Cancel()
+    {
+        await TryCloseAsync(false);
+    }
+}

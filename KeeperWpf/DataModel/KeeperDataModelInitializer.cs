@@ -1,4 +1,5 @@
 ﻿using KeeperInfrastructure;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,7 +9,9 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     AccountRepository accountRepository,
     ExchangeRatesRepository exchangeRatesRepository, OfficialRatesRepository officialRatesRepository,
     MetalRatesRepository metalRatesRepository, RefinancingRatesRepository refinancingRatesRepository,
-    TransactionsRepository transactionsRepository)
+    TrustAccountsRepository trustAccountsRepository, TrustAssetsRepository trustAssetsRepository,
+    TrustAssetRatesRepository trustAssetRatesRepository, TrustTransactionsRepository trustTransactionsRepository,
+    TransactionsRepository transactionsRepository, FuellingsRepository fuellingsRepository)
 {
 
     public async Task<bool> GetAccountTreeAndDictionaryFromDb()
@@ -26,35 +29,37 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
         return true;
     }
 
-    public void GetExchangeRatesFromDb()
+    public void GetRatesFromDb()
     {
-        var exchangeRates = exchangeRatesRepository.GetAllExchangeRates();
-        var dict = exchangeRates.ToDictionary(r => r.Date);
-        keeperDataModel.ExchangeRates = dict;
+        keeperDataModel.ExchangeRates = exchangeRatesRepository.GetAllExchangeRates().ToDictionary(r => r.Date);
+        keeperDataModel.OfficialRates = officialRatesRepository.GetAllOfficialRates().ToDictionary(r => r.Date);
+        keeperDataModel.MetalRates = metalRatesRepository.GetAllMetalRates();
+        keeperDataModel.RefinancingRates = refinancingRatesRepository.GetAllRefinancingRates();
+        Debug.WriteLine($"Loaded {keeperDataModel.ExchangeRates.Count} exchange rates from DB");
     }
 
-    public void GetOfficialRatesFromDb()
+    public void GetDepositOffersFromDb()
     {
-        var officialRates = officialRatesRepository.GetAllOfficialRates();
-        var dict = officialRates.ToDictionary(r => r.Date);
-        keeperDataModel.OfficialRates = dict;
+
     }
 
-    public void GetMetalRatesFromDb()
+    public void GetTrustDataFromDb()
     {
-        var metalRates = metalRatesRepository.GetAllMetalRates();
-        keeperDataModel.MetalRates = metalRates;
-    }
-
-    public void GetRefinancingRatesFromDb()
-    {
-        var refinancingRates = refinancingRatesRepository.GetAllRefinancingRates();
-        keeperDataModel.RefinancingRates = refinancingRates;
+        keeperDataModel.TrustAccounts = trustAccountsRepository.GetAllTrustAccounts();
+        keeperDataModel.InvestmentAssets = trustAssetsRepository
+            .GetAllTrustAssets().Select(a => a.ToModel(keeperDataModel)).ToList();
+        keeperDataModel.AssetRates = trustAssetRatesRepository.GetAllTrustAssetRates();
+        keeperDataModel.InvestTranModels = trustTransactionsRepository
+            .GetAllTrustTransactions().Select(t => t.ToModel(keeperDataModel)).ToList();
     }
 
     public void GetTransactionsFromDb()
     {
-        var transactions = transactionsRepository.GetAllTransactions();
-        keeperDataModel.Transactions = transactions.Select(t=>t.ToModel(keeperDataModel.AcMoDict)).ToDictionary(t=>t.Id, t=>t);
+        keeperDataModel.Transactions = transactionsRepository
+            .GetAllTransactions().Select(t => t.ToModel(keeperDataModel.AcMoDict))
+            .ToDictionary(t => t.Id, t => t);
+
+        var fuellings = fuellingsRepository.GetAllFuellings();
+        keeperDataModel.FuellingJoinTransaction(fuellings);
     }
 }

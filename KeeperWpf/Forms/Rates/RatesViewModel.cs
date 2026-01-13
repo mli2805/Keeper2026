@@ -8,7 +8,6 @@ public class RatesViewModel : Screen
 {
     private readonly KeeperDataModel _keeperDataModel;
     private readonly IWindowManager _windowManager;
-    private readonly KeeperDataModelInitializer _keeperDataModelInitializer;
 
     public OfficialRatesViewModel OfficialRatesViewModel { get; }
     public ExchangeRatesViewModel ExchangeRatesViewModel { get; }
@@ -56,13 +55,11 @@ public class RatesViewModel : Screen
 
 
     public RatesViewModel(KeeperDataModel keeperDataModel, IWindowManager windowManager,
-        KeeperDataModelInitializer keeperDataModelInitializer,
         OfficialRatesViewModel officialRatesViewModel, ExchangeRatesViewModel exchangeRatesViewModel,
         GoldRatesViewModel goldRatesViewModel, RefinancingRatesViewModel refinancingRatesViewModel)
     {
         _keeperDataModel = keeperDataModel;
         _windowManager = windowManager;
-        _keeperDataModelInitializer = keeperDataModelInitializer;
         OfficialRatesViewModel = officialRatesViewModel;
         ExchangeRatesViewModel = exchangeRatesViewModel;
         GoldRatesViewModel = goldRatesViewModel;
@@ -71,8 +68,6 @@ public class RatesViewModel : Screen
 
     public async Task Initialize()
     {
-        // эта страница открывается первой
-        _keeperDataModelInitializer.GetExchangeRatesFromDb();
         ExchangeRatesViewModel.Initialize();
 
         // остальные страницы инициализируем в фоне
@@ -84,18 +79,14 @@ public class RatesViewModel : Screen
     // происходит быстро, можно было и не заморачиваться с названиями на табиках
     private async Task InitializeOtherPages()
     {
-        _keeperDataModelInitializer.GetRefinancingRatesFromDb();
         RefinancingRatesViewModel.Initialize();
         RefinancingRatesTabHeader = "Ставка рефинансирования НБ РБ";
         
-        _keeperDataModelInitializer.GetOfficialRatesFromDb();
         await OfficialRatesViewModel.Initialize();
         OfficialRatesTabHeader = "Официальные курсы НБ РБ";
         
-        _keeperDataModelInitializer.GetMetalRatesFromDb();
         GoldRatesViewModel.Initialize();
         MetalRatesTabHeader = "Золото, закупока минфина";
-      
     }
 
     protected override void OnViewLoaded(object view)

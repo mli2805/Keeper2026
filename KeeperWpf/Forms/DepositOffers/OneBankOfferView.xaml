@@ -1,0 +1,100 @@
+﻿<Window x:Class="KeeperWpf.OneBankOfferView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        xmlns:cal="http://www.caliburnproject.org"
+        mc:Ignorable="d"
+        SizeToContent="Height" Width="390" WindowStartupLocation="CenterScreen" 
+        d:DataContext="{d:DesignInstance keeperWpf:OneBankOfferViewModel}">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5" Height="32">
+            <TextBlock Text="Банк" Margin="5,5,5,5" Width="100"/>
+            <ComboBox Margin="5" ItemsSource="{Binding BankNames}" 
+                      SelectedItem="{Binding SelectedBankName, Mode=TwoWay}" Width="240"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5" Height="30">
+            <TextBlock Text="Название" Margin="5,5,5,5" Width="100"/>
+            <TextBox Margin="5" Text="{Binding ModelInWork.Title}" Width="240"/>
+        </StackPanel>
+        <CheckBox Content="Безотзывный" Margin="10,5" IsChecked="{Binding ModelInWork.IsNotRevocable}"></CheckBox>
+        <StackPanel Orientation="Horizontal" Margin="5" Height="30">
+            <TextBlock Text="Тип ставки по вкладу" Margin="5,5,5,5" Width="180"/>
+            <ComboBox Margin="5" ItemsSource="{Binding RateTypes}" 
+                      SelectedItem="{Binding ModelInWork.RateType}" Width="160"/>
+        </StackPanel>
+        <GroupBox Margin=" 5">
+            <GroupBox.Header>
+                <CheckBox Margin="5,0,0,0" IsChecked="{Binding ModelInWork.IsAddLimited}" 
+                          Content="Доп взносы разрешены только"/>
+            </GroupBox.Header>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="первые" Margin="50,5,5,5" />
+                    <TextBox Width="60" Margin="5" IsEnabled="{Binding ModelInWork.IsAddLimited}"
+                             Text="{Binding ModelInWork.AddLimitInDays}" />
+                    <TextBlock Text="дней" Margin="5" />
+                </StackPanel>
+                <TextBlock Text="Если птичка не стоит - взносы разрешены все время"/>
+                <TextBlock Text="Если птичка и 0 дней - доп взносы запрещены изначально"/>
+                <TextBlock Text="* Хотя по оферу доп взносы разрешены"/>
+                <TextBlock Text="      они могут быть запрещены по конкретному вкладу"/>
+            </StackPanel>
+        </GroupBox>
+        <StackPanel Orientation="Horizontal" Margin="5" Height="30">
+            <TextBlock Text="Основная валюта вклада" Margin="5,5,5,5" Width="180"/>
+            <ComboBox Margin="5" ItemsSource="{Binding Currencies}" SelectedItem="{Binding ModelInWork.MainCurrency}" Width="160"/>
+        </StackPanel>
+        <GroupBox Header="Срок депозита" Margin="5, 0">
+            <StackPanel Margin="5">
+                <CheckBox Content="Бессрочный (тек счета)" IsChecked="{Binding ModelInWork.DepositTerm.IsPerpetual}" Margin="5"/>
+                <StackPanel Orientation="Horizontal" Margin="5" Visibility="{Binding ModelInWork.DepositTerm.ValueVisibility}">
+                    <TextBox Width="100" Text="{Binding ModelInWork.DepositTerm.Value}" Margin="0,5"/>
+                    <ComboBox Width="120" ItemsSource="{Binding Durations}" SelectedItem="{Binding ModelInWork.DepositTerm.Scale}" Margin="5"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Margin="5,0">
+            <StackPanel Margin="0,5,0,0">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Минимум платежей в месяц" Width="170" Margin="5, 0"/>
+                    <TextBox Width="70" Margin="5,2, 5,0" 
+                             Text="{Binding ModelInWork.MonthPaymentsMinimum}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Максимум платежей в месяц" Width="170" Margin="5, 0"/>
+                    <TextBox Width="70"  Margin="5,2, 5,0"
+                             Text="{Binding ModelInWork.MonthPaymentsMaximum}"/>
+                </StackPanel>
+            </StackPanel>
+            
+        </GroupBox>
+        <StackPanel Margin="5,0,5,5">
+            <TextBlock Text="Комментарий" Margin="5" Width="100" HorizontalAlignment="Left"/>
+            <TextBox Margin="5" Text="{Binding ModelInWork.Comment}" 
+                     Height="80" TextWrapping="Wrap"/>
+        </StackPanel>
+        <GroupBox Header="Условия и ставки для депозитов открытых в период" Margin="5">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Margin="0,5">
+                    <Button Name="AddConditions" Height="25" Width="100" Content="Добавить" Margin="5"/>
+                    <Button Name="EditConditions" Height="25" Width="100" Content="Изменить" Margin="5"/>
+                </StackPanel>
+                <ListView  ItemsSource="{Binding ConditionDates}" SelectedItem="{Binding SelectedDate, Mode=TwoWay}" Margin="5">
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Добавить" cal:Message.Attach="AddConditions"/>
+                            <MenuItem Header="Изменить" cal:Message.Attach="EditConditions"/>
+                            <MenuItem Header="Удалить" cal:Message.Attach="RemoveConditions"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                </ListView>
+            </DockPanel>
+        </GroupBox>
+        <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+            <Button Content="Принять" Height="25" Width="100" Name="Save" Margin="5"/>
+            <Button Content="Отклонить" Height="25" Width="100" IsCancel="True" Name="Cancel" Margin="5"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

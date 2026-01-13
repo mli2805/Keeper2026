@@ -16,7 +16,6 @@
 	  <None Remove="Resources\accountmenu16\edit16.ico" />
 	  <None Remove="Resources\accountmenu16\minus16.ico" />
 	  <None Remove="Resources\accountmenu16\plus16.ico" />
-	  <None Remove="Resources\keeper2018.ico" />
 	  <None Remove="Resources\mainmenu\bank_offer.png" />
 	  <None Remove="Resources\mainmenu\calculator.png" />
 	  <None Remove="Resources\mainmenu\car.png" />
@@ -62,6 +61,8 @@
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 		<PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
+		<PackageReference Include="PDFsharp" Version="6.2.4" />
+		<PackageReference Include="PDFsharp-MigraDoc" Version="6.2.4" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -80,9 +81,6 @@
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Include="Resources\accountmenu16\plus16.ico">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\keeper2018.ico">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Include="Resources\mainmenu\bank_offer.png">

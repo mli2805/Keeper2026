@@ -1,0 +1,79 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Caliburn.Micro;
+using KeeperDomain;
+
+namespace KeeperWpf;
+
+public class FuellingInputViewModel : Screen
+{
+    public int Top { get; set; }
+    private int _left;
+    public int Left
+    {
+        get { return _left; }
+        set
+        {
+            if (value == _left) return;
+            _left = value;
+            NotifyOfPropertyChange();
+        }
+    }
+    public int Height { get; set; }
+
+    private readonly KeeperDataModel _dataModel;
+    public FuellingInputVm Vm { get; set; }
+
+    public List<CurrencyCode> Currencies { get; set; } = Enum.GetValues(typeof(CurrencyCode)).OfType<CurrencyCode>().ToList();
+    public List<FuelType> Fuels { get; set; } = Enum.GetValues(typeof(FuelType)).OfType<FuelType>().ToList();
+
+    public List<string> Cars { get; set; }
+
+    private string _selectedCar;
+    public string SelectedCar
+    {
+        get => _selectedCar;
+        set
+        {
+            if (value == _selectedCar) return;
+            _selectedCar = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
+    public FuellingInputViewModel(KeeperDataModel dataModel)
+    {
+        _dataModel = dataModel;
+    }
+
+    public void Initialize(FuellingModel vm)
+    {
+        Cars = _dataModel.Cars.Select(c => c.Title).ToList();
+        Vm = new FuellingInputVm().FromFuellingModel(vm);
+        Vm.DataModel = _dataModel;
+        SelectedCar = _dataModel.Cars.First(c => c.CarAccountId == vm.CarAccountId).Title;
+    }
+    protected override void OnViewLoaded(object view)
+    {
+        DisplayName = "Ввод заправки";
+    }
+
+    public void PlaceIt(int top, int left, int height)
+    {
+        Top = top;
+        Left = left;
+        Height = height;
+    }
+
+    public async Task Save()
+    {
+        await TryCloseAsync(true);
+    }
+
+    public async Task Cancel()
+    {
+        await TryCloseAsync(false);
+    }
+}

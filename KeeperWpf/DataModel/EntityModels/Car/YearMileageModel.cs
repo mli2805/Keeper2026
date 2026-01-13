@@ -7,7 +7,6 @@ public class YearMileageModel
     public int Id { get; set; } //PK
     public int CarId { get; set; }
     public int YearNumber { get; set; } // ordinal
-    // public int Year { get; set; }
     public int Odometer { get; set; }
 
     //вычисляемые поля

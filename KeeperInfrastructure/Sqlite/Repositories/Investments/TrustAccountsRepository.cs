@@ -9,8 +9,6 @@ public class TrustAccountsRepository(KeeperDbContext keeperDbContext)
         var result = keeperDbContext.TrustAccounts.Select(ta => ta.FromEf()).ToList();
         return result;
     }
-
-
 }
 
 public class TrustAssetsRepository(KeeperDbContext keeperDbContext)
