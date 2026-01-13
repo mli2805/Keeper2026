@@ -68,6 +68,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\KeeperDomain\KeeperDomain.csproj" />
 	  <ProjectReference Include="..\KeeperInfrastructure\KeeperInfrastructure.csproj" />
+	  <ProjectReference Include="..\KeeperModels\KeeperModels.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

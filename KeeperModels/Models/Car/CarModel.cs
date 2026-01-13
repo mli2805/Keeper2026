@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace KeeperWpf;
+﻿namespace KeeperModels;
 
 public class CarModel
 {

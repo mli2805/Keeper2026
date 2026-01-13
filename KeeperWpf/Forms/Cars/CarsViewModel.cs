@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using KeeperDomain;
+using KeeperModels;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;

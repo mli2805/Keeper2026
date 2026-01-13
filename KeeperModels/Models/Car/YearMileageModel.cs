@@ -1,6 +1,6 @@
 ﻿using KeeperDomain;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public class YearMileageModel
 {

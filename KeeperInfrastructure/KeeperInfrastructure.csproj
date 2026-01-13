@@ -1,19 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-	  <RootNamespace>KeeperInfrastructure</RootNamespace>
-	  <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<RootNamespace>KeeperInfrastructure</RootNamespace>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.22" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.22" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.22" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.22" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\KeeperDomain\KeeperDomain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\KeeperDomain\KeeperDomain.csproj" />
+		<ProjectReference Include="..\KeeperModels\KeeperModels.csproj" />
+	</ItemGroup>
 
 </Project>
