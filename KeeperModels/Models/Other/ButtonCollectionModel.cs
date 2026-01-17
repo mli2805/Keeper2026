@@ -1,8 +1,4 @@
-﻿using KeeperModels;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace KeeperWpf;
+﻿namespace KeeperModels;
 
 public class ButtonCollectionModel
 {

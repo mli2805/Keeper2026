@@ -1,7 +1,7 @@
 ﻿using System;
 using KeeperDomain;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public class FuellingModel
 {
@@ -19,7 +19,7 @@ public class FuellingModel
     public string Comment { get; set; }
 
 
-    // Вычислимые поля
+    // Вычисляемые поля
     public decimal OneLitrePrice { get; set; }
     public decimal OneLitreInUsd { get; set; }
 

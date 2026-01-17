@@ -1,11 +1,9 @@
-﻿using System;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 using System.Globalization;
 using Caliburn.Micro;
 using KeeperDomain;
-using KeeperModels;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public class TrustTranModel : PropertyChangedBase
 {

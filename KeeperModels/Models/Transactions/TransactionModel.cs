@@ -4,7 +4,7 @@ using Caliburn.Micro;
 using KeeperDomain;
 using KeeperModels;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public class TransactionModel : PropertyChangedBase
 {

@@ -55,5 +55,11 @@ public class KeeperDbContext : DbContext
             .HasMany(c => c.RateLines)
             .WithOne(rl => rl.DepositConditions)
             .HasForeignKey(rl => rl.DepositOfferConditionsId);
+
+        modelBuilder.Entity<TrustAssetEf>()
+            .HasMany(a => a.Rates)
+            .WithOne()
+            .HasForeignKey(r => r.TrustAssetId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

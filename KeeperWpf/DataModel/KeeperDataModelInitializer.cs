@@ -7,16 +7,44 @@ using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
+/// <summary>
+/// Модели с которыми работает WPF приложение в отдельном проекте KeeperModels (wpf class library)
+/// EF entities + DbContext + Repositories в проекте KeeperInfrastructure
+/// Мапперы из EF entities в модели зашиты в методы репозиториев в проекте KeeperInfrastructure
+/// Мапперы ToEf/FromEf для сущностей в KeeperDomain (старая программа и бэкап)  в проекте KeeperInfrastructure/Sqlite/Mappers
+/// 
+/// Здесь вызываем методы репозиториев для загрузки данных из БД в общую модель KeeperDataModel
+/// Инитим один раз при старте приложения, т.к. данные сильно связанны между собой и для большинства форм
+/// нужны как минимум счета, транзакции и курсы
+/// </summary>
 public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     AccountRepository accountRepository, CarRepository carRepository, DepositOffersRepository depositOffersRepository,
     ExchangeRatesRepository exchangeRatesRepository, OfficialRatesRepository officialRatesRepository,
     MetalRatesRepository metalRatesRepository, RefinancingRatesRepository refinancingRatesRepository,
     TrustAccountsRepository trustAccountsRepository, TrustAssetsRepository trustAssetsRepository,
     TrustAssetRatesRepository trustAssetRatesRepository, TrustTransactionsRepository trustTransactionsRepository,
-    TransactionsRepository transactionsRepository, FuellingsRepository fuellingsRepository)
+    TransactionsRepository transactionsRepository, FuellingsRepository fuellingsRepository,
+    CardBalanceMemosRepository cardBalanceMemosRepository, LargeExpenseThresholdsRepository largeExpenseThresholdsRepository,
+    ButtonCollectionsRepository buttonCollectionsRepository, SalaryChangesRepository salaryChangesRepository)
 {
+    public async Task<bool> GetFullModelFromDb()
+    {
+        var success = await GetAccountTreeAndDictionaryFromDb();
+        if (!success)
+        {
+            // на случай если БД пустая, только что удалили и создали новую (будем грузить из текстового бэкапа)
+            return false;
+        }
+        GetRatesFromDb();
+        GetTransactionsFromDb();
+        await GetCarsFromDb();
+        await GetDepositOffersFromDb(keeperDataModel.AcMoDict);
+        GetTrustDataFromDb();
+        await GetOthersFromDb();
+        return true;
+    }
 
-    public async Task<bool> GetAccountTreeAndDictionaryFromDb()
+    private async Task<bool> GetAccountTreeAndDictionaryFromDb()
     {
         // со счетов начинаем поэтому добавил проверку на наличие счетов
         var accounts = await accountRepository.GetAllAccounts();
@@ -31,7 +59,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
         return true;
     }
 
-    public void GetRatesFromDb()
+    private void GetRatesFromDb()
     {
         keeperDataModel.ExchangeRates = exchangeRatesRepository.GetAllExchangeRates().ToDictionary(r => r.Date);
         keeperDataModel.OfficialRates = officialRatesRepository.GetAllOfficialRates().ToDictionary(r => r.Date);
@@ -40,18 +68,18 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
         Debug.WriteLine($"Loaded {keeperDataModel.ExchangeRates.Count} exchange rates from DB");
     }
 
-    public async Task GetCarsFromDb()
+    private async Task GetCarsFromDb()
     {
         keeperDataModel.Cars = await carRepository.GetAllCarsWithMileages();
     }
 
 
-    public async Task GetDepositOffersFromDb(Dictionary<int, AccountItemModel> acMoDict)
+    private async Task GetDepositOffersFromDb(Dictionary<int, AccountItemModel> acMoDict)
     {
         keeperDataModel.DepositOffers = await depositOffersRepository.GetDepositOffersWithConditionsAndRates(acMoDict);
     }
 
-    public void GetTrustDataFromDb()
+    private void GetTrustDataFromDb()
     {
         keeperDataModel.TrustAccounts = trustAccountsRepository.GetAllTrustAccounts();
         keeperDataModel.InvestmentAssets = trustAssetsRepository
@@ -61,7 +89,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
             .GetAllTrustTransactions().Select(t => t.ToModel(keeperDataModel)).ToList();
     }
 
-    public void GetTransactionsFromDb()
+    private void GetTransactionsFromDb()
     {
         keeperDataModel.Transactions = transactionsRepository
             .GetAllTransactions().Select(t => t.ToModel(keeperDataModel.AcMoDict))
@@ -69,5 +97,13 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
 
         var fuellings = fuellingsRepository.GetAllFuellings();
         keeperDataModel.FuellingJoinTransaction(fuellings);
+    }
+
+    private async Task GetOthersFromDb()
+    {
+        keeperDataModel.SalaryChanges = salaryChangesRepository.GetAllSalaryChanges();
+        keeperDataModel.CardBalanceMemoModels = await cardBalanceMemosRepository.GetAllCardBalanceMemos(keeperDataModel.AcMoDict);
+        keeperDataModel.LargeExpenseThresholds = largeExpenseThresholdsRepository.GetAllLargeExpenseThresholds();
+        keeperDataModel.ButtonCollections = await buttonCollectionsRepository.GetAllButtonCollections(keeperDataModel.AcMoDict);
     }
 }

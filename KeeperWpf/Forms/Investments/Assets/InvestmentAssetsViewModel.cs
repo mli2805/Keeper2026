@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using KeeperDomain;
+using KeeperModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

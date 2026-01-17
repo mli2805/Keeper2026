@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using KeeperDomain;
+using KeeperModels;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using Caliburn.Micro;
 using KeeperDomain;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public class TrustAssetModel : PropertyChangedBase
 {

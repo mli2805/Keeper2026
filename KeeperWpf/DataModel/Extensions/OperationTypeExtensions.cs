@@ -3,7 +3,7 @@ using KeeperDomain;
 
 namespace KeeperWpf;
 
-public static class OperationTypeExtantions
+public static class OperationTypeExtensions
 {
     public static Brush FontColor(this OperationType operationType)
     {

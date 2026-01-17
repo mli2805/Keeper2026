@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace KeeperModels;
+﻿namespace KeeperModels;
 
 public class AccountItemModel : TreeViewItemModel
 {

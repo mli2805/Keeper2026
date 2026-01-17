@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using KeeperDomain;
+using KeeperModels;
 
 namespace KeeperWpf;
 

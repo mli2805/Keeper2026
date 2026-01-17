@@ -28,4 +28,8 @@ public class TrustAssetEf
 
     public string Comment { get; set; } = string.Empty;
 
+
+    // Навигационное свойство
+    public List<TrustAssetRateEf> Rates { get; set; } = new List<TrustAssetRateEf>();
+
 }

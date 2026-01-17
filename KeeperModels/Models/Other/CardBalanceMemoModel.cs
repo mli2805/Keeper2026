@@ -1,7 +1,6 @@
-﻿using KeeperModels;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public class CardBalanceMemoModel
 {

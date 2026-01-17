@@ -11,7 +11,6 @@ public class ShellViewModel : Screen, IShell
     private readonly KeeperDataModel _keeperDataModel;
     private readonly KeeperDataModelInitializer _dataModelInitializer;
     private readonly LoadingProgressViewModel _loadingProgressViewModel;
-    private readonly RatesViewModel _ratesViewModel;
 
 
     public ShellPartsBinder ShellPartsBinder { get; }
@@ -23,7 +22,6 @@ public class ShellViewModel : Screen, IShell
     public ShellViewModel(IWindowManager windowManager,
         KeeperDataModel keeperDataModel,
         KeeperDataModelInitializer dataModelInitializer, LoadingProgressViewModel loadingProgressViewModel,
-        RatesViewModel ratesViewModel,
         ShellPartsBinder shellPartsBinder, MainMenuViewModel mainMenuViewModel,
         AccountTreeViewModel accountTreeViewModel, BalanceOrTrafficViewModel balanceOrTrafficViewModel,
         TwoSelectorsViewModel twoSelectorsViewModel)
@@ -32,7 +30,6 @@ public class ShellViewModel : Screen, IShell
         _keeperDataModel = keeperDataModel;
         _dataModelInitializer = dataModelInitializer;
         _loadingProgressViewModel = loadingProgressViewModel;
-        _ratesViewModel = ratesViewModel;
         ShellPartsBinder = shellPartsBinder;
         MainMenuViewModel = mainMenuViewModel;
         AccountTreeViewModel = accountTreeViewModel;
@@ -49,15 +46,7 @@ public class ShellViewModel : Screen, IShell
             await TryCloseAsync();
             return;
         }
-
        
-        // и курсы для отображения остатков в разных валютах
-        _dataModelInitializer.GetRatesFromDb();
-        // нужны транзакции для расчета остатков на счетах
-        _dataModelInitializer.GetTransactionsFromDb();
-
-        await _dataModelInitializer.GetCarsFromDb();
-        await _dataModelInitializer.GetDepositOffersFromDb(_keeperDataModel.AcMoDict);
         var account = _keeperDataModel.AccountsTree.First(r => r.Name == "Мои");
         account.IsSelected = true;
         ShellPartsBinder.SelectedAccountItemModel = account;
@@ -65,9 +54,9 @@ public class ShellViewModel : Screen, IShell
 
     public async Task<bool> LoadAccountsTree()
     {
-        // если БД удалили, она будет создана в AppBootstrapper еще до ShellViewModel
+        // если БД удалили, она будет создана пустая в AppBootstrapper еще до ShellViewModel
         // GetAccountTreeFromDb вернет false, если в БД нет данных
-        if (await _dataModelInitializer.GetAccountTreeAndDictionaryFromDb())
+        if (await _dataModelInitializer.GetFullModelFromDb())
         {
             return true;
         }
@@ -89,18 +78,7 @@ public class ShellViewModel : Screen, IShell
             return false;
         }
 
-        var success = await _dataModelInitializer.GetAccountTreeAndDictionaryFromDb();
+        var success = await _dataModelInitializer.GetFullModelFromDb();
         return true;
-    }
-
-    public async void ShowRatesForm()
-    {
-        await _ratesViewModel.Initialize();
-        await _windowManager.ShowDialogAsync(_ratesViewModel);
-    }
-
-    public async void ShowCarsForm()
-    {
-        // 
     }
 }

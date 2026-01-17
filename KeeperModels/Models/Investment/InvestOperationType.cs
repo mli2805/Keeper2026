@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
 using KeeperDomain;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public static class InvestOperationTypeExt
 {

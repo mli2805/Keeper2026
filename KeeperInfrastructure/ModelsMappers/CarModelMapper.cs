@@ -1,7 +1,4 @@
-﻿using KeeperModels;
-using System.Runtime.CompilerServices;
-
-namespace KeeperInfrastructure;
+﻿namespace KeeperInfrastructure;
 
 public static class CarModelMapper
 {
