@@ -157,7 +157,7 @@ public static class ModelsToEntities
             StockMarket = asset.StockMarket,
             AssetType = asset.AssetType,
             Nominal = asset.Nominal,
-            BondCouponPeriod = asset.BondCouponPeriod,
+            BondCouponPeriod = asset.BondCouponPeriod.FromModel(),
             CouponRate = asset.CouponRate,
             PreviousCouponDate = asset.PreviousCouponDate,
             BondExpirationDate = asset.BondExpirationDate,

@@ -40,10 +40,10 @@ public class TrustAssetModel : PropertyChangedBase
         ? "" 
         : Nominal.ToString(new CultureInfo("en-US")) + " руб";
 
-    public KeeperDomain.Duration BondCouponPeriod { get; set; } = new KeeperDomain.Duration();
-    public string BondCouponPeriodStr => AssetType == AssetType.Bond ? BondCouponPeriod?.Dump() ?? "" : "";
+    public DurationModel BondCouponPeriod { get; set; } = new DurationModel();
+    public string BondCouponPeriodStr => AssetType == AssetType.Bond ? BondCouponPeriod?.ToString() ?? "" : "";
     public DateTime PreviousCouponDate { get; set; }
-    public string PreviousCouponDateStr => AssetType == AssetType.Bond ? PreviousCouponDate.ToLongDateString() : "";
+    public string PreviousCouponDateStr => AssetType == AssetType.Bond ? PreviousCouponDate!.ToLongDateString() : "";
     public DateTime BondExpirationDate { get; set; } = DateTime.MaxValue;
     public string BondExpirationDateStr => AssetType == AssetType.Bond ? BondExpirationDate.ToLongDateString() : "";
 

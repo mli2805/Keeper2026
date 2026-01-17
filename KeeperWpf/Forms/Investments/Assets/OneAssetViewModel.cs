@@ -41,7 +41,7 @@ public class OneAssetViewModel : Screen
             AssetType = AssetType.Stock,
 
             PreviousCouponDate = DateTime.Today.AddDays(-1),
-            BondCouponPeriod = new Duration(182, Durations.Days),
+            BondCouponPeriod = new DurationModel(182, Durations.Days),
             BondExpirationDate = DateTime.Today.AddYears(1),
         };
     }

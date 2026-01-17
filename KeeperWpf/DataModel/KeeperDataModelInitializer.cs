@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 namespace KeeperWpf;
 
 /// <summary>
-/// Модели с которыми работает WPF приложение в отдельном проекте KeeperModels (wpf class library)
+/// Модели с которыми работает WPF приложение находятся в отдельном проекте KeeperModels (wpf class library)
 /// EF entities + DbContext + Repositories в проекте KeeperInfrastructure
-/// Мапперы из EF entities в модели зашиты в методы репозиториев в проекте KeeperInfrastructure
 /// Мапперы ToEf/FromEf для сущностей в KeeperDomain (старая программа и бэкап)  в проекте KeeperInfrastructure/Sqlite/Mappers
+/// Мапперы из EF entities в модели зашиты в методы репозиториев в проекте KeeperInfrastructure
 /// 
 /// Здесь вызываем методы репозиториев для загрузки данных из БД в общую модель KeeperDataModel
 /// Инитим один раз при старте приложения, т.к. данные сильно связанны между собой и для большинства форм
@@ -29,73 +29,67 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
 {
     public async Task<bool> GetFullModelFromDb()
     {
-        var success = await GetAccountTreeAndDictionaryFromDb();
+        var success = await GetAccountsTreeAndDictFromDb();
         if (!success)
         {
             // на случай если БД пустая, только что удалили и создали новую (будем грузить из текстового бэкапа)
             return false;
         }
         GetRatesFromDb();
-        GetTransactionsFromDb();
-        await GetCarsFromDb();
-        await GetDepositOffersFromDb(keeperDataModel.AcMoDict);
-        GetTrustDataFromDb();
+        await GetTransactionsFromDb();
+        keeperDataModel.Cars = await carRepository.GetAllCarsWithMileages();
+        keeperDataModel.DepositOffers = await depositOffersRepository.GetDepositOffersWithConditionsAndRates(keeperDataModel.AcMoDict);
+        await GetTrustDataFromDb(keeperDataModel.AcMoDict);
         await GetOthersFromDb();
         return true;
     }
 
-    private async Task<bool> GetAccountTreeAndDictionaryFromDb()
+    private async Task<bool> GetAccountsTreeAndDictFromDb()
     {
-        // со счетов начинаем поэтому добавил проверку на наличие счетов
-        var accounts = await accountRepository.GetAllAccounts();
-        if (accounts == null || accounts.Count == 0)
+        var pair = await accountRepository.GetAccountModelsTreeAndDict();
+        //  со счетов начинаем поэтому добавил проверку на пустую базу
+        if (pair == null)
         {
             return false;
         }
-        var bankAccounts = await accountRepository.GetAllBankAccounts();
-        var deposits = await accountRepository.GetAllDeposits();
-        var payCards = await accountRepository.GetAllPayCards();
-        keeperDataModel.FillInAccountTreeAndDict(accounts, bankAccounts, deposits, payCards);
+        keeperDataModel.AccountsTree = pair!.Value.Item1;
+        keeperDataModel.AcMoDict = pair!.Value.Item2;
         return true;
     }
 
     private void GetRatesFromDb()
     {
+        // так и показываем на вью
         keeperDataModel.ExchangeRates = exchangeRatesRepository.GetAllExchangeRates().ToDictionary(r => r.Date);
+        // на вью преобразуем в OfficialRatesModel (долгое преобразование с дельтами, в отдельном потоке)
         keeperDataModel.OfficialRates = officialRatesRepository.GetAllOfficialRates().ToDictionary(r => r.Date);
+        // на вью преобразуем в GoldCoinsModel (это можно было бы делать в репозитории, вместо FromEf)
         keeperDataModel.MetalRates = metalRatesRepository.GetAllMetalRates();
+        // так и показываем на вью
         keeperDataModel.RefinancingRates = refinancingRatesRepository.GetAllRefinancingRates();
         Debug.WriteLine($"Loaded {keeperDataModel.ExchangeRates.Count} exchange rates from DB");
     }
 
-    private async Task GetCarsFromDb()
+    private async Task GetTrustDataFromDb(Dictionary<int, AccountItemModel> acMoDict)
     {
-        keeperDataModel.Cars = await carRepository.GetAllCarsWithMileages();
-    }
+        keeperDataModel.TrustAccounts = await trustAccountsRepository.GetAllTrustAccounts();
 
+        keeperDataModel.InvestmentAssets = await trustAssetsRepository.GetAllTrustAssetModels(keeperDataModel.TrustAccounts);
 
-    private async Task GetDepositOffersFromDb(Dictionary<int, AccountItemModel> acMoDict)
-    {
-        keeperDataModel.DepositOffers = await depositOffersRepository.GetDepositOffersWithConditionsAndRates(acMoDict);
-    }
-
-    private void GetTrustDataFromDb()
-    {
-        keeperDataModel.TrustAccounts = trustAccountsRepository.GetAllTrustAccounts();
-        keeperDataModel.InvestmentAssets = trustAssetsRepository
-            .GetAllTrustAssets().Select(a => a.ToModel(keeperDataModel)).ToList();
         keeperDataModel.AssetRates = trustAssetRatesRepository.GetAllTrustAssetRates();
-        keeperDataModel.InvestTranModels = trustTransactionsRepository
-            .GetAllTrustTransactions().Select(t => t.ToModel(keeperDataModel)).ToList();
+
+        keeperDataModel.InvestTranModels = await trustTransactionsRepository
+            .GetAllTrustTransactionModels(acMoDict, keeperDataModel.TrustAccounts, keeperDataModel.InvestmentAssets);
     }
 
-    private void GetTransactionsFromDb()
+    private async Task GetTransactionsFromDb()
     {
-        keeperDataModel.Transactions = transactionsRepository
-            .GetAllTransactions().Select(t => t.ToModel(keeperDataModel.AcMoDict))
-            .ToDictionary(t => t.Id, t => t);
+        keeperDataModel.Transactions = (await transactionsRepository
+            .GetAllTransactionModels(keeperDataModel.AcMoDict)).ToDictionary(t => t.Id);
 
         var fuellings = fuellingsRepository.GetAllFuellings();
+        // тут не только маппинг, но и вычисление доп. полей в моделях
+        // наверное стоит это выполнять только при необходимости, когда открывается форма заправок или ввода новой заправки
         keeperDataModel.FuellingJoinTransaction(fuellings);
     }
 
