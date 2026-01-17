@@ -4,7 +4,7 @@ namespace KeeperInfrastructure;
 
 public class CarEf
 {
-    public int Id { get; private set; }
+    public int Id { get; set; }
 
     public int CarAccountId { get; set; }
     [MaxLength(100)] public string Title { get; set; }

@@ -6,6 +6,7 @@ public static class CarMapper
     {
         return new CarEf
         {
+            Id = car.Id,
             CarAccountId = car.CarAccountId,
             Title = car.Title,
             IssueYear = car.IssueYear,
@@ -17,6 +18,16 @@ public static class CarMapper
             SaleMileage = car.SaleMileage,
             SupposedSalePrice = car.SupposedSalePrice,
             Comment = car.Comment
+        };
+    }
+
+    public static CarYearMileageEf ToEf(this KeeperDomain.CarYearMileage carYearMileage)
+    {
+        return new CarYearMileageEf
+        {
+            Id = carYearMileage.Id,
+            CarId = carYearMileage.CarId,
+            Odometer = carYearMileage.Odometer
         };
     }
 
@@ -36,15 +47,6 @@ public static class CarMapper
             SaleMileage = carEf.SaleMileage,
             SupposedSalePrice = carEf.SupposedSalePrice,
             Comment = carEf.Comment
-        };
-    }
-
-    public static CarYearMileageEf ToEf(this KeeperDomain.CarYearMileage carYearMileage)
-    {
-        return new CarYearMileageEf
-        {
-            CarId = carYearMileage.CarId,
-            Odometer = carYearMileage.Odometer
         };
     }
 
