@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace KeeperWpf;
 
-public static class ToKeeperModel
+public static class ToKeeperDomain
 {
-    public static KeeperModel From(this KeeperDataModel keeperDataModel)
+    public static KeeperDomainModel From(this KeeperDataModel keeperDataModel)
     {
         var accountPlaneList = keeperDataModel.FlattenAccountTree().ToList();
         var bankAccounts = keeperDataModel.AcMoDict.Values
@@ -22,6 +22,7 @@ public static class ToKeeperModel
             .Select(ac => ac.BankAccount.PayCard!)
             .ToList();
 
+        var depositOffers = new List<DepositOffer>();
         var depositRateLines = new List<DepositRateLine>();
         var depositConditions = new List<DepositConditions>();
         foreach (var depositOffer in keeperDataModel.DepositOffers)
@@ -31,9 +32,10 @@ public static class ToKeeperModel
                 depositRateLines.AddRange(pair.Value.RateLines);
                 depositConditions.Add(pair.Value.FromModel());
             }
+            depositOffers.Add(depositOffer.FromModel());
         }
 
-        var result = new KeeperModel()
+        var result = new KeeperDomainModel()
         {
             OfficialRates = keeperDataModel.OfficialRates.Values.ToList(),
             ExchangeRates = keeperDataModel.ExchangeRates.Values.ToList(),
@@ -50,8 +52,17 @@ public static class ToKeeperModel
             Deposits = deposits,
             PayCards = payCards,
 
+            DepositOffers = depositOffers,
+            DepositRateLines = depositRateLines,
+            DepositConditions = depositConditions,
+
             Transactions = keeperDataModel.Transactions.Values.Select(t => t.FromModel()).ToList(),
             Fuellings = keeperDataModel.FuellingVms.Select(f => f.FromModel()).ToList(),
+
+            Cars = keeperDataModel.Cars.Select(c => c.FromModel()).ToList(),
+            CarYearMileages = keeperDataModel.Cars
+                        .SelectMany(c => c.YearsMileage)
+                        .Select(y => y.FromModel()).ToList(),
 
             CardBalanceMemos = keeperDataModel.CardBalanceMemoModels.Select(cbm => cbm.FromModel()).ToList(),
             ButtonCollections = keeperDataModel.ButtonCollections.Select(bc => bc.FromModel()).ToList(),

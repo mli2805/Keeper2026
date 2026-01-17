@@ -7,10 +7,10 @@ public static class TxtLoader
 {
     private static string _backupFolder;
 
-    public static async Task<KeeperModel?> LoadAllFromTextFiles(string backupFolder)
+    public static async Task<KeeperDomainModel?> LoadAllFromTextFiles(string backupFolder)
     {
         _backupFolder = backupFolder;
-        var keeperModel = new KeeperModel
+        var keeperDomainModel = new KeeperDomainModel
         {
             ExchangeRates = await ReadFileLines<ExchangeRates>(),
             OfficialRates = await ReadFileLines<OfficialRates>(),
@@ -41,7 +41,7 @@ public static class TxtLoader
             SalaryChanges = await ReadFileLines<SalaryChange>(),
             LargeExpenseThresholds = await ReadFileLines<LargeExpenseThreshold>(),
         };
-        return keeperModel;
+        return keeperDomainModel;
     }
 
     private static async Task<List<T>> ReadFileLines<T>(string filename = "") where T : KeeperDomain.IParsable<T>, new()

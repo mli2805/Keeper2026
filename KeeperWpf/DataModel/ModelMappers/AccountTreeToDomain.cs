@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using KeeperDomain;
 using KeeperModels;
 
 namespace KeeperWpf;
 
-public static class AccountTreeMapper
+public static class AccountTreeToDomain
 {
    
     public static IEnumerable<Account> FlattenAccountTree(this KeeperDataModel dataModel)

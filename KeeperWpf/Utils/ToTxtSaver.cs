@@ -28,7 +28,7 @@ public class ToTxtSaver
         return await Task.Factory.StartNew(() => SaveTxtFiles(keeperModel));
     }
 
-    private Exception? SaveTxtFiles(KeeperModel keeperModel)
+    private Exception? SaveTxtFiles(KeeperDomainModel keeperModel)
     {
         try
         {

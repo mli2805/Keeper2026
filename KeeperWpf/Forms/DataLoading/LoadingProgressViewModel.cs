@@ -47,11 +47,11 @@ public class LoadingProgressViewModel : Screen
 
     private async Task<bool> Load()
     {
-        var model = await TryLoadAllFromTextFiles();
-        if (model != null)
+        var keeperDomainModel = await TryLoadAllFromTextFiles();
+        if (keeperDomainModel != null)
         {
             WritingToDbMessage = "Запись в базу данных...";
-            await _toSqlite.SaveModelToDb(model!);
+            await _toSqlite.SaveModelToDb(keeperDomainModel!);
             return true;
         }
         else
@@ -60,15 +60,15 @@ public class LoadingProgressViewModel : Screen
         }
     }
 
-    private async Task<KeeperModel?> TryLoadAllFromTextFiles()
+    private async Task<KeeperDomainModel?> TryLoadAllFromTextFiles()
     {
         var backupFolder = Path.Combine(_configuration["DataFolder"] ?? "", "backup");
 
-        KeeperModel? model;
+        KeeperDomainModel? keeperDomainModel;
         try
         {
-            model = await TxtLoader.LoadAllFromTextFiles(backupFolder);
-            if (model is null)
+            keeperDomainModel = await TxtLoader.LoadAllFromTextFiles(backupFolder);
+            if (keeperDomainModel is null)
             {
                 MessageBox.Show("Ошибка при загрузке данных из текстовых файлов.");
                 return null;
@@ -80,7 +80,7 @@ public class LoadingProgressViewModel : Screen
             return null;
         }
 
-        return model;
+        return keeperDomainModel;
     }
 
     public async Task Cancel()

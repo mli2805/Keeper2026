@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using KeeperDomain;
+﻿using KeeperDomain;
+using KeeperInfrastructure;
 using KeeperModels;
+using MigraDoc.Rendering;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace KeeperWpf;
 
-public static class ModelsToEntities
+public static class ModelsToDomain
 {
     public static Transaction FromModel(this TransactionModel transactionModel)
     {
@@ -193,6 +195,35 @@ public static class ModelsToEntities
             Id = model.Id,
             Name = model.Name,
             AccountIds = model.AccountModels.Select(m => m.Id).ToList(),
+        };
+    }
+
+    public static Car FromModel(this CarModel model)
+    {
+        return new Car()
+        {
+            Id = model.Id,
+            CarAccountId = model.CarAccountId,
+            Title = model.Title,
+            IssueYear = model.IssueYear,
+            Vin = model.Vin,
+            StateRegNumber = model.StateRegNumber,
+            PurchaseDate = model.PurchaseDate,
+            PurchaseMileage = model.PurchaseMileage,
+            SaleDate = model.SaleDate,
+            SaleMileage = model.SaleMileage,
+            SupposedSalePrice = model.SupposedSalePrice,
+            Comment = model.Comment,
+        };
+    }
+
+    public static CarYearMileage FromModel(this YearMileageModel model)
+    {
+        return new CarYearMileage()
+        {
+            Id = model.Id,
+            CarId = model.CarId,
+            Odometer = model.Odometer,
         };
     }
 
