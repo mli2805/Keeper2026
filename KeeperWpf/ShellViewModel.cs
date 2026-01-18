@@ -2,6 +2,7 @@ using Caliburn.Micro;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace KeeperWpf;
 
@@ -80,5 +81,10 @@ public class ShellViewModel : Screen, IShell
 
         var success = await _dataModelInitializer.GetFullModelFromDb();
         return true;
+    }
+
+    public async Task OnWindowPreviewKeyDown(KeyEventArgs e)
+    {
+        await MainMenuViewModel.OnPreviewKeyDown(e);
     }
 }

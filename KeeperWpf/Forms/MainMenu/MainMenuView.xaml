@@ -7,7 +7,8 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
              cal:Bind.Model="{Binding .}"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignData MainMenuViewModel}">
+             d:DataContext="{d:DesignData MainMenuViewModel}"
+             Focusable="True">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="PreviewKeyDown">
             <cal:ActionMessage MethodName="OnPreviewKeyDown">
