@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace KeeperWpf;
 
@@ -13,26 +14,63 @@ public class ComboBoxTreeView : ComboBox
 {
     private ExtendedTreeView _treeView;
     private ContentPresenter _contentPresenter;
+    private ScrollViewer _scrollViewer;
 
     static ComboBoxTreeView()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(ComboBoxTreeView), new FrameworkPropertyMetadata(typeof(ComboBoxTreeView)));
     }
 
-    //        protected override void OnMouseWheel(MouseWheelEventArgs e)
-    //        {
-    //            don't call the method of the base class
-    //        }
+    private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child is T typedChild)
+            {
+                return typedChild;
+            }
+
+            var result = FindVisualChild<T>(child);
+            if (result != null)
+            {
+                return result;
+            }
+        }
+        return null;
+    }
 
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
 
         _treeView = (ExtendedTreeView)GetTemplateChild("treeView");
-        if (_treeView != null) _treeView.OnHierarchyMouseUp += OnTreeViewHierarchyMouseUp;
+        if (_treeView != null)
+        {
+            _treeView.OnHierarchyMouseUp += OnTreeViewHierarchyMouseUp;
+            _treeView.PreviewMouseWheel += OnTreeViewPreviewMouseWheel;
+        }
+
+        _scrollViewer = (ScrollViewer)GetTemplateChild("DropDownScrollViewer");
+        
         _contentPresenter = (ContentPresenter)GetTemplateChild("ContentPresenter");
 
         SetSelectedItemToHeader();
+    }
+
+    private void OnTreeViewPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        if (_scrollViewer == null) return;
+
+        if (e.Delta > 0)
+        {
+            _scrollViewer.LineUp();
+        }
+        else
+        {
+            _scrollViewer.LineDown();
+        }
+        e.Handled = true;
     }
 
     protected override void OnDropDownClosed(EventArgs e)
@@ -53,6 +91,67 @@ public class ComboBoxTreeView : ComboBox
     {
         base.OnDropDownOpened(e);
         SetSelectedItemToHeader();
+        ScrollToSelectedItem();
+    }
+
+    private void ScrollToSelectedItem()
+    {
+        if (_treeView == null || SelectedItem == null) return;
+
+        // Даем время на отрисовку визуального дерева
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            var selectedItem = SelectedItem as ITreeViewItemModel;
+            if (selectedItem == null) return;
+
+            // Раскрываем все родительские элементы до выбранного
+            var hierarchy = selectedItem.GetHierarchy().ToList();
+            foreach (var item in hierarchy.Take(hierarchy.Count - 1))
+            {
+                item.IsExpanded = true;
+            }
+
+            // Устанавливаем выбранный элемент
+            selectedItem.IsSelected = true;
+
+            // Даем время на раскрытие элементов
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                // Находим TreeViewItem в визуальном дереве
+                var treeViewItem = FindTreeViewItem(_treeView, selectedItem);
+                if (treeViewItem != null)
+                {
+                    treeViewItem.BringIntoView();
+                }
+            }), System.Windows.Threading.DispatcherPriority.Loaded);
+
+        }), System.Windows.Threading.DispatcherPriority.Background);
+    }
+
+    private TreeViewItem FindTreeViewItem(ItemsControl container, object item)
+    {
+        if (container == null) return null;
+
+        var itemContainer = container.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
+        if (itemContainer != null)
+        {
+            return itemContainer;
+        }
+
+        // Ищем рекурсивно в дочерних элементах
+        foreach (var childItem in container.Items)
+        {
+            var parent = container.ItemContainerGenerator.ContainerFromItem(childItem) as TreeViewItem;
+            if (parent == null) continue;
+
+            var foundItem = FindTreeViewItem(parent, item);
+            if (foundItem != null)
+            {
+                return foundItem;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>

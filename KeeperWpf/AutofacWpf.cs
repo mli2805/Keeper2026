@@ -94,18 +94,18 @@ public sealed class AutofacWpf : Module
         builder.RegisterType<TwoSelectorsViewModel>().SingleInstance();
 
         // Transactions view models
-        builder.RegisterType<TransactionsViewModel>();
-        builder.RegisterType<TranModel>();
-        builder.RegisterType<FilterModel>();
-        builder.RegisterType<FilterViewModel>();
-        builder.RegisterType<TranEditExecutor>();
-        builder.RegisterType<TranMoveExecutor>();
-        builder.RegisterType<TranSelectExecutor>();
-        builder.RegisterType<OneTranViewModel>();
-        builder.RegisterType<ReceiptViewModel>();
-        builder.RegisterType<AskReceiptDeletionViewModel>();
-        builder.RegisterType<FuellingInputViewModel>();
-        builder.RegisterType<BalanceDuringTransactionHinter>();
+        builder.RegisterType<TransactionsViewModel>().SingleInstance();
+        builder.RegisterType<TranModel>().SingleInstance();
+        builder.RegisterType<FilterModel>().SingleInstance();
+        builder.RegisterType<FilterViewModel>().SingleInstance();
+        builder.RegisterType<TranEditExecutor>().SingleInstance();
+        builder.RegisterType<TranMoveExecutor>().SingleInstance();
+        builder.RegisterType<TranSelectExecutor>().SingleInstance();
+        builder.RegisterType<OneTranViewModel>().SingleInstance();
+        builder.RegisterType<ReceiptViewModel>().SingleInstance();
+        builder.RegisterType<AskReceiptDeletionViewModel>().SingleInstance();
+        builder.RegisterType<FuellingInputViewModel>().SingleInstance();
+        builder.RegisterType<BalanceDuringTransactionHinter>().SingleInstance();
         builder.RegisterType<UniversalControlVm>();
         builder.RegisterType<NewExpenseControlVm>();
         
