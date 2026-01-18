@@ -17,10 +17,10 @@ public class ToTxtSaver
 
     public ToTxtSaver(IConfiguration configuration, KeeperDataModel keeperDataModel)
     {
-        _backupFolder = configuration["DataFolder"] ?? "";
+        var dataFolderPath = configuration["DataFolder"];
+        _backupFolder = dataFolderPath != null ? Path.Combine(dataFolderPath, "backup") : @"../backup";
         _keeperDataModel = keeperDataModel;
     }
-
 
     public async Task<Exception?> Save()
     {
