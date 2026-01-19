@@ -255,6 +255,7 @@ public class MainMenuViewModel : PropertyChangedBase
 
     public async Task ShowDepoPlusCurreniesChart()
     {
+        _depoCurrResultViewModel.Initialize();
         await _windowManager.ShowDialogAsync(_depoCurrResultViewModel);
     }
 

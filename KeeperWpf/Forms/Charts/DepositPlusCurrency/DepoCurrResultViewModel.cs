@@ -1,7 +1,9 @@
 ﻿using Caliburn.Micro;
 using OxyPlot;
 using OxyPlot.Axes;
+using OxyPlot.Legends;
 using OxyPlot.Series;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -13,41 +15,9 @@ public class DepoCurrResultViewModel : Screen
 {
     #region Binding properties
 
-    private PlotModel _monthlyDepoCurrModel;
-    private PlotModel _monthlySaldoModel;
-    private PlotModel _annualSaldoModel;
-    public PlotModel MonthlyDepoCurrModel
-    {
-        get => _monthlyDepoCurrModel;
-        set
-        {
-            if (Equals(value, _monthlyDepoCurrModel)) return;
-            _monthlyDepoCurrModel = value;
-            NotifyOfPropertyChange();
-        }
-    }
-
-    public PlotModel MonthlySaldoModel
-    {
-        get => _monthlySaldoModel;
-        set
-        {
-            if (Equals(value, _monthlySaldoModel)) return;
-            _monthlySaldoModel = value;
-            NotifyOfPropertyChange();
-        }
-    }
-
-    public PlotModel AnnualSaldoModel
-    {
-        get => _annualSaldoModel;
-        set
-        {
-            if (Equals(value, _annualSaldoModel)) return;
-            _annualSaldoModel = value;
-            NotifyOfPropertyChange();
-        }
-    }
+    public PlotModel MonthlyDepoCurrModel { get; set; } = null!;
+    public PlotModel MonthlySaldoModel { get; set; } = null!;
+    public PlotModel AnnualSaldoModel { get; set; } = null!;
 
     private Visibility _monthlyDepoCurrModelVisibility = Visibility.Collapsed;
     private Visibility _monthlySaldoModelVisibility = Visibility.Collapsed;
@@ -96,87 +66,195 @@ public class DepoCurrResultViewModel : Screen
     protected override void OnViewLoaded(object view)
     {
         DisplayName = "T - Toggle chart";
-        using (new WaitCursor())
-        {
-            Initialize();
-        }
     }
 
-    private void Initialize()
+    public void Initialize()
     {
         var points = _depositCurrencySaldoCalculator.Evaluate().ToList();
-        InitializeMonthlyDepoCurrPlotModel(points);
-        InitializeMonthlySaldoPlotModel(points);
-        InitializeAnnualSaldoPlotModel(points);
+        MonthlyDepoCurrModel = InitializeMonthlyDepoCurrPlotModel(points);
+        MonthlySaldoModel = InitializeMonthlySaldoPlotModel(points);
+
+        var yearPoints = points
+           .GroupBy(p => p.StartDate.Year)
+           .Select(gr => new DepoCurrencyData()
+           {
+               StartDate = gr.First().StartDate,
+               DepoRevenue = gr.Sum(l => l.DepoRevenue),
+               CurrencyRatesDifferrence = gr.Sum(l => l.CurrencyRatesDifferrence),
+           })
+           .ToList();
+        AnnualSaldoModel = InitializeAnnualSaldoPlotModel(yearPoints);
         MonthlyDepoCurrModelVisibility = Visibility.Visible;
     }
 
-    private void InitializeMonthlyDepoCurrPlotModel(List<DepoCurrencyData> points)
+    private PlotModel InitializeMonthlyDepoCurrPlotModel(List<DepoCurrencyData> points)
     {
-        MonthlyDepoCurrModel = new PlotModel();
-        MonthlyDepoCurrModel.Axes.Add(new LinearAxis() { Position = AxisPosition.Left, MajorGridlineStyle = LineStyle.Dash });
+        var plotModel = new PlotModel();
+        plotModel.Legends.Add(new Legend()
+        {
+            LegendPosition = LegendPosition.BottomLeft,
+            LegendPlacement = LegendPlacement.Inside,
+            LegendOrientation = LegendOrientation.Horizontal,
+        });
+        var categoryAxis = new CategoryAxis
+        {
+            Position = AxisPosition.Bottom,
+            MajorStep = 12,
+            LabelFormatter = Month,
+            Key = "y1"
+        };
+        var valueAxis1 = new LinearAxis
+        {
+            Position = AxisPosition.Left,
+            MajorGridlineStyle = LineStyle.Dash,
+            Key = "x1"
+        };
+        plotModel.Axes.Add(categoryAxis);
+        plotModel.Axes.Add(valueAxis1);
 
-        var series = new BarSeries() { Title = "Monthly Depo", FillColor = OxyColors.Blue, IsStacked = true, };
+        var series = new BarSeries()
+        {
+            Title = "Monthly Depo",
+            FillColor = OxyColors.Blue,
+            IsStacked = true,
+            XAxisKey = "x1",
+            YAxisKey = "y1"
+        };
         series.Items.AddRange(points.Select(p => new BarItem((double)p.DepoRevenue)));
-        MonthlyDepoCurrModel.Series.Add(series);
+        plotModel.Series.Add(series);
 
-        var series2 = new BarSeries() { Title = "Monthly Currencies", FillColor = OxyColors.Green, IsStacked = true };
+        var series2 = new BarSeries()
+        {
+            Title = "Monthly Currencies",
+            FillColor = OxyColors.Green,
+            IsStacked = true,
+            XAxisKey = "x1",
+            YAxisKey = "y1"
+        };
         series2.Items.AddRange(points.Select(p => new BarItem((double)p.CurrencyRatesDifferrence)));
-        MonthlyDepoCurrModel.Series.Add(series2);
+        plotModel.Series.Add(series2);
 
-        MonthlyDepoCurrModel.Axes.Add(new CategoryAxis() { ItemsSource = points.Select(p => p.Label).ToArray() });
+        return plotModel;
     }
 
-    private void InitializeMonthlySaldoPlotModel(List<DepoCurrencyData> points)
+    private PlotModel InitializeMonthlySaldoPlotModel(List<DepoCurrencyData> points)
     {
-        MonthlySaldoModel = new PlotModel();
-        MonthlySaldoModel.Axes.Add(new LinearAxis() { Position = AxisPosition.Left, MajorGridlineStyle = LineStyle.Dash });
+        var plotModel = new PlotModel();
+        plotModel.Legends.Add(new Legend()
+        {
+            LegendPosition = LegendPosition.BottomLeft,
+            LegendPlacement = LegendPlacement.Inside,
+            LegendOrientation = LegendOrientation.Horizontal,
+        });
+        var categoryAxis = new CategoryAxis
+        {
+            Position = AxisPosition.Bottom,
+            MajorStep = 12,
+            LabelFormatter = Month,
+            Key = "y1"
+        };
+        var valueAxis1 = new LinearAxis
+        {
+            Position = AxisPosition.Left,
+            MajorGridlineStyle = LineStyle.Dash,
+            Key = "x1"
+        };
+        plotModel.Axes.Add(categoryAxis);
+        plotModel.Axes.Add(valueAxis1);
 
-        var series = new BarSeries() { Title = "Monthly Saldo", FillColor = OxyColors.Blue, NegativeFillColor = OxyColors.Red };
+        var series = new BarSeries()
+        {
+            Title = "Monthly Saldo",
+            FillColor = OxyColors.Blue,
+            NegativeFillColor = OxyColors.Red,
+            XAxisKey = "x1",
+            YAxisKey = "y1"
+        };
         series.Items.AddRange(points.Select(p => new BarItem((double)p.Saldo)));
-        MonthlySaldoModel.Series.Add(series);
+        plotModel.Series.Add(series);
 
-        MonthlySaldoModel.Axes.Add(new CategoryAxis() { ItemsSource = points.Select(p => p.Label).ToArray() });
+        return plotModel;
     }
 
-    private void InitializeAnnualSaldoPlotModel(List<DepoCurrencyData> points)
+    private PlotModel InitializeAnnualSaldoPlotModel(List<DepoCurrencyData> yearPoints)
     {
-        AnnualSaldoModel = new PlotModel();
-        AnnualSaldoModel.Axes.Add(new LinearAxis() { Position = AxisPosition.Left, MajorGridlineStyle = LineStyle.Dash });
+        var plotModel = new PlotModel();
+        plotModel.Legends.Add(new Legend()
+        {
+            LegendPosition = LegendPosition.BottomLeft,
+            LegendPlacement = LegendPlacement.Inside,
+            LegendOrientation = LegendOrientation.Horizontal,
+        });
+        var categoryAxis = new CategoryAxis
+        {
+            Position = AxisPosition.Bottom,
+            MajorStep = 1,
+            LabelFormatter = Year,
+            Key = "y1"
+        };
+        var valueAxis1 = new LinearAxis
+        {
+            Position = AxisPosition.Left,
+            MajorGridlineStyle = LineStyle.Dash,
+            Key = "x1"
+        };
+        plotModel.Axes.Add(categoryAxis);
+        plotModel.Axes.Add(valueAxis1);
 
-        var yearPoints = points
-            .GroupBy(p => p.StartDate.Year)
-            .Select(gr => new DepoCurrencyData()
-            {
-                StartDate = gr.First().StartDate,
-                DepoRevenue = gr.Sum(l => l.DepoRevenue),
-                CurrencyRatesDifferrence = gr.Sum(l => l.CurrencyRatesDifferrence),
-            })
-            .ToList();
-
-
-        var seriesDepo = new BarSeries() { Title = "Annual Depo", FillColor = OxyColors.Green, IsStacked = true, };
+        var seriesDepo = new BarSeries()
+        {
+            Title = "Annual Depo",
+            FillColor = OxyColors.Green,
+            IsStacked = true,
+            XAxisKey = "x1",
+            YAxisKey = "y1"
+        };
         seriesDepo.Items.AddRange(yearPoints.Select(p => new BarItem((double)p.DepoRevenue)));
-        AnnualSaldoModel.Series.Add(seriesDepo);
+        plotModel.Series.Add(seriesDepo);
 
-        var seriesCurrencies = new BarSeries() { Title = "Annual Currencies", FillColor = OxyColors.Orange, IsStacked = true };
+        var seriesCurrencies = new BarSeries()
+        {
+            Title = "Annual Currencies",
+            FillColor = OxyColors.Orange,
+            IsStacked = true,
+            XAxisKey = "x1",
+            YAxisKey = "y1"
+        };
         seriesCurrencies.Items.AddRange(yearPoints.Select(p => new BarItem((double)p.CurrencyRatesDifferrence)));
-        AnnualSaldoModel.Series.Add(seriesCurrencies);
+        plotModel.Series.Add(seriesCurrencies);
 
-        var seriesSaldo = new BarSeries() { Title = "Annual Saldo", FillColor = OxyColors.Blue, NegativeFillColor = OxyColors.Red };
+        var seriesSaldo = new BarSeries()
+        {
+            Title = "Annual Saldo",
+            FillColor = OxyColors.Blue,
+            NegativeFillColor = OxyColors.Red,
+            XAxisKey = "x1",
+            YAxisKey = "y1"
+        };
         seriesSaldo.Items.AddRange(yearPoints.Select(p => new BarItem((double)p.Saldo)));
-        AnnualSaldoModel.Series.Add(seriesSaldo);
+        plotModel.Series.Add(seriesSaldo);
 
-        AnnualSaldoModel.Axes.Add(new CategoryAxis() { ItemsSource = yearPoints.Select(p => p.Label).ToArray() });
+        return plotModel;
     }
 
+    private string Month(double valueOnAxys)
+    {
+        var dateTime = new DateTime(2002, 1, 1).AddMonths((int)valueOnAxys);
+        return $"{dateTime:MM/yy}";
+    }
+
+    private string Year(double valueOnAxys)
+    {
+        var dateTime = new DateTime(2002, 1, 1).AddYears((int)valueOnAxys);
+        return $"{dateTime:yyyy}";
+    }
 
     private int _model = 1;
 
     public void ToggleModel(KeyEventArgs e)
     {
         if (e.Key != Key.T) return;
-        
+
         if (_model == 1)
         {
             _model = 2;
