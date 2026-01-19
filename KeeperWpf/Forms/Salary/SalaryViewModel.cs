@@ -89,7 +89,7 @@ public class SalaryViewModel : Screen
     public List<AccountItemModel> Employers { get; set; }
 
     private Visibility _salaryChangesVisibility = Visibility.Collapsed;
-    public Visibility SalaryChangesVisibility   
+    public Visibility SalaryChangesVisibility
     {
         get => _salaryChangesVisibility;
         set
@@ -130,19 +130,29 @@ public class SalaryViewModel : Screen
     private PlotModel BuildChart()
     {
         var myPlotModel = new PlotModel();
-        CreateBarSeries(myPlotModel);
-        myPlotModel.Axes.Add(new CategoryAxis()
+        var categoryAxis = new CategoryAxis
         {
             Position = AxisPosition.Bottom,
-            MajorStep = 6,
+            MajorStep = 12,
             LabelFormatter = F,
-        });
+            Key = "y1"
+        };
+        var valueAxis1 = new LinearAxis
+        {
+            Position = AxisPosition.Left,
+            Minimum = 0,
+            Key = "x1"
+        };
+        myPlotModel.Axes.Add(categoryAxis);
+        myPlotModel.Axes.Add(valueAxis1);
+
+        CreateBarSeries(myPlotModel);
         return myPlotModel;
     }
 
     private string F(double valueOnAxys)
     {
-        var dateTime = new DateTime(2002,1,1).AddMonths((int)valueOnAxys);
+        var dateTime = new DateTime(2002, 1, 1).AddMonths((int)valueOnAxys);
         return $"{dateTime:MM/yy}";
     }
 
@@ -151,14 +161,28 @@ public class SalaryViewModel : Screen
         var aggr = Aggregate(_onlySalary);
         var aggr2 = Aggregate(_salaryAndIrregulars);
 
-        var salarySeries = new BarSeries() { Title = "Salary", FillColor = OxyColors.Blue, IsStacked = true, };
-        var irregularSeries = new BarSeries() { Title = "Irregular", FillColor = OxyColors.Gray, IsStacked = true, };
+        var salarySeries = new BarSeries()
+        {
+            Title = "Salary",
+            FillColor = OxyColors.Blue,
+            IsStacked = true,
+            XAxisKey = "x1",
+            YAxisKey = "y1"
+        };
+        var irregularSeries = new BarSeries()
+        {
+            Title = "Irregular",
+            FillColor = OxyColors.Gray,
+            IsStacked = true,
+            XAxisKey = "x1",
+            YAxisKey = "y1"
+        };
         for (int i = 0; i < aggr.Count; i++)
         {
             salarySeries.Items.Add(new BarItem((double)aggr[i].AmountInUsd));
             irregularSeries.Items.Add(new BarItem((double)(aggr2[i].AmountInUsd - aggr[i].AmountInUsd)));
         }
-       
+
         myPlotModel.Series.Add(salarySeries);
         myPlotModel.Series.Add(irregularSeries);
     }
@@ -232,7 +256,7 @@ public class SalaryViewModel : Screen
 
     private void ShowSalaryChanges()
     {
-        SalaryChangesVisibility = SalaryChangesVisibility == Visibility.Visible 
+        SalaryChangesVisibility = SalaryChangesVisibility == Visibility.Visible
             ? Visibility.Collapsed : Visibility.Visible;
     }
 

@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Caliburn.Micro;
 using OxyPlot;
 using OxyPlot.Axes;
+using OxyPlot.Legends;
 using OxyPlot.Series;
 
 namespace KeeperWpf;
@@ -29,26 +30,50 @@ public class BasketDiagramViewModel : Screen
         _caption = caption;
 
         BasketPlotModel = new PlotModel();
+        BasketPlotModel.Legends.Add(new Legend()
+        {
+            LegendPosition = LegendPosition.TopLeft,
+            LegendPlacement = LegendPlacement.Inside,
+            LegendOrientation = LegendOrientation.Horizontal,
+        });
+
         BasketDeltaPlotModel = new PlotModel();
-
-        _rates = rates;
-        GetLinesOfBasket(out LineSeries basket, out BarSeries delta);
-
-        BasketPlotModel.Series.Add(basket);
+        // влияет на Series.Title(s), без этого легенда не будет отрисована,
+        // еще можно задать Title для осей, они пишутся рядом с осями
+        BasketDeltaPlotModel.Legends.Add(new Legend()
+        {
+            LegendPosition = LegendPosition.TopCenter,
+            LegendPlacement = LegendPlacement.Inside,
+            LegendOrientation = LegendOrientation.Horizontal,
+        });
+        
         BasketPlotModel.Axes.Add(new DateTimeAxis()
         {
             IntervalType = DateTimeIntervalType.Months,
             MajorGridlineStyle = LineStyle.Solid,
         });
 
-        BasketDeltaPlotModel.Series.Add(delta);
-
         BasketDeltaPlotModel.Axes.Add(new CategoryAxis()
         {
             IsTickCentered = true,
             MajorStep = (DateTime.Today - _startDateD).Days / 12.0,
             LabelFormatter = F,
+            Key = "y1"
         });
+        BasketDeltaPlotModel.Axes.Add(new LinearAxis()
+        {
+            Position = AxisPosition.Left,
+            MajorGridlineStyle = LineStyle.Solid,
+            Key = "x1"
+        });
+
+        // можно сначала создать BarSeries указав ему оси (XAxisKey = "x1", YAxisKey = "y1"), а потом добавить оси в модель
+        // или наоборот, как здесь сначала оси, потом Series, работает в обоих случаях
+
+        _rates = rates;
+        GetLinesOfBasket(out LineSeries basket, out BarSeries delta);
+        BasketPlotModel.Series.Add(basket);
+        BasketDeltaPlotModel.Series.Add(delta);
     }
 
     private string F(double day)
@@ -59,12 +84,16 @@ public class BasketDiagramViewModel : Screen
     private void GetLinesOfBasket(out LineSeries basket, out BarSeries basketDelta)
     {
         basket = new LineSeries() { Title = "Корзина 30-20-50", TextColor = OxyColors.Orange };
+
         basketDelta = new BarSeries()
         {
-            Title = "Дневное изменение корзины в %",
+            Title = "Data Дневное изменение корзины в %",
             FillColor = OxyColors.Red,
-            NegativeFillColor = OxyColors.Green
+            NegativeFillColor = OxyColors.Green,
+            XAxisKey = "x1",
+            YAxisKey = "y1"
         };
+
         var threshold = new DateTime(2016,7,1);
         foreach (var nbRbRateOnScreen in _rates.Where(r => r.Date >= _startDate))
         {

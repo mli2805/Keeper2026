@@ -46,7 +46,7 @@
         <Grid>
             <oxy:PlotView  Model="{Binding MyPlotModel}" Background="Beige" />
             <DataGrid  Margin="60, 30, 0,0" Width="620" BorderThickness="0"
-                HorizontalAlignment="Left" Height="450" VerticalAlignment="Top" Opacity="1" Background="Beige"
+                HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Opacity="1" Background="Beige"
                 ItemsSource="{Binding SalaryChanges}" 
                 AutoGenerateColumns="False" CanUserSortColumns="False" 
                 Visibility="{Binding SalaryChangesVisibility}">
