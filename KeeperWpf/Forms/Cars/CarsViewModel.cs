@@ -167,7 +167,16 @@ public class CarsViewModel : Screen
             string filename = $@"reports\{SelectedCar.Title}.pdf";
             var path = System.IO.Path.Combine(dataFolder, filename);
             document.Save(path);
-            Process.Start(path);
+            var process = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    FileName = path,
+                    UseShellExecute = true
+                }
+            };
+
+            process.Start();
         }
         catch (Exception e)
         {

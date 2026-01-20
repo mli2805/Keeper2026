@@ -80,7 +80,7 @@ public static partial class PdfCarReportFactory
 
             row = table.AddRow();
             row.Cells[0].AddParagraph($"приобретено топлива");
-            row.Cells[1].AddParagraph($"{totalLitres} л");
+            row.Cells[1].AddParagraph($"{totalLitres:F2} л");
             var literInUsd = (double)-totalFuelling / totalLitres;
             row.Cells[2].AddParagraph($"$ {literInUsd:N} за литр");
 

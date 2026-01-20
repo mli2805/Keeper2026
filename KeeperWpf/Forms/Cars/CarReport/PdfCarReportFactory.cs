@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
+using PdfSharp.Fonts;
 using PdfSharp.Pdf;
 
 namespace KeeperWpf;
@@ -14,9 +15,9 @@ public static partial class PdfCarReportFactory
         var carReportData = dataModel.ExtractCarReportData(car, isByTags);
 
         Document doc = new Document();
-        doc.DefaultPageSetup.LeftMargin = Unit.FromCentimeter(1.0);
 
         Section firstPageSection = doc.AddSection();
+        firstPageSection.PageSetup.LeftMargin = Unit.FromCentimeter(1.0);
         firstPageSection.PageSetup.TopMargin = 40;
         firstPageSection.PageSetup.BottomMargin = 10;
         var paragraph = firstPageSection.AddParagraph();
@@ -28,11 +29,13 @@ public static partial class PdfCarReportFactory
         firstPageSection.DrawTotals(carReportData, car, dataModel);
 
         Section tablesSection = doc.AddSection();
+        tablesSection.PageSetup.LeftMargin = Unit.FromCentimeter(1.0);
         tablesSection.PageSetup.TopMargin = 20;
         tablesSection.PageSetup.BottomMargin = 10;
         tablesSection.DrawTagTables(carReportData, isByTags, isBynInReport);
 
         var pdfDocumentRenderer = new PdfDocumentRenderer() { Document = doc };
+        GlobalFontSettings.FontResolver = new EmbeddedFontResolver();
         pdfDocumentRenderer.RenderDocument();
 
         return pdfDocumentRenderer.PdfDocument;

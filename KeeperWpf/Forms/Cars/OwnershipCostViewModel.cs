@@ -67,19 +67,32 @@ public class OwnershipCostViewModel : Screen
     private PlotModel InitializePlot(List<TransactionModel> trans, DateTime purchaseDate, string period)
     {
         var plotModel = new PlotModel();
-        var BarSeries = new BarSeries
+        var barSeries = new BarSeries
         {
             Title = period == "year" ? "Расходы за год" : "Расходы за месяц",
-            FillColor = OxyColors.SteelBlue
+            FillColor = OxyColors.SteelBlue,
+            XAxisKey = "x1",
+            YAxisKey = "y1"
         };
         var lineSeries = new LineSeries
         {
             Title = "Среднее значение",
             Color = OxyColors.Red,
-            MarkerType = MarkerType.Circle
+            MarkerType = MarkerType.Circle,
         };
-        var categoryAxis = new CategoryAxis { Position = AxisPosition.Bottom };
-        var valueAxis = new LinearAxis { Position = AxisPosition.Left };
+        var categoryAxis = new CategoryAxis
+        {
+            Position = AxisPosition.Bottom,
+            MajorStep = period == "year" ? 1 : 5,
+            Key = "y1"
+        };
+        var valueAxis = new LinearAxis
+        {
+            Position = AxisPosition.Left,
+            MajorGridlineStyle = LineStyle.Dash,
+            Key = "x1"
+        };
+       
 
         // вычисление
         DateTime currentDate = purchaseDate.Date;
@@ -99,12 +112,10 @@ public class OwnershipCostViewModel : Screen
                 sumInUsd += transaction.GetAmountInUsd(_dataModel);
             }
             var item = new BarItem((double)sumInUsd);
-            BarSeries.Items.Add(item);
+            barSeries.Items.Add(item);
             var label = period == "year" 
                 ? currentDate.ToString("dd/MM/yy") + "-" + currentDate.AddYears(1).AddDays(-1).ToString("dd/MM/yy")
-                : columnIndex % 5 == 0 
-                        ? currentDate.ToString("MMMyy") 
-                        : "";
+                : currentDate.ToString("MMMyy");
             categoryAxis.Labels.Add(label);
             columnIndex++;
 
@@ -117,11 +128,10 @@ public class OwnershipCostViewModel : Screen
         }
         while (currentDate <= trans.Last().Timestamp.Date);
 
-        plotModel.Series.Add(BarSeries);
+        plotModel.Series.Add(barSeries);
         plotModel.Series.Add(lineSeries);
         plotModel.Axes.Add(categoryAxis);
         plotModel.Axes.Add(valueAxis);
-
         return plotModel;
     }
 
