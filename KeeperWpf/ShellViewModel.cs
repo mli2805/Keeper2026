@@ -50,6 +50,7 @@ public class ShellViewModel : Screen, IShell
        
         var account = _keeperDataModel.AccountsTree.First(r => r.Name == "Мои");
         account.IsSelected = true;
+        MainMenuViewModel.SetBellPath();
         ShellPartsBinder.SelectedAccountItemModel = account;
     }
 

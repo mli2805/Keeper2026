@@ -184,7 +184,7 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <Button Name="SaveAllDb" Margin="25,0,0,0" Background="White" BorderBrush="White" ToolTip="SaveAllDb">
+        <Button Name="SaveInTextFilesForBackup" Margin="25,0,0,0" Background="White" BorderBrush="White" ToolTip="SaveAllDb">
             <Image Source="../../Resources/mainmenu/save.png" Width="24" Height="24" />
         </Button>
         <Button Name="Calculator" Margin="5,0,0,0" Background="White" BorderBrush="White" ToolTip="Calculator">

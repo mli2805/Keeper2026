@@ -7,31 +7,24 @@ using Caliburn.Micro;
 
 namespace KeeperWpf;
 
-public class MainMenuViewModel : PropertyChangedBase
+public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel keeperDataModel, ShellPartsBinder shellPartsBinder,
+    TransactionsViewModel transactionsViewModel, RatesViewModel ratesViewModel,
+    MonthAnalysisViewModel monthAnalysisViewModel, BankOffersViewModel bankOffersViewModel,
+    // charts:
+    BalancesAndSaldosViewModel balancesAndSaldosViewModel, ExpenseByCategoriesViewModel expenseByCategoriesViewModel,
+    DepoCurrResultViewModel depoCurrResultViewModel,
+    //
+    SalaryViewModel salaryViewModel, GskViewModel gskViewModel, CarsViewModel carsViewModel, 
+    OpenDepositsViewModel openDepositsViewModel, CardsAndAccountsViewModel cardsAndAccountsViewModel,
+    // trust:
+    InvestmentAssetsViewModel investmentAssetsViewModel, AssetRatesViewModel assetRatesViewModel,
+    TrustAccountsViewModel trustAccountsViewModel, InvestmentTransactionsViewModel investmentTransactionsViewModel,
+    InvestmentAnalysisViewModel investmentAnalysisViewModel,
+    //
+    MemosViewModel memosViewModel, SettingsViewModel settingsViewModel, 
+    ButtonCollectionBuilderViewModel buttonCollectionBuilderViewModel, ToTxtSaver toTxtSaver)
+    : PropertyChangedBase
 {
-    private readonly IWindowManager _windowManager;
-    private readonly KeeperDataModel _keeperDataModel;
-    private readonly ShellPartsBinder _shellPartsBinder;
-    private readonly RatesViewModel _ratesViewModel;
-    private readonly MonthAnalysisViewModel _monthAnalysisViewModel;
-    private readonly TransactionsViewModel _transactionsViewModel;
-    private readonly BankOffersViewModel _bankOffersViewModel;
-    private readonly SettingsViewModel _settingsViewModel;
-    private readonly MemosViewModel _memosViewModel;
-    private readonly CarsViewModel _carsViewModel;
-    private readonly ExpenseByCategoriesViewModel _expenseByCategoriesViewModel;
-    private readonly DepoCurrResultViewModel _depoCurrResultViewModel;
-    private readonly GskViewModel _gskViewModel;
-    private readonly OpenDepositsViewModel _openDepositsViewModel;
-    private readonly CardsAndAccountsViewModel _cardsAndAccountsViewModel;
-    private readonly SalaryViewModel _salaryViewModel;
-    private readonly InvestmentAssetsViewModel _investmentAssetsViewModel;
-    private readonly AssetRatesViewModel _assetRatesViewModel;
-    private readonly TrustAccountsViewModel _trustAccountsViewModel;
-    private readonly InvestmentTransactionsViewModel _investmentTransactionsViewModel;
-    private readonly InvestmentAnalysisViewModel _investmentAnalysisViewModel;
-    private readonly ButtonCollectionBuilderViewModel _buttonCollectionBuilderViewModel;
-    private readonly ToTxtSaver _toTxtSaver;
 
     #region Reminder icon
     private Visibility _reminderIconVisibility = Visibility.Collapsed;
@@ -58,7 +51,7 @@ public class MainMenuViewModel : PropertyChangedBase
         }
     }
 
-    private string _bellPath;
+    private string _bellPath = "../../Resources/mainmenu/white-bell.png";
     public string BellPath
     {
         get => _bellPath;
@@ -72,7 +65,7 @@ public class MainMenuViewModel : PropertyChangedBase
 
     public void SetBellPath()
     {
-        var hasAlarm = _keeperDataModel.HasLowBalanceAlarm();
+        var hasAlarm = keeperDataModel.HasLowBalanceAlarm();
         BellPath = hasAlarm ? "../../Resources/mainmenu/yellow-bell.png" : "../../Resources/mainmenu/white-bell.png";
         ReminderWaitIconVisibility = Visibility.Collapsed;
         ReminderIconVisibility = Visibility.Visible;
@@ -110,47 +103,8 @@ public class MainMenuViewModel : PropertyChangedBase
         ExchangeWaitIconVisibility = Visibility.Collapsed;
         ExchangeIconVisibility = Visibility.Visible;
     }
-    #endregion
 
-    public MainMenuViewModel(IWindowManager windowManager, KeeperDataModel keeperDataModel,
-        ShellPartsBinder shellPartsBinder,
-        TransactionsViewModel transactionsViewModel,
-        RatesViewModel ratesViewModel,
-        MonthAnalysisViewModel monthAnalysisViewModel, BankOffersViewModel bankOffersViewModel,
-         SettingsViewModel settingsViewModel, MemosViewModel memosViewModel,
-        CarsViewModel carsViewModel, ExpenseByCategoriesViewModel expenseByCategoriesViewModel,
-        DepoCurrResultViewModel depoCurrResultViewModel, GskViewModel gskViewModel,
-        OpenDepositsViewModel openDepositsViewModel,
-        CardsAndAccountsViewModel cardsAndAccountsViewModel, SalaryViewModel salaryViewModel,
-        InvestmentAssetsViewModel investmentAssetsViewModel, AssetRatesViewModel assetRatesViewModel,
-        TrustAccountsViewModel trustAccountsViewModel, InvestmentTransactionsViewModel investmentTransactionsViewModel,
-        InvestmentAnalysisViewModel investmentAnalysisViewModel, ButtonCollectionBuilderViewModel buttonCollectionBuilderViewModel,
-        ToTxtSaver toTxtSaver)
-    {
-        _windowManager = windowManager;
-        _keeperDataModel = keeperDataModel;
-        _shellPartsBinder = shellPartsBinder;
-        _ratesViewModel = ratesViewModel;
-        _monthAnalysisViewModel = monthAnalysisViewModel;
-        _transactionsViewModel = transactionsViewModel;
-        _bankOffersViewModel = bankOffersViewModel;
-        _settingsViewModel = settingsViewModel;
-        _memosViewModel = memosViewModel;
-        _carsViewModel = carsViewModel;
-        _expenseByCategoriesViewModel = expenseByCategoriesViewModel;
-        _depoCurrResultViewModel = depoCurrResultViewModel;
-        _gskViewModel = gskViewModel;
-        _openDepositsViewModel = openDepositsViewModel;
-        _cardsAndAccountsViewModel = cardsAndAccountsViewModel;
-        _salaryViewModel = salaryViewModel;
-        _investmentAssetsViewModel = investmentAssetsViewModel;
-        _assetRatesViewModel = assetRatesViewModel;
-        _trustAccountsViewModel = trustAccountsViewModel;
-        _investmentTransactionsViewModel = investmentTransactionsViewModel;
-        _investmentAnalysisViewModel = investmentAnalysisViewModel;
-        _buttonCollectionBuilderViewModel = buttonCollectionBuilderViewModel;
-        _toTxtSaver = toTxtSaver;
-    }
+    #endregion
 
     // for short-cuts
     public async Task OnPreviewKeyDown(KeyEventArgs e)
@@ -193,16 +147,16 @@ public class MainMenuViewModel : PropertyChangedBase
     {
         try
         {
-            _transactionsViewModel.Initialize();
+            transactionsViewModel.Initialize();
 
             // после добавления переносов в поле комента стала криво рассчитывать отрисовку
             // поэтому говорим диспетчеру, что когда он будет абсолютно свободен (т.е. отрисует форму)
             // надо изменить ширину формы -  это заставит wpf перерисовать форму, на этот раз правильно
             Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new System.Action(() =>
             {
-                _transactionsViewModel.Width -= 1;
+                transactionsViewModel.Width -= 1;
             }));
-            await _windowManager.ShowDialogAsync(_transactionsViewModel);
+            await windowManager.ShowDialogAsync(transactionsViewModel);
         }
         catch (Exception e)
         {
@@ -210,10 +164,10 @@ public class MainMenuViewModel : PropertyChangedBase
             return;
         }
 
-        if (_transactionsViewModel.Model.IsCollectionChanged)
+        if (transactionsViewModel.Model.IsCollectionChanged)
         {
-            _shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
-            await _keeperDataModel.RefreshCardBalances();
+            shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
+            await keeperDataModel.RefreshCardBalances();
             SetBellPath();
             await SaveInTextFilesForBackup();
         }
@@ -221,152 +175,158 @@ public class MainMenuViewModel : PropertyChangedBase
 
     public async Task ShowRatesForm()
     {
-        await _ratesViewModel.Initialize();
-        await _windowManager.ShowDialogAsync(_ratesViewModel);
-        
+        await ratesViewModel.Initialize();
+        await windowManager.ShowDialogAsync(ratesViewModel);
+
         //_shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
         await SaveInTextFilesForBackup();
     }
 
     public async Task ShowMonthAnalysisForm()
     {
-        _monthAnalysisViewModel.Initialize();
-        await _windowManager.ShowDialogAsync(_monthAnalysisViewModel);
+        monthAnalysisViewModel.Initialize();
+        await windowManager.ShowDialogAsync(monthAnalysisViewModel);
     }
 
     public async Task ShowDepositOffersForm()
     {
-        _bankOffersViewModel.Initialize();
-        await _windowManager.ShowDialogAsync(_bankOffersViewModel);
+        bankOffersViewModel.Initialize();
+        await windowManager.ShowDialogAsync(bankOffersViewModel);
     }
 
     public async Task ShowBalancesAndSaldosChart()
     {
-        var vm = new BalancesAndSaldosViewModel();
-        vm.Initialize(_keeperDataModel);
-        await _windowManager.ShowWindowAsync(vm);
+        balancesAndSaldosViewModel.Initialize(keeperDataModel);
+        await windowManager.ShowWindowAsync(balancesAndSaldosViewModel);
     }
 
     public async Task ShowExpensesChart()
     {
-        _expenseByCategoriesViewModel.Initialize();
-        await _windowManager.ShowDialogAsync(_expenseByCategoriesViewModel);
+        expenseByCategoriesViewModel.Initialize();
+        await windowManager.ShowDialogAsync(expenseByCategoriesViewModel);
     }
 
-    public async Task ShowDepoPlusCurreniesChart()
+    public async Task ShowDepoPlusCurrenciesChart()
     {
-        _depoCurrResultViewModel.Initialize();
-        await _windowManager.ShowDialogAsync(_depoCurrResultViewModel);
+        depoCurrResultViewModel.Initialize();
+        await windowManager.ShowDialogAsync(depoCurrResultViewModel);
     }
 
     public async Task ShowSalaryForm()
     {
-        _salaryViewModel.Initialize();
-        await _windowManager.ShowDialogAsync(_salaryViewModel);
+        salaryViewModel.Initialize();
+        await windowManager.ShowDialogAsync(salaryViewModel);
     }
 
     public async Task ShowGskForm()
     {
-        _gskViewModel.Initialize();
-        await _windowManager.ShowDialogAsync(_gskViewModel);
+        gskViewModel.Initialize();
+        await windowManager.ShowDialogAsync(gskViewModel);
     }
 
     public async Task ShowCarForm()
     {
-        _carsViewModel.Initialize();
-        await _windowManager.ShowDialogAsync(_carsViewModel);
+        carsViewModel.Initialize();
+        await windowManager.ShowDialogAsync(carsViewModel);
     }
 
     public async Task ShowDepositsForm()
     {
-        _openDepositsViewModel.Initialize();
-        await _windowManager.ShowWindowAsync(_openDepositsViewModel);
+        openDepositsViewModel.Initialize();
+        await windowManager.ShowWindowAsync(openDepositsViewModel);
     }
 
     public async Task ShowPayCardsForm()
     {
-        _cardsAndAccountsViewModel.Initialize();
-        await _windowManager.ShowDialogAsync(_cardsAndAccountsViewModel);
+        cardsAndAccountsViewModel.Initialize();
+        await windowManager.ShowDialogAsync(cardsAndAccountsViewModel);
     }
 
     #region Investments
     public async Task ShowTrustAccountsForm()
     {
-        _trustAccountsViewModel.Initialize();
-        await _windowManager.ShowWindowAsync(_trustAccountsViewModel);
+        trustAccountsViewModel.Initialize();
+        await windowManager.ShowWindowAsync(trustAccountsViewModel);
     }
 
     public async Task ShowInvestmentAssetsForm()
     {
-        _investmentAssetsViewModel.Initialize();
-        await _windowManager.ShowWindowAsync(_investmentAssetsViewModel);
+        investmentAssetsViewModel.Initialize();
+        await windowManager.ShowWindowAsync(investmentAssetsViewModel);
     }
 
     public async Task ShowAssetRatesForm()
     {
-        _assetRatesViewModel.Initialize();
-        await _windowManager.ShowWindowAsync(_assetRatesViewModel);
+        assetRatesViewModel.Initialize();
+        await windowManager.ShowWindowAsync(assetRatesViewModel);
     }
 
     public async Task ShowInvestmentTransactionsForm()
     {
-        _investmentTransactionsViewModel.Initialize();
-        await _windowManager.ShowWindowAsync(_investmentTransactionsViewModel);
-        _shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
+        investmentTransactionsViewModel.Initialize();
+        await windowManager.ShowWindowAsync(investmentTransactionsViewModel);
+        shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
         await SaveInTextFilesForBackup();
     }
 
     public async Task ShowInvestmentAnalysisForm()
     {
-        _investmentAnalysisViewModel.Initialize();
-        await _windowManager.ShowWindowAsync(_investmentAnalysisViewModel);
+        investmentAnalysisViewModel.Initialize();
+        await windowManager.ShowWindowAsync(investmentAnalysisViewModel);
     }
     #endregion
 
+    public async Task ShowRemindersForm()
+    {
+        await memosViewModel.Initialize();
+        await windowManager.ShowDialogAsync(memosViewModel);
+    }
+
+    public async Task ShowSettingsForm()
+    {
+        await windowManager.ShowDialogAsync(settingsViewModel);
+    }
+
+    public async Task ShowButtonCollectionBuilder()
+    {
+        buttonCollectionBuilderViewModel.Initialize();
+        await windowManager.ShowDialogAsync(buttonCollectionBuilderViewModel);
+    }
 
     public async Task SaveInTextFilesForBackup()
     {
-        var exception = await _toTxtSaver.Save();
-        if (exception != null)
+        shellPartsBinder.FooterVisibility = Visibility.Visible;
+        try
         {
-            MessageBox.Show("Ошибка при сохранении резервной копии в текстовые файлы: " + exception.Message);
-            return;
-        }
+            var exception = await toTxtSaver.Save();
+            if (exception != null)
+            {
+                MessageBox.Show("Ошибка при сохранении резервной копии в текстовые файлы: " + exception.Message);
+                return;
+            }
 
-        var zipException = await _toTxtSaver.ZipTxtFiles();
-        if (zipException != null)
-        {
-            MessageBox.Show("Ошибка при архивировании текстовых файлов резервной копии: " + zipException.Message);
-            return;
-        }
+            var zipException = await toTxtSaver.ZipTxtFiles();
+            if (zipException != null)
+            {
+                MessageBox.Show("Ошибка при архивировании текстовых файлов резервной копии: " + zipException.Message);
+                return;
+            }
 
-        var deleteException = await _toTxtSaver.DeleteTxtFiles();
-        if (deleteException != null)
+            var deleteException = await toTxtSaver.DeleteTxtFiles();
+            if (deleteException != null)
+            {
+                MessageBox.Show("Ошибка при удалении текстовых файлов резервной копии: " + deleteException.Message);
+                return;
+            }
+        }
+        finally
         {
-            MessageBox.Show("Ошибка при удалении текстовых файлов резервной копии: " + deleteException.Message);
-            return;
+            shellPartsBinder.FooterVisibility = Visibility.Hidden;
         }
     }
 
     public void Calculator()
     {
         System.Diagnostics.Process.Start("calc");
-    }
-
-    public async Task ShowRemindersForm()
-    {
-        await _memosViewModel.Initialize();
-        await _windowManager.ShowDialogAsync(_memosViewModel);
-    }
-
-    public async Task ShowSettingsForm()
-    {
-        await _windowManager.ShowDialogAsync(_settingsViewModel);
-    }
-
-    public async Task ShowButtonCollectionBuilder()
-    {
-        _buttonCollectionBuilderViewModel.Initialize();
-        await _windowManager.ShowDialogAsync(_buttonCollectionBuilderViewModel);
     }
 }
