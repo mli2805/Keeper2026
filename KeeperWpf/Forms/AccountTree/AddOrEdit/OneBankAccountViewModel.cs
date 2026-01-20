@@ -15,13 +15,13 @@ public class OneBankAccountViewModel : Screen
     private bool _isInAddMode;
     private bool _isCard;
 
-    public AccountItemModel AccountItemModel { get; set; }
-    public BankAccountModel BankAccountInWork { get; set; }
+    public AccountItemModel AccountItemModel { get; set; } = null!;
+    public BankAccountModel BankAccountInWork { get; set; } = null!;
 
-    public List<AccountItemModel> Banks { get; set; }
-    public List<string> BankNames { get; set; }
+    public List<AccountItemModel> Banks { get; set; } = null!;
+    public List<string> BankNames { get; set; } = null!;
 
-    private string _selectedBankName;
+    private string _selectedBankName = null!;
     public string SelectedBankName
     {
         get => _selectedBankName;
@@ -31,12 +31,12 @@ public class OneBankAccountViewModel : Screen
             _selectedBankName = value;
             BankAccountInWork.BankId = Banks.First(b => b.Name == _selectedBankName).Id;
             DepositOffers = _dataModel.DepositOffers.Where(o => o.Bank.Name == _selectedBankName).ToList();
-            SelectedDepositOffer = DepositOffers.LastOrDefault();
+            SelectedDepositOffer = DepositOffers.Last();
             NotifyOfPropertyChange();
         }
     }
 
-    private List<DepositOfferModel> _depositOffers;
+    private List<DepositOfferModel> _depositOffers = null!;
     public List<DepositOfferModel> DepositOffers
     {
         get => _depositOffers;
@@ -48,7 +48,7 @@ public class OneBankAccountViewModel : Screen
         }
     }
 
-    private DepositOfferModel _selectedDepositOffer;
+    private DepositOfferModel _selectedDepositOffer = null!;
 
     public DepositOfferModel SelectedDepositOffer
     {
@@ -67,9 +67,9 @@ public class OneBankAccountViewModel : Screen
         }
     }
 
-    public string ParentName { get; set; }
+    public string ParentName { get; set; } = null!;
 
-    private string _accountName;
+    private string _accountName = null!;
     public string AccountName   
     {
         get => _accountName;
@@ -83,7 +83,7 @@ public class OneBankAccountViewModel : Screen
 
     public bool IsSavePressed { get; set; }
 
-    public List<PaymentSystem> PaymentSystems { get; set; }
+    public List<PaymentSystem> PaymentSystems { get; set; } = null!;
     public Visibility PayCardSectionVisibility { get; set; }
 
     public OneBankAccountViewModel(KeeperDataModel dataModel)
@@ -99,7 +99,7 @@ public class OneBankAccountViewModel : Screen
         PayCardSectionVisibility = isCard ? Visibility.Visible : Visibility.Collapsed;
         _isInAddMode = isInAddMode;
 
-        var folder = accountItemModel.Parent.Name;
+        var folder = accountItemModel.Parent!.Name;
 
         Banks = _dataModel.AcMoDict[220].Children.Select(c=>(AccountItemModel)c).ToList();
         BankNames = Banks.Select(b => b.Name).ToList();
@@ -113,11 +113,11 @@ public class OneBankAccountViewModel : Screen
         {
             BankAccountInWork.IsMine = true;
             if (isCard)
-                BankAccountInWork.PayCard.CardHolder = "LEANID MARHOLIN";
+                BankAccountInWork.PayCard!.CardHolder = "LEANID MARHOLIN";
 
             _selectedBankName = BankNames.FirstOrDefault(b=>b == folder) ?? BankNames.First();
             DepositOffers = _dataModel.DepositOffers.Where(o => o.Bank.Name == SelectedBankName).ToList();
-            SelectedDepositOffer = DepositOffers.LastOrDefault();
+            SelectedDepositOffer = DepositOffers.Last();
         }
         else
         {
@@ -126,7 +126,7 @@ public class OneBankAccountViewModel : Screen
             var bank = _dataModel.AcMoDict[accountItemModel.BankAccount.BankId];
             _selectedBankName = bank.Name;
             DepositOffers = _dataModel.DepositOffers.Where(o => o.Bank.Name == SelectedBankName).ToList();
-            _selectedDepositOffer = DepositOffers.FirstOrDefault(o => o.Id == BankAccountInWork.DepositOfferId);
+            _selectedDepositOffer = DepositOffers.First(o => o.Id == BankAccountInWork.DepositOfferId);
         }
     }
 

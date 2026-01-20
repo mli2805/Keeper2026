@@ -13,7 +13,7 @@ public class ScrollToBottomOnAddBehavior : Behavior<DataGrid>
         itemCollection.CollectionChanged += ItemCollectionOnCollectionChanged;
     }
 
-    private void ItemCollectionOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+    private void ItemCollectionOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
     {
         if (args.Action == NotifyCollectionChangedAction.Reset) return; // Reset приходит при начальной инициализации Rows и обрабатывается в ScrollToPreviousExitPointOrBottomOnLoadBehavior
         if (AssociatedObject.Items.Count == 0) return;

@@ -68,7 +68,7 @@ public class TreeViewItemModel : PropertyChangedBase
         }
     }
 
-    public TreeViewItemModel Parent
+    public TreeViewItemModel? Parent
     {
         get => _parent;
         set => _parent = value;

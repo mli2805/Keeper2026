@@ -10,10 +10,10 @@ namespace KeeperWpf;
 public class AccName : PropertyChangedBase, ITreeViewItemModel
 {
     public int Id { get; set; }
-    public string Name { get; set; }
-    public string ButtonName { get; set; }
-    public string Tooltip { get; set; }
-    public AccName Parent { get; set; }
+    public string Name { get; set; } = null!;
+    public string ButtonName { get; set; } = null!;
+    public string? Tooltip { get; set; }
+    public AccName Parent { get; set; } = null!;
     public bool IsFolder;
     public List<AccName> Children { get; private set; } = new List<AccName>();
 
@@ -23,7 +23,7 @@ public class AccName : PropertyChangedBase, ITreeViewItemModel
     /// <param name="account">корневой account, с которого начать</param>
     /// <param name="cutBranches">список ветвей, которые обрубить</param>
     /// <returns></returns>
-    public AccName PopulateFromAccount(AccountItemModel account, List<int> cutBranches)
+    public AccName PopulateFromAccount(AccountItemModel account, List<int>? cutBranches)
     {
         var result = new AccName
         {

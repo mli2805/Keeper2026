@@ -85,7 +85,7 @@ public static class AccountTreeExt
     {
         var owner = accountItemModel.Parent;
         accountItemModel.Parent = null;
-        owner.Children.Remove(accountItemModel);
+        owner!.Children.Remove(accountItemModel);
         dataModel.AcMoDict.Remove(accountItemModel.Id);
     }
 }

@@ -10,30 +10,28 @@ public class ComboTreesProvider
 {
     private readonly KeeperDataModel _dataModel;
 
-    public List<AccName> MyAccNamesForIncome { get; set; }
-    public List<AccName> AccNamesForIncomeTags { get; set; }
+    public List<AccName> MyAccNamesForIncome { get; set; } = null!;
+    public List<AccName> AccNamesForIncomeTags { get; set; } = null!;
 
-    public List<AccName> MyAccNamesForExpense { get; set; }
-    public List<AccName> Shops { get; set; }
-    public List<AccName> Meds { get; set; }
-    public List<AccName> AccNamesForExpenseTags { get; set; }
+    public List<AccName> MyAccNamesForExpense { get; set; } = null!;
+    public List<AccName> Shops { get; set; } = null!;
+    public List<AccName> Meds { get; set; } = null!;
+    public List<AccName> AccNamesForExpenseTags { get; set; } = null!;
 
-    public List<AccName> MyAccNamesForTransfer { get; set; }
-    public List<AccName> AccNamesForTransferTags { get; set; }
+    public List<AccName> MyAccNamesForTransfer { get; set; } = null!;
+    public List<AccName> AccNamesForTransferTags { get; set; } = null!;
 
-    public List<AccName> MyAccNamesForExchange { get; set; }
-    public List<AccName> AccNamesForExchangeTags { get; set; }
+    public List<AccName> MyAccNamesForExchange { get; set; } = null!;
+    public List<AccName> AccNamesForExchangeTags { get; set; } = null!;
 
-    //public List<AccName> AccNamesForFilterTags { get; set; }
+    public List<AccName> AccNamesForInvestmentExpense { get; set; } = null!;
+    public List<AccName> AccNamesForInvestmentIncome { get; set; } = null!;
+    public List<AccName> AccNamesForInvestment { get; set; } = null!;
 
-    public List<AccName> AccNamesForInvestmentExpense { get; set; }
-    public List<AccName> AccNamesForInvestmentIncome { get; set; }
-    public List<AccName> AccNamesForInvestment { get; set; }
-
-    public List<AccName> Counterparties { get; set; }
-    public List<AccName> IncomeCategories { get; set; }
-    public List<AccName> ExpenseCategories { get; set; }
-    public List<AccName> AdditionalTags { get; set; }
+    public List<AccName> Counterparties { get; set; } = null!;
+    public List<AccName> IncomeCategories { get; set; } = null!;
+    public List<AccName> ExpenseCategories { get; set; } = null!;
+    public List<AccName> AdditionalTags { get; set; } = null!;
 
     public ComboTreesProvider(KeeperDataModel dataModel)
     {

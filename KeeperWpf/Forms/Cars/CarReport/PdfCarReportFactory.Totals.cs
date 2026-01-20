@@ -12,8 +12,8 @@ public static partial class PdfCarReportFactory
         gap.Format.SpaceBefore = Unit.FromCentimeter(0.7);
 
         var total = carReportData.Categories.Sum(t => t.Table.Sum(r => r.AmountInUsd));
-        var totalFuelling = carReportData.Categories.FirstOrDefault(t => t.English == "car fuel")?.Table
-            .Sum(r => r.AmountInUsd);
+        var totalFuelling = carReportData.Categories.FirstOrDefault(t => t.English == "car fuel")!
+            .Table.Sum(r => r.AmountInUsd);
         var table = section.AddTable();
         table.Style = "Table";
         table.Borders.Width = 0.25;
@@ -40,7 +40,7 @@ public static partial class PdfCarReportFactory
         row.Cells[2].AddParagraph($"$ {inAday:N}");
 
         row = table.AddRow();
-        row.Cells[0].AddParagraph($"{ (carReportData.FinishDate - carReportData.StartDate).Days / 365.0:#.00} лет.");
+        row.Cells[0].AddParagraph($"{(carReportData.FinishDate - carReportData.StartDate).Days / 365.0:#.00} лет.");
         var inAyear = (double)-total / (carReportData.FinishDate - carReportData.StartDate).Days * 365.0;
         row.Cells[1].AddParagraph("в год");
         row.Cells[2].AddParagraph($"$ {inAyear:N}");
