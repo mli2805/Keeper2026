@@ -1,10 +1,11 @@
 ﻿using KeeperDomain;
 using KeeperModels;
 using System.Collections.ObjectModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-public class AccountRepository(KeeperDbContext keeperDbContext)
+public class AccountRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<(ObservableCollection<AccountItemModel>, Dictionary<int, AccountItemModel>)?> GetAccountModelsTreeAndDict()
     {
@@ -68,11 +69,13 @@ public class AccountRepository(KeeperDbContext keeperDbContext)
 
     public async Task<List<Account>> GetAllAccounts()
     {
+        using var keeperDbContext = factory.CreateDbContext();
         return keeperDbContext.Accounts.Select(a => a.FromEf()).ToList();
     }
 
     public async Task<List<BankAccountModel>> GetAllBankAccountsFromDb()
     {
+        using var keeperDbContext = factory.CreateDbContext();
         return keeperDbContext.BankAccounts.Select(bankAccount => new BankAccountModel
         {
             Id = bankAccount.Id,
@@ -89,16 +92,19 @@ public class AccountRepository(KeeperDbContext keeperDbContext)
 
     public async Task<List<BankAccount>> GetAllBankAccounts()
     {
+        using var keeperDbContext = factory.CreateDbContext();
         return keeperDbContext.BankAccounts.Select(ba => ba.FromEf()).ToList();
     }
 
     public async Task<List<Deposit>> GetAllDeposits()
     {
+        using var keeperDbContext = factory.CreateDbContext();
         return keeperDbContext.Deposits.Select(d => d.FromEf()).ToList();
     }
 
     public async Task<List<PayCard>> GetAllPayCards()
     {
+        using var keeperDbContext = factory.CreateDbContext();
         return keeperDbContext.PayCards.Select(pc => pc.FromEf()).ToList();
     }
 }

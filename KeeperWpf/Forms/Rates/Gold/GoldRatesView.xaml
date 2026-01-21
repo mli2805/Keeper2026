@@ -10,9 +10,13 @@
              >
       <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Margin="10">
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Ввести дату и цену золота 900-й пробы и нажать " VerticalAlignment="Center"/>
-                <Button Name="Recount" Content="рассчитать" Margin="5,0" Width="80" Height="24"></Button>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                <StackPanel Margin="0,0,10,0">
+                    <TextBlock Text="Ввести новые или изменить существующие" VerticalAlignment="Center"/>
+                    <TextBlock Text="дату и цену золота 900-й пробы и нажать " VerticalAlignment="Center"/>
+
+                </StackPanel>
+                <Button Name="Recount" Content="Сохранить все" Margin="5,4,0,0" Width="120" Height="24"></Button>
             </StackPanel>
             <TextBlock>
                 <Hyperlink NavigateUri="http://www.minfin.gov.by/ru/activities_jewels/fund/pokupka/fizlic/archive/" RequestNavigate="HandleLinkClick"> 

@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-public class TrustAssetsRepository(KeeperDbContext keeperDbContext)
+public class TrustAssetsRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<TrustAssetModel>> GetAllTrustAssetModels(List<TrustAccount> trustAccounts)
     {
+        using var keeperDbContext = factory.CreateDbContext();
         var assetsEf = await keeperDbContext.TrustAssets.ToListAsync();
         var result = new List<TrustAssetModel>(assetsEf.Count);
         foreach (var asset in assetsEf)
@@ -36,6 +37,7 @@ public class TrustAssetsRepository(KeeperDbContext keeperDbContext)
 
     public List<TrustAsset> GetAllTrustAssets()
     {
+        using var keeperDbContext = factory.CreateDbContext();
         var result = keeperDbContext.TrustAssets.Select(ta => ta.FromEf()).ToList();
         return result;
     }

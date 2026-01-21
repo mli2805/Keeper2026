@@ -83,7 +83,7 @@ public class TransactionsViewModel : Screen
         await wm.ShowWindowAsync(_filterViewModel);
     }
 
-    private void FilterModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    private void FilterModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (Model.SelectedTranWrappedForDataGrid != null)
             Model.SelectedTranWrappedForDataGrid.IsSelected = false;
@@ -93,7 +93,7 @@ public class TransactionsViewModel : Screen
         Model.SelectedTranWrappedForDataGrid = (TranWrappedForDataGrid)Model.SortedRows.CurrentItem;
     }
 
-    private void FilterViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    private void FilterViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == "IsActive" && _filterViewModel.IsActive == false)
         {

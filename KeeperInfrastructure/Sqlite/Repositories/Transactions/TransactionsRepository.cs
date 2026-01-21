@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-public class TransactionsRepository(KeeperDbContext keeperDbContext)
+public class TransactionsRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<TransactionModel>> GetAllTransactionModels(Dictionary<int, AccountItemModel> acMoDict)
     {
+        using var keeperDbContext = factory.CreateDbContext();
         var transactionsEf = await keeperDbContext.Transactions.ToListAsync();
         var result = new List<TransactionModel>(transactionsEf.Count);
         foreach (var t in transactionsEf)
@@ -38,16 +39,18 @@ public class TransactionsRepository(KeeperDbContext keeperDbContext)
    
     public List<Transaction> GetAllTransactions()
     {
+        using var keeperDbContext = factory.CreateDbContext();
         var result = keeperDbContext.Transactions.Select(t => t.FromEf()).ToList();
         return result;
 
     }
 }
 
-public class FuellingsRepository(KeeperDbContext keeperDbContext)
+public class FuellingsRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public List<Fuelling> GetAllFuellings()
     {
+        using var keeperDbContext = factory.CreateDbContext();
         var result = keeperDbContext.Fuellings.Select(f => f.FromEf()).ToList();
         return result;
     }

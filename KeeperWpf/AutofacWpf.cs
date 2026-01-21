@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using Microsoft.EntityFrameworkCore;
 using KeeperInfrastructure;
+using KeeperInfrastructure.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
@@ -14,20 +16,28 @@ public sealed class AutofacWpf : Module
         builder.RegisterType<ShellViewModel>().As<IShell>();
         builder.RegisterType<WindowManager>().As<IWindowManager>().InstancePerLifetimeScope();
 
-        // Register DbContext with SQLite
+        // Register Factory for DbContext with SQLite
+        // в отличии от Asp.net, где DbContext создается на время жизни 1 запроса,
+        // в WPF приложении создаем DbContext при каждом запросе (при каждом вызове функции любого репозитория)
+        // Смысл тот же - чтобы не накапливались изменения в трекинге EF, не росло потребление памяти
         builder.Register(c =>
         {
             var configuration = c.Resolve<IConfiguration>();
             var dbFolder = configuration["DataFolder"] ?? "";
             var dbPath = Path.Combine(dbFolder, "db/keeper.db");
 
-            var optionsBuilder = new DbContextOptionsBuilder<KeeperDbContext>();
-            optionsBuilder.UseSqlite($"Data Source={dbPath}");
-            optionsBuilder.EnableSensitiveDataLogging();
-            return new KeeperDbContext(optionsBuilder.Options);
-        }).AsSelf().InstancePerLifetimeScope();
+            var options = new DbContextOptionsBuilder<KeeperDbContext>()
+                .UseSqlite($"Data Source={dbPath}")
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors()
+                .Options;
 
-        builder.Register(c=>
+            return new KeeperDbContextFactory(options);
+        })
+        .As<IDbContextFactory<KeeperDbContext>>()
+        .SingleInstance();
+
+        builder.Register(c =>
         {
             var configuration = c.Resolve<IConfiguration>();
             var dbFolder = configuration["DataFolder"] ?? "";
@@ -108,7 +118,7 @@ public sealed class AutofacWpf : Module
         builder.RegisterType<BalanceDuringTransactionHinter>().SingleInstance();
         builder.RegisterType<UniversalControlVm>();
         builder.RegisterType<NewExpenseControlVm>();
-        
+
         // Month analysis view models
         builder.RegisterType<MonthAnalysisViewModel>();
         builder.RegisterType<MonthAnalyzer>();

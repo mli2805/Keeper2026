@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-public class ButtonCollectionsRepository(KeeperDbContext keeperDbContext)
+public class ButtonCollectionsRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<ButtonCollectionModel>> GetAllButtonCollections(Dictionary<int, AccountItemModel> AcMoDict)
     {
+        using var keeperDbContext = factory.CreateDbContext();
         List<ButtonCollectionEf> bcs = await keeperDbContext.ButtonCollections.ToListAsync();
         var result = new List<ButtonCollectionModel>(bcs.Count);
         foreach (var bc in bcs)
@@ -28,6 +29,7 @@ public class ButtonCollectionsRepository(KeeperDbContext keeperDbContext)
 
     public List<ButtonCollection> GetAllButtonCollections()
     {
+        using var keeperDbContext = factory.CreateDbContext();
         var result = keeperDbContext.ButtonCollections.Select(bc => bc.FromEf()).ToList();
         return result;
     }

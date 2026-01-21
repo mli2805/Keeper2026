@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-public class DepositOffersRepository(KeeperDbContext keeperDbContext)
+public class DepositOffersRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<DepositOfferModel>> GetDepositOffersWithConditionsAndRates(Dictionary<int, AccountItemModel> acMoDict)
     {
+        using var keeperDbContext = factory.CreateDbContext();
         var offersEf = await keeperDbContext.DepositOffers
             .Include(o => o.Conditions)
                 .ThenInclude(c => c.RateLines)
@@ -75,12 +76,14 @@ public class DepositOffersRepository(KeeperDbContext keeperDbContext)
 
     public List<DepositOffer> GetAllDepositOffers()
     {
+        using var keeperDbContext = factory.CreateDbContext();
         var result = keeperDbContext.DepositOffers.Select(o=>o.FromEf()).ToList();
         return result;
     }
 
     public List<DepositConditions> GetDepositConditionsByOfferId(int offerId)
     {
+        using var keeperDbContext = factory.CreateDbContext();
         var result = keeperDbContext.DepositConditions
             .Where(c => c.DepositOfferId == offerId)
             .Select(c => c.FromEf())
@@ -90,6 +93,7 @@ public class DepositOffersRepository(KeeperDbContext keeperDbContext)
 
     public List<DepositRateLine> GetDepositRateLinesByConditionId(int depositConditionsId)
     {
+        using var keeperDbContext = factory.CreateDbContext();
         var result = keeperDbContext.DepositRateLines
             .Where(rl => rl.DepositOfferConditionsId == depositConditionsId)
             .Select(rl => rl.FromEf())

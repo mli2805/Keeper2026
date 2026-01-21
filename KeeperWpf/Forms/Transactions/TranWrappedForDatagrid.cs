@@ -8,7 +8,7 @@ namespace KeeperWpf;
 
 public class TranWrappedForDataGrid : PropertyChangedBase
 {
-    private TransactionModel _tran;
+    private TransactionModel _tran = null!;
     public TransactionModel Tran
     {
         get { return _tran; }
@@ -38,7 +38,7 @@ public class TranWrappedForDataGrid : PropertyChangedBase
 
     private string GetAccountForDataGrid()
     {
-        return IsOneAccountTransaction() ? Tran.MyAccount.Name : $"{Tran.MyAccount.Name} ->\n  {Tran.MySecondAccount.Name}";
+        return IsOneAccountTransaction() ? Tran.MyAccount.Name : $"{Tran.MyAccount.Name} ->\n  {Tran.MySecondAccount!.Name}";
     }
 
     private string GetPaymentWayFromDataGrid()
@@ -57,14 +57,13 @@ public class TranWrappedForDataGrid : PropertyChangedBase
         }
     }
 
-
     private string GetAmountForDataGrid()
     {
         return IsOneAmountTransaction()
             ? ShowAmount(Tran.Amount, Tran.Currency)
-            : ShowAmount(Tran.Amount, Tran.Currency) + " ->\n    " + ShowAmount(Tran.AmountInReturn, Tran.CurrencyInReturn);
+            : ShowAmount(Tran.Amount, Tran.Currency) + " ->\n    " + ShowAmount(Tran.AmountInReturn, Tran.CurrencyInReturn!.Value);
     }
-    private string ShowAmount(decimal amount, CurrencyCode? currency)
+    private string ShowAmount(decimal amount, CurrencyCode currency)
     {
         return currency == CurrencyCode.BYR
             ? $" {amount:#,0} {currency.ToString().ToLower()}"

@@ -18,11 +18,11 @@ public class TranMoveExecutor
         _dataModel = dataModel;
     }
 
-    private List<TransactionModel> _selectedTransactions;
-    private List<TransactionModel> _nearbyTransactions;
-    private List<TransactionModel> _transToElevate;
-    private List<TransactionModel> _transToLower;
-    private List<TransactionModel> _transToShiftTime;
+    private List<TransactionModel> _selectedTransactions = null!;
+    private List<TransactionModel> _nearbyTransactions = null!;
+    private List<TransactionModel> _transToElevate = null!;
+    private List<TransactionModel> _transToLower = null!;
+    private List<TransactionModel> _transToShiftTime = null!;
     private bool _areDatesEqual;
     public void MoveSelected(Destination destination)
     {

@@ -1,12 +1,15 @@
 ﻿using KeeperDomain;
+using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-public class ToSqlite(KeeperDbContext keeperDbContext)
+public class ToSqlite(IDbContextFactory<KeeperDbContext> factory)
 {
 
     public async Task SaveModelToDb(KeeperDomainModel keeperDomainModel)
     {
+        using var keeperDbContext = factory.CreateDbContext();
+
         // Disable change tracking for bulk inserts
         keeperDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
         

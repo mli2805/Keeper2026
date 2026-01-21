@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-public class TrustTransactionsRepository(KeeperDbContext keeperDbContext)
+public class TrustTransactionsRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<TrustTranModel>> GetAllTrustTransactionModels(Dictionary<int, AccountItemModel> acMoDict,
            List<TrustAccount> trustAccounts, List<TrustAssetModel> trustAssetModels)
     {
+        using var keeperDbContext = factory.CreateDbContext();
         var transactionsEf = await keeperDbContext.TrustTransactions.ToListAsync();
         var result = new List<TrustTranModel>(transactionsEf.Count);
         foreach (var transaction in transactionsEf)
@@ -37,6 +38,7 @@ public class TrustTransactionsRepository(KeeperDbContext keeperDbContext)
 
     public List<TrustTransaction> GetAllTrustTransactions()
     {
+        using var keeperDbContext = factory.CreateDbContext();
         var result = keeperDbContext.TrustTransactions.Select(tt => tt.FromEf()).ToList();
         return result;
     }

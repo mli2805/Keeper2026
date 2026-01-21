@@ -43,8 +43,8 @@ public class GoldRatesViewModel : PropertyChangedBase
    
     public void Recount()
     {
-        Save();
-        Initialize();
+        Save(); // сохраняет ВСЕ строки таблицы на экране в модель данных
+        Initialize(); // заново загружает в таблицу на экране из модели данных, 
     }
 
     private void Save()
