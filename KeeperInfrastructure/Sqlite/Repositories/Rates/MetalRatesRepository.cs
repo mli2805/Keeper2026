@@ -16,30 +16,40 @@ public class MetalRatesRepository(IDbContextFactory<KeeperDbContext> factory)
     {
         using var keeperDbContext = factory.CreateDbContext();
 
-        // таблица маленькая и нет операции удаления записей
+        var uiRates = metalRates.ToList();
 
-        var ids = metalRates.Where(r => r.Id != 0).Select(r => r.Id).ToList();
-        var existingRates = keeperDbContext.MetalRates.Where(r => ids.Contains(r.Id)).ToDictionary(r => r.Id);
+        var uiIds = uiRates.Where(r => r.Id != 0)
+                           .Select(r => r.Id)
+                           .ToHashSet();
 
-        foreach (var rate in metalRates)
+        var dbRates = await keeperDbContext.MetalRates.ToListAsync();
+
+        // Удаляем те, которых больше нет в UI
+        var toDelete = dbRates.Where(db => !uiIds.Contains(db.Id)).ToList();
+        keeperDbContext.MetalRates.RemoveRange(toDelete);
+
+        // Обновляем и добавляем
+        foreach (var rate in uiRates)
         {
-            if (rate.Id != 0 && existingRates.ContainsKey(rate.Id))
+            if (rate.Id != 0)
             {
-                // обновляем существующую запись
-                MetalRateEf rateEf = existingRates[rate.Id];
-                rateEf.Date = rate.Date;
-                rateEf.Metal = rate.Metal;
-                rateEf.Proba = rate.Proba;
-                rateEf.Price = rate.Price;
+                var existing = dbRates.FirstOrDefault(r => r.Id == rate.Id);
+                if (existing != null)
+                {
+                    existing.Date = rate.Date;
+                    existing.Metal = rate.Metal;
+                    existing.Proba = rate.Proba;
+                    existing.Price = rate.Price;
+                }
             }
             else
             {
-                // добавляем новую запись
-                var rateEf = rate.ToEf();
-                await keeperDbContext.MetalRates.AddAsync(rateEf);
+                var newEf = rate.ToEf();
+                await keeperDbContext.MetalRates.AddAsync(newEf);
             }
         }
 
         await keeperDbContext.SaveChangesAsync();
     }
+
 }
