@@ -20,14 +20,19 @@ public static class CbrRatesDownloader
             // запрос создается для диапазона дат, если нужен один день - начало и конец совпадают
             string uri =
                 $"http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1={date:dd.MM.yyyy}&date_req2={date:dd.MM.yyyy}&VAL_NM_RQ={usdCode}";
-            var response = await MyRequest.GetAsync(uri);
+          
+            var response = await MyRequest.GetResponseAsync(uri);
+            if (!response.Success)
+                return null;
+
+            //var response = await MyRequest.GetAsync(uri);
             // ответ есть для любой даты (диапазона), но для некоторых дней внутри нету поля Record
             // например, в по итогам торгов в пятницу устанавливается курс на субботу, 
             //           поэтому запрос курса субботы вернёт результат с курсом,
             //           далее запросы курса воскресенья и понедельника придут пустые,
             //           при этом на сайте цб рф (не api) будет написано, что курс установлен С субботы, т.е. и на вск и на пнд
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml(response);
+            doc.LoadXml(response.Content);
             var json = JsonConvert.SerializeXmlNode(doc)
                 .Replace("@", "")
                 .Replace("?", "");

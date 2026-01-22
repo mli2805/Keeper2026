@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using KeeperDomain;
+using KeeperInfrastructure;
 
 namespace KeeperWpf;
 
 public class OfficialRatesViewModel : PropertyChangedBase
 {
     private readonly KeeperDataModel _keeperDataModel;
+    private readonly OfficialRatesRepository _officialRatesRepository;
+
     public RangeObservableCollection<OfficialRatesModel> Rows { get; set; } = new RangeObservableCollection<OfficialRatesModel>();
 
-    private OfficialRatesModel _selectedRow;
+    private OfficialRatesModel _selectedRow = null!;
     public OfficialRatesModel SelectedRow
     {
         get => _selectedRow;
@@ -26,8 +30,27 @@ public class OfficialRatesViewModel : PropertyChangedBase
         }
     }
 
-    public OfficialRatesModel LastDayOfYear { get; set; }
-    public OfficialRatesModel DayYearAgo { get; set; }
+    private OfficialRatesModel? _lastDayOfYear = null!;
+    public OfficialRatesModel? LastDayOfYear
+    {
+        get => _lastDayOfYear; set
+        {
+            if (Equals(value, _lastDayOfYear)) return;
+            _lastDayOfYear = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
+    private OfficialRatesModel? _dayYearAgo = null!;
+    public OfficialRatesModel? DayYearAgo
+    {
+        get => _dayYearAgo; set
+        {
+            if (Equals(value, _dayYearAgo)) return;
+            _dayYearAgo = value;
+            NotifyOfPropertyChange();
+        }
+    }
 
     private bool _isDownloadEnabled;
     public bool IsDownloadEnabled
@@ -41,9 +64,10 @@ public class OfficialRatesViewModel : PropertyChangedBase
         }
     }
 
-    public OfficialRatesViewModel(KeeperDataModel keeperDataModel)
+    public OfficialRatesViewModel(KeeperDataModel keeperDataModel, OfficialRatesRepository officialRatesRepository)
     {
         _keeperDataModel = keeperDataModel;
+        _officialRatesRepository = officialRatesRepository;
     }
 
     public async Task Initialize()
@@ -54,9 +78,9 @@ public class OfficialRatesViewModel : PropertyChangedBase
 
     private void Init()
     {
-        OfficialRatesModel endOfLastYear = null;
-        OfficialRatesModel yearAgo = null;
-        OfficialRatesModel yesterday = null;
+        OfficialRatesModel? endOfLastYear = null;
+        OfficialRatesModel? yearAgo = null;
+        OfficialRatesModel? yesterday = null;
 
         List<OfficialRatesModel> data = new List<OfficialRatesModel>();
 
@@ -67,16 +91,13 @@ public class OfficialRatesViewModel : PropertyChangedBase
             var today = new OfficialRatesModel(record.Value, yesterday, endOfLastYear, yearAgo); // вычисления дельт
             data.Add(today);
 
-            // if (Application.Current.Dispatcher != null)
-            //     Application.Current.Dispatcher.Invoke(() => Rows.Add(current));
-
-            // if (!today.BasketDelta.Equals(0))
             yesterday = today;
 
             if (today.Date.Day == 31 && today.Date.Month == 12)
                 endOfLastYear = today;
         }
 
+        // функция вызывается из не-UI потока поэтому используем Dispatcher
         if (Application.Current.Dispatcher != null)
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -93,12 +114,14 @@ public class OfficialRatesViewModel : PropertyChangedBase
         {
             var date = Rows.Last().Date.AddDays(1);
             var endOfLastYear = Rows.Last(r => r.Date.Day == 31 && r.Date.Month == 12);
+            List<OfficialRates> downloaded = new List<OfficialRates>();
             while (date <= DateTime.Today.Date.AddDays(1))
             {
                 var currencyRates = await DownloadRbAndRfRates(date);
                 if (currencyRates == null) break;
 
                 currencyRates.Id = Rows.Last().Id + 1;
+                downloaded.Add(currencyRates);
                 _keeperDataModel.OfficialRates.Add(currencyRates.Date, currencyRates);
                 var yearAgo = Rows
                     .Last(r => r.Date.Day == currencyRates.Date.Day && r.Date.Month == currencyRates.Date.Month);
@@ -109,11 +132,12 @@ public class OfficialRatesViewModel : PropertyChangedBase
                     endOfLastYear = line;
                 date = date.AddDays(1);
             }
+            await _officialRatesRepository.Add(downloaded);
         }
         IsDownloadEnabled = true;
     }
 
-    private async Task<OfficialRates> DownloadRbAndRfRates(DateTime date)
+    private async Task<OfficialRates?> DownloadRbAndRfRates(DateTime date)
     {
         var nbRbRates = await NbRbRatesDownloader.GetRatesForDateAsync(date);
         if (nbRbRates == null) return null;
@@ -123,6 +147,7 @@ public class OfficialRatesViewModel : PropertyChangedBase
         return currencyRates;
     }
 
+    // для заполнения пропусков в курсах ЦБ РФ
     public async void UpdateCbRf()
     {
         var lastRfDate = _keeperDataModel.OfficialRates.Values.OrderBy(v => v.Date)
@@ -132,6 +157,7 @@ public class OfficialRatesViewModel : PropertyChangedBase
         var prevRurUsdRate = _keeperDataModel.OfficialRates[from].CbrRate.Usd;
         var checkDate = from.AddDays(1);
 
+        List<OfficialRates> forRepoUpdate = new List<OfficialRates>();
         using (new WaitCursor())
         {
             while (checkDate < lastRfDate)
@@ -141,6 +167,7 @@ public class OfficialRatesViewModel : PropertyChangedBase
                     // перепроверяем, вдруг есть курс для этой даты, по каким-то причинам не был получен ранее
                     var usd2Rur = await CbrRatesDownloader.GetRateForDateFromXml(checkDate);
                     _keeperDataModel.OfficialRates[checkDate].CbrRate.Usd = usd2Rur ?? prevRurUsdRate.Clone();
+                    forRepoUpdate.Add(_keeperDataModel.OfficialRates[checkDate]);
 
                     // чтобы сразу на экране обновилось
                     var line = Rows.FirstOrDefault(r => r.Date == checkDate);
@@ -155,6 +182,7 @@ public class OfficialRatesViewModel : PropertyChangedBase
 
                 checkDate = checkDate.AddDays(1);
             }
+            await _officialRatesRepository.UpdateSome(forRepoUpdate);
         }
     }
 

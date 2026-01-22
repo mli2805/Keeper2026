@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Caliburn.Micro;
 using KeeperDomain;
+using KeeperInfrastructure;
 
 namespace KeeperWpf;
 
 public class GoldRatesViewModel : PropertyChangedBase
 {
     private readonly KeeperDataModel _keeperDataModel;
-    private List<GoldCoinsModel> _rows;
+    private readonly MetalRatesRepository _metalRatesRepository;
 
+    private List<GoldCoinsModel> _rows = null!;
     public List<GoldCoinsModel> Rows
     {
         get => _rows;
@@ -21,9 +24,10 @@ public class GoldRatesViewModel : PropertyChangedBase
         }
     }
 
-    public GoldRatesViewModel(KeeperDataModel keeperDataModel)
+    public GoldRatesViewModel(KeeperDataModel keeperDataModel, MetalRatesRepository metalRatesRepository)
     {
         _keeperDataModel = keeperDataModel;
+        _metalRatesRepository = metalRatesRepository;
     }
 
     public void Initialize()
@@ -40,14 +44,14 @@ public class GoldRatesViewModel : PropertyChangedBase
             .ToList();
     }
 
-   
-    public void Recount()
+
+    public async Task Recount()
     {
-        Save(); // сохраняет ВСЕ строки таблицы на экране в модель данных
+        await Save(); // сохраняет ВСЕ строки таблицы на экране в модель данных
         Initialize(); // заново загружает в таблицу на экране из модели данных, 
     }
 
-    private void Save()
+    private async Task Save()
     {
         _keeperDataModel.MetalRates = Rows.Select(l => new MetalRate()
         {
@@ -57,5 +61,7 @@ public class GoldRatesViewModel : PropertyChangedBase
             Proba = 900,
             Price = l.MinfinGold900Rate
         }).ToList();
+
+        await _metalRatesRepository.UpdateWholeList(_keeperDataModel.MetalRates);
     }
 }

@@ -8,7 +8,7 @@ namespace KeeperWpf;
 public class RefinancingRatesViewModel : PropertyChangedBase
 {
     private readonly KeeperDataModel _keeperDataModel;
-    public ObservableCollection<RefinancingRate> Rows { get; set; }
+    public ObservableCollection<RefinancingRate> Rows { get; set; } = null!;
 
     public RefinancingRatesViewModel(KeeperDataModel keeperDataModel)
     {

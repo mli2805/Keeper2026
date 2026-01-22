@@ -22,7 +22,7 @@ public class OfficialRatesModel : PropertyChangedBase
     public int Id;
     public DateTime Date { get; set; }
     public OfficialRates TodayRates { get; set; }
-    private NbRbRates YesterdayNbRbRates { get; set; }
+    private NbRbRates? YesterdayNbRbRates { get; set; }
 
     public readonly double Basket;
     private readonly double _yesterdayBasket;
@@ -33,12 +33,12 @@ public class OfficialRatesModel : PropertyChangedBase
     public string UsdStr { get; set; }
     public Brush UsdBrush { get; set; }
 
-    public StringWithBrush UsdToEndOfYear { get; set; }
-    public StringWithBrush UsdY2Y { get; set; }
+    public StringWithBrush? UsdToEndOfYear { get; set; }
+    public StringWithBrush? UsdY2Y { get; set; }
 
     public string EuroBynStr { get; set; }
 
-    private string _euroUsdStr;
+    private string _euroUsdStr = null!;
     public string EuroUsdStr
     {
         get => _euroUsdStr;
@@ -53,7 +53,7 @@ public class OfficialRatesModel : PropertyChangedBase
     public string RurUnitStr { get; set; }
     public string RurStr { get; set; }
 
-    private string _rurUsdStr;
+    private string _rurUsdStr = null!;
     public string RurUsdStr
     {
         get => _rurUsdStr;
@@ -69,26 +69,26 @@ public class OfficialRatesModel : PropertyChangedBase
     public string CnyStr { get; set; }
 
     public string BasketNumberStr { get; set; }
-    public string BasketStr { get; set; }
-    public Brush BasketBrush { get; set; }
+    public string BasketStr { get; set; } = null!;
+    public Brush BasketBrush { get; set; } = null!;
 
     // private double _procBasketBreak;
     // public string BasketAfterBreakStr { get; set; }
     // public Brush BasketBreakBrush { get; set; }
 
-    public StringWithBrush BasketToEndOfYear { get; set; } // To last day of previous year
-    public StringWithBrush BasketY2Y { get; set; } // To this day year ago
+    public StringWithBrush? BasketToEndOfYear { get; set; } // To last day of previous year
+    public StringWithBrush? BasketY2Y { get; set; } // To this day year ago
 
 
     private string Template => Date >= new DateTime(2016, 7, 1) ? "#,#.0000" : "#,#.####";
 
     public OfficialRatesModel(OfficialRates record,
-        OfficialRatesModel previous, OfficialRatesModel endOfLastYear, OfficialRatesModel yearAgo)
+        OfficialRatesModel? previous, OfficialRatesModel? endOfLastYear, OfficialRatesModel? yearAgo)
     {
         Id = record.Id;
         Date = record.Date;
         TodayRates = record;
-        YesterdayNbRbRates = previous?.TodayRates.NbRates;
+        YesterdayNbRbRates = previous?.TodayRates.NbRates ?? null;
 
         UsdStr = TodayRates.NbRates.Usd.Value.ToString(Template, new CultureInfo("ru-RU"));
         EuroBynStr = TodayRates.NbRates.Euro.Value.ToString(Template, new CultureInfo("ru-RU"));

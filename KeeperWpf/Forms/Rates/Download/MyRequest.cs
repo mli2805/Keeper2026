@@ -1,29 +1,56 @@
 ﻿using System;
-using System.IO;
-using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
+public class MyResponse
+{
+    public string Content { get; set; } = string.Empty;
+    public bool Success { get; set; }
+    public string Error { get; set; } = string.Empty;
+
+    public MyResponse(string content)
+    {
+        Content = content;
+        Success = true;
+    }
+
+    public MyResponse(Exception e)
+    {
+        Success = false;
+        Error = e.Message;
+    }
+}
+
 public static class MyRequest
 {
-    public static async Task<string> GetAsync(string uri)
+    private static readonly HttpClient _httpClient = new HttpClient(new HttpClientHandler
+    {
+        AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
+    })
+    {
+        Timeout = TimeSpan.FromSeconds(10)
+    };
+
+    public static async Task<MyResponse> GetResponseAsync(string uri)
     {
         try
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-            HttpWebResponse response = (HttpWebResponse) await request.GetResponseAsync();
-            Stream stream = response.GetResponseStream();
-            if (stream == null) return "";
-            using (StreamReader reader = new StreamReader(stream))
+            HttpResponseMessage? response = await _httpClient.GetAsync(uri);
+            if (response.IsSuccessStatusCode)
             {
-                return await reader.ReadToEndAsync();
+                var str = await response.Content.ReadAsStringAsync();
+                return new MyResponse(str);
+            }
+            else
+            {
+                return new MyResponse(new Exception($"HTTP Error: {response.StatusCode}"));
             }
         }
         catch (Exception e)
         {
-            return e.Message;
+            return new MyResponse(e);
         }
     }
 }

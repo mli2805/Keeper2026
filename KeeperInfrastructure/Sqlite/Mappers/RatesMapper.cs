@@ -57,7 +57,7 @@ public static class RatesMapper
     {
         return new ExchangeRatesEf
         {
-            Id = exchangeRates.Id,
+            Id = exchangeRates.Id, // Id генерируется в коде приложения
             Date = exchangeRates.Date,
             BynUsdA = exchangeRates.UsdToByn,
             BynUsdB = exchangeRates.BynToUsd,

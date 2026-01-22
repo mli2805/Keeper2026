@@ -12,7 +12,7 @@ public class MetalRatesRepository(IDbContextFactory<KeeperDbContext> factory)
         return result;
     }
 
-    public async Task SaveMetalRates(IEnumerable<MetalRate> metalRates)
+    public async Task UpdateWholeList(IEnumerable<MetalRate> metalRates)
     {
         using var keeperDbContext = factory.CreateDbContext();
 

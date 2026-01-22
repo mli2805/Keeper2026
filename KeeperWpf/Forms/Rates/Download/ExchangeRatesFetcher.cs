@@ -16,8 +16,10 @@ public static class ExchangeRatesFetcher
 
         try
         {
-            var response = await MyRequest.GetAsync(uri);
-            var lines = (List<KomBankRatesLine>?)JsonConvert.DeserializeObject(response, typeof(List<KomBankRatesLine>));
+            var response = await MyRequest.GetResponseAsync(uri);
+            if (!response.Success)
+                return null;
+            var lines = (List<KomBankRatesLine>?)JsonConvert.DeserializeObject(response.Content, typeof(List<KomBankRatesLine>));
             return lines?.Select(l => l.ToExchangeRates()).ToList() ?? null;
         }
         catch (Exception e)

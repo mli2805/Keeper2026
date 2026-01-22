@@ -15,8 +15,11 @@ public static class NbRbRatesDownloader
         try
         {
             string uri = "https://www.nbrb.by/API/ExRates/Rates?onDate=" + $"{date:yyyy-M-d}" + "&Periodicity=0";
-            var response = await MyRequest.GetAsync(uri);
-            var nbList = (List<NbRbSiteRate>?)JsonConvert.DeserializeObject(response, typeof(List<NbRbSiteRate>));
+            var response = await MyRequest.GetResponseAsync(uri);
+            if (!response.Success)
+                return null;
+
+            var nbList = (List<NbRbSiteRate>?)JsonConvert.DeserializeObject(response.Content, typeof(List<NbRbSiteRate>));
             if (nbList == null || nbList.Count == 0) return null;
             var result = new NbRbRates();
             var usdRate = nbList.First(c => c.Cur_Abbreviation == "USD");
@@ -40,14 +43,16 @@ public static class NbRbRatesDownloader
         }
     }
 
-    public static async Task<List<RefinancingRate>> GetRefinanceRatesAsync()
+    public static async Task<List<RefinancingRate>?> GetRefinanceRatesAsync()
     {
         try
         {
             string uri = "https://www.nbrb.by/api/refinancingrate";
-            var response = await MyRequest.GetAsync(uri);
-            var rrList = (List<RefinancingRate>)JsonConvert.DeserializeObject(response, typeof(List<RefinancingRate>));
-            if (rrList.Count == 0) return null;
+            var response = await MyRequest.GetResponseAsync(uri);
+            if (!response.Success)
+                return null;
+            var rrList = (List<RefinancingRate>?)JsonConvert.DeserializeObject(response.Content, typeof(List<RefinancingRate>));
+            if (rrList == null || rrList.Count == 0) return null;
             return rrList;
         }
         catch (Exception e)
