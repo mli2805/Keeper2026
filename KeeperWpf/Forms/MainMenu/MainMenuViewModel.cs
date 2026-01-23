@@ -106,7 +106,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
 
     #endregion
 
-    // for short-cuts
+    // UserControl должен быть Focusable="True" чтобы шорткаты работали
     public async Task OnPreviewKeyDown(KeyEventArgs e)
     {
         switch (e.Key)

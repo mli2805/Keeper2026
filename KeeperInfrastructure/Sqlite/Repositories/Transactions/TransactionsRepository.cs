@@ -9,49 +9,36 @@ public class TransactionsRepository(IDbContextFactory<KeeperDbContext> factory)
     public async Task<List<TransactionModel>> GetAllTransactionModels(Dictionary<int, AccountItemModel> acMoDict)
     {
         using var keeperDbContext = factory.CreateDbContext();
-        var transactionsEf = await keeperDbContext.Transactions.ToListAsync();
-        var result = new List<TransactionModel>(transactionsEf.Count);
-        foreach (var t in transactionsEf)
-        {
-            var tagIds = string.IsNullOrWhiteSpace(t.Tags) ? new List<int>() : t.Tags.Split('|').Select(s => int.Parse(s.Trim())).ToList();
-            var transactionModel = new TransactionModel()
-            {
-                Id = t.Id,
-                Timestamp = t.Timestamp,
-                Receipt = t.Receipt,
-                Operation = t.Operation,
-                PaymentWay = t.PaymentWay,
-                MyAccount = acMoDict[t.MyAccount],
-                MySecondAccount = t.MySecondAccount == null ? null : acMoDict[t.MySecondAccount!.Value],
-                Counterparty = t.Counterparty == null ? null : acMoDict[t.Counterparty!.Value],
-                Category = t.Category == null ? null : acMoDict[t.Category!.Value],
-                Amount = t.Amount,
-                AmountInReturn = t.AmountInReturn ?? 0,
-                Currency = t.Currency,
-                CurrencyInReturn = t.CurrencyInReturn,
-                Tags = tagIds.Select(i=> acMoDict[i]).ToList(),
-                Comment = t.Comment,
-            };
-            result.Add(transactionModel);
-        }
+        var transactionsEf = await keeperDbContext.Transactions
+            .OrderBy(t => t.Timestamp)
+            .ToListAsync();
+        var result = transactionsEf.Select(transactionsEf => transactionsEf.FromEf(acMoDict)).ToList();
         return result;
     }
-   
-    public List<Transaction> GetAllTransactions()
+
+    public async Task AddTransactions(List<TransactionModel> transactionModels)
     {
         using var keeperDbContext = factory.CreateDbContext();
-        var result = keeperDbContext.Transactions.Select(t => t.FromEf()).ToList();
-        return result;
+        var transactionsEf = transactionModels.Select(tm => tm.ToEf()).ToList();
+        await keeperDbContext.Transactions.AddRangeAsync(transactionsEf);
+        await keeperDbContext.SaveChangesAsync();
+    }
 
+    public async Task UpdateTransaction(TransactionModel transactionModel)
+    {
+        using var keeperDbContext = factory.CreateDbContext();
+        var transactionEf = transactionModel.ToEf();
+        keeperDbContext.Transactions.Update(transactionEf);
+        await keeperDbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteTransactions(List<int> transactionsId)
+    {
+        using var keeperDbContext = factory.CreateDbContext();
+        var transactionsEf = keeperDbContext.Transactions.Where(t => transactionsId.Contains(t.Id)).ToList();
+        keeperDbContext.Transactions.RemoveRange(transactionsEf);
+        await keeperDbContext.SaveChangesAsync();
     }
 }
 
-public class FuellingsRepository(IDbContextFactory<KeeperDbContext> factory)
-{
-    public List<Fuelling> GetAllFuellings()
-    {
-        using var keeperDbContext = factory.CreateDbContext();
-        var result = keeperDbContext.Fuellings.Select(f => f.FromEf()).ToList();
-        return result;
-    }
-}
+

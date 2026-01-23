@@ -20,8 +20,7 @@ public class ShellViewModel : Screen, IShell
     public BalanceOrTrafficViewModel BalanceOrTrafficViewModel { get; }
     public TwoSelectorsViewModel TwoSelectorsViewModel { get; }
 
-    public ShellViewModel(IWindowManager windowManager,
-        KeeperDataModel keeperDataModel,
+    public ShellViewModel(IWindowManager windowManager, KeeperDataModel keeperDataModel,
         KeeperDataModelInitializer dataModelInitializer, LoadingProgressViewModel loadingProgressViewModel,
         ShellPartsBinder shellPartsBinder, MainMenuViewModel mainMenuViewModel,
         AccountTreeViewModel accountTreeViewModel, BalanceOrTrafficViewModel balanceOrTrafficViewModel,
@@ -82,10 +81,5 @@ public class ShellViewModel : Screen, IShell
 
         var success = await _dataModelInitializer.GetFullModelFromDb();
         return true;
-    }
-
-    public async Task OnWindowPreviewKeyDown(KeyEventArgs e)
-    {
-        await MainMenuViewModel.OnPreviewKeyDown(e);
     }
 }

@@ -1,9 +1,58 @@
 ﻿using KeeperDomain;
+using KeeperModels;
 
 namespace KeeperInfrastructure;
 
 public static class TransactionsMapper
 {
+    public static TransactionEf ToEf(this TransactionModel transactionModel)
+    {
+        return new TransactionEf
+        {
+            Id = transactionModel.Id,
+            Timestamp = transactionModel.Timestamp,
+            Operation = transactionModel.Operation,
+            PaymentWay = transactionModel.PaymentWay,
+            Receipt = transactionModel.Receipt,
+            MyAccount = transactionModel.MyAccount.Id,
+            MySecondAccount = transactionModel.MySecondAccount?.Id,
+            Counterparty = transactionModel.Counterparty?.Id,
+            Category = transactionModel.Category?.Id,
+            Amount = transactionModel.Amount,
+            Currency = transactionModel.Currency,
+            AmountInReturn = transactionModel.AmountInReturn != 0 ? transactionModel.AmountInReturn : null,
+            CurrencyInReturn = transactionModel.CurrencyInReturn,
+            Tags = string.Join("|", transactionModel.Tags.Select(t => t.Id)),
+            Comment = transactionModel.Comment
+        };
+    }
+
+    public static TransactionModel FromEf(this TransactionEf transactionEf, Dictionary<int, AccountItemModel> acMoDict)
+    {
+        var tagIds = string.IsNullOrWhiteSpace(transactionEf.Tags)
+                ? new List<int>()
+                : transactionEf.Tags.Split('|').Select(s => int.Parse(s.Trim())).ToList();
+
+        return new TransactionModel
+        {
+            Id = transactionEf.Id,
+            Timestamp = transactionEf.Timestamp,
+            Operation = transactionEf.Operation,
+            PaymentWay = transactionEf.PaymentWay,
+            Receipt = transactionEf.Receipt,
+            MyAccount = acMoDict[transactionEf.MyAccount],
+            MySecondAccount = transactionEf.MySecondAccount == null ? null : acMoDict[transactionEf.MySecondAccount!.Value],
+            Counterparty = transactionEf.Counterparty == null ? null : acMoDict[transactionEf.Counterparty!.Value],
+            Category = transactionEf.Category == null ? null : acMoDict[transactionEf.Category!.Value],
+            Amount = transactionEf.Amount,
+            AmountInReturn = transactionEf.AmountInReturn ?? 0,
+            Currency = transactionEf.Currency,
+            CurrencyInReturn = transactionEf.CurrencyInReturn,
+            Tags = tagIds.Select(i => acMoDict[i]).ToList(),
+            Comment = transactionEf.Comment
+        };
+    }
+
     public static TransactionEf ToEf(this Transaction transaction)
     {
         return new TransactionEf
@@ -45,30 +94,6 @@ public static class TransactionsMapper
             CurrencyInReturn = transactionEf.CurrencyInReturn,
             Tags = transactionEf.Tags ?? "",
             Comment = transactionEf.Comment
-        };
-    }
-
-    public static FuellingEf ToEf(this Fuelling fuelling)
-    {
-        return new FuellingEf
-        {
-            Id = fuelling.Id,
-            TransactionId = fuelling.TransactionId,
-            CarAccountId = fuelling.CarAccountId,
-            Volume = fuelling.Volume,
-            FuelType = fuelling.FuelType,
-        };
-    }
-
-    public static Fuelling FromEf(this FuellingEf fuellingEf)
-    {
-        return new Fuelling
-        {
-            Id = fuellingEf.Id,
-            TransactionId = fuellingEf.TransactionId,
-            CarAccountId = fuellingEf.CarAccountId,
-            Volume = fuellingEf.Volume,
-            FuelType = fuellingEf.FuelType,
         };
     }
 }

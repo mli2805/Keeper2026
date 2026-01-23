@@ -10,15 +10,6 @@
         Width="1087" Height="777" WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance keeperWpf:ShellViewModel}"
         >
-
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="PreviewKeyDown">
-            <cal:ActionMessage MethodName="OnWindowPreviewKeyDown">
-                <cal:Parameter Value="$eventArgs" />
-            </cal:ActionMessage>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
-
     <DockPanel>
         <keeperWpf:MainMenuView DockPanel.Dock="Top" DataContext="{Binding MainMenuViewModel}"/>
         <Border DockPanel.Dock="Bottom" Height="30">

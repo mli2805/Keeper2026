@@ -61,5 +61,8 @@ public class KeeperDbContext : DbContext
             .WithOne()
             .HasForeignKey(r => r.TrustAssetId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<TransactionEf>()
+            .HasIndex(t => t.Timestamp);
     }
 }

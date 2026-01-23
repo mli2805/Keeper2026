@@ -24,6 +24,10 @@ public class TranMoveExecutor
     private List<TransactionModel> _transToLower = null!;
     private List<TransactionModel> _transToShiftTime = null!;
     private bool _areDatesEqual;
+
+
+    //TODO добавить движение всех транзакций чека
+
     public void MoveSelected(Destination destination)
     {
          if (!FillLists(destination)) return;

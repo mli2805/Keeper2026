@@ -54,29 +54,28 @@ public class BalanceDuringTransactionHinter
 
     public string GetMySecondAccountBalance(TransactionModel transactionInWork)
     {
-        if (transactionInWork?.MySecondAccount == null) return "было ххх - стало ххх";
-        if (!transactionInWork.MySecondAccount.Is(158)) return "было ххх - стало ххх";
-
         if (transactionInWork.Operation == OperationType.Перенос)
         {
             var balanceBefore =
                 _dataModel.Transactions.Values.Sum(a => a.AmountForAccount(
-                    transactionInWork.MySecondAccount, transactionInWork.Currency, transactionInWork.Timestamp.AddMilliseconds(-1)));
+                    transactionInWork.MySecondAccount!, transactionInWork.Currency, transactionInWork.Timestamp.AddMilliseconds(-1)));
 
             return BuildTip(balanceBefore, balanceBefore + transactionInWork.AmountForAccount(
-                                               transactionInWork.MySecondAccount, transactionInWork.Currency), transactionInWork.Currency);
+                                               transactionInWork.MySecondAccount!, transactionInWork.Currency), transactionInWork.Currency);
         }
-        else // OperationType.Обмен
+        if (transactionInWork.Operation == OperationType.Обмен)
         {
             var balanceBefore =
                 _dataModel.Transactions.Values.Sum(a => a.AmountForAccount(
-                    transactionInWork.MySecondAccount, transactionInWork.CurrencyInReturn, transactionInWork.Timestamp.AddMilliseconds(-1)));
+                    transactionInWork.MySecondAccount!, transactionInWork.CurrencyInReturn, transactionInWork.Timestamp.AddMilliseconds(-1)));
 
             return BuildTip(balanceBefore, balanceBefore +
-                              transactionInWork.AmountForAccount(transactionInWork.MySecondAccount, transactionInWork.CurrencyInReturn),
+                              transactionInWork.AmountForAccount(transactionInWork.MySecondAccount!, transactionInWork.CurrencyInReturn),
                                             transactionInWork.CurrencyInReturn!.Value);
 
         }
+
+        return "было ххх - стало ххх";
     }
 
     public string GetExchangeRate(TransactionModel transactionInWork)

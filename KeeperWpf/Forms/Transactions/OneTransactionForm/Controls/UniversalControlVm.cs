@@ -168,7 +168,7 @@ public class UniversalControlVm : PropertyChangedBase
     }
 
     // if true should not be changed by associations
-    private bool _counterpartyChangedManually; 
+    private bool _counterpartyChangedManually;
     private bool _categoryChangedManually;
 
     public void SetTran(TransactionModel tran)

@@ -2,105 +2,94 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
+using KeeperInfrastructure;
 using KeeperModels;
 
 namespace KeeperWpf;
 
-public class TranEditExecutor
+public class TranEditExecutor(TranModel model, IWindowManager windowManager,
+    KeeperDataModel dataModel, OneTranViewModel oneTranViewModel, 
+    TransactionsRepository transactionsRepository, FuellingsRepository fuellingsRepository,
+    AskReceiptDeletionViewModel askReceiptDeletionViewModel)
 {
-    private readonly TranModel _model;
-
-    private readonly IWindowManager _windowManager;
-    private readonly KeeperDataModel _dataModel;
-    private readonly OneTranViewModel _oneTranViewModel;
-    private readonly AskReceiptDeletionViewModel _askReceiptDeletionViewModel;
-
-    public TranEditExecutor(TranModel model, IWindowManager windowManager,
-        KeeperDataModel dataModel, OneTranViewModel oneTranViewModel, AskReceiptDeletionViewModel askReceiptDeletionViewModel)
-    {
-        _model = model;
-
-        _windowManager = windowManager;
-        _dataModel = dataModel;
-        _oneTranViewModel = oneTranViewModel;
-        _askReceiptDeletionViewModel = askReceiptDeletionViewModel;
-    }
-
-
     public async Task EditSelected()
     {
-        var selectedTran = _model.SelectedTranWrappedForDataGrid.Tran;
+        var selectedTran = model.SelectedTranWrappedForDataGrid.Tran;
 
-        _oneTranViewModel.Init(selectedTran, false);
-        bool? result = await _windowManager.ShowDialogAsync(_oneTranViewModel);
+        oneTranViewModel.Init(selectedTran, false);
+        bool? result = await windowManager.ShowDialogAsync(oneTranViewModel);
 
         if (!result.HasValue || !result.Value) return;
 
-        _oneTranViewModel.GetTran().CopyInto(selectedTran);
+        oneTranViewModel.GetTran().CopyInto(selectedTran);
 
-        _dataModel.Transactions.Remove(selectedTran.Id);
-        _dataModel.Transactions.Add(selectedTran.Id, selectedTran);
+        dataModel.Transactions.Remove(selectedTran.Id);
+        dataModel.Transactions.Add(selectedTran.Id, selectedTran);
+        await transactionsRepository.UpdateTransaction(selectedTran);
 
-        _model.SortedRows.Refresh();
-        _model.IsCollectionChanged = true;
+        model.SortedRows.Refresh();
+        model.IsCollectionChanged = true;
     }
 
     public async Task AddAfterSelected()
     {
         var tranForAdding = PrepareTranForAdding();
-        _oneTranViewModel.Init(tranForAdding, true);
-        bool? result = await _windowManager.ShowDialogAsync(_oneTranViewModel);
+        oneTranViewModel.Init(tranForAdding, true);
+        bool? result = await windowManager.ShowDialogAsync(oneTranViewModel);
 
         if (!result.HasValue || !result.Value) return;
 
-        if (_oneTranViewModel.ReceiptList != null)
-            AddOneTranAndReceipt(_oneTranViewModel);
-        else if (_oneTranViewModel.FuellingTran != null)
+        if (oneTranViewModel.ReceiptList != null)
+            await AddOneTranAndReceipt(oneTranViewModel);
+        else if (oneTranViewModel.FuellingTran != null)
         {
-            var transactionModel = _oneTranViewModel.FuellingTran.Clone();
-            transactionModel.MyAccount = _oneTranViewModel.TranInWork.MyAccount;
-            AddOneTran(transactionModel);
+            var transactionModel = oneTranViewModel.FuellingTran.Clone();
+            transactionModel.MyAccount = oneTranViewModel.TranInWork.MyAccount;
+            await AddOneTran(transactionModel);
 
-            if (_oneTranViewModel.FuellingModel != null)
+            if (oneTranViewModel.FuellingModel != null)
             {
-                var fm = _oneTranViewModel.FuellingModel.Clone();
+                var fm = oneTranViewModel.FuellingModel.Clone();
                 fm.Transaction = transactionModel;
                 fm.Comment = transactionModel.Comment;
-                _dataModel.FuellingVms.Add(fm);
+                dataModel.FuellingVms.Add(fm);
+                await fuellingsRepository.AddFuelling(fm);
             }
         }
         else
-            AddOneTran(_oneTranViewModel.GetTran().Clone());
+            await AddOneTran(oneTranViewModel.GetTran().Clone());
 
-        if (_oneTranViewModel.IsOneMore)
+        if (oneTranViewModel.IsOneMore)
             await AddAfterSelected();
 
-        _model.IsCollectionChanged = true;
+        model.IsCollectionChanged = true;
     }
 
-    private void AddOneTran(TransactionModel tran)
+    private async Task AddOneTran(TransactionModel tran)
     {
-        tran.Id = _dataModel.Transactions.Keys.Max() + 1;
+        tran.Id = dataModel.Transactions.Keys.Max() + 1;
 
         var wrappedTransactionsAfterInserted =
-            _model.Rows.Where(t => t.Tran.Timestamp.Date == tran.Timestamp.Date && t.Tran.Timestamp >= tran.Timestamp).ToList();
+            model.Rows.Where(t => t.Tran.Timestamp.Date == tran.Timestamp.Date && t.Tran.Timestamp >= tran.Timestamp).ToList();
         foreach (var wrapped in wrappedTransactionsAfterInserted)
         {
             wrapped.Tran.Timestamp = wrapped.Tran.Timestamp.AddMinutes(1);
-            _dataModel.Transactions[wrapped.Tran.Id].Timestamp = wrapped.Tran.Timestamp;
+            dataModel.Transactions[wrapped.Tran.Id].Timestamp = wrapped.Tran.Timestamp;
+            await transactionsRepository.UpdateTransaction(wrapped.Tran);
         }
 
         var tranWrappedForDatagrid = new TranWrappedForDataGrid(tran);
-        _model.Rows.Add(tranWrappedForDatagrid);
-        _model.SelectedTranWrappedForDataGrid = tranWrappedForDatagrid;
+        model.Rows.Add(tranWrappedForDatagrid);
+        model.SelectedTranWrappedForDataGrid = tranWrappedForDatagrid;
 
-        _dataModel.Transactions.Add(tran.Id, tran);
+        dataModel.Transactions.Add(tran.Id, tran);
+        await transactionsRepository.AddTransactions(new List<TransactionModel> { tran });
     }
 
-    private void AddOneTranAndReceipt(OneTranViewModel oneTranForm)
+    private async Task AddOneTranAndReceipt(OneTranViewModel oneTranForm)
     {
         var oneTran = oneTranForm.GetTran();
-        var sameDayTransactions = _dataModel.Transactions.Values.Where(t => t.Timestamp.Date == oneTran.Timestamp.Date).ToList();
+        var sameDayTransactions = dataModel.Transactions.Values.Where(t => t.Timestamp.Date == oneTran.Timestamp.Date).ToList();
         var receiptId = sameDayTransactions.Any() ? sameDayTransactions.Max(r => r.Receipt) + 1 : 1;
         foreach (var tuple in oneTranForm.ReceiptList!)
         {
@@ -109,13 +98,13 @@ public class TranEditExecutor
             tran.Amount = tuple.Item1;
             tran.Category = tuple.Item2;
             tran.Comment = tuple.Item3;
-            AddOneTran(tran);
+            await AddOneTran(tran);
         }
     }
 
     private TransactionModel PrepareTranForAdding()
     {
-        var tranForAdding = _model.SelectedTranWrappedForDataGrid.Tran.Clone();
+        var tranForAdding = model.SelectedTranWrappedForDataGrid.Tran.Clone();
         tranForAdding.Timestamp = tranForAdding.Timestamp.AddMinutes(1);
         tranForAdding.Amount = 0;
         tranForAdding.AmountInReturn = 0;
@@ -125,51 +114,55 @@ public class TranEditExecutor
 
     public async Task DeleteSelected()
     {
-        if (_model.SelectedTranWrappedForDataGrid.Tran.Receipt != 0)
+        if (model.SelectedTranWrappedForDataGrid.Tran.Receipt != 0)
         {
-            await _windowManager.ShowDialogAsync(_askReceiptDeletionViewModel);
-            if (_askReceiptDeletionViewModel.Result == 0)
+            await windowManager.ShowDialogAsync(askReceiptDeletionViewModel);
+            if (askReceiptDeletionViewModel.Result == 0)
                 return;
-            if (_askReceiptDeletionViewModel.Result == 1)
-                DeleteOneTransaction();
+            if (askReceiptDeletionViewModel.Result == 1)
+                await DeleteOneTransaction();
             else
-                DeleteWholeReceipt();
+                await DeleteWholeReceipt();
         }
         else
-            DeleteOneTransaction();
-        _model.IsCollectionChanged = true;
+            await DeleteOneTransaction();
+        model.IsCollectionChanged = true;
     }
 
-    private void DeleteOneTransaction()
+    private async Task DeleteOneTransaction()
     {
-        var trId = _model.SelectedTranWrappedForDataGrid.Tran.Id;
-        var wrappedTrans = new List<TranWrappedForDataGrid>() { _model.SelectedTranWrappedForDataGrid };
-        Delete(wrappedTrans);
-        var fuellingModel = _dataModel.FuellingVms.FirstOrDefault(f => f.Transaction.Id == trId);
+        var trId = model.SelectedTranWrappedForDataGrid.Tran.Id;
+        var wrappedTrans = new List<TranWrappedForDataGrid>() { model.SelectedTranWrappedForDataGrid };
+        await Delete(wrappedTrans);
+        var fuellingModel = dataModel.FuellingVms.FirstOrDefault(f => f.Transaction.Id == trId);
         if (fuellingModel != null)
-            _dataModel.FuellingVms.Remove(fuellingModel);
+        {
+            dataModel.FuellingVms.Remove(fuellingModel);
+            await fuellingsRepository.DeleteFuelling(fuellingModel.Id);
+        }
     }
 
-    private void DeleteWholeReceipt()
+    private async Task DeleteWholeReceipt()
     {
-        var wrappedTrans = _model.Rows.Where(t =>
-            t.Tran.Timestamp.Date == _model.SelectedTranWrappedForDataGrid.Tran.Timestamp.Date
-            && t.Tran.Receipt == _model.SelectedTranWrappedForDataGrid.Tran.Receipt).ToList();
+        var wrappedTrans = model.Rows.Where(t =>
+            t.Tran.Timestamp.Date == model.SelectedTranWrappedForDataGrid.Tran.Timestamp.Date
+            && t.Tran.Receipt == model.SelectedTranWrappedForDataGrid.Tran.Receipt).ToList();
 
-        Delete(wrappedTrans);
+        await Delete(wrappedTrans);
     }
 
-    private void Delete(List<TranWrappedForDataGrid> wrappedTrans)
+    private async Task Delete(List<TranWrappedForDataGrid> wrappedTrans)
     {
-        int n = _model.Rows.IndexOf(wrappedTrans.First());
+        int n = model.Rows.IndexOf(wrappedTrans.First());
         foreach (var wrappedTran in wrappedTrans)
         {
-            _dataModel.Transactions.Remove(wrappedTran.Tran.Id);
-            _model.Rows.Remove(wrappedTran);
+            dataModel.Transactions.Remove(wrappedTran.Tran.Id);
+            model.Rows.Remove(wrappedTran);
         }
+        await transactionsRepository.DeleteTransactions(wrappedTrans.Select(t => t.Tran.Id).ToList());
 
-        if (n >= _model.Rows.Count)
-            n = _model.Rows.Count - 1;
-        _model.SelectedTranWrappedForDataGrid = _model.Rows.ElementAt(n);
+        if (n >= model.Rows.Count)
+            n = model.Rows.Count - 1;
+        model.SelectedTranWrappedForDataGrid = model.Rows.ElementAt(n);
     }
 }
