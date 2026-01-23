@@ -4,5 +4,5 @@ namespace KeeperWpf;
 
 public class StatisticsLinesViewModel
 {
-    public List<TrustStatisticsLine> Rows { get; set; }
+    public List<TrustStatisticsLine> Rows { get; set; } = null!;
 }

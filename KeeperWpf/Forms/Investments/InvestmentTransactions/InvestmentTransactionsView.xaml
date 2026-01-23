@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:keeperWpf="clr-namespace:KeeperWpf"
-       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
         Height="455" SizeToContent="Width" WindowStartupLocation="CenterOwner" 
@@ -34,12 +34,12 @@
                     <Button Content="Оплатить налог на вывод средств" Margin="5" cal:Message.Attach="InvestOperation('PayWithdrawalTax')"/>
                 </StackPanel>
                 <StackPanel Width="220" Margin="5" DockPanel.Dock="Bottom">
-                    <Button Name="Close" Content="Close"/>
+                    <Button Name="CloseView" Content="Закрыть"/>
                 </StackPanel>
                 <StackPanel></StackPanel>
             </DockPanel>
         </Border>
-        
+
         <DockPanel Dock="Left">
             <DataGrid ItemsSource="{Binding Transactions}"
                       SelectedItem="{Binding SelectedTransaction, Mode=TwoWay}"

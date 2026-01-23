@@ -5,7 +5,7 @@ namespace KeeperWpf;
 
 public class DepoTotalVm
 {
-    public string Pieces { get; set; }
+    public string Pieces { get; set; } = null!;
     public CurrencyCode Currency { get; set; }
     public DepoPartTotalVm Depo { get; set; } = new DepoPartTotalVm();
     public DepoPartTotalVm DepoAndMatras { get; set; } = new DepoPartTotalVm();

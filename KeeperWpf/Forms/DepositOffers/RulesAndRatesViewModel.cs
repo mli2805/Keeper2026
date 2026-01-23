@@ -15,9 +15,9 @@ public class RulesAndRatesViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
     private readonly IWindowManager _windowManager;
-    public string Title;
-    public DepoCondsModel Conditions { get; set; }
-    public ObservableCollection<DepositRateLine> Rows { get; set; }
+    public string Title = null!;
+    public DepoCondsModel Conditions { get; set; } = null!;
+    public ObservableCollection<DepositRateLine> Rows { get; set; } = null!;
     public DateTime NewDate { get; set; } = DateTime.Today;
     private int _maxDepoRateLineId;
 
@@ -25,7 +25,7 @@ public class RulesAndRatesViewModel : Screen
 
     public List<string> Operations { get; set; } = new List<string>() { "*", "+", "/", "-" };
 
-    private string _selectedOperation;
+    private string _selectedOperation = null!;
     public string SelectedOperation
     {
         get => _selectedOperation;
@@ -186,7 +186,7 @@ public class RulesAndRatesViewModel : Screen
         return await base.CanCloseAsync(cancellationToken);
     }
 
-    public async Task Close()
+    public async Task CloseView()
     {
         await TryCloseAsync();
     }

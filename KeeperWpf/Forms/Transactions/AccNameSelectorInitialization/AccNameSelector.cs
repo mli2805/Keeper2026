@@ -14,7 +14,7 @@ public partial class AccNameSelector
         _comboTreesProvider = comboTreesProvider;
     }
 
-    private AccNameSelectorVm Build(string controlTitle, Dictionary<string, int> frequentAccountButtonNames,
+    private AccNameSelectorVm Build(string controlTitle, Dictionary<string, int>? frequentAccountButtonNames,
         List<AccName> availableAccNames, int activeAccountId)
     {
         return new AccNameSelectorVm
@@ -24,9 +24,9 @@ public partial class AccNameSelector
                 ? new List<AccNameButtonVm>() 
                 : frequentAccountButtonNames.Select(
                     button => new AccNameButtonVm(button.Key,
-                        availableAccNames.FindThroughTheForestById(button.Value))).ToList(),
+                        availableAccNames.FindThroughTheForestById(button.Value)!)).ToList(),
             AvailableAccNames = availableAccNames,
-            MyAccName = availableAccNames.FindThroughTheForestById(activeAccountId),
+            MyAccName = availableAccNames.FindThroughTheForestById(activeAccountId)!,
         };
     }
 

@@ -15,7 +15,7 @@ public class FilterModel : PropertyChangedBase
     #region OperationType
 
     public List<OperationTypesFilter> OperationTypes { get; set; } = InitOperationTypesFilter();
-    private OperationTypesFilter _myOperationType;
+    private OperationTypesFilter _myOperationType = null!;
     public OperationTypesFilter MyOperationType
     {
         get => _myOperationType;
@@ -44,7 +44,7 @@ public class FilterModel : PropertyChangedBase
 
     public List<PaymentWaysFilter> PaymentWays { get; set; } = InitPaymentWaysFilter();
    
-    private PaymentWaysFilter _myPaymentWay;
+    private PaymentWaysFilter _myPaymentWay = null!;
     public PaymentWaysFilter MyPaymentWay
     {
         get => _myPaymentWay;
@@ -72,7 +72,7 @@ public class FilterModel : PropertyChangedBase
 
     #region MyAccount
 
-    private List<AccName> _availableAccNames;
+    private List<AccName> _availableAccNames = null!;
     public List<AccName> AvailableAccNames
     {
         get => _availableAccNames;
@@ -84,7 +84,7 @@ public class FilterModel : PropertyChangedBase
         }
     }
 
-    private AccName _myAccName;
+    private AccName _myAccName = null!;
     public AccName MyAccName
     {
         get => _myAccName;
@@ -134,10 +134,10 @@ public class FilterModel : PropertyChangedBase
 
     #endregion
 
-    public List<AccName> AvailableCounterparties { get; set; }
+    public List<AccName> AvailableCounterparties { get; set; } = null!;
 
-    private AccName _counterparty;
-    public AccName Counterparty
+    private AccName? _counterparty;
+    public AccName? Counterparty
     {
         get => _counterparty;
         set
@@ -148,10 +148,10 @@ public class FilterModel : PropertyChangedBase
         }
     }
 
-    public List<AccName> AvailableCategories { get; set; }
+    public List<AccName> AvailableCategories { get; set; } = null!;
 
-    private AccName _category;
-    public AccName Category
+    private AccName? _category;
+    public AccName? Category
     {
         get => _category;
         set
@@ -163,8 +163,8 @@ public class FilterModel : PropertyChangedBase
     }
 
     #region Amount = < >
-    private string _amount;
-    public string Amount
+    private string? _amount;
+    public string? Amount
     {
         get => _amount;
         set
@@ -216,7 +216,7 @@ public class FilterModel : PropertyChangedBase
 
     public List<CurrencyCodesFilter> Currencies { get; set; } = InitCurrencyCodesFilter();
 
-    private CurrencyCodesFilter _myCurrency;
+    private CurrencyCodesFilter _myCurrency = null!;
     public CurrencyCodesFilter MyCurrency
     {
         get => _myCurrency;
@@ -305,12 +305,12 @@ public class FilterModel : PropertyChangedBase
     }
     public ObservableCollection<AccName> MyTags { get; set; } = new ObservableCollection<AccName>();
 
-    public TagPickerVm MyTagPickerVm { get; set; }
+    public TagPickerVm MyTagPickerVm { get; set; } = null!;
 
     #endregion
 
 
-    private string _myComment;
+    private string _myComment = string.Empty;
     public string MyComment
     {
         get => _myComment;
@@ -364,20 +364,20 @@ public class FilterModel : PropertyChangedBase
         MyTags.CollectionChanged += MyTags_CollectionChanged;
     }
 
-    private void MyTags_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    private void MyTags_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         NotifyOfPropertyChange(nameof(MyTags));
     }
 
     public void CleanAll()
     {
-        MyOperationType = OperationTypes.FirstOrDefault();
-        MyAccName = AvailableAccNames.FirstOrDefault();
+        MyOperationType = OperationTypes.First();
+        MyAccName = AvailableAccNames.First();
         Counterparty = AvailableCounterparties.FirstOrDefault(); // если поставить корень Внешних - это сразу отфильтрует все Переносы
         MyPaymentWay = PaymentWays.First();
         Category = AvailableCategories.FirstOrDefault();
         Amount = null;
-        MyCurrency = Currencies.FirstOrDefault();
+        MyCurrency = Currencies.First();
         MyTagPickerVm.Tags.Clear();
         MyComment = "";
     }
@@ -385,13 +385,13 @@ public class FilterModel : PropertyChangedBase
     {
         switch (propertyNumber)
         {
-            case 1: MyOperationType = OperationTypes.FirstOrDefault(); return;
-            case 2: MyAccName = AvailableAccNames.FirstOrDefault(); return;
+            case 1: MyOperationType = OperationTypes.First(); return;
+            case 2: MyAccName = AvailableAccNames.First(); return;
             case 11: Counterparty = AvailableCounterparties.FirstOrDefault(); return;
             case 7: MyPaymentWay = PaymentWays.First(); return;
             case 12: Category = AvailableCategories.FirstOrDefault(); return;
             case 3: Amount = null; return;
-            case 4: MyCurrency = Currencies.FirstOrDefault(); return;
+            case 4: MyCurrency = Currencies.First(); return;
             case 5: MyTagPickerVm.Tags.Clear(); return;
             case 6: MyComment = ""; return;
             case 99: CleanAll(); return;

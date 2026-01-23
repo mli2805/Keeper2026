@@ -195,7 +195,7 @@ public class InvestmentTransactionsViewModel : Screen
         }
     }
 
-    public async Task Close()
+    public async Task CloseView()
     {
         await TryCloseAsync();
     }

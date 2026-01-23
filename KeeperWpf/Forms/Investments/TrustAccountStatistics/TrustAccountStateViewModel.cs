@@ -8,17 +8,17 @@ namespace KeeperWpf;
 public class TrustAccountStateViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    private TrustAccount _trustAccount;
+    private TrustAccount _trustAccount = null!;
 
     public StatisticsLinesViewModel StatisticsLinesViewModel { get; set; } = new StatisticsLinesViewModel();
 
-    public string TopUp { get; set; }
-    public string Buy { get; set; }
-    public string Sell { get; set; }
-    public string BuySellDiff { get; set; }
-    public string Enroll { get; set; }
-    public string Withdraw { get; set; }
-    public string Balance { get; set; }
+    public string TopUp { get; set; } = null!;
+    public string Buy { get; set; } = null!;
+    public string Sell { get; set; } = null!;
+    public string BuySellDiff { get; set; } = null!;
+    public string Enroll { get; set; } = null!;
+    public string Withdraw { get; set; } = null!;
+    public string Balance { get; set; } = null!;
 
 
     public TrustAccountStateViewModel(KeeperDataModel dataModel)

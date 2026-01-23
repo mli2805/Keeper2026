@@ -11,7 +11,7 @@ namespace KeeperWpf;
 public class ReceiptViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    private readonly AccNameSelector _accNameSelectionControlInitializer;
+    private readonly AccNameSelector _accNameSelectionControlInitializer = null!;
     public int Top { get; set; }
     private int _left;
     public int Left
@@ -52,7 +52,7 @@ public class ReceiptViewModel : Screen
         }
     }
 
-    public List<Tuple<decimal, AccountItemModel, string>> ResultList { get; set; }
+    public List<Tuple<decimal, AccountItemModel, string>> ResultList { get; set; } = null!;
 
     private decimal _partialAmount;
     public decimal PartialAmount
@@ -67,7 +67,7 @@ public class ReceiptViewModel : Screen
     }
     public decimal PartialTotal => (from a in ResultList select a.Item1).Sum();
 
-    private string _partialComment;
+    private string _partialComment = null!;
     public string PartialComment
     {
         get { return _partialComment; }
@@ -79,7 +79,7 @@ public class ReceiptViewModel : Screen
         }
     }
 
-    private string _receiptFigure;
+    private string _receiptFigure = null!;
     public string ReceiptFigure
     {
         get { return _receiptFigure; }
@@ -105,7 +105,7 @@ public class ReceiptViewModel : Screen
 
     public List<CurrencyCode> CurrencyList { get; private set; }
 
-    public AccNameSelectorVm MyAccNameSelectorVm { get; set; }
+    public AccNameSelectorVm MyAccNameSelectorVm { get; set; } = null!;
 
     public ReceiptViewModel(KeeperDataModel dataModel, AccNameSelector accNameSelectionControlInitializer)
     {

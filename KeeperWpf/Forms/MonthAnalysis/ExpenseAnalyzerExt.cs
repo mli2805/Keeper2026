@@ -52,7 +52,7 @@ public static class ExpenseAnalyzerExt
 
         foreach (var tran in expenseTrans)
         {
-            var expenseArticle = dataModel.GetTopLevelCategory(tran.Category, true);
+            var expenseArticle = dataModel.GetTopLevelCategory(tran.Category!, true);
 
             var amountInUsd = dataModel.AmountInUsd(tran.Timestamp, tran.Currency, tran.Amount);
             if (byCategories.ContainsKey(expenseArticle))

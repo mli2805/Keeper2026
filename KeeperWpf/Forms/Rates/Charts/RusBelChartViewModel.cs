@@ -10,8 +10,8 @@ namespace KeeperWpf;
 
 public class RusBelChartViewModel : Screen
 {
-    private string _caption;
-    private KeeperDataModel _keeperDataModel;
+    private string _caption = null!;
+    private KeeperDataModel _keeperDataModel = null!;
 
     public LineSeries RusSeries { get; set; } = new LineSeries() { Title = "RUS", Color = OxyColors.Red};
     public LineSeries BelSeries { get; set; } = new LineSeries() { Title = "BEL", Color = OxyColors.Green};

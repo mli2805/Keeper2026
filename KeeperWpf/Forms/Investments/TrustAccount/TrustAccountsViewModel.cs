@@ -17,8 +17,8 @@ public class TrustAccountsViewModel : Screen
     private readonly TrustAccountStateViewModel _trustAccountStateViewModel;
     private readonly TrustAccountAnalysisViewModel _trustAccountAnalysisViewModel;
 
-    public ObservableCollection<TrustAccount> TrustAccounts { get; set; }
-    public TrustAccount SelectedAccount { get; set; }
+    public ObservableCollection<TrustAccount> TrustAccounts { get; set; } = null!;
+    public TrustAccount SelectedAccount { get; set; } = null!;
 
     public List<string> BasicFeeExplanation { get; } = new List<string>()
     {

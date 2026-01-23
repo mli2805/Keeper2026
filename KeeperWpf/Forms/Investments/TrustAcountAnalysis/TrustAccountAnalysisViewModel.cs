@@ -8,23 +8,23 @@ namespace KeeperWpf;
 public class TrustAccountAnalysisViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    private TrustAccount _trustAccount;
+    private TrustAccount _trustAccount = null!;
 
     public AssetsTableViewModel OpenAssetsViewModel { get; set; } = new AssetsTableViewModel();
     public AssetsTableViewModel ClosedAssetsViewModel { get; set; } = new AssetsTableViewModel();
 
-    public string TransferredToTrustStr { get; set; }
-    public string RealExternalsStr { get; set; }
-    public string AllCurrentActivesStr { get; set; }
-    public string FinResultStr { get; set; }
-    public string FinPercentStr { get; set; }
+    public string TransferredToTrustStr { get; set; } = null!;
+    public string RealExternalsStr { get; set; } = null!;
+    public string AllCurrentActivesStr { get; set; } = null!;   
+    public string FinResultStr { get; set; } = null!;
+    public string FinPercentStr { get; set; } = null!;
 
 
-    public string CashStr { get; set; }
-    public string OperationsFeeStr { get; set; }
-    public string BaseFeeStr { get; set; }
-    public string NotPaidFeesStr { get; set; }
-    public string AllPaidFeesStr { get; set; }
+    public string CashStr { get; set; } = null!;
+    public string OperationsFeeStr { get; set; } = null!;
+    public string BaseFeeStr { get; set; } = null!;
+    public string NotPaidFeesStr { get; set; } = null!;
+    public string AllPaidFeesStr { get; set; } = null!;
 
     public TrustAccountAnalysisViewModel(KeeperDataModel dataModel)
     {

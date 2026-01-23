@@ -15,7 +15,7 @@ public static class ReportLineFactory
 
         var amount = isInReturn ? tran.AmountInReturn : tran.Amount;
         // ReSharper disable once PossibleInvalidOperationException
-        var currency = isInReturn ? (CurrencyCode)tran.CurrencyInReturn : tran.Currency;
+        var currency = isInReturn ? (CurrencyCode)tran.CurrencyInReturn! : tran.Currency;
         if (sign == 1)
         {
             line.Income = new Balance(currency, amount);
@@ -39,8 +39,7 @@ public static class ReportLineFactory
         line.After = new Balance(line.Before);
         line.Type = DepositOperationType.Exchange;
 
-        // ReSharper disable once PossibleInvalidOperationException
-        line.Income = new Balance((CurrencyCode)tran.CurrencyInReturn, tran.AmountInReturn);
+        line.Income = new Balance((CurrencyCode)tran.CurrencyInReturn!, tran.AmountInReturn);
         line.After.Add((CurrencyCode)tran.CurrencyInReturn, tran.AmountInReturn);
         line.Outcome = new Balance(tran.Currency, tran.Amount);
         line.After.Sub(tran.Currency, tran.Amount);

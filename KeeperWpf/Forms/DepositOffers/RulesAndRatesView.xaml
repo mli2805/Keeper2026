@@ -40,7 +40,8 @@
 
                 <TextBlock Text="   Таблицу %% надо заполнять - на нее вычисления завязаны"/>
             </StackPanel>
-        </GroupBox>  <Button Name="Close" DockPanel.Dock="Bottom" Margin="5,10" Width="140" HorizontalAlignment="Center" Content="Закрыть" />
+        </GroupBox>  
+        <Button Name="CloseView" DockPanel.Dock="Bottom" Margin="5,10" Width="140" HorizontalAlignment="Center" Content="Закрыть" />
         <StackPanel DockPanel.Dock="Bottom" Margin="5">
             <CheckBox Name="IsFactDays" Content="исходя из фактического количества дней в году" Margin="5"
               IsChecked="{Binding Conditions.IsFactDays, Mode=TwoWay}"/>
