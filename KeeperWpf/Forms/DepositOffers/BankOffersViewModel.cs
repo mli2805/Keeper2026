@@ -15,9 +15,9 @@ public class BankOffersViewModel : Screen
     private readonly IWindowManager _windowManager;
     private readonly KeeperDataModel _dataModel;
     private readonly OneBankOfferViewModel _oneBankOfferViewModel;
-    public ObservableCollection<DepositOfferModel> Rows { get; set; }
+    public ObservableCollection<DepositOfferModel> Rows { get; set; } = null!;
 
-    private DepositOfferModel _selectedDepositOffer;
+    private DepositOfferModel _selectedDepositOffer = null!;
     public DepositOfferModel SelectedDepositOffer
     {
         get => _selectedDepositOffer;
@@ -53,8 +53,8 @@ public class BankOffersViewModel : Screen
         foreach (var depositOfferModel in _dataModel.DepositOffers)
         {
             var account = _dataModel.AcMoDict.Values.FirstOrDefault(a =>
-                (a.IsDeposit && a.BankAccount.DepositOfferId == depositOfferModel.Id)
-                || (a.IsCard && a.BankAccount.DepositOfferId == depositOfferModel.Id));
+                (a.IsDeposit && a.BankAccount!.DepositOfferId == depositOfferModel.Id)
+                || (a.IsCard && a.BankAccount!.DepositOfferId == depositOfferModel.Id));
 
             if (account != null)
             {
@@ -118,7 +118,7 @@ public class BankOffersViewModel : Screen
 
     public async Task RemoveSelectedOffer()
     {
-        if (_dataModel.AcMoDict.Values.Any(a => a.IsDeposit && a.BankAccount.DepositOfferId == SelectedDepositOffer.Id))
+        if (_dataModel.AcMoDict.Values.Any(a => a.IsDeposit && a.BankAccount!.DepositOfferId == SelectedDepositOffer.Id))
         {
             var strs = new List<string> { "Существует как минимум один депозит открытый по этой оферте.", "", "Сначала удалите депозиты." };
             var vm = new MyMessageBoxViewModel(MessageType.Error, strs);

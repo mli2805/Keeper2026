@@ -19,10 +19,10 @@ public class CardOrAccountVm
     public DateTime StartDate { get; set; }
     public DateTime FinishDate { get; set; }
 
-    public AccountItemModel AccountItemOfBank { get; set; }
+    public AccountItemModel AccountItemOfBank { get; set; } = null!;
     public CurrencyCode MainCurrency { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     public decimal Amount { get; set; }
 }

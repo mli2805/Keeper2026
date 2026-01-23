@@ -16,7 +16,7 @@ public class CardsAndAccountsViewModel : Screen
     public ObservableCollection<string> Totals { get; set; } = new ObservableCollection<string>();
     public ObservableCollection<string> Balance { get; set; } = new ObservableCollection<string>();
 
-    public CardsAndAccountsFilter Filter { get; set; }
+    public CardsAndAccountsFilter Filter { get; set; } = null!;
 
     public CardsAndAccountsViewModel(LogFile logFile, KeeperDataModel dataModel)
     {
@@ -29,7 +29,7 @@ public class CardsAndAccountsViewModel : Screen
         DisplayName = "Платежные карты и счета";
     }
 
-    private void Filter_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void Filter_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == "BalanceStr") return;
 
@@ -66,7 +66,7 @@ public class CardsAndAccountsViewModel : Screen
             var calc = new TrafficOfAccountCalculator(_dataModel, account, 
                 new Period(new DateTime(2001, 12, 31), DateTime.Today.AddDays(1)));
             calc.EvaluateAccount();
-            calc.TryGetValue(account.BankAccount.MainCurrency, out var amount);
+            calc.TryGetValue(account.BankAccount!.MainCurrency, out var amount);
             var lineVm = new CardOrAccountVm()
             {
                 IsMine = account.BankAccount.IsMine,
@@ -84,7 +84,7 @@ public class CardsAndAccountsViewModel : Screen
 
             if (account.IsCard)
             {
-                lineVm.CardNumber = account.BankAccount.PayCard.CardNumber;
+                lineVm.CardNumber = account.BankAccount.PayCard!.CardNumber;
                 lineVm.CardHolder = account.BankAccount.PayCard.CardHolder;
                 lineVm.PaymentSystem = account.BankAccount.PayCard.PaymentSystem;
                 lineVm.IsVirtual = account.BankAccount.PayCard.IsVirtual;

@@ -12,16 +12,16 @@ public class CardFeeViewModel : Screen
     private readonly KeeperDataModel _dataModel;
     private readonly ShellPartsBinder _shellPartsBinder;
 
-    public string BankLine { get; set; }
-    public string CardLine { get; set; }
-    public string CardCurrency { get; set; }
+    public string BankLine { get; set; } = null!;
+    public string CardLine { get; set; } = null!;
+    public string CardCurrency { get; set; } = null!;
 
     public decimal Amount { get; set; }
-    public DatePickerWithTrianglesVm MyDatePickerVm { get; set; }
+    public DatePickerWithTrianglesVm MyDatePickerVm { get; set; } = null!;
     public string Comment { get; set; } = "";
 
-    private AccountItemModel _card;
-    private AccountItemModel _bank;
+    private AccountItemModel _card = null!;
+    private AccountItemModel _bank = null!;
 
     public CardFeeViewModel(KeeperDataModel dataModel, ShellPartsBinder shellPartsBinder)
     {
@@ -37,10 +37,10 @@ public class CardFeeViewModel : Screen
     public void Initialize(AccountItemModel card)
     {
         _card = card;
-        _bank = _dataModel.AcMoDict[card.BankAccount.BankId];
+        _bank = _dataModel.AcMoDict[card.BankAccount!.BankId];
         BankLine = $"Банк \"{_bank.Name}\" списал комиссию";
         CardLine = $"с карты \"{card.Name}\"";
-        CardCurrency = _card.BankAccount.MainCurrency.ToString().ToUpper();
+        CardCurrency = _card.BankAccount!.MainCurrency.ToString().ToUpper();
         MyDatePickerVm = new DatePickerWithTrianglesVm() { SelectedDate = DateTime.Today };
     }
 
@@ -61,7 +61,7 @@ public class CardFeeViewModel : Screen
             Counterparty = _bank,
             Category = _dataModel.CardFeeCategory(),
             Amount = Amount,
-            Currency = _card.BankAccount.MainCurrency,
+            Currency = _card.BankAccount!.MainCurrency,
             Tags = new List<AccountItemModel>(),
             Comment = Comment,
         };

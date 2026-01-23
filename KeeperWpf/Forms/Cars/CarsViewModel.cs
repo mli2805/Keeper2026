@@ -20,10 +20,9 @@ public class CarsViewModel : Screen
     private readonly FuelViewModel _fuelViewModel;
     private readonly OwnershipCostViewModel _ownershipCostViewModel;
 
-    public List<CarModel> Cars { get; set; }
+    public List<CarModel> Cars { get; set; } = null!;
 
-    private CarModel _selectedCar;
-
+    private CarModel _selectedCar = null!;
     public CarModel SelectedCar
     {
         get => _selectedCar;
@@ -41,9 +40,9 @@ public class CarsViewModel : Screen
         }
     }
 
-    public List<YearMileageModel> YearMileagesToShow { get; set; }
-    public YearMileageModel Total { get; set; }
-    public YearMileageModel TotalPlus { get; set; }
+    public List<YearMileageModel> YearMileagesToShow { get; set; } = null!;
+    public YearMileageModel Total { get; set; } = null!;
+    public YearMileageModel TotalPlus { get; set; } = null!;
 
     public Visibility IsLastCarVisibility => SelectedCar.Id == Cars.Last().Id
         ? Visibility.Visible : Visibility.Collapsed;
@@ -131,7 +130,7 @@ public class CarsViewModel : Screen
         yearMileageModel.YearAmount = _dataModel.Transactions.Values
             .Where(t => yearMileageModel.Period.Includes(t.Timestamp) &&
                         t.Operation == OperationType.Расход &&
-                        t.Category.Parent.Is(SelectedCar.CarAccountId) &&
+                        t.Category!.Parent!.Is(SelectedCar.CarAccountId) &&
                         (t.Tags.All(tag => tag.Id != 1064) || includePurchase)) // 1064 тэг покупки-продажи авто
             .Sum(t => t.GetAmountInUsd(_dataModel));
 
@@ -196,7 +195,7 @@ public class CarsViewModel : Screen
         return await base.CanCloseAsync(cancellationToken);
     }
 
-    public async Task Close()
+    public async Task CloseView()
     {
         await TryCloseAsync();
     }

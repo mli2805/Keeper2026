@@ -9,10 +9,10 @@ namespace KeeperWpf;
 public class BalanceVerificationViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    private string _caption;
+    private string _caption = null!;
     private decimal _total;
-    public List<VerificationLine> Lines { get; set; }
-    public VerificationLine SelectedLine { get; set; }
+    public List<VerificationLine> Lines { get; set; } = null!;
+    public VerificationLine? SelectedLine { get; set; }
 
     public BalanceVerificationViewModel(KeeperDataModel dataModel)
     {
@@ -24,7 +24,7 @@ public class BalanceVerificationViewModel : Screen
         DisplayName = _caption;
     }
 
-    private TransactionModel[] _trans;
+    private TransactionModel[] _trans = null!;
     private int _transIndex;
     public void Initialize(AccountItemModel accountItemModel)
     {
@@ -64,7 +64,7 @@ public class BalanceVerificationViewModel : Screen
         {
             Amount = tr.Amount,
             Date = tr.Timestamp.ToString("dd/MMM"),
-            Counterparty = tr.Counterparty.Name,
+            Counterparty = tr.Counterparty!.Name,
             OperationType = OperationType.Доход,
             Text = tr.Comment,
         });
@@ -103,7 +103,7 @@ public class BalanceVerificationViewModel : Screen
         {
             Amount = -tr.Amount,
             Date = tr.Timestamp.ToString("dd/MMM"),
-            Counterparty = tr.Counterparty.Name,
+            Counterparty = tr.Counterparty!.Name,
             OperationType = OperationType.Расход,
             Text = tr.Comment,
         };
@@ -116,7 +116,7 @@ public class BalanceVerificationViewModel : Screen
         {
             Amount = amount,
             Date = tr.Timestamp.ToString("dd/MMM"),
-            Counterparty = (tr.MyAccount.Id == accountItemModel.Id ? tr.MySecondAccount : tr.MyAccount).Name,
+            Counterparty = (tr.MyAccount.Id == accountItemModel.Id ? tr.MySecondAccount! : tr.MyAccount).Name,
             OperationType = OperationType.Перенос,
             Text = tr.Comment,
         });
@@ -130,7 +130,7 @@ public class BalanceVerificationViewModel : Screen
         {
             Amount = amount,
             Date = tr.Timestamp.ToString("dd/MMM"),
-            Counterparty = (tr.MyAccount.Id == accountItemModel.Id ? tr.MySecondAccount : tr.MyAccount).Name,
+            Counterparty = (tr.MyAccount.Id == accountItemModel.Id ? tr.MySecondAccount! : tr.MyAccount).Name,
             OperationType = OperationType.Обмен,
             Text = tr.Comment,
         });
@@ -139,6 +139,6 @@ public class BalanceVerificationViewModel : Screen
 
     public void CheckLine()
     {
-        SelectedLine.IsChecked = !SelectedLine.IsChecked;
+        SelectedLine!.IsChecked = !SelectedLine.IsChecked;
     }
 }

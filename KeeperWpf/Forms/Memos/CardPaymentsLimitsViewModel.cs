@@ -21,9 +21,9 @@ public class CardPaymentsLimitsViewModel : PropertyChangedBase
 
         var ll = new List<CardPaymentsLimitsModel>();
         foreach (var a in _keeperDataModel.AcMoDict.Values
-                     .Where(a => !a.Is(NickNames.Closed) && a.IsCard && a.BankAccount.MainCurrency == CurrencyCode.BYN))
+                     .Where(a => !a.Is(NickNames.Closed) && a.IsCard && a.BankAccount!.MainCurrency == CurrencyCode.BYN))
         {
-            var depoOffer = _keeperDataModel.DepositOffers.First(o=>o.Id == a.BankAccount.DepositOfferId);
+            var depoOffer = _keeperDataModel.DepositOffers.First(o=>o.Id == a.BankAccount!.DepositOfferId);
 
             var line = new CardPaymentsLimitsModel()
             {

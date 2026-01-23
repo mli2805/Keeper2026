@@ -170,7 +170,7 @@
             </DockPanel>
         </Border>
 
-        <Button DockPanel.Dock="Bottom" Content="Закрыть" Width="120" Margin=" 5" Name="Close" HorizontalAlignment="Right"/>
+        <Button DockPanel.Dock="Bottom" Content="Закрыть" Width="120" Margin=" 5" Name="CloseView" HorizontalAlignment="Right"/>
         <Button Name="ShowOwnershipCostChart" 
                 DockPanel.Dock="Bottom" Height="48" Width="120" Margin="5" HorizontalAlignment="Right" >
             <TextBlock TextWrapping="Wrap" Text="График стоимости владения" TextAlignment="Center"/>

@@ -6,7 +6,7 @@ namespace KeeperWpf;
 
 public class CardPaymentsLimitsModel
 {
-    public AccountItemModel Account { get; set; }
+    public AccountItemModel Account { get; set; } = null!;
     public decimal CurrentBalance { get; set; }
 
     public decimal ExpenseNotLess { get; set; }
@@ -15,7 +15,7 @@ public class CardPaymentsLimitsModel
     public string NotMore => ExpenseNotMore == 0 ? "-" : ExpenseNotMore.ToString(CultureInfo.InvariantCulture);
     public decimal CurrentExpense { get; set; }
 
-    public string Comment { get; set; }
+    public string Comment { get; set; } = string.Empty;
 
     public SolidColorBrush RowBackground => GetRowBackground();
     public bool IsSelected { get; set; }

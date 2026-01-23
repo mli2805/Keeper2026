@@ -84,7 +84,7 @@ public class CardsAndAccountsFilter : PropertyChangedBase, IDataErrorInfo
 
     public List<string> Currencies { get; set; } = new List<string>() { "все", "byn", "usd", "euro", "rur", "cny" };
 
-    private string _selectedCurrency;
+    private string _selectedCurrency = null!;
     public string SelectedCurrency
     {
         get => _selectedCurrency;
@@ -150,7 +150,7 @@ public class CardsAndAccountsFilter : PropertyChangedBase, IDataErrorInfo
         }
     }
 
-    public string Error { get; } = null;
+    public string Error { get; set; } = string.Empty;
 
     public void ClearAll()
     {

@@ -12,13 +12,13 @@ namespace KeeperWpf;
 
 public class BasketDiagramViewModel : Screen
 {
-    private string _caption;
+    private string _caption = null!;
     private readonly DateTime _startDate = new DateTime(2012, 7, 1);
     private readonly DateTime _startDateD = DateTime.Now.AddMonths(-6);
-    private List<OfficialRatesModel> _rates;
+    private List<OfficialRatesModel> _rates = null!;
 
-    public PlotModel BasketPlotModel { get; set; }
-    public PlotModel BasketDeltaPlotModel { get; set; }
+    public PlotModel BasketPlotModel { get; set; } = null!;
+    public PlotModel BasketDeltaPlotModel { get; set; } = null!;
 
     protected override void OnViewLoaded(object view)
     {
