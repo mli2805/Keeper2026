@@ -11,15 +11,15 @@ public static class ToKeeperDomain
         var accountPlaneList = keeperDataModel.FlattenAccountTree().ToList();
         var bankAccounts = keeperDataModel.AcMoDict.Values
                 .Where(a => a.IsBankAccount)
-                .Select(ac => ac.BankAccount.FromModel())
+                .Select(ac => ac.BankAccount!.FromModel())
                 .ToList();
         var deposits = keeperDataModel.AcMoDict.Values
             .Where(a => a.IsDeposit)
-            .Select(ac => ac.BankAccount.Deposit!)
+            .Select(ac => ac.BankAccount!.Deposit!)
             .ToList();
         var payCards = keeperDataModel.AcMoDict.Values
             .Where(a => a.IsCard)
-            .Select(ac => ac.BankAccount.PayCard!)
+            .Select(ac => ac.BankAccount!.PayCard!)
             .ToList();
 
         var depositOffers = new List<DepositOffer>();

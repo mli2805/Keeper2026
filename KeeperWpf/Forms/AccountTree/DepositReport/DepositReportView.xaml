@@ -35,7 +35,7 @@
                            HorizontalAlignment="Right" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Name="Buttons" DockPanel.Dock="Bottom">
-                <Button Name="Close" Content="Close" Width="100" Margin="0,0,35,15" HorizontalAlignment="Right"/>
+                <Button Name="CloseView" Content="Закрыть" Width="100" Margin="0,0,35,15" HorizontalAlignment="Right"/>
             </StackPanel>
             <StackPanel Margin="0,0,0,15">
                 <TextBlock Text="{Binding Model.RateStr2}" Margin="0,5,5,0" HorizontalAlignment="Left"/>

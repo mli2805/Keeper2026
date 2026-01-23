@@ -16,7 +16,7 @@ public class BalanceDuringTransactionHinter
         _dataModel = dataModel;
     }
 
-    private string BuildTip(decimal before, decimal after, CurrencyCode? currency)
+    private string BuildTip(decimal before, decimal after, CurrencyCode currency)
     {
         return currency == CurrencyCode.BYR
             ? String.Format(TemplateForByr, before, after, currency.ToString().ToLower())
@@ -35,7 +35,7 @@ public class BalanceDuringTransactionHinter
         return tranInWork.CurrencyInReturn != null
                 ? tranInWork.CurrencyInReturn == CurrencyCode.USD
                     ? ""
-                    : _dataModel.AmountInUsdString(tranInWork.Timestamp, tranInWork.CurrencyInReturn, tranInWork.AmountInReturn)
+                    : _dataModel.AmountInUsdString(tranInWork.Timestamp, tranInWork.CurrencyInReturn!.Value, tranInWork.AmountInReturn)
                 : "не задана валюта";
     }
 
@@ -74,7 +74,7 @@ public class BalanceDuringTransactionHinter
 
             return BuildTip(balanceBefore, balanceBefore +
                               transactionInWork.AmountForAccount(transactionInWork.MySecondAccount, transactionInWork.CurrencyInReturn),
-                                            transactionInWork.CurrencyInReturn);
+                                            transactionInWork.CurrencyInReturn!.Value);
 
         }
     }

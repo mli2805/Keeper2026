@@ -24,7 +24,7 @@ public static class AccountModelExt
 
         return dataModel.AcMoDict.Values
             .Where(a => a.Is(161) && a.IsCard)
-            .OrderBy(d => d.BankAccount.FinishDate);
+            .OrderBy(d => d.BankAccount!.FinishDate);
     }
 
     public static IOrderedEnumerable<AccountItemModel> GetCardsAndAccountsOrderedByFinishDate(this KeeperDataModel dataModel)
@@ -33,7 +33,7 @@ public static class AccountModelExt
 
         return dataModel.AcMoDict.Values
             .Where(a => a.Is(161) && !a.IsFolder)
-            .OrderBy(d => d.BankAccount.FinishDate);
+            .OrderBy(d => d.BankAccount!.FinishDate);
     }
 
     public static IOrderedEnumerable<AccountItemModel> GetOpenDepositsOrderedByFinishDate(this KeeperDataModel dataModel)
@@ -41,13 +41,13 @@ public static class AccountModelExt
         // 166 - папка Депозиты
         return dataModel.AcMoDict.Values
             .Where(a => !a.Children.Any() && a.Is(166))
-            .OrderBy(d => d.BankAccount.FinishDate);
+            .OrderBy(d => d.BankAccount!.FinishDate);
     }
 
     public static AccountItemModel GetTopLevelCategory(this KeeperDataModel dataModel, AccountItemModel category, bool isExpense)
     {
         var root = isExpense ? NickNames.ExpenseCategoriesRoot : NickNames.IncomeCategoriesRoot;
-        while (category.Parent.Id != root)
+        while (category.Parent!.Id != root)
         {
             category = dataModel.AcMoDict[category.Parent.Id];
         }

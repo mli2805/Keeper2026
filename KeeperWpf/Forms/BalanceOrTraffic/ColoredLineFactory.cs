@@ -13,7 +13,7 @@ public static class ColoredLineFactory
     {
         var amount = isInReturn ? tran.AmountInReturn : tran.Amount;
         var currency = isInReturn ? tran.CurrencyInReturn : tran.Currency;
-        var shortLine = $@"{tran.Timestamp.Date.ToShortDateString()}  {dataModel.AmountInUsdString(tran.Timestamp, currency, amount * sign)}";
+        var shortLine = $@"{tran.Timestamp.Date.ToShortDateString()}  {dataModel.AmountInUsdString(tran.Timestamp, currency!.Value, amount * sign)}";
         return new ListLine($"  {shortLine}   {GetPp(tran)} {tran.Comment}", GetColor(tran, sign))
         {
             TooltipLines = dataModel.BuildTooltip(tran)
@@ -31,7 +31,7 @@ public static class ColoredLineFactory
     {
         var amount = isInReturn ? tran.AmountInReturn : tran.Amount;
         var currency = isInReturn ? tran.CurrencyInReturn : tran.Currency;
-        var shortLine = $"{tran.Timestamp.Date.ToShortDateString()}  {dataModel.AmountInUsdString(tran.Timestamp, currency, amount * sign, out inUsd)}";
+        var shortLine = $"{tran.Timestamp.Date.ToShortDateString()}  {dataModel.AmountInUsdString(tran.Timestamp, currency!.Value, amount * sign, out inUsd)}";
         return new ListLine($"  {shortLine}   {tran.Comment}", GetColor(tran, sign))
         {
             TooltipLines = dataModel.BuildTooltip(tran)
@@ -41,7 +41,7 @@ public static class ColoredLineFactory
     public static ListLine ColoredLineOneAccountExchange(this KeeperDataModel dataModel, TransactionModel tran)
     {
         var minus = $"{dataModel.AmountInUsdString(tran.Timestamp, tran.Currency, tran.Amount * -1)}";
-        var plus = $"{dataModel.AmountInUsdString(tran.Timestamp, tran.CurrencyInReturn, tran.AmountInReturn)}";
+        var plus = $"{dataModel.AmountInUsdString(tran.Timestamp, tran.CurrencyInReturn!.Value, tran.AmountInReturn)}";
         var shortLine = $"{tran.Timestamp.Date.ToShortDateString()}  {minus} -> {plus}";
         return new ListLine($"  {shortLine}   {tran.Comment}", Brushes.Black)
         {
@@ -73,15 +73,15 @@ public static class ColoredLineFactory
         if (tran.Operation == OperationType.Перенос || tran.Operation == OperationType.Обмен)
         {
             result.Add(new TransactionTooltipLine($"{tran.Operation} с:", tran.MyAccount.Name));
-            result.Add(new TransactionTooltipLine(" на:", tran.MySecondAccount.Name));
+            result.Add(new TransactionTooltipLine(" на:", tran.MySecondAccount!.Name));
         }
         else
         {
             result.Add(new TransactionTooltipLine(
                 tran.Operation == OperationType.Доход ? "На:" : "С: ", tran.MyAccount.Name));
             result.Add(new TransactionTooltipLine(
-                tran.Operation == OperationType.Доход ? "Кто:" : "Кому:", tran.Counterparty.Name));
-            result.Add(new TransactionTooltipLine("За что: ", tran.Category.Name));
+                tran.Operation == OperationType.Доход ? "Кто:" : "Кому:", tran.Counterparty!.Name));
+            result.Add(new TransactionTooltipLine("За что: ", tran.Category!.Name));
         }
 
         if (tran.Operation == OperationType.Обмен)
@@ -92,7 +92,7 @@ public static class ColoredLineFactory
 
         if (tran.Operation == OperationType.Обмен)
             result.Add(new TransactionTooltipLine("Получил: ",
-                dataModel.AmountWithUsdAndRate(tran.Timestamp, tran.CurrencyInReturn, tran.AmountInReturn)));
+                dataModel.AmountWithUsdAndRate(tran.Timestamp, tran.CurrencyInReturn!.Value, tran.AmountInReturn)));
 
         if (tran.Tags.Any())
             result.Add(new TransactionTooltipLine("Тэги:",
@@ -109,12 +109,12 @@ public static class ColoredLineFactory
         if (tran.Amount > tran.AmountInReturn)
         {
             exchangeRate = tran.Amount / tran.AmountInReturn;
-            currencies = $"{tran.Currency.ToString().ToLower()}/{tran.CurrencyInReturn.ToString().ToLower()}";
+            currencies = $"{tran.Currency.ToString().ToLower()}/{tran.CurrencyInReturn!.Value.ToString().ToLower()}";
         }
         else
         {
             exchangeRate = tran.AmountInReturn / tran.Amount;
-            currencies = $"{tran.CurrencyInReturn.ToString().ToLower()}/{tran.Currency.ToString().ToLower()}";
+            currencies = $"{tran.CurrencyInReturn!.Value.ToString().ToLower()}/{tran.Currency.ToString().ToLower()}";
         }
         return $" (Курс обмена {exchangeRate:F5} {currencies})";
     }

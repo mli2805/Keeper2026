@@ -13,13 +13,13 @@ namespace KeeperWpf;
 /// </summary>
 public partial class AccountTreeView
 {
-    TreeViewItemModel _draggedItem, _target;
+    TreeViewItemModel? _draggedItem, _target;
     public AccountTreeView()
     {
         InitializeComponent();
     }
 
-    private void treeView_MouseMove(object sender, MouseEventArgs e)
+    private async void treeView_MouseMove(object sender, MouseEventArgs e)
     {
         if (e.LeftButton != MouseButtonState.Pressed) return;
         _draggedItem = (TreeViewItemModel)MyTreeView.SelectedItem;
@@ -33,8 +33,7 @@ public partial class AccountTreeView
             // A Move drop was accepted
             if (!_draggedItem.Name.Equals(_target.Name) && Keyboard.IsKeyDown(Key.LeftCtrl))
             {
-                DoAction(_draggedItem, _target);
-                // CopyItem(_draggedItem, _target);
+                await DoAction(_draggedItem, _target);
                 _target = null;
                 _draggedItem = null;
             }
@@ -45,7 +44,7 @@ public partial class AccountTreeView
     {
         // Verify that this is a valid drop and then store the drop target
         TreeViewItem item = GetNearestContainer(e.OriginalSource as UIElement);
-        e.Effects = CheckDropTarget(_draggedItem, ((TreeViewItemModel)item.Header))
+        e.Effects = CheckDropTarget(_draggedItem!, ((TreeViewItemModel)item.Header))
             ? DragDropEffects.Move : DragDropEffects.None;
         e.Handled = true;
     }
@@ -109,8 +108,8 @@ public partial class AccountTreeView
 
     private void MoveAccount(TreeViewItemModel source, TreeViewItemModel destination, Place place)
     {
-        var sourceParent = (source).Parent;
-        var destinationParent = (destination).Parent;
+        var sourceParent = (source).Parent!;
+        var destinationParent = (destination).Parent!;
 
         sourceParent.Children.Remove(source);
         (source).Parent = destinationParent;
@@ -119,7 +118,7 @@ public partial class AccountTreeView
 
     private void PlaceIntoDestinationFolder(TreeViewItemModel source, TreeViewItemModel destination, Place place)
     {
-        var destinationParent = (destination).Parent;
+        var destinationParent = (destination).Parent!;
 
         var tempAccount = new AccountItemModel(-1, "temporary", null);
         for (int i = destinationParent.Children.Count - 1; i >= 0; i--)
@@ -153,14 +152,14 @@ public partial class AccountTreeView
     {
         var vm = (AccountTreeViewModel)DataContext;
         vm.ShellPartsBinder.SelectedAccountItemModel =
-            vm.KeeperDataModel.AcMoDict.Values.FirstOrDefault(a => a.IsSelected);
+            vm.KeeperDataModel.AcMoDict.Values.FirstOrDefault(a => a.IsSelected)!;
     }
 
     private void MoveIntoFolder(TreeViewItemModel source, TreeViewItemModel destination)
     {
-        (source).Parent.Children.Remove(source);
+        source.Parent!.Children.Remove(source);
         destination.Children.Add(source);
-        (source).Parent = destination;
+        source.Parent = destination;
     }
 
 }

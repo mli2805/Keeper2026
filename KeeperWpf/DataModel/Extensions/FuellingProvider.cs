@@ -41,15 +41,15 @@ public static class FuellingProvider
                 case CurrencyCode.EUR:
                 {
                     var rate = dataModel.GetRate(tr.Timestamp, tr.Currency);
-                    fuellingModel.OneLitrePrice = oneLitrePrice * (decimal)rate.Value;
+                    fuellingModel.OneLitrePrice = oneLitrePrice * (decimal)rate!.Value;
                     var rateUsd = dataModel.GetRate(tr.Timestamp, CurrencyCode.EUR, true);
-                    fuellingModel.OneLitreInUsd = oneLitrePrice * (decimal)rateUsd.Value;
+                    fuellingModel.OneLitreInUsd = oneLitrePrice * (decimal)rateUsd!.Value;
                     break;
                 }
                 case CurrencyCode.USD:
                 {
                     var rate = dataModel.GetRate(tr.Timestamp, tr.Timestamp < new DateTime(2016, 7, 1) ? CurrencyCode.BYR : CurrencyCode.BYN);
-                    fuellingModel.OneLitrePrice = oneLitrePrice * (decimal)rate.Value;
+                    fuellingModel.OneLitrePrice = oneLitrePrice * (decimal)rate!.Value;
                     fuellingModel.OneLitreInUsd = oneLitrePrice;
                     break;
                 }

@@ -100,15 +100,15 @@ public static class DepositReportModelExt
         if (model.BankAccount.MainCurrency == CurrencyCode.BYN ||
             model.BankAccount.MainCurrency == CurrencyCode.BYR)
         {
-            model.RateStart = dataModel.GetRate(model.BankAccount.StartDate, model.BankAccount.MainCurrency);
+            model.RateStart = dataModel.GetRate(model.BankAccount.StartDate, model.BankAccount.MainCurrency)!;
             if (model.BankAccount.StartDate < new DateTime(2016, 7, 1))
                 model.RateStart.Value /= 10000;
-            model.RateNow = dataModel.GetRate(DateTime.Today, model.BankAccount.MainCurrency);
+            model.RateNow = dataModel.GetRate(DateTime.Today, model.BankAccount.MainCurrency)!;
         }
         else
         {
-            model.RateStart = dataModel.GetRate(model.BankAccount.StartDate, model.BankAccount.MainCurrency, true);
-            model.RateNow = dataModel.GetRate(DateTime.Today, model.BankAccount.MainCurrency, true);
+            model.RateStart = dataModel.GetRate(model.BankAccount.StartDate, model.BankAccount.MainCurrency, true)!;
+            model.RateNow = dataModel.GetRate(DateTime.Today, model.BankAccount.MainCurrency, true)!;
         }
 
         model.RateForecast = new OneRate();

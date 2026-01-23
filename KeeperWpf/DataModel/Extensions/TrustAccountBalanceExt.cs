@@ -84,7 +84,7 @@ public static class TrustAccountBalanceExt
         if (tran.TrustAccount.Currency == CurrencyCode.RUB)
         {
             var rate = dataModel.GetRate(tran.Timestamp, CurrencyCode.RUB);
-            result.BaseFee += tran.CurrencyAmount * (decimal)(rate.Unit / rate.Value);
+            result.BaseFee += tran.CurrencyAmount * (decimal)(rate!.Unit / rate.Value);
         }
         else
             result.BaseFee +=

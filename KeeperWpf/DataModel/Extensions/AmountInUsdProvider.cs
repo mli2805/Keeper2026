@@ -7,12 +7,12 @@ namespace KeeperWpf;
 
 public static class AmountInUsdProvider
 {
-    public static string AmountInUsdString(this KeeperDataModel dataModel, DateTime date, CurrencyCode? currency, decimal amount)
+    public static string AmountInUsdString(this KeeperDataModel dataModel, DateTime date, CurrencyCode currency, decimal amount)
     {
         return dataModel.AmountInUsdString(date, currency, amount, out decimal _);
     }
 
-    public static string AmountInUsdString(this KeeperDataModel dataModel, DateTime date, CurrencyCode? currency,
+    public static string AmountInUsdString(this KeeperDataModel dataModel, DateTime date, CurrencyCode currency,
         decimal amount, out decimal amountInUsd, bool flag = true)
     {
         amountInUsd = amount;
@@ -35,7 +35,7 @@ public static class AmountInUsdProvider
     }
 
     public static string AmountWithUsdAndRate(this KeeperDataModel dataModel, DateTime date,
-        CurrencyCode? currency, decimal amount)
+        CurrencyCode currency, decimal amount)
     {
         var shortLine = $"{amount:#,#.00} {currency.ToString().ToLower()}";
         if (currency == CurrencyCode.USD) return shortLine;

@@ -8,7 +8,7 @@ namespace KeeperWpf;
 public class DepositReportViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    public DepositReportModel Model { get; set; }
+    public DepositReportModel Model { get; set; } = null!;
 
     public DepositReportViewModel(KeeperDataModel dataModel)
     {
@@ -34,5 +34,5 @@ public class DepositReportViewModel : Screen
         DisplayName = Model.DepositName;
     }
 
-    public async void Close() { await TryCloseAsync(); }
+    public async void CloseView() { await TryCloseAsync(); }
 }
