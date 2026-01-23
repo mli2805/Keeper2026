@@ -5,9 +5,9 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
-public class FuellingInputVm: PropertyChangedBase
+public class FuellingInputVm : PropertyChangedBase
 {
-    public KeeperDataModel DataModel;
+    private KeeperDataModel _dataModel;
 
     private double _volume;
     private decimal _amount;
@@ -75,19 +75,23 @@ public class FuellingInputVm: PropertyChangedBase
 
     public string CurrencyName => _currency.ToString().ToLower();
 
-    public string Comment { get; set; }
+    public string Comment { get; set; } = string.Empty;
 
     public int CarAccountId { get; set; }
 
     public decimal OneLitrePrice { get; set; }
     public decimal OneLitreInUsd { get; set; }
 
-   
+    public FuellingInputVm(KeeperDataModel dataModel)
+    {
+        _dataModel = dataModel;
+    }
+
     private void EvaluatePrices()
     {
-        if (DataModel == null || _amount == 0 || Math.Abs(_volume) < 0.01) return;
+        if (_amount == 0 || Math.Abs(_volume) < 0.01) return;
         OneLitrePrice = _amount / (decimal)_volume;
-        OneLitreInUsd = DataModel.AmountInUsd(Timestamp, _currency, _amount) / (decimal)_volume;
+        OneLitreInUsd = _dataModel.AmountInUsd(Timestamp, _currency, _amount) / (decimal)_volume;
     }
 
     public FuellingInputVm FromFuellingModel(FuellingModel model)

@@ -61,16 +61,16 @@ public partial class AccountTreeView
         e.Effects = DragDropEffects.Move;
     }
 
-    private TreeViewItem GetNearestContainer(UIElement element)
+    private TreeViewItem GetNearestContainer(UIElement? element)
     {
         // Walk up the element tree to the nearest tree view item.
-        TreeViewItem container = element as TreeViewItem;
+        TreeViewItem? container = element as TreeViewItem;
         while ((container == null) && (element != null))
         {
             element = VisualTreeHelper.GetParent(element) as UIElement;
             container = element as TreeViewItem;
         }
-        return container;
+        return container!;
     }
 
     private bool CheckDropTarget(TreeViewItemModel sourceItem, TreeViewItemModel targetItem)

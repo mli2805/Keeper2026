@@ -6,11 +6,9 @@ namespace KeeperWpf;
 
 public class AccNameSelectorVm : PropertyChangedBase
 {
-    public List<AccNameButtonVm> Buttons { get; set; }
+    public List<AccNameButtonVm> Buttons { get; set; } = null!;
 
-    private AccName _myAccName;
-    private List<AccName> _availableAccNames;
-
+    private AccName _myAccName = null!;
     public AccName MyAccName
     {
         get { return _myAccName; }
@@ -22,6 +20,7 @@ public class AccNameSelectorVm : PropertyChangedBase
         }
     }
 
+    private List<AccName> _availableAccNames = null!;
     public List<AccName> AvailableAccNames
     {
         get { return _availableAccNames; }
@@ -33,7 +32,7 @@ public class AccNameSelectorVm : PropertyChangedBase
         }
     }
 
-    public string ControlTitle { get; set; }
+    public string ControlTitle { get; set; } = string.Empty;
 
     public Visibility Visibility { get; set; }
 

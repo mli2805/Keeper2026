@@ -10,10 +10,10 @@ namespace KeeperWpf;
 public class GskViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    public ObservableCollection<PaymentLineModel> Rows { get; set; } = null!;
+    public ObservableCollection<GskLineModel> Rows { get; set; } = null!;
 
-    private PaymentLineModel _selectedRow = null!;
-    public PaymentLineModel SelectedRow
+    private GskLineModel _selectedRow = null!;
+    public GskLineModel SelectedRow
     {
         get => _selectedRow;
         set
@@ -45,12 +45,12 @@ public class GskViewModel : Screen
 
     public void Initialize()
     {
-        Rows = new ObservableCollection<PaymentLineModel>();
+        Rows = new ObservableCollection<GskLineModel>();
         var list = _dataModel.Transactions.Values
             .Where(t => t.Category != null && t.Category.Id == 285).ToList(); // погашение кредита ЖСК
         foreach (var tr in list)
         {
-            var paymentLine = new PaymentLineModel()
+            var paymentLine = new GskLineModel()
             {
                 Date = tr.Timestamp.ToShortDateString(),
                 Sum = _dataModel.AmountInUsdString(tr.Timestamp, tr.Currency, tr.Amount, out decimal amountIsUsd),

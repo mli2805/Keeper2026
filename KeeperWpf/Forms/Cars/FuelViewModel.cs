@@ -17,10 +17,10 @@ namespace KeeperWpf;
 public class FuelViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    public List<FuellingModel> Rows { get; set; }
+    public List<FuellingModel> Rows { get; set; } = null!;
     public string Total => $"Итого {Rows.Sum(f => f.Volume)} литров";
 
-    public PlotModel FuelPricePlotModel { get; set; }
+    public PlotModel FuelPricePlotModel { get; set; } = null!;
 
     private Visibility _tableVisibility = Visibility.Collapsed;
     public Visibility TableVisibility
@@ -62,11 +62,11 @@ public class FuelViewModel : Screen
         InitializeChartModel();
     }
 
-    private LinearAxis _linearAxisRb;
-    private LinearAxis _linearAxisUsd;
-    private LineSeries _dieselSeries;
-    private LineSeries _dieselSeriesUsd;
-    private ScatterSeries _arcticSeries;
+    private LinearAxis _linearAxisRb = null!;
+    private LinearAxis _linearAxisUsd = null!;
+    private LineSeries _dieselSeries = null!;
+    private LineSeries _dieselSeriesUsd = null!;
+    private ScatterSeries _arcticSeries = null!;
     private void InitializeChartModel()
     {
         FuelPricePlotModel = new PlotModel();

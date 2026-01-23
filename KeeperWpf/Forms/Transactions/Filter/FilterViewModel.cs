@@ -42,7 +42,7 @@ public class FilterViewModel : Screen
         }
     }
 
-    private FilterModel _filterModel;
+    private FilterModel _filterModel = null!;
     public FilterModel FilterModel
     {
         get { return _filterModel; }

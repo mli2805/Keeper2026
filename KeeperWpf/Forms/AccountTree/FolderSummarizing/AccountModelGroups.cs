@@ -10,7 +10,7 @@ public class AccountGroup
 {
     public string Title;
     public List<AccountItemModel> Accounts = new List<AccountItemModel>();
-    public BalanceWithDetails BalanceWithDetails;
+    public BalanceWithDetails BalanceWithDetails = null!;
     public decimal Procent;
 
     public AccountGroup(string title) { Title = title; }

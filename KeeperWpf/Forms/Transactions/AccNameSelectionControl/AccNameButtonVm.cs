@@ -4,7 +4,7 @@ public class AccNameButtonVm
 {
     public string Name { get; }
     public AccName AccName { get; }
-    public string Tooltip { get; }
+    public string? Tooltip { get; }
 
     public AccNameButtonVm(string name, AccName accName)
     {

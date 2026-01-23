@@ -25,14 +25,14 @@ public class FuellingInputViewModel : Screen
     public int Height { get; set; }
 
     private readonly KeeperDataModel _dataModel;
-    public FuellingInputVm Vm { get; set; }
+    public FuellingInputVm Vm { get; set; } = null!;
 
     public List<CurrencyCode> Currencies { get; set; } = Enum.GetValues(typeof(CurrencyCode)).OfType<CurrencyCode>().ToList();
     public List<FuelType> Fuels { get; set; } = Enum.GetValues(typeof(FuelType)).OfType<FuelType>().ToList();
 
-    public List<string> Cars { get; set; }
+    public List<string> Cars { get; set; } = null!;
 
-    private string _selectedCar;
+    private string _selectedCar = null!;
     public string SelectedCar
     {
         get => _selectedCar;
@@ -52,8 +52,7 @@ public class FuellingInputViewModel : Screen
     public void Initialize(FuellingModel vm)
     {
         Cars = _dataModel.Cars.Select(c => c.Title).ToList();
-        Vm = new FuellingInputVm().FromFuellingModel(vm);
-        Vm.DataModel = _dataModel;
+        Vm = new FuellingInputVm(_dataModel).FromFuellingModel(vm);
         SelectedCar = _dataModel.Cars.First(c => c.CarAccountId == vm.CarAccountId).Title;
     }
     protected override void OnViewLoaded(object view)
