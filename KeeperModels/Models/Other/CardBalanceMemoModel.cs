@@ -5,7 +5,7 @@ namespace KeeperModels;
 public class CardBalanceMemoModel
 {
     public int Id { get; set; }
-    public AccountItemModel Account { get; set; }
+    public AccountItemModel Account { get; set; } = null!;
     public decimal BalanceThreshold { get; set; }
     public decimal CurrentBalance { get; set; }
 

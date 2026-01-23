@@ -9,7 +9,7 @@ public class DepoCondsModel
     public int DepositOfferId { get; set; }
     public DateTime DateFrom { get; set; }
 
-    public string RateFormula { get; set; }
+    public string RateFormula { get; set; } = string.Empty;
     public bool IsFactDays { get; set; } // true 28-31/365 false 30/360
     public bool EveryStartDay { get; set; } 
     public bool EveryFirstDayOfMonth { get; set; }
@@ -26,5 +26,5 @@ public class DepoCondsModel
 
     public List<DepositRateLine> RateLines { get; set; } = new List<DepositRateLine>();
 
-    public string Comment { get; set; }
+    public string Comment { get; set; } = string.Empty;
 }

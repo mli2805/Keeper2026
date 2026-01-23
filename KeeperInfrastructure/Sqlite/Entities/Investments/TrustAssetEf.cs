@@ -1,4 +1,5 @@
 ﻿using KeeperDomain;
+using System.ComponentModel.DataAnnotations;
 
 namespace KeeperInfrastructure;
 
@@ -7,8 +8,8 @@ public class TrustAssetEf
     public int Id { get; set; }
 
     public int TrustAccountId { get; set; }
-    public string Ticker { get; set; }
-    public string Title { get; set; }
+    [MaxLength(25)] public string Ticker { get; set; } = null!;
+    [MaxLength(100)] public string Title { get; set; } = null!;
     public StockMarket StockMarket { get; set; }
     public AssetType AssetType { get; set; }
 
@@ -26,7 +27,7 @@ public class TrustAssetEf
 
     #endregion
 
-    public string Comment { get; set; } = string.Empty;
+    [MaxLength(250)] public string Comment { get; set; } = string.Empty;
 
 
     // Навигационное свойство

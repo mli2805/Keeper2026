@@ -1,4 +1,5 @@
 ﻿using KeeperDomain;
+using System.ComponentModel.DataAnnotations;
 
 namespace KeeperInfrastructure;
 
@@ -22,5 +23,5 @@ public class TrustTransactionEf
     public CurrencyCode PurchaseFeeCurrency { get; set; } = CurrencyCode.BYN;
     public int FeePaymentOperationId { get; set; }
 
-    public string Comment { get; set; }
+    [MaxLength(250)] public string Comment { get; set; } = string.Empty;
 }

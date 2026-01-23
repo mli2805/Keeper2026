@@ -10,5 +10,5 @@ public class DepositRateLineEf
     public decimal Rate { get; set; }
 
     // Навигационное свойство
-    public DepositConditionsEf DepositConditions { get; set; }
+    public DepositConditionsEf DepositConditions { get; set; } = null!;
 }

@@ -10,7 +10,7 @@ public class YearMileageModel
     public int Odometer { get; set; }
 
     //вычисляемые поля
-    public Period Period { get; set; }
+    public Period Period { get; set; } = null!;
     public string FromTo => Period.ToStringD();
     public int Mileage { get; set; }
     public decimal YearAmount { get; set; }

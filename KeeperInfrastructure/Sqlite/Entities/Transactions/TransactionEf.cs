@@ -19,5 +19,5 @@ public class TransactionEf
     public decimal? AmountInReturn { get; set; }
     public CurrencyCode? CurrencyInReturn { get; set; }
     [MaxLength(100)] public string? Tags { get; set; }
-    [MaxLength(250)] public string Comment { get; set; }
+    [MaxLength(250)] public string Comment { get; set; } = string.Empty;
 }

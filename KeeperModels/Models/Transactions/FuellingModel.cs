@@ -5,7 +5,7 @@ namespace KeeperModels;
 public class FuellingModel
 {
     public int Id { get; set; } //PK
-    public TransactionModel Transaction { get; set; }
+    public TransactionModel Transaction { get; set; } = null!;
 
     public double Volume { get; set; }
     public FuelType FuelType { get; set; }
@@ -15,7 +15,7 @@ public class FuellingModel
     public int CarAccountId { get; set; } // хранится в TransactionModel как один из тэгов
     public decimal Amount { get; set; }
     public CurrencyCode Currency { get; set; }
-    public string Comment { get; set; }
+    public string Comment { get; set; } = string.Empty;
 
 
     // Вычисляемые поля

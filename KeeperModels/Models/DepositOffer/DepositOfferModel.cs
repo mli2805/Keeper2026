@@ -7,8 +7,8 @@ namespace KeeperModels;
 public class DepositOfferModel : PropertyChangedBase
 {
     public int Id { get; set; }
-    public AccountItemModel Bank { get; set; }
-    public string Title { get; set; }
+    public AccountItemModel Bank { get; set; } = null!;
+    public string Title { get; set; } = null!;
     public bool IsNotRevocable { get; set; }
     public string NotRevocableStr => IsNotRevocable ? "безотзыв" : "отзывной";
 
@@ -46,10 +46,10 @@ public class DepositOfferModel : PropertyChangedBase
         : "без ограничений";
     public CurrencyCode MainCurrency { get; set; }
 
-    public DurationModel DepositTerm { get; set; }
+    public DurationModel DepositTerm { get; set; } = null!;
 
 
-    public Brush BackgroundColor { get; set; }
+    public Brush BackgroundColor { get; set; } = null!;
 
     private bool _isSelected;
     public bool IsSelected
@@ -70,7 +70,7 @@ public class DepositOfferModel : PropertyChangedBase
     public Dictionary<DateTime, DepoCondsModel> CondsMap { get; private set; } = new Dictionary<DateTime, DepoCondsModel>();
     public int MonthPaymentsMinimum { get; set; }
     public int MonthPaymentsMaximum { get; set; }
-    public string Comment { get; set; }
+    public string Comment { get; set; } = string.Empty;
 
     public override string ToString()
     {
@@ -98,7 +98,7 @@ public class DepositOfferModel : PropertyChangedBase
         };
         foreach (var pair in CondsMap)
         {
-            result.CondsMap.Add(pair.Key, pair.Value.DeepCopyXml());
+            result.CondsMap.Add(pair.Key, pair.Value.DeepCopyXml()!);
         }
         return result;
     }

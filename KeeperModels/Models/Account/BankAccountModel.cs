@@ -24,8 +24,8 @@ public class BankAccountModel : PropertyChangedBase
         }
     }
 
-    public string AgreementNumber { get; set; } // номер договора, где он есть
-    public string ReplenishDetails { get; set; } // реквизиты для пополнения
+    public string AgreementNumber { get; set; } = string.Empty; // номер договора, где он есть
+    public string ReplenishDetails { get; set; } = string.Empty; // реквизиты для пополнения
 
 
     public DateTime StartDate { get; set; }

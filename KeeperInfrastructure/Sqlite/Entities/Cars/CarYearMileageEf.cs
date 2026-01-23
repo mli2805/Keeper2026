@@ -7,5 +7,5 @@ public class CarYearMileageEf
     public int Odometer { get; set; }
 
     // Навигационное свойство обратно к Car
-    public CarEf Car { get; set; }
+    public CarEf Car { get; set; } = null!;
 }

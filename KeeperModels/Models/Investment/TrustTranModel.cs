@@ -38,8 +38,8 @@ public class TrustTranModel : PropertyChangedBase
 
     public string TranForCombo => $"{Timestamp:d} {CurrencyAmount} {Currency.ToString().ToLower()}";
 
-    private AccountItemModel _accountItemModel;
-    public AccountItemModel AccountItemModel
+    private AccountItemModel? _accountItemModel;
+    public AccountItemModel? AccountItemModel
     {
         get => _accountItemModel;
         set
@@ -53,7 +53,7 @@ public class TrustTranModel : PropertyChangedBase
 
     public string AccountForDataGrid => AccountItemModel?.Name ?? "";
 
-    private TrustAccount _trustAccount;
+    private TrustAccount _trustAccount = null!;
     public TrustAccount TrustAccount
     {
         get => _trustAccount;
@@ -132,7 +132,7 @@ public class TrustTranModel : PropertyChangedBase
     public string AssetAmountForDatagrid =>
         AssetAmount == 0 ? "" : AssetAmount.ToString(CultureInfo.CurrentCulture);
 
-    private TrustAssetModel _asset;
+    private TrustAssetModel _asset = null!;
     public TrustAssetModel Asset
     {
         get => _asset;

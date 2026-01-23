@@ -9,9 +9,9 @@ public class TrustAssetModel : PropertyChangedBase
 {
     public int Id { get; set; }
 
-    public TrustAccount TrustAccount { get; set; }
-    public string Ticker { get; set; }
-    public string Title { get; set; }
+    public TrustAccount? TrustAccount { get; set; }
+    public string Ticker { get; set; } = null!;
+    public string Title { get; set; } = null!;
     public StockMarket StockMarket { get; set; }
 
     private AssetType _assetType;

@@ -95,7 +95,7 @@ public class TreeViewItemModel : PropertyChangedBase
         return Parent != null && Parent.Is(accountId);
     }
 
-    public TreeViewItemModel IsC(TreeViewItemModel treeViewItemModel)
+    public TreeViewItemModel? IsC(TreeViewItemModel treeViewItemModel)
     {
         if (Equals(treeViewItemModel)) return this;
         if (Parent == null) return null;

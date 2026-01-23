@@ -7,7 +7,7 @@ public class AccountItemModel : TreeViewItemModel
     //public string Img => this.GetIconPath();
     public bool IsFolder { get; set; }
 
-    public BankAccountModel BankAccount { get; set; }
+    public BankAccountModel? BankAccount { get; set; }
     public bool IsBankAccount => BankAccount != null;
 
     public bool IsDeposit => BankAccount != null && BankAccount.Deposit != null;
@@ -19,9 +19,9 @@ public class AccountItemModel : TreeViewItemModel
     public int AssociatedExternalId { get; set; } // for category
     public int AssociatedTagId { get; set; } // for counterparty or category
 
-    public string ShortName { get; set; }
-    public string ButtonName { get; set; } // face of shortcut button (if exists)
-    public string Comment { get; set; }
+    public string ShortName { get; set; } = string.Empty;
+    public string ButtonName { get; set; } = string.Empty; // face of shortcut button (if exists)
+    public string Comment { get; set; } = string.Empty;
 
     public override string ToString() => Name;
 
@@ -31,7 +31,7 @@ public class AccountItemModel : TreeViewItemModel
     {
         if (!IsCard) return !string.IsNullOrEmpty(Comment) ? Comment : null;
 
-        var result = BankAccount.PayCard.CardNumber;
+        var result = BankAccount!.PayCard!.CardNumber;
         if (!string.IsNullOrEmpty(Comment)) result += Environment.NewLine + Comment;
         return result;
     }

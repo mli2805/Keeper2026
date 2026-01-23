@@ -5,7 +5,7 @@ namespace KeeperInfrastructure;
 
 public static class TxtLoader
 {
-    private static string _backupFolder;
+    private static string _backupFolder = null!;
 
     public static async Task<KeeperDomainModel?> LoadAllFromTextFiles(string backupFolder)
     {

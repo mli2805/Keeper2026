@@ -120,6 +120,6 @@ public class TransactionModel : PropertyChangedBase
         }
     }
 
-    public List<AccountItemModel> Tags { get; set; }
-    public string Comment { get; set; }
+    public List<AccountItemModel> Tags { get; set; } = new List<AccountItemModel>();
+    public string Comment { get; set; } = string.Empty;
 }

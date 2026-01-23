@@ -46,7 +46,7 @@ public class DurationModel : PropertyChangedBase
             case Durations.Months: return $"{Value} {Value.MonthsNumber()}";
             case Durations.Days: return $"{Value} {Value.DaysNumber()}";
 
-            default: return base.ToString();
+            default: return "неправильные единицы";
         }
     }
 
