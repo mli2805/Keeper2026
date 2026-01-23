@@ -53,29 +53,29 @@ public static class CbrRatesDownloader
 
 public class Xml
 {
-    public string Version { get; set; }
-    public string Encoding { get; set; }
+    public string Version { get; set; } = string.Empty;
+    public string Encoding { get; set; } = string.Empty;
 }
 
 public class Record
 {
-    public string Date { get; set; }
-    public string Id { get; set; }
-    public string Nominal { get; set; }
-    public string Value { get; set; }
+    public string Date { get; set; } = string.Empty;
+    public string Id { get; set; } = string.Empty;
+    public string Nominal { get; set; } = string.Empty;
+    public string Value { get; set; } = string.Empty;
 }
 
 public class ValCurs
 {
-    public string Id { get; set; }
-    public string DateRange1 { get; set; }
-    public string DateRange2 { get; set; }
-    public string Name { get; set; }
-    public Record Record { get; set; }
+    public string Id { get; set; } = string.Empty;
+    public string DateRange1 { get; set; } = string.Empty;
+    public string DateRange2 { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public Record Record { get; set; } = null!;
 }
 
 public class RootObject
 {
-    public Xml Xml { get; set; }
-    public ValCurs ValCurs { get; set; }
+    public Xml Xml { get; set; } = null!;
+    public ValCurs ValCurs { get; set; } = null!;
 }

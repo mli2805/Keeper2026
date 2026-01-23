@@ -6,8 +6,8 @@ public enum DragAndDropAction { Before, Inside, After, Cancel }
 public class AskDragAccountActionViewModel : Screen
 {
     private readonly KeeperDataModel _keeperDataModel;
-    public string Account1 { get; set; }
-    public string Account2 { get; set; }
+    public string Account1 { get; set; } = null!;
+    public string Account2 { get; set; } = null!;
     public bool IsInsideEnabled {get; set;}
 
     public DragAndDropAction Answer { get; set; }

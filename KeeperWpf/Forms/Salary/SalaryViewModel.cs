@@ -32,11 +32,10 @@ public class SalaryViewModel : Screen
     private bool _isWithIrregulars;
     private bool _isAggregated;
 
-    private List<SalaryLineModel> _onlySalary;
-    private List<SalaryLineModel> _salaryAndIrregulars;
+    private List<SalaryLineModel> _onlySalary = null!;
+    private List<SalaryLineModel> _salaryAndIrregulars = null!;
 
-    private PlotModel _myPlotModel;
-
+    private PlotModel _myPlotModel = null!;
     public PlotModel MyPlotModel
     {
         get => _myPlotModel;
@@ -61,7 +60,6 @@ public class SalaryViewModel : Screen
     } // "Only salary";
 
     private string _aggregateButtonCaption = "Aggregate";
-
     public string AggregateButtonCaption
     {
         get => _aggregateButtonCaption;
@@ -85,8 +83,8 @@ public class SalaryViewModel : Screen
         }
     }
 
-    public List<SalaryChange> SalaryChanges { get; set; }
-    public List<AccountItemModel> Employers { get; set; }
+    public List<SalaryChange> SalaryChanges { get; set; } = null!;
+    public List<AccountItemModel> Employers { get; set; } = null!;
 
     private Visibility _salaryChangesVisibility = Visibility.Collapsed;
     public Visibility SalaryChangesVisibility
@@ -195,7 +193,7 @@ public class SalaryViewModel : Screen
         if (!includeIrregulars)
         {
             // 772 - официальн зарплата
-            transactionModels = transactionModels.Where(t => t.Category.Is(772));
+            transactionModels = transactionModels.Where(t => t.Category!.Is(772));
         }
 
         return transactionModels.Select(ToSalaryLine);
@@ -240,7 +238,7 @@ public class SalaryViewModel : Screen
     {
         SalaryLineModel result = new SalaryLineModel();
         result.Timestamp = transaction.Timestamp;
-        result.Employer = transaction.Counterparty.Name;
+        result.Employer = transaction.Counterparty!.Name;
         result.Amount = _dataModel.AmountInUsdString(transaction.Timestamp, transaction.Currency, transaction.Amount, out decimal amountInUsd);
         result.AmountInUsd = amountInUsd;
         result.Comment = transaction.Comment;

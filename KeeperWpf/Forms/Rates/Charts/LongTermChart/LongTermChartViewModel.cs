@@ -8,9 +8,9 @@ namespace KeeperWpf;
 
 public class LongTermChartViewModel : Screen
 {
-    private string _caption;
+    private string _caption = null!;
 
-    public LongTermChartModel Model { get; set; }
+    public LongTermChartModel Model { get; set; } = null!;
 
     protected override void OnViewLoaded(object view)
     {

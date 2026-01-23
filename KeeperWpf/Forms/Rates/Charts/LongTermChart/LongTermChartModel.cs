@@ -17,8 +17,8 @@ public class LongTermChartModel
     private readonly DateTime _dt19990111 = new DateTime(1999, 01, 11); // EURO
     private readonly DateTime _dt19980101 = new DateTime(1998, 01, 01); // 1000 RUB
 
-    public PlotModel LongTermModel { get; set; }
-    public LineSeries UsdNbSeries { get; set; }
+    public PlotModel LongTermModel { get; set; } = null!;
+    public LineSeries UsdNbSeries { get; set; } = null!;
 
     private bool _isUsdNb;
     public bool IsUsdNb
@@ -32,7 +32,7 @@ public class LongTermChartModel
         }
     }
 
-    public LineSeries UsdMySeries { get; set; }
+    public LineSeries UsdMySeries { get; set; } = null!;
 
     private bool _isUsdMy = true;
     public bool IsUsdMy
@@ -46,7 +46,7 @@ public class LongTermChartModel
         }
     }
 
-    public LineSeries RubNbSeries { get; set; }
+    public LineSeries RubNbSeries { get; set; } = null!;
 
     private bool _isRubNb;
     public bool IsRubNb
@@ -60,7 +60,7 @@ public class LongTermChartModel
         }
     }
 
-    public LineSeries RubUsdSeries { get; set; }
+    public LineSeries RubUsdSeries { get; set; } = null!;
 
     private bool _isRubUsd;
     public bool IsRubUsd
@@ -74,7 +74,7 @@ public class LongTermChartModel
         }
     }
 
-    public LineSeries EurNbSeries { get; set; }
+    public LineSeries EurNbSeries { get; set; } = null!;
 
     private bool _isEurNb;
     public bool IsEurNb
@@ -88,7 +88,7 @@ public class LongTermChartModel
         }
     }
 
-    public LineSeries EurUsdSeries { get; set; }
+    public LineSeries EurUsdSeries { get; set; } = null!;
 
     private bool _isEurUsd;
 
@@ -103,7 +103,7 @@ public class LongTermChartModel
         }
     }
 
-    public LineSeries BasketSeries { get; set; }
+    public LineSeries BasketSeries { get; set; } = null!;
 
     private bool _isBasket;
     public bool IsBasket
@@ -178,7 +178,7 @@ public class LongTermChartModel
         }
     }
 
-    private NormalizedRates GetNormalizedRates(OfficialRates officialRates, ExchangeRates exchangeRates)
+    private NormalizedRates GetNormalizedRates(OfficialRates officialRates, ExchangeRates? exchangeRates)
     {
         var result = new NormalizedRates();
         if (officialRates.Date >= _dt20160701)

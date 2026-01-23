@@ -9,7 +9,7 @@ namespace KeeperWpf;
 
 public class MonthAnalysisModel
 {
-    public string MonthAnalysisViewCaption { get; set; }
+    public string MonthAnalysisViewCaption { get; set; } = null!;
     public DateTime StartDate { get; set; }
     public DateTime FinishMoment { get; set; }
     public bool IsYearAnalysisMode { get; set; }
@@ -18,20 +18,20 @@ public class MonthAnalysisModel
 
     public BorderedListViewModel BeforeViewModel { get; set; } = new BorderedListViewModel();
     public decimal Before;
-    public BorderedListViewModel IncomeViewModel { get; set; }
+    public BorderedListViewModel IncomeViewModel { get; set; } = null!;
     public decimal Income;
-    public BorderedListViewModel ExpenseViewModel { get; set; }
+    public BorderedListViewModel ExpenseViewModel { get; set; } = null!;
     public decimal Expense;
     public decimal LargeExpense;
     public BorderedListViewModel AfterViewModel { get; set; } = new BorderedListViewModel();
     public decimal After;
     public BorderedListViewModel FinResultViewModel { get; set; } = new BorderedListViewModel();
-    public ListOfLines  RatesChanges { get; set; }
+    public ListOfLines RatesChanges { get; set; } = null!;
     public decimal ExchangeDifference;
     public BorderedListViewModel ForecastViewModel { get; set; } = new BorderedListViewModel();
     public decimal IncomeForecast;
     public decimal ExpenseForecast;
-    public List<string> IncomeForecastList;
+    public List<string> IncomeForecastList = null!;
 
     public void FillResultList(bool isCurrentPeriod)
     {

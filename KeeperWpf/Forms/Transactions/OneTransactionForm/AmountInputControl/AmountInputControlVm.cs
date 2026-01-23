@@ -10,8 +10,8 @@ namespace KeeperWpf;
 
 public class AmountInputControlVm : PropertyChangedBase
 {
-    public string LabelContent { get; set; }
-    public Brush AmountColor { get; set; } 
+    public string LabelContent { get; set; } = null!;
+    public Brush AmountColor { get; set; } = Brushes.Black;
 
     private decimal _amount;
     public decimal Amount

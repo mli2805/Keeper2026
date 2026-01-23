@@ -14,9 +14,9 @@ public class ButtonCollectionBuilderViewModel : Screen
     private readonly KeeperDataModel _dataModel;
     private readonly ComboTreesProvider _comboTreesProvider;
 
-    public List<ButtonCollectionModel> Collections { get; set; }
+    public List<ButtonCollectionModel> Collections { get; set; } = null!;
 
-    private ButtonCollectionModel _selectedCollection;
+    private ButtonCollectionModel _selectedCollection = null!;
     public ButtonCollectionModel SelectedCollection
     {
         get => _selectedCollection;
@@ -26,13 +26,13 @@ public class ButtonCollectionBuilderViewModel : Screen
             _selectedCollection = value;
             Buttons = new ObservableCollection<AccountItemModel>(SelectedCollection.AccountModels);
             SelectedButton = Buttons.FirstOrDefault();
-            AccNames = ForMyAccount(_selectedCollection, out AccName selectedAccName);
+            AccNames = ForMyAccount(_selectedCollection, out AccName? selectedAccName);
             SelectedAccName = selectedAccName;
             NotifyOfPropertyChange();
         }
     }
 
-    private List<AccName> _accNames;
+    private List<AccName> _accNames = null!;
     public List<AccName> AccNames
     {
         get => _accNames;
@@ -45,8 +45,8 @@ public class ButtonCollectionBuilderViewModel : Screen
         }
     }
 
-    private AccName _selectedAccName;
-    public AccName SelectedAccName
+    private AccName? _selectedAccName;
+    public AccName? SelectedAccName
     {
         get => _selectedAccName;
         set
@@ -58,7 +58,7 @@ public class ButtonCollectionBuilderViewModel : Screen
     }
 
 
-    private ObservableCollection<AccountItemModel> _buttons;
+    private ObservableCollection<AccountItemModel> _buttons = null!;
     public ObservableCollection<AccountItemModel> Buttons
     {
         get => _buttons;
@@ -70,8 +70,8 @@ public class ButtonCollectionBuilderViewModel : Screen
         }
     }
 
-    private AccountItemModel _selectedButton;
-    public AccountItemModel SelectedButton
+    private AccountItemModel? _selectedButton;
+    public AccountItemModel? SelectedButton
     {
         get => _selectedButton;
         set
@@ -107,52 +107,52 @@ public class ButtonCollectionBuilderViewModel : Screen
     }
 
 
-    private List<AccName> ForMyAccount(ButtonCollectionModel collectionModel, out AccName selectedAccName)
+    private List<AccName> ForMyAccount(ButtonCollectionModel collectionModel, out AccName? selectedAccName)
     {
         switch (collectionModel.Id)
         {
             case 1:
-                selectedAccName = _comboTreesProvider.MyAccNamesForIncome.FindThroughTheForestById(695);
+                selectedAccName = _comboTreesProvider.MyAccNamesForIncome.FindThroughTheForestById(695)!;
                 return _comboTreesProvider.MyAccNamesForIncome;
             case 2:
-                selectedAccName = _comboTreesProvider.MyAccNamesForExpense.FindThroughTheForestById(781);
+                selectedAccName = _comboTreesProvider.MyAccNamesForExpense.FindThroughTheForestById(781)!;
                 return _comboTreesProvider.MyAccNamesForExpense;
             case 8:
-                selectedAccName = _comboTreesProvider.AccNamesForIncomeTags.FindThroughTheForestById(443);
+                selectedAccName = _comboTreesProvider.AccNamesForIncomeTags.FindThroughTheForestById(443)!;
                 return _comboTreesProvider.AccNamesForIncomeTags;
             case 5:
             case 9:
-                selectedAccName = _comboTreesProvider.AccNamesForExpenseTags.FindThroughTheForestById(256);
+                selectedAccName = _comboTreesProvider.AccNamesForExpenseTags.FindThroughTheForestById(256)!;
                 return _comboTreesProvider.AccNamesForExpenseTags;
             case 6:
-                selectedAccName = _comboTreesProvider.MyAccNamesForTransfer.FindThroughTheForestById(695);
+                selectedAccName = _comboTreesProvider.MyAccNamesForTransfer.FindThroughTheForestById(695)!;
                 return _comboTreesProvider.MyAccNamesForTransfer;
             case 7:
-                selectedAccName = _comboTreesProvider.MyAccNamesForExchange.FindThroughTheForestById(841);
+                selectedAccName = _comboTreesProvider.MyAccNamesForExchange.FindThroughTheForestById(841)!;
                 return _comboTreesProvider.MyAccNamesForExchange;
             case 10:
             case 11:
                 var external = _comboTreesProvider.GetFullBranch(157);
-                selectedAccName = external.FindThroughTheForestById(225);
+                selectedAccName = external.FindThroughTheForestById(225)!;
                 return external;
             case 12:
-                selectedAccName = _comboTreesProvider.AccNamesForInvestment.FindThroughTheForestById(695);
+                selectedAccName = _comboTreesProvider.AccNamesForInvestment.FindThroughTheForestById(695)!;
                 return _comboTreesProvider.AccNamesForInvestment;
 
             case 13:
-                selectedAccName = _comboTreesProvider.AccNamesForIncomeTags.FindThroughTheForestById(443);
+                selectedAccName = _comboTreesProvider.AccNamesForIncomeTags.FindThroughTheForestById(443)!;
                 return _comboTreesProvider.Counterparties;
             case 14:
-                selectedAccName = _comboTreesProvider.AccNamesForExpenseTags.FindThroughTheForestById(256);
+                selectedAccName = _comboTreesProvider.AccNamesForExpenseTags.FindThroughTheForestById(256)!;
                 return _comboTreesProvider.Counterparties;
             case 15:
-                selectedAccName = _comboTreesProvider.IncomeCategories.FindThroughTheForestById(204);
+                selectedAccName = _comboTreesProvider.IncomeCategories.FindThroughTheForestById(204)!;
                 return _comboTreesProvider.IncomeCategories;
             case 16:
-                selectedAccName = _comboTreesProvider.ExpenseCategories.FindThroughTheForestById(257);
+                selectedAccName = _comboTreesProvider.ExpenseCategories.FindThroughTheForestById(257)!;
                 return _comboTreesProvider.ExpenseCategories;
             case 17:
-                selectedAccName = _comboTreesProvider.AccNamesForExchangeTags.FindThroughTheForestById(477);
+                selectedAccName = _comboTreesProvider.AccNamesForExchangeTags.FindThroughTheForestById(477)!;
                 return _comboTreesProvider.ExpenseCategories;
             default:
                 selectedAccName = null;

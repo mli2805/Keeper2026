@@ -4,7 +4,7 @@ namespace KeeperWpf;
 
 public static class LogHelper
 {
-    public static LogFile LogFile { get; set; }
+    public static LogFile LogFile { get; set; } = null!;
 
     public static void AppendLine(string message)
     {

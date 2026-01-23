@@ -7,9 +7,9 @@ namespace KeeperWpf;
 
 public class SellerSelectorVm : PropertyChangedBase
 {
-    public List<AccNameButtonVm> Buttons { get; set; }
+    public List<AccNameButtonVm> Buttons { get; set; } = null!;
 
-    private AccName _myAccName;
+    private AccName _myAccName = null!;
     public AccName MyAccName
     {
         get => _myAccName;
@@ -24,7 +24,7 @@ public class SellerSelectorVm : PropertyChangedBase
         }
     }
 
-    private List<AccName> _availableAccNames;
+    private List<AccName> _availableAccNames = null!;
 
     public List<AccName> AvailableAccNames
     {
@@ -37,10 +37,9 @@ public class SellerSelectorVm : PropertyChangedBase
         }
     }
 
-    public List<AccName> Shops { get; set; }
+    public List<AccName> Shops { get; set; } = null!;
 
-    private AccName _selectedShop;
-
+    private AccName _selectedShop = null!;
     public AccName SelectedShop
     {
         get => _selectedShop;
@@ -52,7 +51,7 @@ public class SellerSelectorVm : PropertyChangedBase
 
             if (value.Id != -1)
             {
-                MyAccName = _availableAccNames.FindThroughTheForestById(value.Id);
+                MyAccName = _availableAccNames.FindThroughTheForestById(value.Id)!;
 
                 SelectedMed = Meds.First();
             }
@@ -61,15 +60,15 @@ public class SellerSelectorVm : PropertyChangedBase
                 // если в комбике магазов выбрали прочерк,
                 // то в основном комбике перескакиваем на АЗС только если был выбран какой-то магаз
                 if (Shops.Select(s => s.Id).Contains(MyAccName.Id))
-                    MyAccName = _availableAccNames.FindThroughTheForestById(272); // АЗС
+                    MyAccName = _availableAccNames.FindThroughTheForestById(272)!; // АЗС
             }
 
         }
     }
 
-    public List<AccName> Meds { get; set; }
+    public List<AccName> Meds { get; set; } = null!;
 
-    private AccName _selectedMed;
+    private AccName _selectedMed = null!;
     public AccName SelectedMed
     {
         get => _selectedMed;
@@ -80,7 +79,7 @@ public class SellerSelectorVm : PropertyChangedBase
             NotifyOfPropertyChange();
             if (value.Id != -1)
             {
-                MyAccName = _availableAccNames.FindThroughTheForestById(value.Id);
+                MyAccName = _availableAccNames.FindThroughTheForestById(value.Id)!;
                 SelectedShop = Shops.First();
             }
             else
@@ -88,12 +87,12 @@ public class SellerSelectorVm : PropertyChangedBase
                 // если в комбике медов выбрали прочерк,
                 // то в основном комбике перескакиваем на АЗС только если был выбран какой-то мед
                 if (Meds.Select(s => s.Id).Contains(MyAccName.Id))
-                    MyAccName = _availableAccNames.FindThroughTheForestById(272); // АЗС
+                    MyAccName = _availableAccNames.FindThroughTheForestById(272)!; // АЗС
             }
         }
     }
 
-    public string ControlTitle { get; set; }
+    public string ControlTitle { get; set; } = string.Empty;
 
     public Visibility Visibility { get; set; }
 

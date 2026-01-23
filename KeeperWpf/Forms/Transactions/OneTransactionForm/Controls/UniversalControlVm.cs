@@ -31,7 +31,7 @@ public class UniversalControlVm : PropertyChangedBase
     public TransactionModel TranInWork { get; set; } = new TransactionModel();
     public bool IsAddMode { get; set; }
 
-    private AccNameSelectorVm _myAccNameSelectorVm;
+    private AccNameSelectorVm _myAccNameSelectorVm = null!;
     public AccNameSelectorVm MyAccNameSelectorVm
     {
         get => _myAccNameSelectorVm;
@@ -43,7 +43,7 @@ public class UniversalControlVm : PropertyChangedBase
         }
     }
 
-    private AccNameSelectorVm _counterpartySelectorVm;
+    private AccNameSelectorVm _counterpartySelectorVm = null!;
     public AccNameSelectorVm CounterpartySelectorVm
     {
         get => _counterpartySelectorVm;
@@ -55,7 +55,7 @@ public class UniversalControlVm : PropertyChangedBase
         }
     }
 
-    private AccNameSelectorVm _categorySelectorVm;
+    private AccNameSelectorVm _categorySelectorVm = null!;
     public AccNameSelectorVm CategorySelectorVm
     {
         get => _categorySelectorVm;
@@ -68,7 +68,7 @@ public class UniversalControlVm : PropertyChangedBase
     }
 
 
-    private AccNameSelectorVm _mySecondAccNameSelectorVm;
+    private AccNameSelectorVm _mySecondAccNameSelectorVm = null!;
     public AccNameSelectorVm MySecondAccNameSelectorVm
     {
         get => _mySecondAccNameSelectorVm;
@@ -79,7 +79,7 @@ public class UniversalControlVm : PropertyChangedBase
             NotifyOfPropertyChange();
         }
     }
-    private AmountInputControlVm _myAmountInputControlVm;
+    private AmountInputControlVm _myAmountInputControlVm = null!;
     public AmountInputControlVm MyAmountInputControlVm
     {
         get => _myAmountInputControlVm;
@@ -90,7 +90,7 @@ public class UniversalControlVm : PropertyChangedBase
             NotifyOfPropertyChange();
         }
     }
-    private AmountInputControlVm _myAmountInReturnInputControlVm;
+    private AmountInputControlVm _myAmountInReturnInputControlVm = null!;
     public AmountInputControlVm MyAmountInReturnInputControlVm
     {
         get => _myAmountInReturnInputControlVm;
@@ -102,7 +102,7 @@ public class UniversalControlVm : PropertyChangedBase
         }
     }
 
-    private TagPickerVm _myTagPickerVm;
+    private TagPickerVm _myTagPickerVm = null!;
     public TagPickerVm MyTagPickerVm
     {
         get => _myTagPickerVm;
@@ -113,7 +113,7 @@ public class UniversalControlVm : PropertyChangedBase
             NotifyOfPropertyChange();
         }
     }
-    private DatePickerWithTrianglesVm _myDatePickerVm;
+    private DatePickerWithTrianglesVm _myDatePickerVm = null!;
     public DatePickerWithTrianglesVm MyDatePickerVm
     {
         get => _myDatePickerVm;
@@ -125,7 +125,7 @@ public class UniversalControlVm : PropertyChangedBase
         }
     }
 
-    private string _myAccountBalance;
+    private string _myAccountBalance = null!;
     public string MyAccountBalance
     {
         get => _myAccountBalance;
@@ -145,7 +145,6 @@ public class UniversalControlVm : PropertyChangedBase
     public List<PaymentWay> PaymentWays { get; set; }
 
     private PaymentWay _selectedPaymentWay;
-
     public PaymentWay SelectedPaymentWay
     {
         get => _selectedPaymentWay;
@@ -247,7 +246,7 @@ public class UniversalControlVm : PropertyChangedBase
         }
     }
 
-    private void MyAccNameSelectorVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void MyAccNameSelectorVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == "MyAccName")
         {
@@ -259,7 +258,7 @@ public class UniversalControlVm : PropertyChangedBase
         }
     }
 
-    private void MySecondAccNameSelectorVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void MySecondAccNameSelectorVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == "MyAccName")
         {
@@ -270,7 +269,7 @@ public class UniversalControlVm : PropertyChangedBase
         }
     }
 
-    private void CounterpartySelectorVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void CounterpartySelectorVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName != "MyAccName") return;
         _counterpartyChangedManually = true;
@@ -292,7 +291,7 @@ public class UniversalControlVm : PropertyChangedBase
         AddTagIfAssociated(TranInWork.Counterparty.AssociatedTagId);
     }
 
-    private void CategorySelectorVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void CategorySelectorVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName != "MyAccName") return;
         _categoryChangedManually = true;
@@ -314,7 +313,7 @@ public class UniversalControlVm : PropertyChangedBase
         AddTagIfAssociated(TranInWork.Category.AssociatedTagId);
     }
 
-    private AccountItemModel FindAssociated(AccountItemModel account, OperationType opType)
+    private AccountItemModel? FindAssociated(AccountItemModel account, OperationType opType)
     {
 
         var associatedId = account.IsCategory()
@@ -335,7 +334,7 @@ public class UniversalControlVm : PropertyChangedBase
         MyTagPickerVm.Tags.Add(new AccName().PopulateFromAccount(tag, null));
     }
 
-    private void MyAmountInputControlVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void MyAmountInputControlVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == "Amount") TranInWork.Amount = MyAmountInputControlVm.Amount;
         if (e.PropertyName == "Currency") TranInWork.Currency = MyAmountInputControlVm.Currency;
@@ -346,7 +345,7 @@ public class UniversalControlVm : PropertyChangedBase
         }
     }
 
-    private void MyAmountInReturnInputControlVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void MyAmountInReturnInputControlVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == "Amount") TranInWork.AmountInReturn = MyAmountInReturnInputControlVm.Amount;
         if (e.PropertyName == "Currency") TranInWork.CurrencyInReturn = MyAmountInReturnInputControlVm.Currency;
@@ -354,7 +353,7 @@ public class UniversalControlVm : PropertyChangedBase
 
     #region Tags
 
-    private void Tags_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private void Tags_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == NotifyCollectionChangedAction.Remove)
             ReactOnRemove();
@@ -364,21 +363,21 @@ public class UniversalControlVm : PropertyChangedBase
 
     private void ReactOnRemove()
     {
-        var tag = _dataModel.AcMoDict[MyTagPickerVm.TagInWork.Id];
+        var tag = _dataModel.AcMoDict[MyTagPickerVm.TagInWork!.Id];
         TranInWork.Tags.Remove(tag);
         MyTagPickerVm.TagInWork = null;
     }
 
     private void ReactOnUsersAdd()
     {
-        var tag = _dataModel.AcMoDict[MyTagPickerVm.TagInWork.Id];
+        var tag = _dataModel.AcMoDict[MyTagPickerVm.TagInWork!.Id];
         TranInWork.Tags.Add(tag);
         MyTagPickerVm.TagInWork = null;
     }
 
     #endregion
 
-    private void MyDatePickerVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void MyDatePickerVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         var selectedDate = MyDatePickerVm.SelectedDate;
         var dayTransactions = _dataModel.Transactions.Values.Where(t => t.Timestamp.Date == selectedDate.Date).ToList();
@@ -390,7 +389,7 @@ public class UniversalControlVm : PropertyChangedBase
         TranInWork.Timestamp = selectedDate.Date.AddMinutes(minute);
     }
 
-    private void TranInWork_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void TranInWork_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {

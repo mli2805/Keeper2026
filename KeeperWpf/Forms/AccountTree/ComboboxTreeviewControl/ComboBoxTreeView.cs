@@ -12,16 +12,16 @@ namespace KeeperWpf;
 
 public class ComboBoxTreeView : ComboBox
 {
-    private ExtendedTreeView _treeView;
-    private ContentPresenter _contentPresenter;
-    private ScrollViewer _scrollViewer;
+    private ExtendedTreeView _treeView = null!;
+    private ContentPresenter _contentPresenter = null!;
+    private ScrollViewer _scrollViewer = null!;
 
     static ComboBoxTreeView()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(ComboBoxTreeView), new FrameworkPropertyMetadata(typeof(ComboBoxTreeView)));
     }
 
-    private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+    private static T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
     {
         for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
         {
@@ -128,7 +128,7 @@ public class ComboBoxTreeView : ComboBox
         }), System.Windows.Threading.DispatcherPriority.Background);
     }
 
-    private TreeViewItem FindTreeViewItem(ItemsControl container, object item)
+    private TreeViewItem? FindTreeViewItem(ItemsControl container, object item)
     {
         if (container == null) return null;
 
@@ -244,7 +244,7 @@ public class ComboBoxTreeView : ComboBox
     /// <summary>
     /// Searches the items of the hierarchy inside the items source and selects the last found item
     /// </summary>
-    private static ITreeViewItemModel SelectItem(IEnumerable<ITreeViewItemModel> items, IEnumerable<string> selectedHierarchy)
+    private static ITreeViewItemModel? SelectItem(IEnumerable<ITreeViewItemModel> items, IEnumerable<string> selectedHierarchy)
     {
         if (items == null || selectedHierarchy == null)
         {
@@ -256,7 +256,7 @@ public class ComboBoxTreeView : ComboBox
 
         if (!hierarchy.Any() || !currentItems.Any()) return null;
 
-        ITreeViewItemModel selectedItem = null;
+        ITreeViewItemModel? selectedItem = null;
 
         for (int i = 0; i < hierarchy.Count; i++)
         {
@@ -296,7 +296,7 @@ public class ComboBoxTreeView : ComboBox
     /// </summary>
     private void SetSelectedItemToHeader()
     {
-        string content = null;
+        string? content = null;
 
         var item = SelectedItem as ITreeViewItemModel;
         if (item != null)
@@ -310,7 +310,7 @@ public class ComboBoxTreeView : ComboBox
     /// <summary>
     /// Gets the combobox header and displays the specified content there
     /// </summary>
-    private void SetContentAsTextBlock(string content)
+    private void SetContentAsTextBlock(string? content)
     {
         if (_contentPresenter == null)
         {
