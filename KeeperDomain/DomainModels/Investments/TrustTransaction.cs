@@ -23,7 +23,7 @@ public class TrustTransaction : IDumpable, IParsable<TrustTransaction>
     public CurrencyCode PurchaseFeeCurrency { get; set; } = CurrencyCode.BYN;
     public int FeePaymentOperationId { get; set; }
 
-    public string Comment { get; set; }
+    public string Comment { get; set; } = string.Empty;
 
     public string Dump()
     {

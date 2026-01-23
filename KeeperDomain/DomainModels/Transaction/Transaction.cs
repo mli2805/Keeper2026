@@ -23,8 +23,8 @@ public class Transaction : IDumpable, IParsable<Transaction>
     public CurrencyCode Currency { get; set; }
     public decimal AmountInReturn { get; set; }
     public CurrencyCode? CurrencyInReturn { get; set; }
-    [MaxLength(100)] public string Tags { get; set; }
-    [MaxLength(250)] public string Comment { get; set; }
+    [MaxLength(100)] public string Tags { get; set; } = string.Empty;
+    [MaxLength(250)] public string Comment { get; set; } = string.Empty;
 
     public string Dump()
     {

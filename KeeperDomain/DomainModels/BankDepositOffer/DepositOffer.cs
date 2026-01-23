@@ -6,7 +6,7 @@ namespace KeeperDomain;
 public class DepositOffer : IDumpable, IParsable<DepositOffer>
 {
     public int Id { get; set; } //PK
-    [MaxLength(100)] public string Title { get; set; }
+    [MaxLength(100)] public string Title { get; set; } = null!;
     public bool IsNotRevocable { get; set; }
     public RateType RateType { get; set; }
     public bool IsAddLimited { get; set; }
@@ -19,7 +19,7 @@ public class DepositOffer : IDumpable, IParsable<DepositOffer>
     public CurrencyCode MainCurrency { get; set; }
     //
 
-    public Duration DepositTerm { get; set; }
+    public Duration DepositTerm { get; set; } = null!;
 
     // Для карточек 
     // иногда задан минимум при котором не берется плата за обслуживание или начисляется манибэк
@@ -27,7 +27,7 @@ public class DepositOffer : IDumpable, IParsable<DepositOffer>
     public int MonthPaymentsMinimum { get; set; }
     public int MonthPaymentsMaximum { get; set; }
 
-    [MaxLength(250)] public string Comment { get; set; }
+    [MaxLength(250)] public string Comment { get; set; } = string.Empty;
 
     public string Dump()
     {

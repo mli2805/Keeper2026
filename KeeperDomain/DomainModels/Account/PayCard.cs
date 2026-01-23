@@ -7,8 +7,8 @@ public class PayCard : IDumpable, IParsable<PayCard>
 {
     public int Id { get; set; } // совпадает с ID Account'a и BankAccount'a
     
-    [MaxLength(20)] public string CardNumber { get; set; }
-    [MaxLength(50)] public string CardHolder { get; set; }
+    [MaxLength(20)] public string CardNumber { get; set; } = string.Empty;
+    [MaxLength(50)] public string CardHolder { get; set; } = string.Empty;
 
     public PaymentSystem PaymentSystem { get; set; }
     public bool IsVirtual { get; set; }

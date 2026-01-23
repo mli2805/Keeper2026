@@ -9,7 +9,7 @@ public class SalaryChange : IDumpable, IParsable<SalaryChange>
     public int EmployerId { get; set; }
     public DateTime FirstReceived { get; set; } = new DateTime(2008, 6, 1);
     public decimal Amount { get; set; }
-    public string Comment { get; set; }
+    public string Comment { get; set; } = string.Empty;
 
     public string Dump()
     {
