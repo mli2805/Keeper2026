@@ -23,7 +23,7 @@ public static class AmountInUsdProvider
         return shortLine + (flag ? $" ( {amountInUsd:#,0.00} usd )" :  $" ({amountInUsd:#,0.00} usd)");
     }
 
-    public static decimal AmountInUsd(this KeeperDataModel dataModel, DateTime date, CurrencyCode? currency, decimal amount)
+    public static decimal AmountInUsd(this KeeperDataModel dataModel, DateTime date, CurrencyCode currency, decimal amount)
     {
         return dataModel.AmountInUsd(date, currency, amount, out decimal _);
     }
@@ -45,7 +45,7 @@ public static class AmountInUsdProvider
     }
 
     private static decimal AmountInUsd(this KeeperDataModel dataModel, DateTime date,
-        CurrencyCode? currency, decimal amount, out decimal rate)
+        CurrencyCode currency, decimal amount, out decimal rate)
     {
         rate = 1;
         if (currency == CurrencyCode.USD) return amount;

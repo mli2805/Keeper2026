@@ -10,8 +10,8 @@ namespace KeeperWpf;
 
 public class UsdFiveInOneChartViewModel : Screen
 {
-    private string _caption;
-    private KeeperDataModel _keeperDataModel;
+    private string _caption = null!;
+    private KeeperDataModel _keeperDataModel = null!;
     private int _firstYear = 2017;
     public PlotModel MyPlotModel { get; set; } = new PlotModel();
 

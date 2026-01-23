@@ -77,10 +77,9 @@ public class TrafficOfTagCalculator : ITraffic
                 _trafficInUsd.Minus = _trafficInUsd.Minus - inUsd;
                 _balanceWithTurnover.Sub(tran.Currency, tran.Amount);
 
-                inUsd = _dataModel.AmountInUsd(tran.Timestamp, tran.CurrencyInReturn, tran.AmountInReturn);
+                inUsd = _dataModel.AmountInUsd(tran.Timestamp, tran.CurrencyInReturn!.Value, tran.AmountInReturn);
                 _trafficInUsd.Plus = _trafficInUsd.Plus + inUsd;
-                // ReSharper disable once PossibleInvalidOperationException
-                _balanceWithTurnover.Add((CurrencyCode)tran.CurrencyInReturn, tran.AmountInReturn);
+                _balanceWithTurnover.Add((CurrencyCode)tran.CurrencyInReturn!, tran.AmountInReturn);
                 break;
         }
     }

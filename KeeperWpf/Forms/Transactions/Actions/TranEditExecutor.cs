@@ -102,7 +102,7 @@ public class TranEditExecutor
         var oneTran = oneTranForm.GetTran();
         var sameDayTransactions = _dataModel.Transactions.Values.Where(t => t.Timestamp.Date == oneTran.Timestamp.Date).ToList();
         var receiptId = sameDayTransactions.Any() ? sameDayTransactions.Max(r => r.Receipt) + 1 : 1;
-        foreach (var tuple in oneTranForm.ReceiptList)
+        foreach (var tuple in oneTranForm.ReceiptList!)
         {
             var tran = oneTran.Clone();
             tran.Receipt = receiptId;

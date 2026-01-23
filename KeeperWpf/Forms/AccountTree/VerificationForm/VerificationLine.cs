@@ -22,9 +22,9 @@ public class VerificationLine : PropertyChangedBase
 
     public decimal Amount { get; set; }
     public string AmountStr => Amount.ToString("#,0.##");
-    public string Date { get; set; }
-    public string Counterparty { get; set; }
-    public string Text { get; set; }
+    public string Date { get; set; } = null!;
+    public string Counterparty { get; set; } = null!;
+    public string Text { get; set; } = null!;   
     public OperationType OperationType { get; set; }
     public Brush ForegroundBrush => OperationType.FontColor();
     public Brush BackgroundBrush => IsChecked ? Brushes.LightGray : Brushes.White;

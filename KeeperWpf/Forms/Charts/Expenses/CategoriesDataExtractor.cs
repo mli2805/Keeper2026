@@ -7,7 +7,7 @@ namespace KeeperWpf;
 public class CategoriesDataExtractor
 {
     private readonly KeeperDataModel _dataModel;
-    private List<int> _expenseGroupsIds;
+    private List<int> _expenseGroupsIds = null!;
 
     public CategoriesDataExtractor(KeeperDataModel dataModel)
     {
@@ -42,7 +42,7 @@ public class CategoriesDataExtractor
             yield return new ClassifiedTran()
             {
                 Timestamp = tr.Timestamp,
-                CategoryId = _dataModel.GetTopLevelCategory(tr.Category, true).Id,
+                CategoryId = _dataModel.GetTopLevelCategory(tr.Category!, true).Id,
                 AmountInUsd = tr.Currency == CurrencyCode.USD 
                     ? tr.Amount 
                     : _dataModel.AmountInUsd(tr.Timestamp, tr.Currency, tr.Amount),

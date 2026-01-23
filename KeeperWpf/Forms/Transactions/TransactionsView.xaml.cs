@@ -15,14 +15,14 @@ public partial class TransactionsView
         InitializeComponent();
     }
 
-    private void OnSelectionChanged( object sender, SelectionChangedEventArgs e )
+    private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        Selector selector = sender as Selector;
-        if ( selector is DataGrid dataGrid && selector.SelectedItem != null && dataGrid.SelectedIndex >= 0 )
+        Selector? selector = sender as Selector;
+        if (selector is DataGrid dataGrid && selector.SelectedItem != null && dataGrid.SelectedIndex >= 0)
         {
             try
             {
-                dataGrid.ScrollIntoView( selector.SelectedItem );
+                dataGrid.ScrollIntoView(selector.SelectedItem);
             }
             catch (Exception exception)
             {
@@ -33,12 +33,12 @@ public partial class TransactionsView
 
     private void MainDataGrid_Loaded(object sender, System.Windows.RoutedEventArgs e)
     {
-        Selector selector = sender as Selector;
-        if ( selector is DataGrid dataGrid && selector.SelectedItem != null && dataGrid.SelectedIndex >= 0 )
+        Selector? selector = sender as Selector;
+        if (selector is DataGrid dataGrid && selector.SelectedItem != null && dataGrid.SelectedIndex >= 0)
         {
             try
             {
-                dataGrid.ScrollIntoView( selector.SelectedItem );
+                dataGrid.ScrollIntoView(selector.SelectedItem);
             }
             catch (Exception exception)
             {

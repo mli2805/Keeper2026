@@ -9,11 +9,11 @@ namespace KeeperWpf;
 
 public class TranModel : PropertyChangedBase
 {
-    public ObservableCollection<TranWrappedForDataGrid> Rows { get; set; }
+    public ObservableCollection<TranWrappedForDataGrid> Rows { get; set; } = null!;
    
-    public ICollectionView SortedRows { get; set; }
+    public ICollectionView SortedRows { get; set; } = null!;
 
-    private TranWrappedForDataGrid _selectedTranWrappedForDataGrid;
+    private TranWrappedForDataGrid _selectedTranWrappedForDataGrid = null!;
     public TranWrappedForDataGrid SelectedTranWrappedForDataGrid
     {
         get => _selectedTranWrappedForDataGrid;
@@ -30,7 +30,7 @@ public class TranModel : PropertyChangedBase
 
     private readonly KeeperDataModel _dataModel;
     private readonly FilterModel _filterModel;
-    private TranFilter _tranFilter;
+    private TranFilter _tranFilter = null!;
 
 
     public TranModel(KeeperDataModel dataModel, FilterModel filterModel)
@@ -63,7 +63,7 @@ public class TranModel : PropertyChangedBase
         var t = (TranWrappedForDataGrid)o;
         return _tranFilter.Filter(t, _filterModel);
     }
-    private void Rows_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    private void Rows_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         IsCollectionChanged = true;
     }

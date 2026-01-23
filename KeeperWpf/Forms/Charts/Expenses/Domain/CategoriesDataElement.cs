@@ -20,8 +20,9 @@ public class CategoriesDataElement : IComparable<CategoriesDataElement>
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public int CompareTo(CategoriesDataElement other)
+    public int CompareTo(CategoriesDataElement? other)
     {
+        if (other == null) return 1;
         return YearMonth.CompareTo(other.YearMonth);
     }
 

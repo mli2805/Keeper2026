@@ -4,8 +4,8 @@ namespace KeeperWpf;
 
 public class TranFilter
 {
-    private TranWrappedForDataGrid _wrappedTran;
-    private FilterModel _filterModel;
+    private TranWrappedForDataGrid _wrappedTran = null!;
+    private FilterModel _filterModel = null!;
     public bool Filter(TranWrappedForDataGrid wrappedTran, FilterModel filterModel)
     {
         _wrappedTran = wrappedTran;

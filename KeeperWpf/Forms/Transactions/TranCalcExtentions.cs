@@ -33,7 +33,7 @@ static class TranCalcExtentions
         }
     }
 
-    public static Balance BalanceForCategory(this TransactionModel tran)
+    public static Balance? BalanceForCategory(this TransactionModel tran)
     {
         switch (tran.Operation)
         {
@@ -46,7 +46,7 @@ static class TranCalcExtentions
             case OperationType.Обмен:
                 var balance = new Balance(tran.Currency, -tran.Amount);
                 // ReSharper disable once PossibleInvalidOperationException
-                balance.Add((CurrencyCode)tran.CurrencyInReturn, tran.AmountInReturn);
+                balance.Add((CurrencyCode)tran.CurrencyInReturn!, tran.AmountInReturn);
                 return balance;
             default:
                 return null;

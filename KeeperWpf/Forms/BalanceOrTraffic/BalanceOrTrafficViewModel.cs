@@ -9,7 +9,7 @@ public class BalanceOrTrafficViewModel : Screen
 
     private ShellPartsBinder ShellPartsBinder { get; }
 
-    private string _accountName;
+    private string _accountName = null!;
     public string AccountName
     {
         get => _accountName;
@@ -23,7 +23,7 @@ public class BalanceOrTrafficViewModel : Screen
 
     public RangeObservableCollection<ListLine> ColoredLines { get; set; }
 
-    private ListLine _selectedColoredLine;
+    private ListLine _selectedColoredLine = null!;
     public ListLine SelectedColoredLine 
     {
         get => _selectedColoredLine;
@@ -35,7 +35,7 @@ public class BalanceOrTrafficViewModel : Screen
         }
     }
 
-    private string _total;
+    private string _total = null!;
     public string Total
     {
         get => _total;
@@ -55,7 +55,7 @@ public class BalanceOrTrafficViewModel : Screen
         ColoredLines = new RangeObservableCollection<ListLine>();
     }
 
-    private void ShellPartsBinder_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void ShellPartsBinder_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (ShellPartsBinder.SelectedAccountItemModel == null) return;
 

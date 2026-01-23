@@ -45,39 +45,38 @@ public class TrafficOfAccountBranchCalculator : ITraffic
         {
             case OperationType.Доход:
                 {
-                    var myAcc = (AccountItemModel)tran.MyAccount.IsC(_accountItemModel);
+                    var myAcc = (AccountItemModel)tran.MyAccount.IsC(_accountItemModel)!;
                     if (myAcc != null)
                         _balanceWithTurnovers.Add(myAcc, tran.Currency, tran.Amount);
                 }
                 break;
             case OperationType.Расход:
                 {
-                    var myAcc = (AccountItemModel)tran.MyAccount.IsC(_accountItemModel);
+                    var myAcc = (AccountItemModel)tran.MyAccount.IsC(_accountItemModel)!;
                     if (myAcc != null)
                         _balanceWithTurnovers.Sub(myAcc, tran.Currency, tran.Amount);
                 }
                 break;
             case OperationType.Перенос:
                 {
-                    var myAcc = (AccountItemModel)tran.MyAccount.IsC(_accountItemModel);
+                    var myAcc = (AccountItemModel)tran.MyAccount.IsC(_accountItemModel)!;
                     if (myAcc != null)
                         _balanceWithTurnovers.Sub(myAcc, tran.Currency, tran.Amount);
 
-                    var myAcc2 = (AccountItemModel)tran.MySecondAccount.IsC(_accountItemModel);
+                    var myAcc2 = (AccountItemModel)tran.MySecondAccount!.IsC(_accountItemModel)!;
                     if (myAcc2 != null)
                         _balanceWithTurnovers.Add(myAcc2, tran.Currency, tran.Amount);
                 }
                 break;
             case OperationType.Обмен:
                 {
-                    var myAcc = (AccountItemModel)tran.MyAccount.IsC(_accountItemModel);
+                    var myAcc = (AccountItemModel)tran.MyAccount.IsC(_accountItemModel)!;
                     if (myAcc != null)
                         _balanceWithTurnovers.Sub(myAcc, tran.Currency, tran.Amount);
 
-                    var myAcc2 = (AccountItemModel)tran.MySecondAccount.IsC(_accountItemModel);
+                    var myAcc2 = (AccountItemModel)tran.MySecondAccount!.IsC(_accountItemModel)!;
                     if (myAcc2 != null)
-                        // ReSharper disable once PossibleInvalidOperationException
-                        _balanceWithTurnovers.Add(myAcc2, (CurrencyCode)tran.CurrencyInReturn, tran.AmountInReturn);
+                        _balanceWithTurnovers.Add(myAcc2, (CurrencyCode)tran.CurrencyInReturn!, tran.AmountInReturn);
                 }
                 break;
         }

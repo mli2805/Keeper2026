@@ -78,8 +78,10 @@ public class YearMonth : IComparable<YearMonth>
         var sub = finish - start;
         return sub.Year*12 + sub.Month + 1;
     }
-    public int CompareTo(YearMonth other)
+
+    public int CompareTo(YearMonth? other)
     {
+        if (other == null) return 1;
         return (Year*12 + Month).CompareTo(other.Year*12 + other.Month);
     }
 

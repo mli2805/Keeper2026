@@ -35,7 +35,7 @@ public class TrafficOfAccountCalculator : ITraffic
 
     public bool TryGetValue(CurrencyCode mainCurrency, out decimal result)
     {
-        if (_balanceWithTurnover.Currencies.TryGetValue(mainCurrency, out TrafficPair trafficPair))
+        if (_balanceWithTurnover.Currencies.TryGetValue(mainCurrency, out TrafficPair? trafficPair))
         {
             result = trafficPair.Plus - trafficPair.Minus;
             return true;
@@ -52,7 +52,7 @@ public class TrafficOfAccountCalculator : ITraffic
 
         if (_isDeposit)
         {
-            DepositReportModel.BankAccount = _accountItemModel.BankAccount;
+            DepositReportModel.BankAccount = _accountItemModel.BankAccount!;
             DepositReportModel.Balance = _balanceWithTurnover.Balance();
             DepositReportModel.AmountInUsd = AmountInUsd;
             DepositReportModel.DepositName = _accountItemModel.Name;
@@ -93,7 +93,8 @@ public class TrafficOfAccountCalculator : ITraffic
         if (tran.MyAccount.Id != _accountItemModel.Id) return;
 
         _coloredTrans.Add(tran.Timestamp, _dataModel.ColoredLine(tran, false, 1));
-        DepositReportModel.Traffic.Add(_dataModel.ReportLine(_balanceWithTurnover.Balance(), tran, false, 1, DepositOperationType.Revenue));
+        DepositReportModel.Traffic.Add(
+            _dataModel.ReportLine(_balanceWithTurnover.Balance(), tran, false, 1, DepositOperationType.Revenue));
         _balanceWithTurnover.Add(tran.Currency, tran.Amount);
     }
 
@@ -103,7 +104,8 @@ public class TrafficOfAccountCalculator : ITraffic
 
         _coloredTrans.Add(tran.Timestamp, _dataModel.ColoredLine(tran, false, -1));
         if (_isDeposit)
-            DepositReportModel.Traffic.Add(_dataModel.ReportLine(_balanceWithTurnover.Balance(), tran, false, -1, DepositOperationType.Consumption));
+            DepositReportModel.Traffic.Add(
+                _dataModel.ReportLine(_balanceWithTurnover.Balance(), tran, false, -1, DepositOperationType.Consumption));
         _balanceWithTurnover.Sub(tran.Currency, tran.Amount);
     }
 
@@ -113,15 +115,17 @@ public class TrafficOfAccountCalculator : ITraffic
         {
             _coloredTrans.Add(tran.Timestamp, _dataModel.ColoredLine(tran, false, -1));
             if (_isDeposit)
-                DepositReportModel.Traffic.Add(_dataModel.ReportLine(_balanceWithTurnover.Balance(), tran, false, -1, DepositOperationType.Consumption));
+                DepositReportModel.Traffic.Add(
+                    _dataModel.ReportLine(_balanceWithTurnover.Balance(), tran, false, -1, DepositOperationType.Consumption));
             _balanceWithTurnover.Sub(tran.Currency, tran.Amount);
         }
 
-        if (tran.MySecondAccount.Id ==_accountItemModel.Id)
+        if (tran.MySecondAccount!.Id ==_accountItemModel.Id)
         {
             _coloredTrans.Add(tran.Timestamp, _dataModel.ColoredLine(tran, false, 1));
             if (_isDeposit)
-                DepositReportModel.Traffic.Add(_dataModel.ReportLine(_balanceWithTurnover.Balance(), tran, false, 1, DepositOperationType.Contribution));
+                DepositReportModel.Traffic.Add(
+                    _dataModel.ReportLine(_balanceWithTurnover.Balance(), tran, false, 1, DepositOperationType.Contribution));
             _balanceWithTurnover.Add(tran.Currency, tran.Amount);
         }
     }
@@ -129,14 +133,13 @@ public class TrafficOfAccountCalculator : ITraffic
     private void RegisterExchange(TransactionModel tran)
     {
         // явочный обмен - приходишь в банк и меняешь - была в кармане одна валюта - стала другая в том же кармане
-        if (tran.MyAccount.Id == _accountItemModel.Id && tran.MySecondAccount.Id == _accountItemModel.Id)
+        if (tran.MyAccount.Id == _accountItemModel.Id && tran.MySecondAccount!.Id == _accountItemModel.Id)
         {
             _coloredTrans.Add(tran.Timestamp, _dataModel.ColoredLineOneAccountExchange(tran));
             if (_isDeposit)
                 DepositReportModel.Traffic.Add(_dataModel.ReportLineOneAccountExchange(_balanceWithTurnover.Balance(), tran));
             _balanceWithTurnover.Sub(tran.Currency, tran.Amount);
-            // ReSharper disable once PossibleInvalidOperationException
-            _balanceWithTurnover.Add((CurrencyCode)tran.CurrencyInReturn, tran.AmountInReturn);
+            _balanceWithTurnover.Add((CurrencyCode)tran.CurrencyInReturn!, tran.AmountInReturn);
         }
         // безнальный обмен - с одного счета списалась одна валюта, на другой зачислилась другая
         else
@@ -145,19 +148,21 @@ public class TrafficOfAccountCalculator : ITraffic
             {
                 _coloredTrans.Add(tran.Timestamp, _dataModel.ColoredLine(tran, false, -1));
                 if (_isDeposit)
-                    DepositReportModel.Traffic.Add(_dataModel.ReportLine(_balanceWithTurnover.Balance(), tran, false, -1, DepositOperationType.Consumption));
+                    DepositReportModel.Traffic.Add
+                        (_dataModel.ReportLine(_balanceWithTurnover.Balance(), tran, false, -1, DepositOperationType.Consumption));
                 _balanceWithTurnover.Sub(tran.Currency, tran.Amount);
             }
 
-            if (tran.MySecondAccount.Id == _accountItemModel.Id)
+            if (tran.MySecondAccount!.Id == _accountItemModel.Id)
             {
                 _coloredTrans.Add(tran.Timestamp, _dataModel.ColoredLine(tran, true, 1));
                 if (_isDeposit)
                 {
-                    DepositReportModel.Traffic.Add(_dataModel.ReportLine(_balanceWithTurnover.Balance(), tran, true, 1, DepositOperationType.Contribution));
+                    DepositReportModel.Traffic.Add(_dataModel
+                        .ReportLine(_balanceWithTurnover.Balance(), tran, true, 1, DepositOperationType.Contribution));
                 }
                 // ReSharper disable once PossibleInvalidOperationException
-                _balanceWithTurnover.Add((CurrencyCode)tran.CurrencyInReturn, tran.AmountInReturn);
+                _balanceWithTurnover.Add((CurrencyCode)tran.CurrencyInReturn!, tran.AmountInReturn);
             }
         }
     }
@@ -176,8 +181,8 @@ public class TrafficOfAccountCalculator : ITraffic
 
     public decimal GetOnlyExpenseByns()
     {
-        var r = _balanceWithTurnover.Currencies.TryGetValue(CurrencyCode.BYN, out TrafficPair byns);
-        return r ? byns.Minus : 0; // переносы со счета тоже попадут
+        var r = _balanceWithTurnover.Currencies.TryGetValue(CurrencyCode.BYN, out TrafficPair? byns);
+        return r ? byns!.Minus : 0; // переносы со счета тоже попадут
     }
 
 }

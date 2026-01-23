@@ -8,7 +8,7 @@ namespace KeeperWpf;
 public class AssetStatisticsViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    private TrustAssetModel _trustAssetModel;
+    private TrustAssetModel _trustAssetModel = null!;
     public StatisticsLinesViewModel StatisticsLinesViewModel { get; set; } = new StatisticsLinesViewModel();
 
     public AssetStatisticsViewModel(KeeperDataModel dataModel)

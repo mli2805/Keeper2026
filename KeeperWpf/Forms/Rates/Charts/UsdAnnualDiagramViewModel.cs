@@ -10,15 +10,13 @@ namespace KeeperWpf;
 
 public class UsdAnnualDiagramViewModel : Screen
 {
-    private string _caption;
-    private KeeperDataModel _keeperDataModel;
+    private string _caption = null!;
+    private KeeperDataModel _keeperDataModel = null!;
 
-    // public PlotModel MyPlotModel2017 { get; set; } = new PlotModel();
-    // public PlotModel MyPlotModel2018 { get; set; } = new PlotModel();
-    public PlotModel MyPlotModel2019 { get; set; } = new PlotModel();
-    public PlotModel MyPlotModel2020 { get; set; } = new PlotModel();
-    public PlotModel MyPlotModel2021 { get; set; } = new PlotModel();
-    public PlotModel MyPlotModel2022 { get; set; } = new PlotModel();
+    public PlotModel MyPlotModel2023 { get; set; } = new PlotModel();
+    public PlotModel MyPlotModel2024 { get; set; } = new PlotModel();
+    public PlotModel MyPlotModel2025 { get; set; } = new PlotModel();
+    public PlotModel MyPlotModel2026 { get; set; } = new PlotModel();
 
     protected override void OnViewLoaded(object view)
     {
@@ -30,12 +28,10 @@ public class UsdAnnualDiagramViewModel : Screen
         _caption = caption;
         _keeperDataModel = keeperDataModel;
 
-        // InitializeYear(MyPlotModel2017, 2017);
-        // InitializeYear(MyPlotModel2018, 2018);
-        InitializeYear(MyPlotModel2019, 2019);
-        InitializeYear(MyPlotModel2020, 2020);
-        InitializeYear(MyPlotModel2021, 2021);
-        InitializeYear(MyPlotModel2022, 2022);
+        InitializeYear(MyPlotModel2023, 2023);
+        InitializeYear(MyPlotModel2024, 2024);
+        InitializeYear(MyPlotModel2025, 2025);
+        InitializeYear(MyPlotModel2026, 2026);
     }
 
     private void InitializeYear(PlotModel yearPlotModel, int year)

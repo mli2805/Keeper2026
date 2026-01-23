@@ -32,7 +32,7 @@ public class TrafficOfTagBranchCalculator : ITraffic
         {
             if (isCategory)
             {
-                if (tran.Category != null && tran.Category.Is(_accountItemModel)) 
+                if (tran.Category != null && tran.Category.Is(_accountItemModel))
                     RegisterTran(tran, tran.Category);
             }
             else if (isCounterparty)
@@ -53,7 +53,7 @@ public class TrafficOfTagBranchCalculator : ITraffic
 
     private void RegisterTran(TransactionModel tran, AccountItemModel myTag)
     {
-            decimal inUsd;
+        decimal inUsd;
         switch (tran.Operation)
         {
             case OperationType.Доход:
@@ -73,12 +73,12 @@ public class TrafficOfTagBranchCalculator : ITraffic
             case OperationType.Обмен:
                 _balanceWithTurnovers.Add(myTag, tran.Currency, tran.Amount);
                 // ReSharper disable once PossibleInvalidOperationException
-                _balanceWithTurnovers.Sub(myTag, (CurrencyCode)tran.CurrencyInReturn, tran.AmountInReturn);
+                _balanceWithTurnovers.Sub(myTag, (CurrencyCode)tran.CurrencyInReturn!, tran.AmountInReturn);
 
-                    inUsd = _dataModel.AmountInUsd(tran.Timestamp, tran.Currency, tran.Amount);
-                    _trafficInUsd.Minus = _trafficInUsd.Minus - inUsd;
-                    inUsd = _dataModel.AmountInUsd(tran.Timestamp, tran.CurrencyInReturn, tran.AmountInReturn);
-                    _trafficInUsd.Plus = _trafficInUsd.Plus + inUsd;
+                inUsd = _dataModel.AmountInUsd(tran.Timestamp, tran.Currency, tran.Amount);
+                _trafficInUsd.Minus = _trafficInUsd.Minus - inUsd;
+                inUsd = _dataModel.AmountInUsd(tran.Timestamp, tran.CurrencyInReturn!.Value, tran.AmountInReturn);
+                _trafficInUsd.Plus = _trafficInUsd.Plus + inUsd;
                 break;
         }
     }
