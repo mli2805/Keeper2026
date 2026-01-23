@@ -8,6 +8,7 @@
 		<AssemblyName>KeeperWpf</AssemblyName>
 		<RootNamespace>KeeperWpf</RootNamespace>
 		<Authors>Leanid Marholin</Authors>
+		<SupportedOSPlatform>windows</SupportedOSPlatform>
 		<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 

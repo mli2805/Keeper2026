@@ -53,7 +53,7 @@
         </DockPanel>
         <DataGrid Name="MainDataGrid" ItemsSource="{Binding Model.Rows}" 
                   SelectedItem="{Binding Model.SelectedTranWrappedForDataGrid, Mode=TwoWay}"
-                  cal:Message.Attach="[Event MouseDoubleClick] = [Action ActionsMethod(1)]"
+                  cal:Message.Attach="[Event MouseDoubleClick] = [Action EditSelected]"
                   IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single" 
                   SelectionChanged="OnSelectionChanged" Loaded="MainDataGrid_Loaded">
             <i:Interaction.Behaviors>
@@ -62,19 +62,19 @@
             </i:Interaction.Behaviors>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Изменить (Space)" cal:Message.Attach="[Event Click] = [Action ActionsMethod(1)]"
+                    <MenuItem Header="Изменить (Space)" cal:Message.Attach="[Event Click] = [Action EditSelected]"
                               BorderBrush="{x:Null}" Background="White" />
                     <MenuItem Header="Сдвинуть вверх (Ctrl+NumPad8)"
-                              cal:Message.Attach="[Event Click] = [Action ActionsMethod(2)]"
+                              cal:Message.Attach="[Event Click] = [Action MoveUp]"
                               BorderBrush="{x:Null}" Background="White" />
                     <MenuItem Header="Сдвинуть вниз (Ctrl+NumPad2)"
-                              cal:Message.Attach="[Event Click] = [Action ActionsMethod(3)]"
+                              cal:Message.Attach="[Event Click] = [Action MoveDown]"
                               BorderBrush="{x:Null}" Background="White" />
                     <MenuItem Header="Вставить после (Insert)"
-                              cal:Message.Attach="[Event Click] = [Action ActionsMethod(4)]"
+                              cal:Message.Attach="[Event Click] = [Action AddAfterSelected]"
                               BorderBrush="{x:Null}" Background="White" />
                     <MenuItem Header="Удалить (Ctrl+Del)"
-                              cal:Message.Attach="[Event Click] = [Action ActionsMethod(5)]"
+                              cal:Message.Attach="[Event Click] = [Action DeleteSelected]"
                               BorderBrush="{x:Null}" Background="White" />
                 </ContextMenu>
             </DataGrid.ContextMenu>

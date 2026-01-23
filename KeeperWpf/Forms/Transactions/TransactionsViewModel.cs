@@ -117,26 +117,51 @@ public class TransactionsViewModel : Screen
                 await ButtonFilter();
                 break;
             case Key.Space:
-                await _tranEditExecutor.EditSelected();
+                await EditSelected();
                 break;
             case Key.NumPad8:
                 if (Keyboard.Modifiers == ModifierKeys.Control)
-                    _tranMoveExecutor.MoveSelected(TranMoveExecutor.Destination.Up);
+                    MoveUp();
                 break;
             case Key.NumPad2:
                 if (Keyboard.Modifiers == ModifierKeys.Control)
-                    _tranMoveExecutor.MoveSelected(TranMoveExecutor.Destination.Down);
+                    MoveDown();
                 break;
             case Key.Insert:
-                await _tranEditExecutor.AddAfterSelected();
+                await AddAfterSelected();
                 break;
             case Key.Delete:
                 if (Keyboard.Modifiers == ModifierKeys.Control)
-                    await _tranEditExecutor.DeleteSelected();
+                    await DeleteSelected();
                 break;
         }
         e.Handled = true;
 
+    }
+
+    public async Task EditSelected()
+    {
+        await _tranEditExecutor.EditSelected();
+    }
+
+    public void MoveUp()
+    {
+        _tranMoveExecutor.MoveSelected(TranMoveExecutor.Destination.Up);
+    }
+
+    public void MoveDown()
+    {
+        _tranMoveExecutor.MoveSelected(TranMoveExecutor.Destination.Down);
+    }
+
+    public async Task AddAfterSelected()
+    {
+        await _tranEditExecutor.AddAfterSelected();
+    }
+
+    public async Task DeleteSelected()
+    {
+        await _tranEditExecutor.DeleteSelected();
     }
 
     public void GoToDate()
