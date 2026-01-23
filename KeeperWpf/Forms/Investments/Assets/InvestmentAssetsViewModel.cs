@@ -18,8 +18,8 @@ public class InvestmentAssetsViewModel : Screen
     private readonly KeeperDataModel _dataModel;
     private readonly IWindowManager _windowManager;
 
-    public ObservableCollection<TrustAssetModel> Assets { get; set; }
-    public TrustAssetModel SelectedAsset { get; set; }
+    public ObservableCollection<TrustAssetModel> Assets { get; set; } = null!;
+    public TrustAssetModel SelectedAsset { get; set; } = null!;
 
     public List<AssetType> AssetTypes { get; set; }
 

@@ -6,7 +6,7 @@ namespace KeeperWpf;
 public class InvestmentAssetOnDate
 {
     public int InvestmentAssetId { get; }
-    public string InvestmentAssetTicker { get; }
+    public string InvestmentAssetTicker { get; } = null!;
     public CurrencyCode InvestmentCurrency { get; set; }
     public int Quantity { get; set; }
     public decimal PriceOfOne => Quantity != 0 ? Price / Quantity : 0;

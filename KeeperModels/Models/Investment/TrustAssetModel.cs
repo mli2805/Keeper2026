@@ -9,7 +9,7 @@ public class TrustAssetModel : PropertyChangedBase
 {
     public int Id { get; set; }
 
-    public TrustAccount? TrustAccount { get; set; }
+    public TrustAccount TrustAccount { get; set; } = null!;
     public string Ticker { get; set; } = null!;
     public string Title { get; set; } = null!;
     public StockMarket StockMarket { get; set; }

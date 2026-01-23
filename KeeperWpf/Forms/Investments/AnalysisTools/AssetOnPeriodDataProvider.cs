@@ -64,11 +64,11 @@ public static class AssetOnPeriodDataProvider
         {
             decimal rate = 1;
             if (!isInUsd)
-                rate = (decimal)dataModel.GetRate(investTranModel.Timestamp.Date, investTranModel.Currency, true).Value;
+                rate = (decimal)dataModel.GetRate(investTranModel.Timestamp.Date, investTranModel.Currency, true)!.Value;
             investTranModel.Rate = rate;
 
             var feeCurrencyRate = (decimal)dataModel
-                .GetRate(investTranModel.Timestamp.Date, investTranModel.BuySellFeeCurrency, true).Value;
+                .GetRate(investTranModel.Timestamp.Date, investTranModel.BuySellFeeCurrency, true)!.Value;
 
             switch (investTranModel.InvestOperationType)
             {
@@ -102,7 +102,7 @@ public static class AssetOnPeriodDataProvider
 
         if (!isInUsd)
             result.CurrentCurrencyRate =
-                (decimal)dataModel.GetRate(period.FinishMoment.Date, result.Asset.TrustAccount.Currency, true).Value;
+                (decimal)dataModel.GetRate(period.FinishMoment.Date, result.Asset.TrustAccount.Currency, true)!.Value;
         return result;
     }
 

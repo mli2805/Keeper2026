@@ -237,7 +237,7 @@ public class ComboBoxTreeView : ComboBox
             //Find corresponding items and expand or select them
             var source = ItemsSource.OfType<ITreeViewItemModel>();
             var item = SelectItem(source, SelectedHierarchy);
-            SelectedItem = item;
+            SelectedItem = item!;
         }
     }
 

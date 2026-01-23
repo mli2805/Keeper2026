@@ -4,10 +4,10 @@ namespace KeeperWpf;
 
 public class AssetOnPeriodData
 {
-    public Period Period;
+    public Period Period = null!;
 
-    public AssetState Before { get; set; }
-    public AssetState OnStart { get; set; }
-    public AssetState InBetween { get; set; }
-    public AssetState AtEnd { get; set; }
+    public AssetState Before { get; set; } = null!;
+    public AssetState OnStart { get; set; } = null!;
+    public AssetState InBetween { get; set; } = null!;
+    public AssetState AtEnd { get; set; } = null!;
 }

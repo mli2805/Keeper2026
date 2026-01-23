@@ -12,7 +12,7 @@ public class ShellPartsBinder : PropertyChangedBase
     private readonly KeeperDataModel _keeperDataModel;
 
     private bool _isSelectedAccountUsedInTransaction;
-    private AccountItemModel _selectedAccountItemModel;
+    private AccountItemModel _selectedAccountItemModel = null!;
     public AccountItemModel SelectedAccountItemModel
     {
         get => _selectedAccountItemModel;
@@ -82,7 +82,7 @@ public class ShellPartsBinder : PropertyChangedBase
                 ? new Period(new DateTime(2001, 12, 30), TranslatedDate)
                 : new Period(TranslatedPeriod.StartDate, TranslatedPeriod.FinishMoment);
 
-    private Period _translatedPeriod;
+    private Period _translatedPeriod = null!;
     public Period TranslatedPeriod
     {
         get => _translatedPeriod;
@@ -95,7 +95,6 @@ public class ShellPartsBinder : PropertyChangedBase
     }
 
     private DateTime _translatedDate;
-
     public DateTime TranslatedDate
     {
         get => _translatedDate.GetEndOfDate();

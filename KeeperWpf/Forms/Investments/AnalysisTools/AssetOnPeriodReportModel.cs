@@ -13,19 +13,19 @@ public class AssetAnalysisModel
 
 public class AssetOnPeriodReportModel
 {
-    public  Period Period { get; set; }
+    public Period Period { get; set; } = null!;
 
-    public List<string> BeforeState { get; set; }
-    public List<string> BeforeFeesAndCoupons { get; set; }
+    public List<string> BeforeState { get; set; } = null!;
+    public List<string> BeforeFeesAndCoupons { get; set; } = null!;
 
-    public List<string> OnStartState { get; set; }
-    public List<string> OnStartFeesAndCoupons { get; set; }
-    public AssetAnalysisModel OnStartAnalysis { get; set; }
+    public List<string> OnStartState { get; set; } = null!;
+    public List<string> OnStartFeesAndCoupons { get; set; } = null!;        
+    public AssetAnalysisModel OnStartAnalysis { get; set; } = null!;
 
-    public List<string> InBetweenTrans { get; set; }
-    public List<string> InBetweenFeesAndCoupons { get; set; }
+    public List<string> InBetweenTrans { get; set; } = null!;
+    public List<string> InBetweenFeesAndCoupons { get; set; } = null!;
 
-    public List<string> AtEndState { get; set; }
-    public List<string> AtEndFeesAndCoupons { get; set; }
-    public AssetAnalysisModel AtEndAnalysis { get; set; }
+    public List<string> AtEndState { get; set; } = null!;
+    public List<string> AtEndFeesAndCoupons { get; set; } = null!;
+    public AssetAnalysisModel AtEndAnalysis { get; set; } = null!;  
 }

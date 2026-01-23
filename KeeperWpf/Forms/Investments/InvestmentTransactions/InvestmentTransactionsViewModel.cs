@@ -19,8 +19,8 @@ public class InvestmentTransactionsViewModel : Screen
     private readonly KeeperDataModel _dataModel;
     private readonly IWindowManager _windowManager;
 
-    public ObservableCollection<TrustTranModel> Transactions { get; set; }
-    public TrustTranModel SelectedTransaction { get; set; }
+    public ObservableCollection<TrustTranModel> Transactions { get; set; } = null!;
+    public TrustTranModel SelectedTransaction { get; set; } = null!;
 
     public InvestmentTransactionsViewModel(ILifetimeScope globalScope, KeeperDataModel dataModel,
         IWindowManager windowManager)
@@ -124,7 +124,7 @@ public class InvestmentTransactionsViewModel : Screen
         if (operationType == OperationType.Расход) // комиссии
         {
             tran.PaymentWay = PaymentWay.КартаДругое;
-            tran.MyAccount = _dataModel.AcMoDict[tranInWork.AccountItemModel.Id];
+            tran.MyAccount = _dataModel.AcMoDict[tranInWork.AccountItemModel!.Id];
             tran.Tags = new List<AccountItemModel>()
             {
                 _dataModel.AcMoDict[694], // Альфа
@@ -136,7 +136,7 @@ public class InvestmentTransactionsViewModel : Screen
             tran.MyAccount = _dataModel.AcMoDict[tranInWork.TrustAccount.AccountId];
             tran.Tags = new List<AccountItemModel>()
             {
-                tranInWork.AccountItemModel, // Альфа
+                tranInWork.AccountItemModel!, // Альфа
                 _dataModel.AcMoDict[209] // дивиденды
             };
         }
@@ -144,7 +144,7 @@ public class InvestmentTransactionsViewModel : Screen
         {
             if (tranInWork.InvestOperationType == InvestOperationType.TopUpTrustAccount)
             {
-                tran.MyAccount = tranInWork.AccountItemModel;
+                tran.MyAccount = tranInWork.AccountItemModel!;
                 tran.MySecondAccount = _dataModel.AcMoDict[tranInWork.TrustAccount.AccountId];
             }
             else //  InvestOperationType.WithdrawFromTrustAccount

@@ -13,10 +13,11 @@ public class TrustAssetsRepository(IDbContextFactory<KeeperDbContext> factory)
         var result = new List<TrustAssetModel>(assetsEf.Count);
         foreach (var asset in assetsEf)
         {
+           
             var assetModel = new TrustAssetModel
             {
                 Id = asset.Id,
-                TrustAccount = asset.Id == 0 ? null : trustAccounts.FirstOrDefault(t => t.Id == asset.TrustAccountId),
+                TrustAccount = trustAccounts.First(t => t.Id == asset.TrustAccountId),
                 Ticker = asset.Ticker,
                 Title = asset.Title,
                 StockMarket = asset.StockMarket,

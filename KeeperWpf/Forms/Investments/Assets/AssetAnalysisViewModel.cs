@@ -9,11 +9,11 @@ namespace KeeperWpf;
 public class AssetAnalysisViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    private TrustAssetModel _asset;
+    private TrustAssetModel _asset = null!;
 
-    private Period _activePeriod;
-    private AssetOnPeriodReportModel _reportModel;
+    private Period _activePeriod = null!;
 
+    private AssetOnPeriodReportModel _reportModel = null!;
     public AssetOnPeriodReportModel ReportModel
     {
         get => _reportModel;
