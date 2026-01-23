@@ -12,9 +12,9 @@ public class ExpenseByCategoriesViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
     private readonly CategoriesDataExtractor _categoriesDataExtractor;
-    private List<CategoriesDataElement> _fullData;
+    private List<CategoriesDataElement> _fullData = null!;
  
-    private PlotModel _myPlotModel;
+    private PlotModel _myPlotModel = null!;
     public PlotModel MyPlotModel
     {
         get => _myPlotModel;
@@ -26,7 +26,7 @@ public class ExpenseByCategoriesViewModel : Screen
         }
     }
 
-    private ObservableCollection<string> _legendBindingSource;
+    private ObservableCollection<string> _legendBindingSource = null!;
     public ObservableCollection<string> LegendBindingSource
     {
         get => _legendBindingSource;
@@ -38,7 +38,7 @@ public class ExpenseByCategoriesViewModel : Screen
         }
     }
 
-    private Tuple<DateTime, DateTime> _myPeriod;
+    private Tuple<DateTime, DateTime> _myPeriod = null!;
     public Tuple<DateTime, DateTime> MyPeriod
     {
         get => _myPeriod;

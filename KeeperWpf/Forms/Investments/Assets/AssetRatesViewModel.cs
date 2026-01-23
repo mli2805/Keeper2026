@@ -15,9 +15,9 @@ public class AssetRatesViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
 
-    public ObservableCollection<TrustAssetRate> Rates { get; set; }
-    public TrustAssetRate SelectedRate { get; set; }
-    public List<TrustAssetModel> Assets { get; set; }
+    public ObservableCollection<TrustAssetRate> Rates { get; set; } = null!;
+    public TrustAssetRate SelectedRate { get; set; } = null!;
+    public List<TrustAssetModel> Assets { get; set; } = null!;
 
     public DateTime SelectedDate { get; set; } = DateTime.Today;
 

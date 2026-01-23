@@ -25,8 +25,8 @@ public class ExpenseTran
         Receipt = tr.Receipt;
         Amount = tr.Amount;
         Currency = tr.Currency;
-        Counterparty = tr.Counterparty;
-        Category = tr.Category;
+        Counterparty = tr.Counterparty!;
+        Category = tr.Category!;
         Tags = tr.Tags.Select(t=>t.Id).ToList();
         Comment = tr.Comment;
     }

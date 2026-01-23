@@ -9,10 +9,10 @@ namespace KeeperWpf;
 public class ExpensesOnAccountViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    private string _caption;
-    private List<TranLine> _transactions;
-    public List<CategoryLine> Incomes { get; set; }
-    public List<CategoryLine> Expenses { get; set; }
+    private string _caption = null!;
+    private List<TranLine> _transactions = null!;
+    public List<CategoryLine> Incomes { get; set; } = null!;
+    public List<CategoryLine> Expenses { get; set; } = null!;
 
     public List<TranLine> Transactions
     {
@@ -20,9 +20,9 @@ public class ExpensesOnAccountViewModel : Screen
         set => _transactions = value;
     }
 
-    public string ExpensesTotalStr { get; set; }
-    public string IncomesTotalStr { get; set; }
-    public string PeriodStr { get; set; }
+    public string ExpensesTotalStr { get; set; } = null!;
+    public string IncomesTotalStr { get; set; } = null!;
+    public string PeriodStr { get; set; } = null!;
     public ExpensesOnAccountViewModel(KeeperDataModel dataModel)
     {
         _dataModel = dataModel;
@@ -60,13 +60,13 @@ public class ExpensesOnAccountViewModel : Screen
 
         foreach (var transaction in trans)
         {
-            var catAccount = _dataModel.GetTopLevelCategory(transaction.Category, transaction.Operation == OperationType.Расход);
+            var catAccount = _dataModel.GetTopLevelCategory(transaction.Category!, transaction.Operation == OperationType.Расход);
             categoriesCollection.Add(catAccount.Name, transaction.Amount);
             _transactions.Add(new TranLine()
             {
                 Timestamp = transaction.Timestamp,
                 Category = catAccount.Name,
-                CounterpartyName = transaction.Counterparty.Name,
+                CounterpartyName = transaction.Counterparty!.Name,
                 Amount = transaction.Amount,
                 Currency = transaction.Currency,
                 Comment = transaction.Comment,

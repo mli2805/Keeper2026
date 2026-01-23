@@ -14,7 +14,6 @@ public class TrafficOfAccountBranchCalculator : ITraffic
     private readonly Period _period;
     private readonly BalanceWithTurnoverOfBranch _balanceWithTurnovers = new BalanceWithTurnoverOfBranch();
     public decimal TotalAmount;
-   
 
     public string Total => TotalAmount.ToString("0.## usd");
 

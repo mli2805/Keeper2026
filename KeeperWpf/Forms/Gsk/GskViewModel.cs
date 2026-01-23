@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Caliburn.Micro;
 using KeeperDomain;
 
@@ -65,6 +66,11 @@ public class GskViewModel : Screen
         TotalAmountInUsd = PaidAmountInUsd + ForecastAmountInUsd;
 
         SelectedRow = Rows.Last();
+    }
+
+    public async Task CloseView()
+    {
+        await TryCloseAsync();
     }
 
 }

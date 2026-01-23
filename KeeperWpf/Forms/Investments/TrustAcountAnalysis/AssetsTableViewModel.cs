@@ -7,7 +7,7 @@ namespace KeeperWpf;
 public class AssetsTableViewModel
 {
     public List<InvestmentAssetOnDate> Rows { get; set; } = new List<InvestmentAssetOnDate>();
-    public InvestmentAssetOnDate Total { get; set; }
+    public InvestmentAssetOnDate Total { get; set; } = null!;
 
     public void Initialize(List<InvestmentAssetOnDate> assets, TrustAccount trustAccount)
     {

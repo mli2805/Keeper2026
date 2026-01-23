@@ -12,7 +12,7 @@ public class DepositReportModel
     public DepositReportModel(KeeperDataModel dataModel) { _dataModel = dataModel; }
 
 
-    public BankAccountModel BankAccount { get; set; }
+    public BankAccountModel BankAccount { get; set; } = null!;
     public bool IsInUsd => BankAccount.MainCurrency == CurrencyCode.USD;
 
 
@@ -20,7 +20,7 @@ public class DepositReportModel
     public decimal AmountInUsd { get; set; }
 
 
-    public string DepositName { get; set; }
+    public string DepositName { get; set; } = null!;
     public string DepositState => AmountInUsd == 0 ? "Депозит закрыт." : "Действующий депозит.";
     public string BalanceInHeader => $"Остаток составляет {_dataModel.BalanceInUsdString(DateTime.Today.GetEndOfDate(), Balance)}";
 
@@ -47,11 +47,11 @@ public class DepositReportModel
     public Brush FinResultBrush => FinResultUsd > 0 ? Brushes.Blue : Brushes.Red;
 
 
-    public OneRate RateStart;
-    public OneRate RateNow;
-    public OneRate RateForecast;
-    public string RateStr1 { get; set; }
-    public string RateStr2 { get; set; }
+    public OneRate RateStart = null!;
+    public OneRate RateNow = null!;
+    public OneRate RateForecast = null!;
+    public string RateStr1 { get; set; } = null!;
+    public string RateStr2 { get; set; } = null!;
     public decimal MoreRevenue { get; set; }  // forecast
     public decimal MoreRevenueUsd { get; set; }  // forecast
     public decimal BalanceAtEndUsd { get; set; }
@@ -64,5 +64,5 @@ public class DepositReportModel
     public decimal ForecastUsd { get; set; }
     public string Forecast => $"Итоговый профит ${ForecastUsd:0.00}";
     public Brush ForecastBrush => ForecastUsd > 0 ? Brushes.Blue : Brushes.Red;
-    public string Forecast2 { get; set; }
+    public string Forecast2 { get; set; } = null!;
 }

@@ -24,7 +24,7 @@ public class ExtendedTreeView : TreeView
         }
     }
 
-    public event MouseEventHandler OnHierarchyMouseUp;
+    public event MouseEventHandler? OnHierarchyMouseUp;
 }
 
 public class ExtendedTreeViewItem : TreeViewItem
@@ -66,5 +66,5 @@ public class ExtendedTreeViewItem : TreeViewItem
         return tvi;
     }
 
-    public event MouseEventHandler OnHierarchyMouseUp;
+    public event MouseEventHandler? OnHierarchyMouseUp;
 }

@@ -44,7 +44,7 @@
                 <TextBlock Text=" usd"/>
             </StackPanel>
         </StackPanel>
-        <Button Content="Close" Name="Close" IsDefault="True" IsCancel="True"
+        <Button Content="Закрыть" Name="CloseView" IsDefault="True" IsCancel="True"
                 Height="25" Width="100" Margin="5"/>
     </StackPanel>
 </Window>
