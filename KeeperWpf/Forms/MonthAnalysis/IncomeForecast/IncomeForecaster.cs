@@ -10,7 +10,7 @@ public class ForeseenIncome
 {
     public DateTime ExpectedAt;
     public decimal AmountUsd;
-    public string Title;
+    public string Title = null!;
 }
 
 public static class IncomeForecaster
@@ -50,8 +50,8 @@ public static class IncomeForecaster
                         && t.Timestamp >= firstOfMonth && t.Timestamp <= finishMoment).ToList();
 
         var salaryDate = firstOfMonth.AddDays(SalaryDay - 1);
-        if (!receivedIncome.Any(t => t.Category.Id == SalaryCategory
-                                         && t.Counterparty.Id == IitAccountId))
+        if (!receivedIncome.Any(t => t.Category!.Id == SalaryCategory
+                                         && t.Counterparty!.Id == IitAccountId))
         {
             yield return new ForeseenIncome()
             {
@@ -60,8 +60,8 @@ public static class IncomeForecaster
                 Title = $"{salaryDate:dd MMM} зарплата ИИТ {IitSalary} usd"
             };
         }
-        if (!receivedIncome.Any(t => t.Category.Id == SalaryCategory
-                                     && t.Counterparty.Id == OptixsoftAccountId))
+        if (!receivedIncome.Any(t => t.Category!.Id == SalaryCategory
+                                     && t.Counterparty!.Id == OptixsoftAccountId))
         {
             yield return new ForeseenIncome()
             {
@@ -72,8 +72,8 @@ public static class IncomeForecaster
         }
 
         var prepaymentDate = firstOfMonth.AddDays(PrepaymentDay - 1);
-        if (!receivedIncome.Any(t => t.Category.Id == PrepaymentCategory
-                                     && t.Counterparty.Id == IitAccountId))
+        if (!receivedIncome.Any(t => t.Category!.Id == PrepaymentCategory
+                                     && t.Counterparty!.Id == IitAccountId))
         {
             yield return new ForeseenIncome()
             {
@@ -82,8 +82,8 @@ public static class IncomeForecaster
                 Title = $"{prepaymentDate:dd MMM} аванс ИИТ {IitPrepayment} usd"
             };
         }
-        if (!receivedIncome.Any(t => t.Category.Id == PrepaymentCategory
-                                     && t.Counterparty.Id == OptixsoftAccountId))
+        if (!receivedIncome.Any(t => t.Category!.Id == PrepaymentCategory
+                                     && t.Counterparty!.Id == OptixsoftAccountId))
         {
             yield return new ForeseenIncome()
             {
@@ -97,7 +97,7 @@ public static class IncomeForecaster
     private static IEnumerable<ForeseenIncome> ForeseeDepoIncome2(this KeeperDataModel dataModel, AccountItemModel depo)
     {
         var depoMainCurrency = dataModel.DepositOffers
-            .First(o => o.Id == depo.BankAccount.DepositOfferId).MainCurrency;
+            .First(o => o.Id == depo.BankAccount!.DepositOfferId).MainCurrency;
         var currency = depoMainCurrency == CurrencyCode.BYR ? CurrencyCode.BYN : depoMainCurrency;
 
         var revenues = depo.GetRevenuesInThisMonth(dataModel);

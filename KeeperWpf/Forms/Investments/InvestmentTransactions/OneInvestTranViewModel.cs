@@ -19,8 +19,8 @@ public class OneInvestTranViewModel : Screen
     public Visibility AssetAmountVisibility { get; set; } = Visibility.Collapsed;
     public Visibility BuySellFeeVisibility { get; set; } = Visibility.Collapsed;
 
-    private AccNameSelectorVm _myAccNameSelectorVm;
-    public AccNameSelectorVm MyAccNameSelectorVm
+    private AccNameSelectorVm? _myAccNameSelectorVm;
+    public AccNameSelectorVm? MyAccNameSelectorVm
     {
         get => _myAccNameSelectorVm;
         set
@@ -45,14 +45,14 @@ public class OneInvestTranViewModel : Screen
         }
     }
 
-    public string TrustAccountLabel { get; set; }
+    public string TrustAccountLabel { get; set; } = null!;
     public List<TrustAccount> TrustAccounts { get; set; }
-    public string AssetLabel { get; set; }
+    public string AssetLabel { get; set; } = null!;
     public List<TrustAssetModel> Assets { get; set; }
 
     public TrustTranModel TranInWork { get; set; } = new TrustTranModel();
 
-    public List<TrustTranModel> FeePayments { get; set; }
+    public List<TrustTranModel> FeePayments { get; set; } = null!;
 
     public OneInvestTranViewModel(KeeperDataModel dataModel, ComboTreesProvider comboTreesProvider,
         AccNameSelector accNameSelectorForInvestment)
@@ -156,7 +156,7 @@ public class OneInvestTranViewModel : Screen
         TranInWork.PropertyChanged += TranInWork_PropertyChanged;
     }
 
-    private void TranInWork_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void TranInWork_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == "TrustAccount")
         {

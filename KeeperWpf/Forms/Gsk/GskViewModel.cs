@@ -10,9 +10,9 @@ namespace KeeperWpf;
 public class GskViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    private PaymentLineModel _selectedRow;
-    public ObservableCollection<PaymentLineModel> Rows { get; set; }
+    public ObservableCollection<PaymentLineModel> Rows { get; set; } = null!;
 
+    private PaymentLineModel _selectedRow = null!;
     public PaymentLineModel SelectedRow
     {
         get => _selectedRow;

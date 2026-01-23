@@ -17,7 +17,7 @@ public static class IncomeMonthAnalyzer
         {
             var amStr = dataModel.AmountInUsdString(tran.Timestamp, tran.Currency, tran.Amount, out decimal amountInUsd, false);
 
-            if (tran.Category.Is(186) || tran.Category.Is(212)) // зарплата (+иррациональные)
+            if (tran.Category!.Is(186) || tran.Category.Is(212)) // зарплата (+иррациональные)
             {
                 result.Add(IncomeCategories.Зарплата,
                     $"{amStr} {BuildCommentForIncomeTransaction(tran, true)} {tran.Timestamp:dd MMM}", amountInUsd);
@@ -58,10 +58,10 @@ public static class IncomeMonthAnalyzer
     {
         try
         {
-            var comment = tran.Counterparty.Name;
+            var comment = tran.Counterparty!.Name;
 
             if (!isSalary)
-                comment += ";  " + tran.Category.Name;
+                comment += ";  " + tran.Category!.Name;
 
             if (!string.IsNullOrEmpty(tran.Comment))
                 comment += ";  " + tran.Comment;

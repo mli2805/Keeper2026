@@ -148,7 +148,7 @@ public class RatesViewModel : Screen
 
     #endregion
 
-    public async Task Close()
+    public async Task CloseView()
     {
         await TryCloseAsync();
     }

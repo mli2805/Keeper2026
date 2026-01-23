@@ -132,7 +132,7 @@ public sealed partial class PeriodChoiceControl : INotifyPropertyChanged
         Model.SetPositions(Model.BtnFromMargin.Left * koeff, Model.CenterPartWidth * koeff);
     }
 
-    private string _periodTitle;
+    private string _periodTitle = null!;
     public string PeriodTitle
     {
         get { return _periodTitle; }
@@ -164,9 +164,9 @@ public sealed partial class PeriodChoiceControl : INotifyPropertyChanged
         return "";
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-    private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

@@ -11,12 +11,12 @@ namespace KeeperWpf;
 public class OneAssetViewModel : Screen
 {
     private readonly KeeperDataModel _keeperDataModel;
-    private string _aim;
+    private string _aim = null!;
     public List<Durations> DurationPeriods { get; set; }
     public List<StockMarket> StockMarkets { get; set; }
     public List<AssetType> AssetTypes { get; set; }
 
-    public TrustAssetModel AssetInWork { get; set; }
+    public TrustAssetModel AssetInWork { get; set; } = null!;
 
     public OneAssetViewModel(KeeperDataModel keeperDataModel)
     {

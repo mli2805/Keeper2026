@@ -6,7 +6,7 @@ namespace KeeperWpf;
 public class KomBankRatesLine
 {
     public int Id;
-    public string Bank;
+    public string Bank = null!;
     public DateTime LastCheck;
     public DateTime StartedFrom;
     public double UsdA;

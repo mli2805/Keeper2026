@@ -39,7 +39,7 @@ public class GoldRatesViewModel : PropertyChangedBase
                 Id = m.Id,
                 Date = m.Date,
                 MinfinGold900Rate = m.Price,
-                BynUsd = _keeperDataModel.GetRate(m.Date, CurrencyCode.BYN).Value
+                BynUsd = _keeperDataModel.GetRate(m.Date, CurrencyCode.BYN)!.Value
             })
             .ToList();
     }

@@ -17,7 +17,7 @@ public class LoadingProgressViewModel : Screen
     private readonly ToSqlite _toSqlite;
 
 
-    private string _writingToDbMessage;
+    private string _writingToDbMessage = null!;
     public string WritingToDbMessage
     {
         get => _writingToDbMessage;

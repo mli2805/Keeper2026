@@ -18,7 +18,7 @@ public static class IncomeYearAnalyzer
         {
             var amountInUsd = dataModel.AmountInUsd(tran.Timestamp, tran.Currency, tran.Amount);
 
-            if (tran.Category.Is(186) || tran.Category.Is(212)) // зарплата (+иррациональные)
+            if (tran.Category!.Is(186) || tran.Category.Is(212)) // зарплата (+иррациональные)
             {
                 result.Employers.CreateNewOrSumValue(tran.Category, amountInUsd);
             }

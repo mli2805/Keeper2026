@@ -8,7 +8,7 @@
         Width="1144" Height="700" WindowStartupLocation="CenterScreen" d:DataContext="{d:DesignData RatesViewModel}">
     <DockPanel>
         <DockPanel DockPanel.Dock="Bottom" Margin="5,15, 5, 7" Height="32">
-            <Button Name="Close" Content="Close" Margin="5" Width="100" DockPanel.Dock="Right"/>
+            <Button Name="CloseView" Content="Закрыть" Margin="5" Width="100" DockPanel.Dock="Right"/>
 
             <Button Name="LongTermChart" Margin="5" Width="80" Content="Long term" DockPanel.Dock="Left"/>
             <Button Name="UsdFourYearsChart" Margin="5" Width="90" Content="Usd 4Years 1" DockPanel.Dock="Left"/>
