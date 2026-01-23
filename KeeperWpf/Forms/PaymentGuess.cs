@@ -65,7 +65,7 @@ public static class PaymentGuess
             {
                 if (Dict[paymantWay].Any(grou => tran.Counterparty.Is(grou)))
                     if (paymantWay == PaymentWay.КартаТерминал)
-                        return tran.MyAccount.BankAccount.PayCard.IsVirtual
+                        return tran.MyAccount.BankAccount!.PayCard!.IsVirtual
                             ? PaymentWay.ТелефонТерминал
                             : PaymentWay.КартаТерминал;
                     else
@@ -79,7 +79,7 @@ public static class PaymentGuess
             {
                 if (Dict[paymantWay].Any(grou => tran.Category.Is(grou)))
                     if (paymantWay == PaymentWay.КартаТерминал)
-                        return tran.MyAccount.BankAccount.PayCard.IsVirtual
+                        return tran.MyAccount.BankAccount!.PayCard!.IsVirtual
                             ? PaymentWay.ТелефонТерминал
                             : PaymentWay.КартаТерминал;
                     else

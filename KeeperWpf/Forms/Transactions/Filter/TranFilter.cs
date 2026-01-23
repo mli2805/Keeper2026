@@ -33,7 +33,7 @@ public class TranFilter
 
     private bool FilterCounterparty()
     {
-        if (_filterModel.Counterparty.Name == "no filter") return true;
+        if (_filterModel.Counterparty!.Name == "no filter") return true;
         return _wrappedTran.Tran.Counterparty != null && _wrappedTran.Tran.Counterparty.Is(_filterModel.Counterparty.Id);
     }
 
@@ -45,7 +45,7 @@ public class TranFilter
 
     private bool FilterCategory()
     {
-        if (_filterModel.Category.Name == "no filter") return true;
+        if (_filterModel.Category!.Name == "no filter") return true;
         return _wrappedTran.Tran.Category != null && _wrappedTran.Tran.Category.Is(_filterModel.Category.Id);
     }
 

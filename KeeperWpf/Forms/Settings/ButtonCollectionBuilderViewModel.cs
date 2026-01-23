@@ -152,18 +152,16 @@ public class ButtonCollectionBuilderViewModel : Screen
                 selectedAccName = _comboTreesProvider.ExpenseCategories.FindThroughTheForestById(257)!;
                 return _comboTreesProvider.ExpenseCategories;
             case 17:
+            default:
                 selectedAccName = _comboTreesProvider.AccNamesForExchangeTags.FindThroughTheForestById(477)!;
                 return _comboTreesProvider.ExpenseCategories;
-            default:
-                selectedAccName = null;
-                return null;
         }
     }
 
 
     public void AddButtonToCollection()
     {
-        var accountModel = _dataModel.AcMoDict[SelectedAccName.Id];
+        var accountModel = _dataModel.AcMoDict[SelectedAccName!.Id];
         if (accountModel.ButtonName != SelectedAccName.ButtonName)
             accountModel.ButtonName = SelectedAccName.ButtonName;
 
@@ -196,7 +194,7 @@ public class ButtonCollectionBuilderViewModel : Screen
             newCollection.Add(array[i]);
         }
 
-        newCollection.Add(SelectedButton);
+        newCollection.Add(SelectedButton!);
         newCollection.Add(array[indexOf - 1]);
 
         for (int i = indexOf + 1; i < array.Length; i++)

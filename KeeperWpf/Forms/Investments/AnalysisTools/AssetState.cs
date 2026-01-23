@@ -38,7 +38,7 @@ public class AssetState
     public string OperationFeesStr => $"{OperationFees:N} byn ({OperationFeesInUsd:N} usd)";
 
     public decimal CurrentCurrencyRate;
-    public string CurrentCurrencyRateStr;
+    public string CurrentCurrencyRateStr = string.Empty;
     public decimal CurrentAssetRate;
     public decimal AccumulatedCouponIncome;
 

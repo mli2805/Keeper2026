@@ -152,7 +152,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
             // после добавления переносов в поле комента стала криво рассчитывать отрисовку
             // поэтому говорим диспетчеру, что когда он будет абсолютно свободен (т.е. отрисует форму)
             // надо изменить ширину формы -  это заставит wpf перерисовать форму, на этот раз правильно
-            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new System.Action(() =>
+            await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new System.Action(() =>
             {
                 transactionsViewModel.Width -= 1;
             }));
