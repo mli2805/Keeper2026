@@ -16,11 +16,10 @@ public class PaymentWaysViewModel : Screen
 {
     private readonly IConfiguration _configuration;
     private readonly KeeperDataModel _dataModel;
-    private AccountItemModel _cardAccountItemModel;
-    private Period _period;
-    // private List<TransactionModel> _otherExpenses;
+    private AccountItemModel _cardAccountItemModel = null!;
+    private Period _period = null!;
 
-    private BorderedListViewModel _transactions;
+    private BorderedListViewModel _transactions = null!;
     public BorderedListViewModel Transactions
     {
         get => _transactions;
@@ -32,7 +31,7 @@ public class PaymentWaysViewModel : Screen
         }
     }
 
-    private BorderedListViewModel _totalFrom;
+    private BorderedListViewModel _totalFrom = null!;
     public BorderedListViewModel TotalFrom
     {
         get => _totalFrom;
@@ -44,7 +43,7 @@ public class PaymentWaysViewModel : Screen
         }
     }
 
-    private BorderedListViewModel _totalTo;
+    private BorderedListViewModel _totalTo = null!;
     public BorderedListViewModel TotalTo
     {
         get => _totalTo;
@@ -59,7 +58,7 @@ public class PaymentWaysViewModel : Screen
     private decimal _sumFrom;
     private decimal _sumTo;
 
-    private string _currentPeriodName;
+    private string _currentPeriodName = null!;
     public string CurrentPeriodName
     {
         get => _currentPeriodName;
@@ -121,13 +120,13 @@ public class PaymentWaysViewModel : Screen
         var transfersToCache = monthTrans
             .Where(t => (t.Operation == OperationType.Перенос || t.Operation == OperationType.Обмен)
                                                               && t.MyAccount.Id == _cardAccountItemModel.Id
-                                                              && t.MySecondAccount.Is(160)).ToList();
+                                                              && t.MySecondAccount!.Is(160)).ToList();
         _sumFrom += StepTwo("Снято налом", transfersToCache, transactions.List, totalFrom.List, Brushes.Black);
 
         var transfersToCards = monthTrans
             .Where(t => (t.Operation == OperationType.Перенос || t.Operation == OperationType.Обмен)
                                                                         && t.MyAccount.Id == _cardAccountItemModel.Id
-                                                                        && t.MySecondAccount.Is(161)).ToList();
+                                                                        && t.MySecondAccount!.Is(161)).ToList();
         _sumFrom += StepTwo("Переведено на мои карты", transfersToCards, transactions.List, totalFrom.List, Brushes.Black);
 
 
@@ -149,13 +148,13 @@ public class PaymentWaysViewModel : Screen
 
         var transfersFromCache = monthTrans
             .Where(t => (t.Operation == OperationType.Перенос || t.Operation == OperationType.Обмен)
-                                                                    && t.MySecondAccount.Id == _cardAccountItemModel.Id
+                                                                    && t.MySecondAccount!.Id == _cardAccountItemModel.Id
                                                                     && t.MyAccount.Is(160)).ToList();
         _sumTo += StepTwo("Пополнено налом", transfersFromCache, transactions.List, totalTo.List, Brushes.Black);
 
         var transfersFromCards = monthTrans
             .Where(t => (t.Operation == OperationType.Перенос || t.Operation == OperationType.Обмен)
-                                                                         && t.MySecondAccount.Id == _cardAccountItemModel.Id
+                                                                         && t.MySecondAccount!.Id == _cardAccountItemModel.Id
                                                                          && t.MyAccount.Is(161)).ToList();
         _sumTo += StepTwo("Пополнено с моих карт", transfersFromCards, transactions.List, totalTo.List, Brushes.Black);
 
@@ -185,7 +184,7 @@ public class PaymentWaysViewModel : Screen
     private string StepTwoTags(TransactionModel tr)
     {
         if (tr.Operation != OperationType.Доход && tr.Operation != OperationType.Расход)
-            return (_cardAccountItemModel.Id == tr.MyAccount.Id ? tr.MySecondAccount : tr.MyAccount).ToString();
+            return (_cardAccountItemModel.Id == tr.MyAccount.Id ? tr.MySecondAccount : tr.MyAccount)!.ToString();
 
         string result = "";
         foreach (var accountModel in tr.Tags)

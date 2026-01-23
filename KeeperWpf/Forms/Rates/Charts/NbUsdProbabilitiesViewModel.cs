@@ -11,8 +11,8 @@ namespace KeeperWpf;
 
 public class NbUsdProbabilitiesViewModel : Screen
 {
-    private string _caption;
-    private List<OfficialRatesModel> _rates;
+    private string _caption = null!;
+    private List<OfficialRatesModel> _rates = null!;
     public PlotModel MyPlotModel { get; set; } = new PlotModel();
 
     protected override void OnViewLoaded(object view)

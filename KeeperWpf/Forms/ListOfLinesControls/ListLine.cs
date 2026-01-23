@@ -18,14 +18,14 @@ public class TransactionTooltipLine
 
 public class ListLine
 {
-    public string Line { get; set; }
+    public string Line { get; set; } = null!;
     public FontWeight FontWeight { get; set; } = FontWeights.Normal;
     public int FontSize { get; set; } = 12;
     public int TextLineHeight { get; set; } = 16;
     public Brush Foreground { get; set; } = Brushes.Black;
 
     // используется на BalanceOrTrafficView
-    public List<TransactionTooltipLine> TooltipLines { get; set; }
+    public List<TransactionTooltipLine> TooltipLines { get; set; } = null!;
     public bool IsTooltipEnabled => TooltipLines != null;
 
     public FontFamily FontFamily { get; set; } = new FontFamily("Lucida Sans Typewriter");

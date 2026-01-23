@@ -105,7 +105,7 @@ public class OneBankAccountViewModel : Screen
         BankNames = Banks.Select(b => b.Name).ToList();
 
         AccountItemModel = accountItemModel;
-        BankAccountInWork = AccountItemModel.BankAccount.Clone();
+        BankAccountInWork = AccountItemModel.BankAccount!.Clone();
         ParentName = accountItemModel.Parent.Name;
         PaymentSystems = Enum.GetValues(typeof(PaymentSystem)).Cast<PaymentSystem>().ToList();
 
@@ -123,7 +123,7 @@ public class OneBankAccountViewModel : Screen
         {
             AccountName = AccountItemModel.Name;
 
-            var bank = _dataModel.AcMoDict[accountItemModel.BankAccount.BankId];
+            var bank = _dataModel.AcMoDict[accountItemModel.BankAccount!.BankId];
             _selectedBankName = bank.Name;
             DepositOffers = _dataModel.DepositOffers.Where(o => o.Bank.Name == SelectedBankName).ToList();
             _selectedDepositOffer = DepositOffers.First(o => o.Id == BankAccountInWork.DepositOfferId);

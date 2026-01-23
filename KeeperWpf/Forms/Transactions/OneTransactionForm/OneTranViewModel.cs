@@ -32,8 +32,8 @@ public class OneTranViewModel : Screen
     private readonly ReceiptViewModel _receiptViewModel;
     private readonly FuellingInputViewModel _fuellingInputViewModel;
 
-    private string _caption;
-    private TransactionModel _tranInWork;
+    private string _caption = null!;
+    private TransactionModel _tranInWork = null!;
     public TransactionModel TranInWork
     {
         get { return _tranInWork; }
@@ -46,7 +46,7 @@ public class OneTranViewModel : Screen
     }
     public List<Tuple<decimal, AccountItemModel, string>>? ReceiptList { get; set; }
     public TransactionModel? FuellingTran { get; set; }
-    public FuellingModel FuellingModel { get; set; }
+    public FuellingModel FuellingModel { get; set; } = null!;
 
     public bool IsAddMode { get; set; }
     public bool IsOneMore { get; set; }

@@ -6,9 +6,9 @@ namespace KeeperWpf;
 public class OneFolderViewModel : Screen
 {
     private bool _isInAddMode;
-    private string _oldName;
-    public AccountItemModel AccountItemInWork { get; set; }
-    public string ParentFolder { get; set; }
+    private string _oldName = null!;
+    public AccountItemModel AccountItemInWork { get; set; } = null!;
+    public string ParentFolder { get; set; } = null!;
     public bool IsSavePressed { get; set; }
   
     public void Initialize(AccountItemModel accountInWork, bool isInAddMode)

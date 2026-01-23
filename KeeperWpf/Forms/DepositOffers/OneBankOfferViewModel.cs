@@ -15,19 +15,19 @@ public class OneBankOfferViewModel : Screen
     private readonly KeeperDataModel _keeperDataModel;
     private readonly IWindowManager _windowManager;
     private readonly RulesAndRatesViewModel _rulesAndRatesViewModel;
-    public List<AccountItemModel> Banks { get; set; }
-    public List<string> BankNames { get; set; }
-    public string SelectedBankName { get; set; }
+    public List<AccountItemModel> Banks { get; set; } = null!;
+    public List<string> BankNames { get; set; } = null!;
+    public string SelectedBankName { get; set; } = null!;
 
-    public List<CurrencyCode> Currencies { get; set; }
-    public List<RateType> RateTypes { get; set; }
-    public List<Durations> Durations { get; set; }
-    public DepositOfferModel ModelInWork { get; set; }
+    public List<CurrencyCode> Currencies { get; set; } = null!;
+    public List<RateType> RateTypes { get; set; } = null!;
+    public List<Durations> Durations { get; set; } = null!;
+    public DepositOfferModel ModelInWork { get; set; } = null!;
 
-    public List<string> ConditionDates { get; set; }
+    public List<string> ConditionDates { get; set; } = null!;
 
 
-    public string SelectedDate { get; set; }
+    public string SelectedDate { get; set; } = null!;
 
     public bool IsCancelled { get; set; }
 

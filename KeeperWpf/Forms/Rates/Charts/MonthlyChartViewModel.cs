@@ -11,8 +11,8 @@ namespace KeeperWpf;
 
 public class MonthlyChartViewModel : Screen
 {
-    private string _caption;
-    private KeeperDataModel _keeperDataModel;
+    private string _caption = null!;
+    private KeeperDataModel _keeperDataModel = null!;
     public PlotModel MyPlotModel00 { get; set; } = new PlotModel();
     public PlotModel MyPlotModel01 { get; set; } = new PlotModel();
     public PlotModel MyPlotModel10 { get; set; } = new PlotModel();

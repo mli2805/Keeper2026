@@ -14,10 +14,10 @@ namespace KeeperWpf;
 public class OwnershipCostViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    private CarModel _carModel;
+    private CarModel _carModel = null!;
 
-    public PlotModel MonthlyOwnershipCostPlotModel { get; set; }
-    public PlotModel AnnualOwnershipCostPlotModel { get; set; }
+    public PlotModel MonthlyOwnershipCostPlotModel { get; set; } = null!;
+    public PlotModel AnnualOwnershipCostPlotModel { get; set; } = null!;
 
     private Visibility _monthlyVisibility = Visibility.Collapsed;
     public Visibility MonthlyVisibility

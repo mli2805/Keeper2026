@@ -8,7 +8,7 @@ namespace KeeperWpf;
 public class MonthAnalyzer
 {
     private readonly KeeperDataModel _dataModel;
-    private MonthAnalysisModel _monthAnalysisModel;
+    private MonthAnalysisModel _monthAnalysisModel = null!;
 
     private bool _isYearAnalysisMode;
 
@@ -55,7 +55,7 @@ public class MonthAnalyzer
         _monthAnalysisModel.RatesChanges = _dataModel.GetRatesDifference(startMoment, finishMoment);
         _monthAnalysisModel.FillResultList(isCurrentPeriod);
         if (isCurrentPeriod)
-            _monthAnalysisModel.FillForecast(finishMoment, (decimal)_dataModel.GetRate(DateTime.Today, CurrencyCode.BYN).Value);
+            _monthAnalysisModel.FillForecast(finishMoment, (decimal)_dataModel.GetRate(DateTime.Today, CurrencyCode.BYN)!.Value);
 
         return _monthAnalysisModel;
     }

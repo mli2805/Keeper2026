@@ -9,9 +9,9 @@ public class OneAccountViewModel : Screen
     private readonly ComboTreesProvider _comboTreesProvider;
     private readonly AccNameSelector _accNameSelectorForAssociations;
     private bool _isInAddMode;
-    private string _oldName;
-    public AccountItemModel AccountItemInWork { get; set; }
-    public string ParentFolder { get; set; }
+    private string _oldName = null!;
+    public AccountItemModel AccountItemInWork { get; set; } = null!;
+    public string ParentFolder { get; set; } = string.Empty;
 
     private AccNameSelectorVm _myAccNameSelectorVm = new AccNameSelectorVm();
     public AccNameSelectorVm MyAccNameSelectorVm
@@ -53,9 +53,9 @@ public class OneAccountViewModel : Screen
 
     public bool IsSavePressed { get; set; }
 
-    public string Who { get; set; }
-    public string TextIn { get; set; }
-    public string TextExp { get; set; }
+    public string Who { get; set; } = string.Empty;
+    public string TextIn { get; set; } = string.Empty;
+    public string TextExp { get; set; } = string.Empty;
 
     public OneAccountViewModel(ComboTreesProvider comboTreesProvider, AccNameSelector accNameSelectorForAssociations)
     {

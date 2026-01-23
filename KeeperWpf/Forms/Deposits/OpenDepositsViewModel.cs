@@ -10,9 +10,9 @@ namespace KeeperWpf;
 public class OpenDepositsViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    public List<DepositVm> Rows { get; private set; }
+    public List<DepositVm> Rows { get; private set; } = null!;
 
-    public List<DepoTotalVm> Totals { get; private set; }
+    public List<DepoTotalVm> Totals { get; private set; } = null!;
 
     public OpenDepositsViewModel(KeeperDataModel dataModel)
     {
@@ -136,9 +136,9 @@ public class OpenDepositsViewModel : Screen
     private DepositVm Convert(AccountItemModel accountItemModel)
     {
         var depoOffer = _dataModel.DepositOffers
-            .First(o => o.Id == accountItemModel.BankAccount.DepositOfferId);
+            .First(o => o.Id == accountItemModel.BankAccount!.DepositOfferId);
         var calc = new TrafficOfAccountCalculator(_dataModel, accountItemModel,
-            new Period(accountItemModel.BankAccount.StartDate, DateTime.Now));
+            new Period(accountItemModel.BankAccount!.StartDate, DateTime.Now));
         var isAddOpen = IsAddOpen(accountItemModel.BankAccount, depoOffer, out var addLimitStr);
         var rate = depoOffer.GetCurrentRate(accountItemModel.BankAccount.StartDate, out string formula);
         return new DepositVm()
@@ -160,7 +160,7 @@ public class OpenDepositsViewModel : Screen
 
     private bool IsAddOpen(BankAccountModel bankAccountModel, DepositOfferModel depositOffer, out string addLimitString)
     {
-        if (bankAccountModel.Deposit.IsAdditionsBanned) // по условия можно, но банк закрыл досрочно
+        if (bankAccountModel.Deposit!.IsAdditionsBanned) // по условия можно, но банк закрыл досрочно
         {
             addLimitString = "банк закрыл досрочно";
             return false;

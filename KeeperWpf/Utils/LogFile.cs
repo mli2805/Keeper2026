@@ -11,11 +11,11 @@ public class LogFile
 {
     private const string ToCompress = ".toCompress";
 
-    private StreamWriter _logFile;
+    private StreamWriter _logFile = null!;
     public string Culture { get; } = "ru-RU";
     public int SizeLimitKb { get; } = 20_000;
     public int LogLevel { get; } = 4;
-    public string LogFullFileName { get; private set; }
+    public string? LogFullFileName { get; private set; }
     private readonly object _obj = new object();
 
     public LogFile AssignFile(string filename)
@@ -87,11 +87,11 @@ public class LogFile
         if (SizeLimitKb > 0 && _logFile.BaseStream.Length > SizeLimitKb * 1024)
         {
             _logFile.Close();
-            File.Copy(LogFullFileName, LogFullFileName + ToCompress, true);
+            File.Copy(LogFullFileName!, LogFullFileName + ToCompress, true);
             var newEmptyLogFile = Utils.FileNameForSure(@"..\Log\", "empty.log", true);
-            File.Copy(newEmptyLogFile, LogFullFileName, true);
+            File.Copy(newEmptyLogFile!, LogFullFileName!, true);
 
-            _logFile = File.AppendText(LogFullFileName);
+            _logFile = File.AppendText(LogFullFileName!);
             _logFile.AutoFlush = true;
             var folder = Path.GetDirectoryName(LogFullFileName);
             if (folder != null)
@@ -130,7 +130,7 @@ public class LogFile
 
 public static class Utils
 {
-    public static string FileNameForSure(string subDir, string filename, bool isBoomNeeded, bool isSubDirAbsolute = false)
+    public static string? FileNameForSure(string subDir, string filename, bool isBoomNeeded, bool isSubDirAbsolute = false)
     {
         try
         {
