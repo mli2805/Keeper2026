@@ -11,7 +11,7 @@ public class DoubleToStringConverter : IValueConverter
     private int _digits;
 
     // Convert from double to string
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value == null) return null;
 
@@ -30,11 +30,11 @@ public class DoubleToStringConverter : IValueConverter
     }
 
     // Convert from string to double
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value == null) return null;
 
-        var pureStr = CleanString(value.ToString());
+        var pureStr = CleanString(value.ToString()!);
         _digits = pureStr.Length;
 
         double? result = null;

@@ -31,7 +31,7 @@ public class NewExpenseControlVm : PropertyChangedBase
     public TransactionModel TranInWork { get; set; } = new TransactionModel();
     public bool IsAddMode { get; set; }
 
-    private AccNameSelectorVm _myAccNameSelectorVm;
+    private AccNameSelectorVm _myAccNameSelectorVm = null!;
     public AccNameSelectorVm MyAccNameSelectorVm
     {
         get => _myAccNameSelectorVm;
@@ -43,7 +43,7 @@ public class NewExpenseControlVm : PropertyChangedBase
         }
     }
 
-    private SellerSelectorVm _counterpartySelectorVm;
+    private SellerSelectorVm _counterpartySelectorVm = null!;
     public SellerSelectorVm CounterpartySelectorVm
     {
         get => _counterpartySelectorVm;
@@ -55,7 +55,7 @@ public class NewExpenseControlVm : PropertyChangedBase
         }
     }
 
-    private AccNameSelectorVm _categorySelectorVm;
+    private AccNameSelectorVm _categorySelectorVm = null!;
     public AccNameSelectorVm CategorySelectorVm
     {
         get => _categorySelectorVm;
@@ -68,7 +68,7 @@ public class NewExpenseControlVm : PropertyChangedBase
     }
 
 
-    private AmountInputControlVm _myAmountInputControlVm;
+    private AmountInputControlVm _myAmountInputControlVm = null!;
     public AmountInputControlVm MyAmountInputControlVm
     {
         get => _myAmountInputControlVm;
@@ -81,7 +81,7 @@ public class NewExpenseControlVm : PropertyChangedBase
     }
 
 
-    private TagPickerVm _myTagPickerVm;
+    private TagPickerVm _myTagPickerVm = null!;
     public TagPickerVm MyTagPickerVm
     {
         get => _myTagPickerVm;
@@ -93,7 +93,7 @@ public class NewExpenseControlVm : PropertyChangedBase
         }
     }
 
-    private DatePickerWithTrianglesVm _myDatePickerVm;
+    private DatePickerWithTrianglesVm _myDatePickerVm = null!;
     public DatePickerWithTrianglesVm MyDatePickerVm
     {
         get => _myDatePickerVm;
@@ -105,7 +105,7 @@ public class NewExpenseControlVm : PropertyChangedBase
         }
     }
 
-    private string _myAccountBalance;
+    private string _myAccountBalance = null!;
     public string MyAccountBalance
     {
         get => _myAccountBalance;
@@ -117,10 +117,7 @@ public class NewExpenseControlVm : PropertyChangedBase
         }
     }
 
-    public string MySecondAccountBalance => _balanceDuringTransactionHinter.GetMySecondAccountBalance(TranInWork);
     public string AmountInUsd => _balanceDuringTransactionHinter.GetAmountInUsd(TranInWork);
-    public string AmountInReturnInUsd => _balanceDuringTransactionHinter.GetAmountInReturnInUsd(TranInWork);
-    public string ExchangeRate => _balanceDuringTransactionHinter.GetExchangeRate(TranInWork);
 
     public List<PaymentWay> PaymentWays { get; set; }
 
@@ -215,7 +212,7 @@ public class NewExpenseControlVm : PropertyChangedBase
         }
     }
 
-    private void MyAmountInputControlVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void MyAmountInputControlVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == "Amount") TranInWork.Amount = MyAmountInputControlVm.Amount;
         if (e.PropertyName == "Currency") TranInWork.Currency = MyAmountInputControlVm.Currency;
@@ -226,7 +223,7 @@ public class NewExpenseControlVm : PropertyChangedBase
         }
     }
 
-    private void MyAccNameSelectorVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void MyAccNameSelectorVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == "MyAccName")
         {
@@ -238,7 +235,7 @@ public class NewExpenseControlVm : PropertyChangedBase
         }
     }
 
-    private void CounterpartySelectorVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void CounterpartySelectorVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName != "MyAccName") return;
         _counterpartyChangedManually = true;
@@ -260,7 +257,7 @@ public class NewExpenseControlVm : PropertyChangedBase
         AddTagIfAssociated(TranInWork.Counterparty.AssociatedTagId);
     }
 
-    private void NewCategorySelectorVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void NewCategorySelectorVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName != "MyAccName") return;
         _categoryChangedManually = true;
@@ -282,7 +279,7 @@ public class NewExpenseControlVm : PropertyChangedBase
         AddTagIfAssociated(TranInWork.Category.AssociatedTagId);
     }
 
-    private AccountItemModel FindAssociated(AccountItemModel account, OperationType opType)
+    private AccountItemModel? FindAssociated(AccountItemModel account, OperationType opType)
     {
 
         var associatedId = account.IsCategory()
@@ -304,7 +301,7 @@ public class NewExpenseControlVm : PropertyChangedBase
     }
 
     #region Tags
-    private void Tags_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private void Tags_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == NotifyCollectionChangedAction.Remove)
             ReactOnRemove();
@@ -314,20 +311,20 @@ public class NewExpenseControlVm : PropertyChangedBase
 
     private void ReactOnRemove()
     {
-        var tag = _dataModel.AcMoDict[MyTagPickerVm.TagInWork.Id];
+        var tag = _dataModel.AcMoDict[MyTagPickerVm.TagInWork!.Id];
         TranInWork.Tags.Remove(tag);
         MyTagPickerVm.TagInWork = null;
     }
 
     private void ReactOnUsersAdd()
     {
-        var tag = _dataModel.AcMoDict[MyTagPickerVm.TagInWork.Id];
+        var tag = _dataModel.AcMoDict[MyTagPickerVm.TagInWork!.Id];
         TranInWork.Tags.Add(tag);
         MyTagPickerVm.TagInWork = null;
     }
     #endregion
 
-    private void MyDatePickerVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void MyDatePickerVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         var selectedDate = MyDatePickerVm.SelectedDate;
         var dayTransactions = _dataModel.Transactions.Values
@@ -340,34 +337,27 @@ public class NewExpenseControlVm : PropertyChangedBase
         TranInWork.Timestamp = selectedDate.Date.AddMinutes(minute);
     }
 
-    private void TranInWork_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void TranInWork_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {
             case "MyAccount":
                 MyAccountBalance = _balanceDuringTransactionHinter.GetMyAccountBalance(TranInWork);
                 break;
-            case "MySecondAccount":
-                NotifyOfPropertyChange(nameof(MySecondAccountBalance));
-                break;
+          
             case "Operation":
             case "Amount":
-            case "AmountInReturn":
             case "Currency":
-            case "CurrencyInReturn":
             case "Timestamp":
                 NotifyOfPropertyChange(nameof(AmountInUsd));
-                NotifyOfPropertyChange(nameof(AmountInReturnInUsd));
                 MyAccountBalance = _balanceDuringTransactionHinter.GetMyAccountBalance(TranInWork);
-                NotifyOfPropertyChange(nameof(MySecondAccountBalance));
-                NotifyOfPropertyChange(nameof(ExchangeRate));
                 break;
         }
     }
 
     #region Прокинуть наверх нажатия Чек и Заправка
 
-    private string _forParentView;
+    private string _forParentView = string.Empty;
     public string ForParentView
     {
         get => _forParentView;

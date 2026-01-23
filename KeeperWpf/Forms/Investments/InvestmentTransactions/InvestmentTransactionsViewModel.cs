@@ -56,7 +56,7 @@ public class InvestmentTransactionsViewModel : Screen
         }
         else if (e.Key == Key.Space)
         {
-            EditSelected();
+            await EditSelected();
             e.Handled = true;
         }
     }

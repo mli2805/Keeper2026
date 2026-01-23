@@ -8,7 +8,7 @@ public class AssetState
 {
     public TrustAssetModel Asset { get; set; }
 
-    public string Caption { get; set; }
+    public string Caption { get; set; } = string.Empty;
 
     public int Quantity { get; set; }
     public decimal PriceWithoutCoupon { get; set; } // price

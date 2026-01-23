@@ -44,8 +44,8 @@ public class OneTranViewModel : Screen
             NotifyOfPropertyChange();
         }
     }
-    public List<Tuple<decimal, AccountItemModel, string>> ReceiptList { get; set; }
-    public TransactionModel FuellingTran { get; set; }
+    public List<Tuple<decimal, AccountItemModel, string>>? ReceiptList { get; set; }
+    public TransactionModel? FuellingTran { get; set; }
     public FuellingModel FuellingModel { get; set; }
 
     public bool IsAddMode { get; set; }
@@ -101,7 +101,7 @@ public class OneTranViewModel : Screen
         OperationTypeViewModel.PropertyChanged += OperationTypeViewModel_PropertyChanged;
     }
 
-    private void OperationTypeViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    private void OperationTypeViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         TranInWork.Operation = OperationTypeViewModel.SelectedOperationType;
         ValidateTranInWorkFieldsWithNewOperationType();
@@ -129,11 +129,11 @@ public class OneTranViewModel : Screen
         MyExchangeControlVm.Visibility = opType == OperationType.Обмен ? Visibility.Visible : Visibility.Collapsed;
     }
 
-    private void MyNewExpenseControlVmOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    private async void MyNewExpenseControlVmOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName != "ForParentView") return;
-        if (MyNewExpenseControlVm.ForParentView == "Fuelling") Fuelling();
-        if (MyNewExpenseControlVm.ForParentView == "Receipt") Receipt();
+        if (MyNewExpenseControlVm.ForParentView == "Fuelling") await Fuelling();
+        if (MyNewExpenseControlVm.ForParentView == "Receipt") await Receipt();
     }
 
 
@@ -200,7 +200,7 @@ public class OneTranViewModel : Screen
     public async Task OneMore()
     {
         IsOneMore = true;
-        Save();
+        await Save();
     }
 
     public async Task Cancel()
@@ -217,7 +217,7 @@ public class OneTranViewModel : Screen
         if (await _windowManager.ShowDialogAsync(_receiptViewModel) != true) return;
 
         ReceiptList = _receiptViewModel.ResultList;
-        Save();
+        await Save();
     }
 
     public async Task Fuelling()

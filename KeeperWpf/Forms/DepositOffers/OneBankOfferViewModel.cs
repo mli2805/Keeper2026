@@ -122,7 +122,7 @@ public class OneBankOfferViewModel : Screen
     {
         if (ModelInWork.CondsMap.Count == 0)
         {
-            AddConditions();
+            await AddConditions();
             return;
         }
         ModelInWork.Bank = Banks.First(b => b.Name == SelectedBankName);

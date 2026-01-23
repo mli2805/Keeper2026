@@ -262,7 +262,7 @@ public class PaymentWaysViewModel : Screen
         File.AppendAllLines(filename, content);
     }
 
-    public async void Close() { await TryCloseAsync(); }
+    public async void CloseView() { await TryCloseAsync(); }
 
     private List<string> ShrinkReceipts(List<TransactionModel> trans)
     {

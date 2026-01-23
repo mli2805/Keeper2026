@@ -19,7 +19,7 @@
 
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="5">
                 <Button Name="Export" Width="150" HorizontalAlignment="Right" Margin="5">Выгрузка в csv (ETF-8)</Button>
-                <Button Name="Close" Width="150" HorizontalAlignment="Right" Margin="5">Закрыть</Button>
+                <Button Name="CloseView" Width="150" HorizontalAlignment="Right" Margin="5">Закрыть</Button>
             </StackPanel>
             <StackPanel></StackPanel>
         </DockPanel>
