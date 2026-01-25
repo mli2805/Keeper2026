@@ -1,7 +1,9 @@
-﻿using KeeperModels;
+﻿using KeeperInfrastructure;
+using KeeperModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
@@ -11,11 +13,13 @@ public class TranMoveExecutor
 
     private readonly TranModel _model;
     private readonly KeeperDataModel _dataModel;
+    private readonly TransactionsRepository _transactionsRepository;
 
-    public TranMoveExecutor(TranModel model, KeeperDataModel dataModel)
+    public TranMoveExecutor(TranModel model, KeeperDataModel dataModel, TransactionsRepository transactionsRepository)
     {
         _model = model;
         _dataModel = dataModel;
+        _transactionsRepository = transactionsRepository;
     }
 
     private List<TransactionModel> _selectedTransactions = null!;
@@ -28,21 +32,21 @@ public class TranMoveExecutor
 
     //TODO добавить движение всех транзакций чека
 
-    public void MoveSelected(Destination destination)
+    public async Task MoveSelected(Destination destination)
     {
-         if (!FillLists(destination)) return;
+        if (!FillLists(destination)) return;
 
         if (!_areDatesEqual && destination == Destination.Down)
         {
             var newTimestamp = _transToElevate.Min(t => t.Timestamp);
-            SetNewTimes(newTimestamp);
+            await SetNewTimes(newTimestamp);
         }
         else
         {
             var newTimestamp = _transToLower.Min(t => t.Timestamp);
-           SetNewTimes(newTimestamp);
+            await SetNewTimes(newTimestamp);
         }
-       
+
         _model.SortedRows.Refresh();
         _model.IsCollectionChanged = true;
     }
@@ -53,7 +57,7 @@ public class TranMoveExecutor
         if (!GetNearby(destination)) return false;
 
         _transToElevate = destination == Destination.Up ? _selectedTransactions : _nearbyTransactions;
-        _transToLower = destination == Destination.Up ?  _nearbyTransactions : _selectedTransactions;
+        _transToLower = destination == Destination.Up ? _nearbyTransactions : _selectedTransactions;
 
         if (!_areDatesEqual && _selectedTransactions.First().Receipt != 0)
         {
@@ -69,7 +73,7 @@ public class TranMoveExecutor
         if (destination == Destination.Down && !_areDatesEqual)
         {
             var maxOfElevate = _transToElevate.Max(t => t.Timestamp);
-            _transToShiftTime = _model.Rows.Where(t => t.Tran.Timestamp.Date.Equals(maxOfElevate.Date) 
+            _transToShiftTime = _model.Rows.Where(t => t.Tran.Timestamp.Date.Equals(maxOfElevate.Date)
                                                        && t.Tran.Timestamp > maxOfElevate).Select(r => r.Tran).ToList();
         }
         else _transToShiftTime = new List<TransactionModel>();
@@ -84,15 +88,15 @@ public class TranMoveExecutor
         {
             _selectedTransactions = _model.Rows.Where(t =>
                     t.Tran.Timestamp.Date.Equals(selected.Timestamp.Date) && t.Tran.Receipt == selected.Receipt)
-                .Select(r => r.Tran).OrderBy(f=>f.Timestamp).ToList();
+                .Select(r => r.Tran).OrderBy(f => f.Timestamp).ToList();
 
             var edgeOfReceipt = destination == Destination.Up
                 ? _selectedTransactions.Min(t => t.Timestamp)
                 : _selectedTransactions.Max(t => t.Timestamp);
             if (!selected.Timestamp.Equals(edgeOfReceipt))
-                _selectedTransactions = new List<TransactionModel> {selected};
+                _selectedTransactions = new List<TransactionModel> { selected };
         }
-        else _selectedTransactions = new List<TransactionModel> {selected};
+        else _selectedTransactions = new List<TransactionModel> { selected };
     }
 
     private bool GetNearby(Destination destination)
@@ -109,22 +113,22 @@ public class TranMoveExecutor
         {
             var isReceiptEqual = _areDatesEqual && _selectedTransactions.First().Receipt == nearbyTran.Tran.Receipt;
             _nearbyTransactions = isReceiptEqual
-                ? new List<TransactionModel> {nearbyTran.Tran}
+                ? new List<TransactionModel> { nearbyTran.Tran }
                 : _model.Rows.Where(t => t.Tran.Timestamp.Date.Equals(nearbyTran.Tran.Timestamp.Date)
-                       && t.Tran.Receipt == nearbyTran.Tran.Receipt).Select(r => r.Tran).OrderBy(f=>f.Timestamp).ToList();
+                       && t.Tran.Receipt == nearbyTran.Tran.Receipt).Select(r => r.Tran).OrderBy(f => f.Timestamp).ToList();
         }
-        else _nearbyTransactions = new List<TransactionModel> {nearbyTran.Tran};
+        else _nearbyTransactions = new List<TransactionModel> { nearbyTran.Tran };
         return true;
     }
 
-    private void SetNewTimes(DateTime newTimestamp)
+    private async Task SetNewTimes(DateTime newTimestamp)
     {
-       newTimestamp = SetNewTimes(newTimestamp, _transToElevate);
-       newTimestamp = SetNewTimes(newTimestamp, _transToLower);
-       SetNewTimes(newTimestamp, _transToShiftTime);
+        newTimestamp = await SetNewTimes(newTimestamp, _transToElevate);
+        newTimestamp = await SetNewTimes(newTimestamp, _transToLower);
+        await SetNewTimes(newTimestamp, _transToShiftTime);
     }
 
-    private DateTime SetNewTimes(DateTime newTimestamp, List<TransactionModel> list)
+    private async Task<DateTime> SetNewTimes(DateTime newTimestamp, List<TransactionModel> list)
     {
         foreach (var transactionModel in list)
         {
@@ -132,6 +136,7 @@ public class TranMoveExecutor
             var transaction = _dataModel.Transactions[transactionModel.Id];
             transaction.Timestamp = newTimestamp;
             newTimestamp = newTimestamp.AddMinutes(1);
+            await _transactionsRepository.UpdateTransaction(transaction);
         }
         return newTimestamp;
     }
