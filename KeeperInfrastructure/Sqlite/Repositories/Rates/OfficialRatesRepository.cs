@@ -36,4 +36,15 @@ public class OfficialRatesRepository(IDbContextFactory<KeeperDbContext> factory)
         }
         await keeperDbContext.SaveChangesAsync();
     }
+
+    public async Task DeleteRate(int rateId)
+    {
+        using var keeperDbContext = factory.CreateDbContext();
+        var rateEf = await keeperDbContext.OfficialRates.FirstOrDefaultAsync(r => r.Id == rateId);
+        if (rateEf != null)
+        {
+            keeperDbContext.OfficialRates.Remove(rateEf);
+            await keeperDbContext.SaveChangesAsync();
+        }
+    }
 }

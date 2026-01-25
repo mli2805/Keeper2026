@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace KeeperWpf;
@@ -32,6 +33,12 @@ public static class MyRequest
     {
         Timeout = TimeSpan.FromSeconds(10)
     };
+
+    static MyRequest()
+    {
+        // без этого умеет читать только UTF-8
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    }
 
     public static async Task<MyResponse> GetResponseAsync(string uri)
     {

@@ -187,10 +187,12 @@ public class OfficialRatesViewModel : PropertyChangedBase
     }
 
 
-    public void RemoveLine()
+    public async Task RemoveLine()
     {
+        var id = SelectedRow.Id;
         _keeperDataModel.OfficialRates.Remove(SelectedRow.Date);
         Rows.Remove(SelectedRow);
+        await _officialRatesRepository.DeleteRate(id);
     }
 
 }
