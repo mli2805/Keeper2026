@@ -2,7 +2,7 @@
 
 namespace KeeperInfrastructure;
 
-public static class AccountMapper
+public static class AccountMapperTxtEf
 {
     public static AccountEf ToEf(this Account account)
     {
@@ -120,5 +120,19 @@ public static class AccountMapper
             IsVirtual = payCardEf.IsVirtual,
             IsPayPass = payCardEf.IsPayPass
         };
+    }
+
+    public static void UpdateFromModel(this DepositEf depositEf, Deposit deposit)
+    {
+        depositEf.IsAdditionsBanned = deposit.IsAdditionsBanned;
+    }
+
+    public static void UpdateFromModel(this PayCardEf payCardEf, PayCard payCard)
+    {
+        payCardEf.CardNumber = payCard.CardNumber;
+        payCardEf.CardHolder = payCard.CardHolder;
+        payCardEf.PaymentSystem = payCard.PaymentSystem;
+        payCardEf.IsVirtual = payCard.IsVirtual;
+        payCardEf.IsPayPass = payCard.IsPayPass;
     }
 }

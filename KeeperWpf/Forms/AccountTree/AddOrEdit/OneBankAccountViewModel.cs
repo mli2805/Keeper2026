@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using KeeperDomain;
+using KeeperInfrastructure;
 using KeeperModels;
 
 namespace KeeperWpf;
 
-public class OneBankAccountViewModel : Screen
+public class OneBankAccountViewModel(KeeperDataModel dataModel, AccountRepository accountRepository) : Screen
 {
-    private readonly KeeperDataModel _dataModel;
     private bool _isInAddMode;
     private bool _isCard;
 
-    public AccountItemModel AccountItemModel { get; set; } = null!;
+    public AccountItemModel AccountItemInWork { get; set; } = null!;
     public BankAccountModel BankAccountInWork { get; set; } = null!;
 
     public List<AccountItemModel> Banks { get; set; } = null!;
@@ -30,7 +31,7 @@ public class OneBankAccountViewModel : Screen
             if (value == _selectedBankName) return;
             _selectedBankName = value;
             BankAccountInWork.BankId = Banks.First(b => b.Name == _selectedBankName).Id;
-            DepositOffers = _dataModel.DepositOffers.Where(o => o.Bank.Name == _selectedBankName).ToList();
+            DepositOffers = dataModel.DepositOffers.Where(o => o.Bank.Name == _selectedBankName).ToList();
             SelectedDepositOffer = DepositOffers.Last();
             NotifyOfPropertyChange();
         }
@@ -86,12 +87,7 @@ public class OneBankAccountViewModel : Screen
     public List<PaymentSystem> PaymentSystems { get; set; } = null!;
     public Visibility PayCardSectionVisibility { get; set; }
 
-    public OneBankAccountViewModel(KeeperDataModel dataModel)
-    {
-        _dataModel = dataModel;
-    }
-
-    public void Initialize(AccountItemModel accountItemModel, bool isInAddMode, bool isCard)
+    public void Initialize(AccountItemModel accountItemInWork, bool isInAddMode, bool isCard)
     {
         _isCard = isCard;
         AccountName = "";
@@ -99,14 +95,14 @@ public class OneBankAccountViewModel : Screen
         PayCardSectionVisibility = isCard ? Visibility.Visible : Visibility.Collapsed;
         _isInAddMode = isInAddMode;
 
-        var folder = accountItemModel.Parent!.Name;
+        var folder = accountItemInWork.Parent!.Name;
 
-        Banks = _dataModel.AcMoDict[220].Children.Select(c=>(AccountItemModel)c).ToList();
+        Banks = dataModel.AcMoDict[220].Children.Select(c=>(AccountItemModel)c).ToList();
         BankNames = Banks.Select(b => b.Name).ToList();
 
-        AccountItemModel = accountItemModel;
-        BankAccountInWork = AccountItemModel.BankAccount!.Clone();
-        ParentName = accountItemModel.Parent.Name;
+        AccountItemInWork = accountItemInWork;
+        BankAccountInWork = AccountItemInWork.BankAccount!.Clone();
+        ParentName = accountItemInWork.Parent.Name;
         PaymentSystems = Enum.GetValues(typeof(PaymentSystem)).Cast<PaymentSystem>().ToList();
 
         if (isInAddMode)
@@ -116,16 +112,16 @@ public class OneBankAccountViewModel : Screen
                 BankAccountInWork.PayCard!.CardHolder = "LEANID MARHOLIN";
 
             _selectedBankName = BankNames.FirstOrDefault(b=>b == folder) ?? BankNames.First();
-            DepositOffers = _dataModel.DepositOffers.Where(o => o.Bank.Name == SelectedBankName).ToList();
+            DepositOffers = dataModel.DepositOffers.Where(o => o.Bank.Name == SelectedBankName).ToList();
             SelectedDepositOffer = DepositOffers.Last();
         }
         else
         {
-            AccountName = AccountItemModel.Name;
+            AccountName = AccountItemInWork.Name;
 
-            var bank = _dataModel.AcMoDict[accountItemModel.BankAccount!.BankId];
+            var bank = dataModel.AcMoDict[accountItemInWork.BankAccount!.BankId];
             _selectedBankName = bank.Name;
-            DepositOffers = _dataModel.DepositOffers.Where(o => o.Bank.Name == SelectedBankName).ToList();
+            DepositOffers = dataModel.DepositOffers.Where(o => o.Bank.Name == SelectedBankName).ToList();
             _selectedDepositOffer = DepositOffers.First(o => o.Id == BankAccountInWork.DepositOfferId);
         }
     }
@@ -133,7 +129,7 @@ public class OneBankAccountViewModel : Screen
     protected override void OnViewLoaded(object view)
     {
         var cap = _isInAddMode ? "Добавить счет в банке" : "Изменить счет в банке";
-        DisplayName = $"{cap} (id = {AccountItemModel.Id})";
+        DisplayName = $"{cap} (id = {AccountItemInWork.Id})";
     }
 
     public void BuildDepoName()
@@ -142,17 +138,23 @@ public class OneBankAccountViewModel : Screen
                       + " " + BankAccountInWork.FinishDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
     }
 
-    public async void Save()
+    public async Task Save()
     {
         IsSavePressed = true;
 
-        AccountItemModel.BankAccount = BankAccountInWork.Clone();
+        AccountItemInWork.BankAccount = BankAccountInWork.Clone();
 
-        AccountItemModel.Name = string.IsNullOrEmpty(AccountName) ? "Без имени" : AccountName;
+        AccountItemInWork.Name = string.IsNullOrEmpty(AccountName) ? "Без имени" : AccountName;
+
+        AccountItemInWork.ChildNumber = AccountItemInWork.Parent!.Children.Count + 1;
+        if (_isInAddMode)
+            await accountRepository.Add(AccountItemInWork);
+        else
+            await accountRepository.Update(AccountItemInWork);
         await TryCloseAsync();
     }
 
-    public async void Cancel()
+    public async Task Cancel()
     {
         IsSavePressed = false;
         await TryCloseAsync();

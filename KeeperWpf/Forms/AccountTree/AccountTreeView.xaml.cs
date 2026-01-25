@@ -24,8 +24,8 @@ public partial class AccountTreeView
         if (e.LeftButton != MouseButtonState.Pressed) return;
         _draggedItem = (TreeViewItemModel)MyTreeView.SelectedItem;
         if (_draggedItem == null) return;
-        DragDropEffects finalDropEffect = DragDrop.DoDragDrop(MyTreeView, MyTreeView.SelectedValue,
-            DragDropEffects.Move);
+        DragDropEffects finalDropEffect = DragDrop
+            .DoDragDrop(MyTreeView, MyTreeView.SelectedValue, DragDropEffects.Move);
 
         //Checking target is not null and item is dragging(moving)
         if ((finalDropEffect == DragDropEffects.Move) && (_target != null))
@@ -84,11 +84,22 @@ public partial class AccountTreeView
 
     //------------------------------------------------------------------------------
 
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source">кого тянут</param>
+    /// <param name="destination">на ком отпустили</param>
+    /// <returns></returns>
     private async Task DoAction(TreeViewItemModel source, TreeViewItemModel destination)
     {
-        var vm = ((AccountTreeViewModel)DataContext).AskDragAccountActionViewModel;
+        AccountTreeViewModel accountTreeViewModel = (AccountTreeViewModel)DataContext;
+        var vm = accountTreeViewModel.AskDragAccountActionViewModel;
         vm.Init(source.Name, destination.Name);
-        await ((AccountTreeViewModel)DataContext).WindowManager.ShowDialogAsync(vm);
+        await accountTreeViewModel.WindowManager.ShowDialogAsync(vm);
+
+        if (vm.Answer == DragAndDropAction.Cancel)
+            return;
 
         switch (vm.Answer)
         {
@@ -99,11 +110,12 @@ public partial class AccountTreeView
                 MoveIntoFolder(source, destination);
                 break;
             case DragAndDropAction.After:
+            default:
                 MoveAccount(source, destination, Place.After);
                 break;
-            case DragAndDropAction.Cancel: return;
-            default: return;
         }
+
+        await accountTreeViewModel.SaveDragAndDrops();
     }
 
     private void MoveAccount(TreeViewItemModel source, TreeViewItemModel destination, Place place)

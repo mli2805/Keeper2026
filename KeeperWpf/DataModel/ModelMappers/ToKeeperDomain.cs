@@ -8,7 +8,7 @@ public static class ToKeeperDomain
 {
     public static KeeperDomainModel From(this KeeperDataModel keeperDataModel)
     {
-        var accountPlaneList = keeperDataModel.FlattenAccountTree().ToList();
+        var accountPlaneList = keeperDataModel.FlattenAccountTree();
         var bankAccounts = keeperDataModel.AcMoDict.Values
                 .Where(a => a.IsBankAccount)
                 .Select(ac => ac.BankAccount!.FromModel())

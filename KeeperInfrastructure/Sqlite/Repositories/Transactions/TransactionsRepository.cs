@@ -27,17 +27,17 @@ public class TransactionsRepository(IDbContextFactory<KeeperDbContext> factory)
     public async Task UpdateTransaction(TransactionModel transactionModel)
     {
         using var keeperDbContext = factory.CreateDbContext();
-        var transactionEf = transactionModel.ToEf();
-        keeperDbContext.Transactions.Update(transactionEf);
+        var transactionEf = await keeperDbContext.Transactions.FirstAsync(t => t.Id == transactionModel.Id);
+        transactionEf.UpdateEf(transactionModel);
         await keeperDbContext.SaveChangesAsync();
     }
 
     public async Task DeleteTransactions(List<int> transactionsId)
     {
         using var keeperDbContext = factory.CreateDbContext();
-        var transactionsEf = keeperDbContext.Transactions.Where(t => transactionsId.Contains(t.Id)).ToList();
-        keeperDbContext.Transactions.RemoveRange(transactionsEf);
-        await keeperDbContext.SaveChangesAsync();
+        await keeperDbContext.Transactions
+            .Where(t => transactionsId.Contains(t.Id))
+            .ExecuteDeleteAsync();
     }
 }
 

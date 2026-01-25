@@ -34,10 +34,10 @@ public static class AccountTreeExt
         return null;
     }
 
-    public static async Task RemoveSelectedAccount(this KeeperDataModel dataModel)
+    public static async Task<int> RemoveSelectedAccount(this KeeperDataModel dataModel)
     {
         var accountModel = dataModel.GetSelectedAccountModel();
-        if (accountModel == null) return;
+        if (accountModel == null) return -1;
         var windowManager = new WindowManager();
         switch (CheckIfAccountCanBeDeleted(dataModel, accountModel))
         {
@@ -52,7 +52,10 @@ public static class AccountTreeExt
                     });
                 var answer = await windowManager.ShowDialogAsync(myMessageBoxViewModel);
                 if (answer.Value)
+                {
                     RemoveAccountLowLevel(dataModel, accountModel);
+                    return accountModel.Id;
+                }
                 break;
             case AccountCantBeDeletedReasons.IsRoot:
                 await windowManager.ShowDialogAsync(new MyMessageBoxViewModel(MessageType.Error,
@@ -67,6 +70,8 @@ public static class AccountTreeExt
                     "Этот счет используется в проводках!"));
                 break;
         }
+
+        return -1;
     }
 
     private static AccountCantBeDeletedReasons CheckIfAccountCanBeDeleted(this KeeperDataModel dataModel, AccountItemModel account)

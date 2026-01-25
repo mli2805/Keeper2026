@@ -121,11 +121,11 @@ public class TransactionsViewModel : Screen
                 break;
             case Key.NumPad8:
                 if (Keyboard.Modifiers == ModifierKeys.Control)
-                    MoveUp();
+                    await MoveUp();
                 break;
             case Key.NumPad2:
                 if (Keyboard.Modifiers == ModifierKeys.Control)
-                    MoveDown();
+                    await MoveDown();
                 break;
             case Key.Insert:
                 await AddAfterSelected();
@@ -144,14 +144,14 @@ public class TransactionsViewModel : Screen
         await _tranEditExecutor.EditSelected();
     }
 
-    public void MoveUp()
+    public async Task MoveUp()
     {
-        _tranMoveExecutor.MoveSelected(TranMoveExecutor.Destination.Up);
+        await _tranMoveExecutor.MoveSelected(TranMoveExecutor.Destination.Up);
     }
 
-    public void MoveDown()
+    public async Task MoveDown()
     {
-        _tranMoveExecutor.MoveSelected(TranMoveExecutor.Destination.Down);
+        await _tranMoveExecutor.MoveSelected(TranMoveExecutor.Destination.Down);
     }
 
     public async Task AddAfterSelected()

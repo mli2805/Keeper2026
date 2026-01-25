@@ -1,16 +1,18 @@
 ﻿using Caliburn.Micro;
+using KeeperInfrastructure;
 using KeeperModels;
+using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
-public class OneFolderViewModel : Screen
+public class OneFolderViewModel(AccountRepository accountRepository) : Screen
 {
     private bool _isInAddMode;
     private string _oldName = null!;
     public AccountItemModel AccountItemInWork { get; set; } = null!;
     public string ParentFolder { get; set; } = null!;
     public bool IsSavePressed { get; set; }
-  
+
     public void Initialize(AccountItemModel accountInWork, bool isInAddMode)
     {
         IsSavePressed = false;
@@ -26,13 +28,18 @@ public class OneFolderViewModel : Screen
         DisplayName = $"{cap} (id = {AccountItemInWork.Id})";
     }
 
-    public async void Save()
+    public async Task Save()
     {
         IsSavePressed = true;
+        AccountItemInWork.ChildNumber = AccountItemInWork.Parent!.Children.Count + 1;
+        if (_isInAddMode)
+            await accountRepository.Add(AccountItemInWork);
+        else
+            await accountRepository.Update(AccountItemInWork);
         await TryCloseAsync();
     }
 
-    public async void Cancel()
+    public async Task Cancel()
     {
         if (!_isInAddMode)
         {

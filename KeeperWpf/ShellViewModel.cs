@@ -1,41 +1,26 @@
 using Caliburn.Micro;
+using KeeperInfrastructure;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace KeeperWpf;
 
-public class ShellViewModel : Screen, IShell
+public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeperDataModel, AccountRepository accountRepository,
+    KeeperDataModelInitializer dataModelInitializer, LoadingProgressViewModel loadingProgressViewModel,
+    ShellPartsBinder shellPartsBinder, MainMenuViewModel mainMenuViewModel,
+    AccountTreeViewModel accountTreeViewModel, BalanceOrTrafficViewModel balanceOrTrafficViewModel,
+    TwoSelectorsViewModel twoSelectorsViewModel) : Screen, IShell
 {
-    private readonly IWindowManager _windowManager;
-    private readonly KeeperDataModel _keeperDataModel;
-    private readonly KeeperDataModelInitializer _dataModelInitializer;
-    private readonly LoadingProgressViewModel _loadingProgressViewModel;
 
 
-    public ShellPartsBinder ShellPartsBinder { get; }
-    public MainMenuViewModel MainMenuViewModel { get; }
-    public AccountTreeViewModel AccountTreeViewModel { get; }
-    public BalanceOrTrafficViewModel BalanceOrTrafficViewModel { get; }
-    public TwoSelectorsViewModel TwoSelectorsViewModel { get; }
-
-    public ShellViewModel(IWindowManager windowManager, KeeperDataModel keeperDataModel,
-        KeeperDataModelInitializer dataModelInitializer, LoadingProgressViewModel loadingProgressViewModel,
-        ShellPartsBinder shellPartsBinder, MainMenuViewModel mainMenuViewModel,
-        AccountTreeViewModel accountTreeViewModel, BalanceOrTrafficViewModel balanceOrTrafficViewModel,
-        TwoSelectorsViewModel twoSelectorsViewModel)
-    {
-        _windowManager = windowManager;
-        _keeperDataModel = keeperDataModel;
-        _dataModelInitializer = dataModelInitializer;
-        _loadingProgressViewModel = loadingProgressViewModel;
-        ShellPartsBinder = shellPartsBinder;
-        MainMenuViewModel = mainMenuViewModel;
-        AccountTreeViewModel = accountTreeViewModel;
-        BalanceOrTrafficViewModel = balanceOrTrafficViewModel;
-        TwoSelectorsViewModel = twoSelectorsViewModel;
-    }
+    public ShellPartsBinder ShellPartsBinder { get; } = shellPartsBinder;
+    public MainMenuViewModel MainMenuViewModel { get; } = mainMenuViewModel;
+    public AccountTreeViewModel AccountTreeViewModel { get; } = accountTreeViewModel;
+    public BalanceOrTrafficViewModel BalanceOrTrafficViewModel { get; } = balanceOrTrafficViewModel;
+    public TwoSelectorsViewModel TwoSelectorsViewModel { get; } = twoSelectorsViewModel;
 
     protected override async void OnViewLoaded(object view)
     {
@@ -47,7 +32,7 @@ public class ShellViewModel : Screen, IShell
             return;
         }
        
-        var account = _keeperDataModel.AccountsTree.First(r => r.Name == "Мои");
+        var account = keeperDataModel.AccountsTree.First(r => r.Name == "Мои");
         account.IsSelected = true;
         MainMenuViewModel.SetBellPath();
         ShellPartsBinder.SelectedAccountItemModel = account;
@@ -57,7 +42,7 @@ public class ShellViewModel : Screen, IShell
     {
         // если БД удалили, она будет создана пустая в AppBootstrapper еще до ShellViewModel
         // GetAccountTreeFromDb вернет false, если в БД нет данных
-        if (await _dataModelInitializer.GetFullModelFromDb())
+        if (await dataModelInitializer.GetFullModelFromDb())
         {
             return true;
         }
@@ -67,19 +52,26 @@ public class ShellViewModel : Screen, IShell
             {
                 "База данных пуста!", "Загрузить данные из текстовых файлов?"
             });
-        var confirmation = await _windowManager.ShowDialogAsync(mb);
+        var confirmation = await windowManager.ShowDialogAsync(mb);
         if (confirmation == null || confirmation.Value == false)
         {
             return false;
         }
 
-        var success2 = await _windowManager.ShowDialogAsync(_loadingProgressViewModel);
+        var success2 = await windowManager.ShowDialogAsync(loadingProgressViewModel);
         if (success2 == null || success2.Value == false)
         {
             return false;
         }
 
-        var success = await _dataModelInitializer.GetFullModelFromDb();
+        var success = await dataModelInitializer.GetFullModelFromDb();
         return true;
+    }
+
+    public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
+    {
+        await accountRepository.UpdateTree(keeperDataModel.FlattenAccountTree());
+        await MainMenuViewModel.SaveInTextFilesForBackup();
+        return await base.CanCloseAsync(cancellationToken);
     }
 }

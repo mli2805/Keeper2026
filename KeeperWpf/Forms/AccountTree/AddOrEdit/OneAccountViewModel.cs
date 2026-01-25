@@ -1,13 +1,14 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using Caliburn.Micro;
+using KeeperInfrastructure;
 using KeeperModels;
 
 namespace KeeperWpf;
 
-public class OneAccountViewModel : Screen
+public class OneAccountViewModel(ComboTreesProvider comboTreesProvider, AccNameSelector accNameSelectorForAssociations,
+    AccountRepository accountRepository) : Screen
 {
-    private readonly ComboTreesProvider _comboTreesProvider;
-    private readonly AccNameSelector _accNameSelectorForAssociations;
     private bool _isInAddMode;
     private string _oldName = null!;
     public AccountItemModel AccountItemInWork { get; set; } = null!;
@@ -57,12 +58,6 @@ public class OneAccountViewModel : Screen
     public string TextIn { get; set; } = string.Empty;
     public string TextExp { get; set; } = string.Empty;
 
-    public OneAccountViewModel(ComboTreesProvider comboTreesProvider, AccNameSelector accNameSelectorForAssociations)
-    {
-        _comboTreesProvider = comboTreesProvider;
-        _accNameSelectorForAssociations = accNameSelectorForAssociations;
-    }
-
     public void Initialize(AccountItemModel accountInWork, bool isInAddMode)
     {
         IsSavePressed = false;
@@ -84,7 +79,7 @@ public class OneAccountViewModel : Screen
 
     private void InitializeAccNameSelectors()
     {
-        _comboTreesProvider.Initialize();
+        comboTreesProvider.Initialize();
 
         if (AccountItemInWork.IsMyAccount() || AccountItemInWork.IsTag())
         {
@@ -101,7 +96,7 @@ public class OneAccountViewModel : Screen
                 MyAccNameSelectorVm.Visibility = Visibility.Visible;
                 MyAccNameSelectorVm2.Visibility = Visibility.Collapsed;
                 TextVisibility = Visibility.Visible;
-                MyAccNameSelectorVm = _accNameSelectorForAssociations
+                MyAccNameSelectorVm = accNameSelectorForAssociations
                     .InitializeForAssociation(AccountItemInWork.Is(NickNames.IncomeCategoriesRoot)
                         ? AssociationEnum.ExternalForIncome
                         : AssociationEnum.ExternalForExpense, AccountItemInWork.AssociatedExternalId);
@@ -112,15 +107,15 @@ public class OneAccountViewModel : Screen
                 MyAccNameSelectorVm.Visibility = Visibility.Visible;
                 MyAccNameSelectorVm2.Visibility = Visibility.Visible;
                 TextVisibility = Visibility.Visible;
-                MyAccNameSelectorVm = _accNameSelectorForAssociations
+                MyAccNameSelectorVm = accNameSelectorForAssociations
                     .InitializeForAssociation(AssociationEnum.IncomeForExternal, AccountItemInWork.AssociatedIncomeId);
-                MyAccNameSelectorVm2 = _accNameSelectorForAssociations
+                MyAccNameSelectorVm2 = accNameSelectorForAssociations
                     .InitializeForAssociation(AssociationEnum.ExpenseForExternal, AccountItemInWork.AssociatedExpenseId);
                 Who = "Контрагент";
             }
 
             AccNameSelectorForTag =
-                _accNameSelectorForAssociations.ForAssociatedTag(AccountItemInWork.AssociatedTagId);
+                accNameSelectorForAssociations.ForAssociatedTag(AccountItemInWork.AssociatedTagId);
         }
     }
 
@@ -130,10 +125,16 @@ public class OneAccountViewModel : Screen
         DisplayName = $"{cap} (id = {AccountItemInWork.Id})";
     }
 
-    public async void Save()
+    public async Task Save()
     {
         ApplyAssociation();
         IsSavePressed = true;
+
+        AccountItemInWork.ChildNumber = AccountItemInWork.Parent!.Children.Count + 1;
+        if (_isInAddMode)
+            await accountRepository.Add(AccountItemInWork);
+        else
+            await accountRepository.Update(AccountItemInWork);
         await TryCloseAsync();
     }
 
@@ -152,7 +153,7 @@ public class OneAccountViewModel : Screen
         }
     }
 
-    public async void Cancel()
+    public async Task Cancel()
     {
         if (!_isInAddMode)
         {

@@ -92,6 +92,7 @@ public sealed class AutofacWpf : Module
         builder.RegisterType<AskDragAccountActionViewModel>().SingleInstance();
         builder.RegisterType<OneAccountViewModel>().SingleInstance();
         builder.RegisterType<OneBankAccountViewModel>().SingleInstance();
+        builder.RegisterType<OneFolderViewModel>().SingleInstance();
         builder.RegisterType<DepositReportViewModel>().SingleInstance();
         builder.RegisterType<ExpensesOnAccountViewModel>().SingleInstance();
         builder.RegisterType<BalanceVerificationViewModel>().SingleInstance();

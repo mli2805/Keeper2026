@@ -5,6 +5,24 @@ namespace KeeperInfrastructure;
 
 public static class TransactionsMapper
 {
+    public static void UpdateEf(this TransactionEf transactionEf, TransactionModel transactionModel)
+    {
+        transactionEf.Timestamp = transactionModel.Timestamp;
+        transactionEf.Operation = transactionModel.Operation;
+        transactionEf.PaymentWay = transactionModel.PaymentWay;
+        transactionEf.Receipt = transactionModel.Receipt;
+        transactionEf.MyAccount = transactionModel.MyAccount.Id;
+        transactionEf.MySecondAccount = transactionModel.MySecondAccount?.Id;
+        transactionEf.Counterparty = transactionModel.Counterparty?.Id;
+        transactionEf.Category = transactionModel.Category?.Id;
+        transactionEf.Amount = transactionModel.Amount;
+        transactionEf.Currency = transactionModel.Currency;
+        transactionEf.AmountInReturn = transactionModel.AmountInReturn != 0 ? transactionModel.AmountInReturn : null;
+        transactionEf.CurrencyInReturn = transactionModel.CurrencyInReturn;
+        transactionEf.Tags = string.Join("|", transactionModel.Tags.Select(t => t.Id));
+        transactionEf.Comment = transactionModel.Comment;
+    }
+
     public static TransactionEf ToEf(this TransactionModel transactionModel)
     {
         return new TransactionEf

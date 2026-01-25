@@ -7,18 +7,22 @@ namespace KeeperWpf;
 
 public static class AccountTreeToDomain
 {
-   
-    public static IEnumerable<Account> FlattenAccountTree(this KeeperDataModel dataModel)
+    public static List<Account> FlattenAccountTree(this KeeperDataModel dataModel)
     {
-        return dataModel.AccountsTree.SelectMany(FlattenBranch);
+        var cN = 0;
+        return dataModel.AccountsTree.SelectMany(a => FlattenBranch(a, ++cN)).ToList();
     }
 
-    private static IEnumerable<Account> FlattenBranch(AccountItemModel accountItemModel)
+    private static List<Account> FlattenBranch(AccountItemModel accountItemModel, int childNumber)
     {
-        var result = new List<Account> { accountItemModel.FromModel() };
+        var account = accountItemModel.FromModel();
+        account.ChildNumber = childNumber;
+        var result = new List<Account> { account };
+
+        var cN = 0;
         foreach (var child in accountItemModel.Children)
         {
-            result.AddRange(FlattenBranch((AccountItemModel)child));
+            result.AddRange(FlattenBranch((AccountItemModel)child, ++cN));
         }
         return result;
     }
