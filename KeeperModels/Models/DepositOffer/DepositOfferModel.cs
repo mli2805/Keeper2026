@@ -67,7 +67,7 @@ public class DepositOfferModel : PropertyChangedBase
     // Conditions of offer could be changed (especially rates, initial sum while Title remains the same)
     // only for newly opened deposits
     // Conditions are applied from some date - key in dictionary
-    public Dictionary<DateTime, DepoCondsModel> CondsMap { get; private set; } = new Dictionary<DateTime, DepoCondsModel>();
+    public Dictionary<DateTime, DepoCondsModel> CondsMap { get; set; } = new Dictionary<DateTime, DepoCondsModel>();
     public int MonthPaymentsMinimum { get; set; }
     public int MonthPaymentsMaximum { get; set; }
     public string Comment { get; set; } = string.Empty;

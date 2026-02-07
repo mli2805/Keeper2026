@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using Caliburn.Micro;
 using KeeperDomain;
+using KeeperInfrastructure;
 using KeeperModels;
 
 namespace KeeperWpf;
@@ -14,6 +15,7 @@ public class BankOffersViewModel : Screen
 {
     private readonly IWindowManager _windowManager;
     private readonly KeeperDataModel _dataModel;
+    private readonly DepositOffersRepository _depositOffersRepository;
     private readonly OneBankOfferViewModel _oneBankOfferViewModel;
     public ObservableCollection<DepositOfferModel> Rows { get; set; } = null!;
 
@@ -30,10 +32,11 @@ public class BankOffersViewModel : Screen
     }
 
     public BankOffersViewModel(IWindowManager windowManager, KeeperDataModel dataModel,
-        OneBankOfferViewModel oneBankOfferViewModel)
+        DepositOffersRepository depositOffersRepository, OneBankOfferViewModel oneBankOfferViewModel)
     {
         _windowManager = windowManager;
         _dataModel = dataModel;
+        _depositOffersRepository = depositOffersRepository;
         _oneBankOfferViewModel = oneBankOfferViewModel;
     }
 
@@ -99,6 +102,7 @@ public class BankOffersViewModel : Screen
 
         Rows.Add(_oneBankOfferViewModel.ModelInWork);
         _dataModel.DepositOffers = Rows.ToList();
+        await _depositOffersRepository.AddDepositOffer(_oneBankOfferViewModel.ModelInWork);
         SelectedDepositOffer = Rows.Last();
     }
 
@@ -114,6 +118,7 @@ public class BankOffersViewModel : Screen
         Rows.Insert(index, offerModel);
         SelectedDepositOffer = Rows[index];
         _dataModel.DepositOffers = Rows.ToList();
+        await _depositOffersRepository.UpdateDepositOffer(offerModel);
     }
 
     public async Task RemoveSelectedOffer()
@@ -125,6 +130,7 @@ public class BankOffersViewModel : Screen
             await _windowManager.ShowDialogAsync(vm);
             return;
         }
+        await _depositOffersRepository.DeleteDepositOffer(SelectedDepositOffer.Id);
         Rows.Remove(SelectedDepositOffer);
         _dataModel.DepositOffers = Rows.ToList();
     }

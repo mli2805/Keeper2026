@@ -5,7 +5,7 @@ namespace KeeperInfrastructure;
 
 public class ToSqlite(IDbContextFactory<KeeperDbContext> factory)
 {
-
+    // данные в формате старого Keeper2018, вычитанные из текстовых файлов, сохраняем в БД SQLite
     public async Task SaveModelToDb(KeeperDomainModel keeperDomainModel)
     {
         using var keeperDbContext = factory.CreateDbContext();
