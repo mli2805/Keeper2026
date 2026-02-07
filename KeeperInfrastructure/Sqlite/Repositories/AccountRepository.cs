@@ -9,14 +9,17 @@ public class AccountRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<(ObservableCollection<AccountItemModel>, Dictionary<int, AccountItemModel>)?> GetAccountModelsTreeAndDict()
     {
-        var accountPlaneList = await GetAllAccounts();
+        using var keeperDbContext = factory.CreateDbContext();
+
+        var accountPlaneList = await keeperDbContext.Accounts.Select(a => a.FromEf()).ToListAsync();
         if (accountPlaneList.Count == 0)
         {
             return null;
         }
-        var bankAccountModels = await GetAllBankAccountsFromDb();
-        var deposits = await GetAllDeposits();
-        var payCards = await GetAllPayCards();
+        var bankAccountModels = await keeperDbContext.BankAccounts.Select(ba => ba.ToModel()).ToListAsync();
+        var deposits = await keeperDbContext.Deposits.Select(d => d.FromEf()).ToListAsync();
+        var payCards = await keeperDbContext.PayCards.Select(pc => pc.FromEf()).ToListAsync();
+
         var acMoDict = accountPlaneList.Select(a => a.ToModel()).ToDictionary(a => a.Id, a => a);
         var accountsTree = new ObservableCollection<AccountItemModel>();
 
@@ -49,25 +52,25 @@ public class AccountRepository(IDbContextFactory<KeeperDbContext> factory)
         return (accountsTree, acMoDict);
     }
 
-    public async Task<List<Account>> GetAllAccounts()
+    private async Task<List<Account>> GetAllAccounts()
     {
         using var keeperDbContext = factory.CreateDbContext();
         return keeperDbContext.Accounts.Select(a => a.FromEf()).ToList();
     }
 
-    public async Task<List<BankAccountModel>> GetAllBankAccountsFromDb()
+    private async Task<List<BankAccountModel>> GetAllBankAccountsFromDb()
     {
         using var keeperDbContext = factory.CreateDbContext();
         return keeperDbContext.BankAccounts.Select(ba => ba.ToModel()).ToList();
     }
 
-    public async Task<List<Deposit>> GetAllDeposits()
+    private async Task<List<Deposit>> GetAllDeposits()
     {
         using var keeperDbContext = factory.CreateDbContext();
         return keeperDbContext.Deposits.Select(d => d.FromEf()).ToList();
     }
 
-    public async Task<List<PayCard>> GetAllPayCards()
+    private async Task<List<PayCard>> GetAllPayCards()
     {
         using var keeperDbContext = factory.CreateDbContext();
         return keeperDbContext.PayCards.Select(pc => pc.FromEf()).ToList();

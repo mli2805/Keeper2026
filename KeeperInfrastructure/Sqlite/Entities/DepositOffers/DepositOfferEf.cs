@@ -25,5 +25,5 @@ public class DepositOfferEf
     [MaxLength(250)] public string Comment { get; set; } = string.Empty;
 
     // Навигационное свойство
-    public List<DepositConditionsEf> Conditions { get; set; } = new List<DepositConditionsEf>();
+    public ICollection<DepositConditionsEf> Conditions { get; set; } = new List<DepositConditionsEf>();
 }

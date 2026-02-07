@@ -74,14 +74,14 @@ public class DepositOffersRepository(IDbContextFactory<KeeperDbContext> factory)
         return result;
     }
 
-    public List<DepositOffer> GetAllDepositOffers()
+    private List<DepositOffer> GetAllDepositOffers()
     {
         using var keeperDbContext = factory.CreateDbContext();
         var result = keeperDbContext.DepositOffers.Select(o=>o.FromEf()).ToList();
         return result;
     }
 
-    public List<DepositConditions> GetDepositConditionsByOfferId(int offerId)
+    private List<DepositConditions> GetDepositConditionsByOfferId(int offerId)
     {
         using var keeperDbContext = factory.CreateDbContext();
         var result = keeperDbContext.DepositConditions
@@ -91,7 +91,7 @@ public class DepositOffersRepository(IDbContextFactory<KeeperDbContext> factory)
         return result;
     }
 
-    public List<DepositRateLine> GetDepositRateLinesByConditionId(int depositConditionsId)
+    private List<DepositRateLine> GetDepositRateLinesByConditionId(int depositConditionsId)
     {
         using var keeperDbContext = factory.CreateDbContext();
         var result = keeperDbContext.DepositRateLines

@@ -65,7 +65,7 @@
                     </MenuItem.Header>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <cal:ActionMessage MethodName="ShowDepoPlusCurreniesChart"/>
+                            <cal:ActionMessage MethodName="ShowDepoPlusCurrenciesChart"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </MenuItem>
