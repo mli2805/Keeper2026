@@ -1,18 +1,82 @@
-﻿namespace Tests.Keeper;
+﻿using KeeperInfrastructure;
+using Microsoft.EntityFrameworkCore;
+
+namespace Tests.Keeper;
 
 [TestClass]
 public sealed class DepositOffersRepositoryTests
 {
+    private IDbContextFactory<KeeperDbContext> _factory = null!;
+
+    [AssemblyInitialize]
+    public static async Task AssemblyInit(TestContext ctx)
+        => await TestHelper.InitializeTemplateAsync();
+
+    [TestInitialize]
+    public void TestInit()
+    {
+        _factory = TestHelper.CreateIsolatedFactory();
+    }
+
+
+    [TestMethod]
+    public async Task ReadDepositOffersTest()
+    {
+        IDbContextFactory<KeeperDbContext> factory = TestHelper.CreateIsolatedFactory();
+        var repository = new DepositOffersRepository(factory);
+        var offers = await repository.GetDepositOffersWithConditionsAndRates(TestHelper.AcMoDict);
+        Assert.IsNotNull(offers);
+        Assert.IsNotEmpty(offers, "Ожидалось, что в базе данных будет хотя бы одна оффера.");
+    }
+
     [TestMethod]
     public async Task AddDepositOfferTest()
     {
-        //var repository = TestHelper.GetDepositOffersRepository();
-        //var offerModel = TestHelper.CreateDepositOfferModel();
-        //await repository.AddDepositOffer(offerModel);
-        //var offers = await repository.GetDepositOffersWithConditionsAndRates(TestHelper.AcMoDict);
-        //var addedOffer = offers.FirstOrDefault(o => o.Id == offerModel.Id);
-        //Assert.IsNotNull(addedOffer);
-        //Assert.AreEqual(offerModel.Name, addedOffer!.Name);
-        //Assert.AreEqual(offerModel.CondsMap.Count, addedOffer.CondsMap.Count);
+        IDbContextFactory<KeeperDbContext> factory = TestHelper.CreateIsolatedFactory();
+        var repository = new DepositOffersRepository(factory);
+        var offers = await repository.GetDepositOffersWithConditionsAndRates(TestHelper.AcMoDict);
+        var initialCount = offers.Count;
+
+        var offerModel = DepositOfferTestHelper.CreateDepositOfferModel(TestHelper.AcMoDict);
+        var savedOfferModel = await repository.AddDepositOffer(offerModel, TestHelper.AcMoDict);
+        var offers2 = await repository.GetDepositOffersWithConditionsAndRates(TestHelper.AcMoDict);
+        Assert.HasCount(expected: initialCount + 1, offers2);
+        var addedOffer = offers2.FirstOrDefault(o => o.Id == savedOfferModel.Id);
+
+        Assert.IsNotNull(addedOffer);
+        Assert.AreEqual(offerModel.MonthPaymentsMinimum, addedOffer!.MonthPaymentsMinimum);
+        Assert.HasCount(expected: offerModel.CondsMap.Count, addedOffer.CondsMap);
+    }
+
+    [TestMethod]
+    public async Task UpdateDepositOfferTest()
+    {
+        // Arrange
+        IDbContextFactory<KeeperDbContext> factory = TestHelper.CreateIsolatedFactory();
+        var repository = new DepositOffersRepository(factory);
+        var offerModel = DepositOfferTestHelper.CreateDepositOfferModel(TestHelper.AcMoDict);
+        var addedOfferModel = await repository.AddDepositOffer(offerModel, TestHelper.AcMoDict);
+
+        // Act - Update title
+        var changedModel = DepositOfferTestHelper.ChangeDepositOfferModel(addedOfferModel);
+        var updatedOfferModel = await repository.UpdateDepositOffer(changedModel, TestHelper.AcMoDict);
+
+        // Assert
+        var offers = await repository.GetDepositOffersWithConditionsAndRates(TestHelper.AcMoDict);
+        var updatedOffer = offers.FirstOrDefault(o => o.Id == addedOfferModel.Id);
+        Assert.IsNotNull(updatedOffer);
+        Assert.AreEqual("Обновленный тестовый вклад", updatedOffer!.Title);
+        Assert.AreEqual(offerModel.MonthPaymentsMinimum + 100, updatedOffer.MonthPaymentsMinimum);
+        var conds1 = updatedOffer.CondsMap[DateTime.Today.AddDays(-30)];
+        Assert.IsNotNull(conds1);
+        Assert.IsFalse(conds1.IsFactDays);
+        Assert.HasCount(3, conds1.RateLines);
+        Assert.AreEqual(4.5m, conds1.RateLines[1].Rate);
+
+        var conds2 = updatedOffer.CondsMap[DateTime.Today.AddDays(-15)];
+        Assert.IsNotNull(conds2);
+        Assert.HasCount(2, conds2.RateLines);
+
+        Assert.IsFalse(updatedOffer.CondsMap.ContainsKey(DateTime.Today));
     }
 }

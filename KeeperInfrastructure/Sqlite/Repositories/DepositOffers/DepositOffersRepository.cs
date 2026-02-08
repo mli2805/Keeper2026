@@ -1,5 +1,6 @@
 ﻿using KeeperModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace KeeperInfrastructure;
 
@@ -16,13 +17,16 @@ public class DepositOffersRepository(IDbContextFactory<KeeperDbContext> factory)
         return offersEf.Select(o => o.ToModel(acMoDict)).ToList();
     }
 
-    public async Task AddDepositOffer(DepositOfferModel offerModel)
+    // возвращает добавленную офферу с условиями и ставками с заполненным Id во всех сущностях
+    public async Task<DepositOfferModel> AddDepositOffer(DepositOfferModel offerModel, Dictionary<int, AccountItemModel> acMoDict)
     {
         using var keeperDbContext = factory.CreateDbContext();
-        await keeperDbContext.DepositOffers.AddAsync(offerModel.FromModel());
+        EntityEntry<DepositOfferEf> entityEntry = await keeperDbContext.DepositOffers.AddAsync(offerModel.FromModel());
         await keeperDbContext.SaveChangesAsync();
+        return entityEntry.Entity.ToModel(acMoDict);
     }
-    public async Task UpdateDepositOffer(DepositOfferModel offerModel)
+
+    public async Task<DepositOfferModel> UpdateDepositOffer(DepositOfferModel offerModel, Dictionary<int, AccountItemModel> acMoDict)
     {
         using var keeperDbContext = factory.CreateDbContext();
         var existingOfferEf = await keeperDbContext.DepositOffers
@@ -100,6 +104,7 @@ public class DepositOffersRepository(IDbContextFactory<KeeperDbContext> factory)
         }
 
         await keeperDbContext.SaveChangesAsync();
+        return existingOfferEf.ToModel(acMoDict);
     }
 
     public async Task DeleteDepositOffer(int offerId)

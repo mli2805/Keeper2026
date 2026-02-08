@@ -102,7 +102,7 @@ public class BankOffersViewModel : Screen
 
         Rows.Add(_oneBankOfferViewModel.ModelInWork);
         _dataModel.DepositOffers = Rows.ToList();
-        await _depositOffersRepository.AddDepositOffer(_oneBankOfferViewModel.ModelInWork);
+         await _depositOffersRepository.AddDepositOffer(_oneBankOfferViewModel.ModelInWork, _dataModel.AcMoDict);
         SelectedDepositOffer = Rows.Last();
     }
 
@@ -118,7 +118,7 @@ public class BankOffersViewModel : Screen
         Rows.Insert(index, offerModel);
         SelectedDepositOffer = Rows[index];
         _dataModel.DepositOffers = Rows.ToList();
-        await _depositOffersRepository.UpdateDepositOffer(offerModel);
+        await _depositOffersRepository.UpdateDepositOffer(offerModel, _dataModel.AcMoDict);
     }
 
     public async Task RemoveSelectedOffer()
