@@ -6,19 +6,6 @@ namespace Tests.Keeper;
 [TestClass]
 public sealed class DepositOffersRepositoryTests
 {
-    private IDbContextFactory<KeeperDbContext> _factory = null!;
-
-    [AssemblyInitialize]
-    public static async Task AssemblyInit(TestContext ctx)
-        => await DbTestHelper.InitializeTemplateAsync();
-
-    [TestInitialize]
-    public void TestInit()
-    {
-        _factory = DbTestHelper.CreateIsolatedFactory();
-    }
-
-
     [TestMethod]
     public async Task ReadDepositOffersTest()
     {
