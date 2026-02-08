@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Tests.Keeper;
 
-public static class TestHelper
+public static class DbTestHelper
 {
     private static SqliteConnection? _templateConnection;
     private static readonly object _lock = new();

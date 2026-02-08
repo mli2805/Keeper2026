@@ -1,5 +1,4 @@
-﻿using KeeperDomain;
-using KeeperModels;
+﻿using KeeperModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;

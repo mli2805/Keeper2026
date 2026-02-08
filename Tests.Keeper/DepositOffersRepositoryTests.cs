@@ -10,21 +10,21 @@ public sealed class DepositOffersRepositoryTests
 
     [AssemblyInitialize]
     public static async Task AssemblyInit(TestContext ctx)
-        => await TestHelper.InitializeTemplateAsync();
+        => await DbTestHelper.InitializeTemplateAsync();
 
     [TestInitialize]
     public void TestInit()
     {
-        _factory = TestHelper.CreateIsolatedFactory();
+        _factory = DbTestHelper.CreateIsolatedFactory();
     }
 
 
     [TestMethod]
     public async Task ReadDepositOffersTest()
     {
-        IDbContextFactory<KeeperDbContext> factory = TestHelper.CreateIsolatedFactory();
+        IDbContextFactory<KeeperDbContext> factory = DbTestHelper.CreateIsolatedFactory();
         var repository = new DepositOffersRepository(factory);
-        var offers = await repository.GetDepositOffersWithConditionsAndRates(TestHelper.AcMoDict);
+        var offers = await repository.GetDepositOffersWithConditionsAndRates(DbTestHelper.AcMoDict);
         Assert.IsNotNull(offers);
         Assert.IsNotEmpty(offers, "Ожидалось, что в базе данных будет хотя бы одна оффера.");
     }
@@ -32,14 +32,14 @@ public sealed class DepositOffersRepositoryTests
     [TestMethod]
     public async Task AddDepositOfferTest()
     {
-        IDbContextFactory<KeeperDbContext> factory = TestHelper.CreateIsolatedFactory();
+        IDbContextFactory<KeeperDbContext> factory = DbTestHelper.CreateIsolatedFactory();
         var repository = new DepositOffersRepository(factory);
-        var offers = await repository.GetDepositOffersWithConditionsAndRates(TestHelper.AcMoDict);
+        var offers = await repository.GetDepositOffersWithConditionsAndRates(DbTestHelper.AcMoDict);
         var initialCount = offers.Count;
 
-        var offerModel = DepositOfferTestHelper.CreateDepositOfferModel(TestHelper.AcMoDict);
-        var savedOfferModel = await repository.AddDepositOffer(offerModel, TestHelper.AcMoDict);
-        var offers2 = await repository.GetDepositOffersWithConditionsAndRates(TestHelper.AcMoDict);
+        var offerModel = DepositOfferTestHelper.CreateDepositOfferModel(DbTestHelper.AcMoDict);
+        var savedOfferModel = await repository.AddDepositOffer(offerModel, DbTestHelper.AcMoDict);
+        var offers2 = await repository.GetDepositOffersWithConditionsAndRates(DbTestHelper.AcMoDict);
         Assert.HasCount(expected: initialCount + 1, offers2);
         var addedOffer = offers2.FirstOrDefault(o => o.Id == savedOfferModel.Id);
 
@@ -52,17 +52,17 @@ public sealed class DepositOffersRepositoryTests
     public async Task UpdateDepositOfferTest()
     {
         // Arrange
-        IDbContextFactory<KeeperDbContext> factory = TestHelper.CreateIsolatedFactory();
+        IDbContextFactory<KeeperDbContext> factory = DbTestHelper.CreateIsolatedFactory();
         var repository = new DepositOffersRepository(factory);
-        var offerModel = DepositOfferTestHelper.CreateDepositOfferModel(TestHelper.AcMoDict);
-        var addedOfferModel = await repository.AddDepositOffer(offerModel, TestHelper.AcMoDict);
+        var offerModel = DepositOfferTestHelper.CreateDepositOfferModel(DbTestHelper.AcMoDict);
+        var addedOfferModel = await repository.AddDepositOffer(offerModel, DbTestHelper.AcMoDict);
 
         // Act - Update title
         var changedModel = DepositOfferTestHelper.ChangeDepositOfferModel(addedOfferModel);
-        var updatedOfferModel = await repository.UpdateDepositOffer(changedModel, TestHelper.AcMoDict);
+        var updatedOfferModel = await repository.UpdateDepositOffer(changedModel, DbTestHelper.AcMoDict);
 
         // Assert
-        var offers = await repository.GetDepositOffersWithConditionsAndRates(TestHelper.AcMoDict);
+        var offers = await repository.GetDepositOffersWithConditionsAndRates(DbTestHelper.AcMoDict);
         var updatedOffer = offers.FirstOrDefault(o => o.Id == addedOfferModel.Id);
         Assert.IsNotNull(updatedOffer);
         Assert.AreEqual("Обновленный тестовый вклад", updatedOffer!.Title);
