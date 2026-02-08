@@ -11,12 +11,9 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
-public class BankOffersViewModel : Screen
+public class BankOffersViewModel(IWindowManager windowManager, KeeperDataModel dataModel,
+    DepositOffersRepository depositOffersRepository, OneBankOfferViewModel oneBankOfferViewModel) : Screen
 {
-    private readonly IWindowManager _windowManager;
-    private readonly KeeperDataModel _dataModel;
-    private readonly DepositOffersRepository _depositOffersRepository;
-    private readonly OneBankOfferViewModel _oneBankOfferViewModel;
     public ObservableCollection<DepositOfferModel> Rows { get; set; } = null!;
 
     private DepositOfferModel _selectedDepositOffer = null!;
@@ -31,15 +28,6 @@ public class BankOffersViewModel : Screen
         }
     }
 
-    public BankOffersViewModel(IWindowManager windowManager, KeeperDataModel dataModel,
-        DepositOffersRepository depositOffersRepository, OneBankOfferViewModel oneBankOfferViewModel)
-    {
-        _windowManager = windowManager;
-        _dataModel = dataModel;
-        _depositOffersRepository = depositOffersRepository;
-        _oneBankOfferViewModel = oneBankOfferViewModel;
-    }
-
     // 161 - папка Карточки
     // 166 - папка Депозиты
     // 902 - папка Трастовые
@@ -51,11 +39,11 @@ public class BankOffersViewModel : Screen
     public SolidColorBrush NotInUseBrush { get; set; } = Brushes.Transparent;
     public void Initialize()
     {
-        Rows = new ObservableCollection<DepositOfferModel>();
+        Rows = [];
 
-        foreach (var depositOfferModel in _dataModel.DepositOffers)
+        foreach (var depositOfferModel in dataModel.DepositOffers)
         {
-            var account = _dataModel.AcMoDict.Values.FirstOrDefault(a =>
+            var account = dataModel.AcMoDict.Values.FirstOrDefault(a =>
                 (a.IsDeposit && a.BankAccount!.DepositOfferId == depositOfferModel.Id)
                 || (a.IsCard && a.BankAccount!.DepositOfferId == depositOfferModel.Id));
 
@@ -90,54 +78,57 @@ public class BankOffersViewModel : Screen
     {
         var offerModel = new DepositOfferModel
         {
-            Id = Rows.Max(l => l.Id) + 1,
             Bank = SelectedDepositOffer.Bank,
             MainCurrency = CurrencyCode.BYN,
             DepositTerm = new DurationModel(1, Durations.Years),
         };
 
-        _oneBankOfferViewModel.Initialize(offerModel);
-        await _windowManager.ShowDialogAsync(_oneBankOfferViewModel);
-        if (_oneBankOfferViewModel.IsCancelled) return;
+        oneBankOfferViewModel.Initialize(offerModel);
+        await windowManager.ShowDialogAsync(oneBankOfferViewModel);
+        if (oneBankOfferViewModel.IsCancelled) return;
 
-        Rows.Add(_oneBankOfferViewModel.ModelInWork);
-        _dataModel.DepositOffers = Rows.ToList();
-         await _depositOffersRepository.AddDepositOffer(_oneBankOfferViewModel.ModelInWork, _dataModel.AcMoDict);
-        SelectedDepositOffer = Rows.Last();
+        var newDepositOffer = await depositOffersRepository
+            .AddDepositOffer(oneBankOfferViewModel.ModelInWork, dataModel.AcMoDict);
+
+        Rows.Add(newDepositOffer);
+        dataModel.DepositOffers.Add(newDepositOffer);
+        SelectedDepositOffer = newDepositOffer;
     }
 
     public async Task EditSelectedOffer()
     {
         var offerModel = SelectedDepositOffer.DeepCopyExceptBank();
-        _oneBankOfferViewModel.Initialize(offerModel);
-        await _windowManager.ShowDialogAsync(_oneBankOfferViewModel);
-        if (_oneBankOfferViewModel.IsCancelled) return;
+        oneBankOfferViewModel.Initialize(offerModel);
+        await windowManager.ShowDialogAsync(oneBankOfferViewModel);
+        if (oneBankOfferViewModel.IsCancelled) return;
+
+        var updatedDepositOffer = await depositOffersRepository
+            .UpdateDepositOffer(oneBankOfferViewModel.ModelInWork, dataModel.AcMoDict);
 
         var index = Rows.IndexOf(SelectedDepositOffer);
         Rows.Remove(SelectedDepositOffer);
-        Rows.Insert(index, offerModel);
-        SelectedDepositOffer = Rows[index];
-        _dataModel.DepositOffers = Rows.ToList();
-        await _depositOffersRepository.UpdateDepositOffer(offerModel, _dataModel.AcMoDict);
+        Rows.Insert(index, updatedDepositOffer);
+        dataModel.DepositOffers = [.. Rows];
+        SelectedDepositOffer = updatedDepositOffer;
     }
 
     public async Task RemoveSelectedOffer()
     {
-        if (_dataModel.AcMoDict.Values.Any(a => a.IsDeposit && a.BankAccount!.DepositOfferId == SelectedDepositOffer.Id))
+        if (dataModel.AcMoDict.Values.Any(a => a.IsDeposit && a.BankAccount!.DepositOfferId == SelectedDepositOffer.Id))
         {
             var strs = new List<string> { "Существует как минимум один депозит открытый по этой оферте.", "", "Сначала удалите депозиты." };
             var vm = new MyMessageBoxViewModel(MessageType.Error, strs);
-            await _windowManager.ShowDialogAsync(vm);
+            await windowManager.ShowDialogAsync(vm);
             return;
         }
-        await _depositOffersRepository.DeleteDepositOffer(SelectedDepositOffer.Id);
+        await depositOffersRepository.DeleteDepositOffer(SelectedDepositOffer.Id);
         Rows.Remove(SelectedDepositOffer);
-        _dataModel.DepositOffers = Rows.ToList();
+        dataModel.DepositOffers = [.. Rows];
     }
 
     public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
     {
-        _dataModel.DepositOffers = Rows.ToList();
+        dataModel.DepositOffers = [.. Rows];
         return await base.CanCloseAsync(cancellationToken);
     }
 }

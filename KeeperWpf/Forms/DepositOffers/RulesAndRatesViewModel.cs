@@ -11,15 +11,12 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
-public class RulesAndRatesViewModel : Screen
+public class RulesAndRatesViewModel(KeeperDataModel dataModel, IWindowManager windowManager) : Screen
 {
-    private readonly KeeperDataModel _dataModel;
-    private readonly IWindowManager _windowManager;
-    public string Title = null!;
+    public string _title = null!;
     public DepoCondsModel Conditions { get; set; } = null!;
     public ObservableCollection<DepositRateLine> Rows { get; set; } = null!;
     public DateTime NewDate { get; set; } = DateTime.Today;
-    private int _maxDepoRateLineId;
 
     public Visibility FormulaVisibility { get; set; }
 
@@ -55,17 +52,10 @@ public class RulesAndRatesViewModel : Screen
 
     public string SaveFormulaAs => Conditions.RateFormula;
 
-    public RulesAndRatesViewModel(KeeperDataModel dataModel, IWindowManager windowManager)
+    public void Initialize(string title, DepoCondsModel conditions, RateType rateType)
     {
-        _dataModel = dataModel;
-        _windowManager = windowManager;
-    }
-
-    public void Initialize(string title, DepoCondsModel conditions, RateType rateType, int maxDepoRateLineId)
-    {
-        Title = title;
+        _title = title;
         Conditions = conditions;
-        _maxDepoRateLineId = maxDepoRateLineId;
 
         FormulaVisibility = rateType == RateType.Linked ? Visibility.Visible : Visibility.Collapsed;
         if (rateType == RateType.Linked)
@@ -76,22 +66,16 @@ public class RulesAndRatesViewModel : Screen
             FormulaK = k;
         }
 
-        Rows = new ObservableCollection<DepositRateLine>();
-        foreach (var rateLine in conditions.RateLines)
-        {
-            Rows.Add(rateLine);
-        }
+        Rows = [.. conditions.RateLines];
         if (Rows.Count == 0)
-            Rows.Add(CreateRateLine(maxDepoRateLineId + 1,
+            Rows.Add(CreateRateLine(
                 rateType == RateType.Linked ? (decimal)RateFormula.Calculate(Conditions.RateFormula, 1) : 0));
     }
 
-    private DepositRateLine CreateRateLine(int id, decimal rate)
+    private static DepositRateLine CreateRateLine(decimal rate)
     {
         return new DepositRateLine()
         {
-            Id = id,
-            DepositOfferConditionsId = Conditions.Id,
             DateFrom = DateTime.Today,
             AmountFrom = 0,
             AmountTo = 999999999999,
@@ -101,20 +85,17 @@ public class RulesAndRatesViewModel : Screen
 
     protected override void OnViewLoaded(object view)
     {
-        DisplayName = Title;
+        DisplayName = _title;
     }
 
     public void AddLine()
     {
         var lastLine = Rows.Last();
-        var id = Math.Max(_maxDepoRateLineId, Rows.Max(r => r.Id));
         var newLine = new DepositRateLine()
         {
-            Id = id + 1,
-            DepositOfferConditionsId = lastLine.DepositOfferConditionsId,
             DateFrom = lastLine.DateFrom,
-            AmountFrom = lastLine.AmountTo + (decimal)0.01,
-            AmountTo = lastLine.AmountTo * 100 - (decimal)0.01,
+            AmountFrom = lastLine.AmountTo + 0.01m,
+            AmountTo = lastLine.AmountTo * 100 - 0.01m,
             Rate = lastLine.Rate,
         };
         Rows.Add(newLine);
@@ -126,7 +107,6 @@ public class RulesAndRatesViewModel : Screen
         var copy = Rows.Where(r => r.DateFrom == lastLine.DateFrom)
             .Select(line => new DepositRateLine()
             {
-                DepositOfferConditionsId = line.DepositOfferConditionsId,
                 DateFrom = NewDate,
                 AmountFrom = line.AmountFrom,
                 AmountTo = line.AmountTo,
@@ -134,10 +114,8 @@ public class RulesAndRatesViewModel : Screen
             })
             .ToList();
 
-        var id = Math.Max(_maxDepoRateLineId, Rows.Max(r => r.Id));
         foreach (var line in copy)
         {
-            line.Id = ++id;
             Rows.Add(line);
         }
     }
@@ -158,7 +136,7 @@ public class RulesAndRatesViewModel : Screen
 
         foreach (var depositRateLine in table)
         {
-            var l = _dataModel.RefinancingRates.Last(r => r.Date.Date <= depositRateLine.DateFrom.Date);
+            var l = dataModel.RefinancingRates.Last(r => r.Date.Date <= depositRateLine.DateFrom.Date);
             depositRateLine.Rate = (decimal)RateFormula.Calculate(Conditions.RateFormula, l.Value);
             Rows.Add(depositRateLine);
         }
@@ -168,7 +146,7 @@ public class RulesAndRatesViewModel : Screen
     // единственный случай когда нужна кнопка здесь - когда заводим новый депозит/новые условия
     private void UpdateTable()
     {
-        _maxDepoRateLineId = _dataModel.UpdateRateLinesInConditions(Conditions, _maxDepoRateLineId);
+        dataModel.UpdateRateLinesInConditions(Conditions);
         Rows.Clear();
         Conditions.RateLines.ForEach(Rows.Add);
     }
@@ -178,11 +156,11 @@ public class RulesAndRatesViewModel : Screen
         if (Rows.Count == 0)
         {
             var vm = new MyMessageBoxViewModel(MessageType.Error, "Таблица не должна быть пустая");
-            await _windowManager.ShowDialogAsync(vm);
+            await windowManager.ShowDialogAsync(vm);
             return await base.CanCloseAsync(cancellationToken);
         }
 
-        Conditions.RateLines = Rows.ToList();
+        Conditions.RateLines = [.. Rows];
         return await base.CanCloseAsync(cancellationToken);
     }
 

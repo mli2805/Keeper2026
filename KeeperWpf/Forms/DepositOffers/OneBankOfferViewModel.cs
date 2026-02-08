@@ -9,12 +9,11 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
-public class OneBankOfferViewModel : Screen
+public class OneBankOfferViewModel(KeeperDataModel keeperDataModel, IWindowManager windowManager,
+    RulesAndRatesViewModel rulesAndRatesViewModel) : Screen
 {
     private readonly string _dateTemplate = "dd-MM-yyyy";
-    private readonly KeeperDataModel _keeperDataModel;
-    private readonly IWindowManager _windowManager;
-    private readonly RulesAndRatesViewModel _rulesAndRatesViewModel;
+
     public List<AccountItemModel> Banks { get; set; } = null!;
     public List<string> BankNames { get; set; } = null!;
     public string SelectedBankName { get; set; } = null!;
@@ -31,22 +30,14 @@ public class OneBankOfferViewModel : Screen
 
     public bool IsCancelled { get; set; }
 
-    public OneBankOfferViewModel(KeeperDataModel keeperDataModel, IWindowManager windowManager, 
-        RulesAndRatesViewModel rulesAndRatesViewModel)
-    {
-        _keeperDataModel = keeperDataModel;
-        _windowManager = windowManager;
-        _rulesAndRatesViewModel = rulesAndRatesViewModel;
-    }
-
     public void Initialize(DepositOfferModel model)
     {
-        Banks = _keeperDataModel.AcMoDict[220].Children.Select(c=>(AccountItemModel)c).ToList();
+        Banks = keeperDataModel.AcMoDict[220].Children.Select(c=>(AccountItemModel)c).ToList();
         BankNames = Banks.Select(b => b.Name).ToList();
         SelectedBankName = BankNames.First(n => n == model.Bank.Name);
-        Currencies = Enum.GetValues(typeof(CurrencyCode)).OfType<CurrencyCode>().ToList();
-        RateTypes = Enum.GetValues(typeof(RateType)).OfType<RateType>().ToList();
-        Durations = Enum.GetValues(typeof(Durations)).OfType<Durations>().ToList();
+        Currencies = Enum.GetValues<CurrencyCode>().OfType<CurrencyCode>().ToList();
+        RateTypes = Enum.GetValues<RateType>().OfType<RateType>().ToList();
+        Durations = Enum.GetValues<Durations>().OfType<Durations>().ToList();
         ModelInWork = model;
         ConditionDates = ModelInWork.CondsMap.Keys.Select(d => d.ToString(_dateTemplate)).ToList();
         if (ConditionDates.Count > 0) SelectedDate = ConditionDates.Last();
@@ -62,41 +53,40 @@ public class OneBankOfferViewModel : Screen
         var date = DateTime.Today;
         while (ModelInWork.CondsMap.ContainsKey(date)) date = date.AddDays(1);
 
-        var lastIdInDb = _keeperDataModel.GetDepoConditionsMaxId();
-        var lastIdHere = ModelInWork.CondsMap.Any()
-            ? ModelInWork.CondsMap.Values.ToList().Max(c => c.Id)
-            : 0;
-        var maxId = Math.Max(lastIdInDb, lastIdHere);
+        //var lastIdInDb = _keeperDataModel.GetDepoConditionsMaxId();
+        //var lastIdHere = ModelInWork.CondsMap.Any()
+        //    ? ModelInWork.CondsMap.Values.ToList().Max(c => c.Id)
+        //    : 0;
+        //var maxId = Math.Max(lastIdInDb, lastIdHere);
 
         var depoCondsModel = new DepoCondsModel()
         {
-            Id = maxId + 1,
-            DepositOfferId = ModelInWork.Id,
+            //DepositOfferId = ModelInWork.Id,
             DateFrom = date,
         };
-        _rulesAndRatesViewModel.Initialize(ModelInWork.Title, depoCondsModel, ModelInWork.RateType, GetMaxDepoRateLineId());
-        await _windowManager.ShowDialogAsync(_rulesAndRatesViewModel);
+        rulesAndRatesViewModel.Initialize(ModelInWork.Title, depoCondsModel, ModelInWork.RateType);
+        await windowManager.ShowDialogAsync(rulesAndRatesViewModel);
         ModelInWork.CondsMap.Add(depoCondsModel.DateFrom, depoCondsModel);
         ConditionDates = ModelInWork.CondsMap.Keys.Select(d => d.ToString(_dateTemplate)).ToList();
         NotifyOfPropertyChange(nameof(ConditionDates));
     }
 
-    private int GetMaxDepoRateLineId()
-    {
-        var lastInDb = _keeperDataModel.GetDepoRateLinesMaxId();
-        var lastIdHere = ModelInWork.CondsMap.Any()
-            ? ModelInWork.CondsMap.Values.ToList()
-                .SelectMany(c => c.RateLines).Max(r => r.Id)
-            : 0;
-        return Math.Max(lastInDb, lastIdHere);
-    }
+    //private int GetMaxDepoRateLineId()
+    //{
+    //    var lastInDb = _keeperDataModel.GetDepoRateLinesMaxId();
+    //    var lastIdHere = ModelInWork.CondsMap.Any()
+    //        ? ModelInWork.CondsMap.Values.ToList()
+    //            .SelectMany(c => c.RateLines).Max(r => r.Id)
+    //        : 0;
+    //    return Math.Max(lastInDb, lastIdHere);
+    //}
 
     public async Task EditConditions()
     {
         if (SelectedDate == null) return;
         var date = DateTime.ParseExact(SelectedDate, _dateTemplate, new DateTimeFormatInfo());
-        _rulesAndRatesViewModel.Initialize(ModelInWork.Title, ModelInWork.CondsMap[date], ModelInWork.RateType, GetMaxDepoRateLineId());
-        await _windowManager.ShowDialogAsync(_rulesAndRatesViewModel);
+        rulesAndRatesViewModel.Initialize(ModelInWork.Title, ModelInWork.CondsMap[date], ModelInWork.RateType);
+        await windowManager.ShowDialogAsync(rulesAndRatesViewModel);
         if (date == ModelInWork.CondsMap[date].DateFrom) return;
 
         var depoCondsModel = ModelInWork.CondsMap[date];
