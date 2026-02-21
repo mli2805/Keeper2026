@@ -8,7 +8,7 @@ public class CarRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<CarModel>> GetAllCarsWithMileages()
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var cars = await keeperDbContext.Cars
             .Include(c => c.YearMileages)
             .ToListAsync();
@@ -43,26 +43,26 @@ public class CarRepository(IDbContextFactory<KeeperDbContext> factory)
 
     public async Task<List<Car>> GetAllCars()
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         return keeperDbContext.Cars.Select(c=>c.FromEf()).ToList();
     }
 
     public async Task<List<CarYearMileage>> GetAllCarYearMileages()
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         return keeperDbContext.CarYearMileages.Select(m=>m.FromEf()).ToList();
     }
 
     public async Task AddCar(Car car)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         keeperDbContext.Cars.Add(car.ToEf());
         await keeperDbContext.SaveChangesAsync();
     }
 
     public async Task AddCarYearMileage(CarYearMileage carYearMileage)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         keeperDbContext.CarYearMileages.Add(carYearMileage.ToEf());
         await keeperDbContext.SaveChangesAsync();
     }

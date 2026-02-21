@@ -143,13 +143,13 @@ public class ToTxtSaver
         var zipFileToCreate = Path.Combine(_backupFolder, archiveName);
         try
         {
-            var zip = ZipFile.Open(zipFileToCreate, ZipArchiveMode.Create);
+            var zip = await ZipFile.OpenAsync(zipFileToCreate, ZipArchiveMode.Create);
             var filenames = Directory.GetFiles(_backupFolder, "*.txt"); // note: this does not recurse directories! 
             foreach (var filename in filenames)
             {
-                zip.CreateEntryFromFile(filename, Path.GetFileName(filename), CompressionLevel.Optimal);
+                await zip.CreateEntryFromFileAsync(filename, Path.GetFileName(filename), CompressionLevel.Optimal);
             }
-            zip.Dispose();
+            await zip.DisposeAsync();
             return null;
         }
         catch (Exception e)

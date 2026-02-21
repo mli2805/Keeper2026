@@ -6,7 +6,7 @@ public class KeeperDbContextInitializer(IDbContextFactory<KeeperDbContext> facto
 {
     public async Task InitializeAsync()
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
 
         // при подкладывании файлов из Keeper2018 удалить базу перед созданием 
         //await keeperDbContext.Database.EnsureDeletedAsync();

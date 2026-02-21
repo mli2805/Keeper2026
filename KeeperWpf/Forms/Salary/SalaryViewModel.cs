@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using KeeperDomain;
+using KeeperInfrastructure;
 using KeeperModels;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 
 namespace KeeperWpf;
 
-public class SalaryViewModel : Screen
+public class SalaryViewModel(KeeperDataModel dataModel, SalaryChangesRepository salaryChangesRepository) : Screen
 {
-    private readonly KeeperDataModel _dataModel;
-
     private List<SalaryLineModel> _rows = new List<SalaryLineModel>();
     public List<SalaryLineModel> Rows
     {
@@ -98,12 +98,6 @@ public class SalaryViewModel : Screen
         }
     }
 
-
-    public SalaryViewModel(KeeperDataModel dataModel)
-    {
-        _dataModel = dataModel;
-    }
-
     protected override void OnViewLoaded(object view)
     {
         DisplayName = "Salary  (O - оклады, T - таблица)";
@@ -111,10 +105,10 @@ public class SalaryViewModel : Screen
 
     public void Initialize()
     {
-        SalaryChanges = _dataModel.SalaryChanges;
-        Employers = _dataModel.AcMoDict[171].Children.Cast<AccountItemModel>().ToList();
+        SalaryChanges = dataModel.SalaryChanges;
+        Employers = dataModel.AcMoDict[171].Children.Cast<AccountItemModel>().ToList();
 
-        var myEmployersFolder = _dataModel.AcMoDict[171];
+        var myEmployersFolder = dataModel.AcMoDict[171];
         _onlySalary = BuildFor(myEmployersFolder, false).ToList();
         _salaryAndIrregulars = BuildFor(myEmployersFolder, true).ToList();
 
@@ -187,7 +181,7 @@ public class SalaryViewModel : Screen
 
     private IEnumerable<SalaryLineModel> BuildFor(AccountItemModel employersFolder, bool includeIrregulars)
     {
-        var transactionModels = _dataModel.Transactions.Values
+        var transactionModels = dataModel.Transactions.Values
             .Where(t => t.Counterparty != null && t.Counterparty.Is(employersFolder));
 
         if (!includeIrregulars)
@@ -217,12 +211,8 @@ public class SalaryViewModel : Screen
                 l.Timestamp.Year == salaryLineModel.Timestamp.Year &&
                 l.Timestamp.Month == salaryLineModel.Timestamp.Month);
 
-            if (line.Employer == null)
-            {
-                line.Employer = salaryLineModel.Employer;
-            }
-            if (line.Amount == null)
-                line.Amount = $"{line.AmountInUsd:0,0} usd";
+            line.Employer = salaryLineModel.Employer;
+            line.Amount = $"{line.AmountInUsd:0,0} usd";
 
             if (!string.IsNullOrEmpty(salaryLineModel.Comment))
             {
@@ -239,7 +229,7 @@ public class SalaryViewModel : Screen
         SalaryLineModel result = new SalaryLineModel();
         result.Timestamp = transaction.Timestamp;
         result.Employer = transaction.Counterparty!.Name;
-        result.Amount = _dataModel.AmountInUsdString(transaction.Timestamp, transaction.Currency, transaction.Amount, out decimal amountInUsd);
+        result.Amount = dataModel.AmountInUsdString(transaction.Timestamp, transaction.Currency, transaction.Amount, out decimal amountInUsd);
         result.AmountInUsd = amountInUsd;
         result.Comment = transaction.Comment;
         return result;
@@ -292,5 +282,13 @@ public class SalaryViewModel : Screen
     public async Task Close()
     {
         await TryCloseAsync();
+    }
+
+    public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
+    {
+        await salaryChangesRepository.SaveAll(SalaryChanges);
+
+        return await base.CanCloseAsync(cancellationToken);
+
     }
 }

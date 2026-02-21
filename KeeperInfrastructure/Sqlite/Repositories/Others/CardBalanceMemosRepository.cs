@@ -8,7 +8,7 @@ public class CardBalanceMemosRepository(IDbContextFactory<KeeperDbContext> facto
 {
     public async Task<List<CardBalanceMemoModel>> GetAllCardBalanceMemos(Dictionary<int, AccountItemModel> AcMoDict)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var result = await keeperDbContext.CardBalanceMemos
             .Select(cm => new CardBalanceMemoModel
             {

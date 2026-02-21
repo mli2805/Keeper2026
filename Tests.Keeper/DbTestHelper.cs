@@ -30,7 +30,7 @@ public static class DbTestHelper
             .UseSqlite(_templateConnection)
             .Options;
 
-        using var ctx = new KeeperDbContext(options);
+        await using var ctx = new KeeperDbContext(options);
         await ctx.Database.EnsureCreatedAsync();
 
         var keeperDomainModel =

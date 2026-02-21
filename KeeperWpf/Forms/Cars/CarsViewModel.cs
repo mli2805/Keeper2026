@@ -165,7 +165,7 @@ public class CarsViewModel : Screen
             var dataFolder = _configuration["DataFolder"] ?? "";
             string filename = $@"reports\{SelectedCar.Title}.pdf";
             var path = System.IO.Path.Combine(dataFolder, filename);
-            document.Save(path);
+            await document.SaveAsync(path);
             var process = new Process()
             {
                 StartInfo = new ProcessStartInfo()

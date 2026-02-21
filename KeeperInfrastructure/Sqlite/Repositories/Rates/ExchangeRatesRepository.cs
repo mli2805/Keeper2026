@@ -14,7 +14,7 @@ public class ExchangeRatesRepository(IDbContextFactory<KeeperDbContext> factory)
 
     public async Task Add(List<ExchangeRates> rates)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var ratesEf = rates.Select(r => r.ToEf());
         keeperDbContext.ExchangeRates.AddRange(ratesEf);
         await keeperDbContext.SaveChangesAsync();
@@ -22,7 +22,7 @@ public class ExchangeRatesRepository(IDbContextFactory<KeeperDbContext> factory)
 
     public async Task Delete(DateTime date)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var rate = await keeperDbContext.ExchangeRates.FirstOrDefaultAsync(r => r.Date == date);
         if (rate != null)
         {

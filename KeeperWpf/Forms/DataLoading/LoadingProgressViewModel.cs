@@ -85,7 +85,7 @@ public class LoadingProgressViewModel : Screen
 
     public async Task Cancel()
     {
-        _cancellationTokenSource.Cancel();
+        await _cancellationTokenSource.CancelAsync();
         await TryCloseAsync(false);
     }
 }

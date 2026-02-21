@@ -15,7 +15,7 @@ public class FuellingsRepository(IDbContextFactory<KeeperDbContext> factory)
 
     public async Task AddFuelling(FuellingModel fuellingModel)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var fuellingEf = fuellingModel.ToEf();
         await keeperDbContext.Fuellings.AddAsync(fuellingEf);
         await keeperDbContext.SaveChangesAsync();
@@ -23,7 +23,7 @@ public class FuellingsRepository(IDbContextFactory<KeeperDbContext> factory)
 
     public async Task DeleteFuelling(int fuellingId)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var fuellingEf = await keeperDbContext.Fuellings.FirstOrDefaultAsync(f => f.Id == fuellingId);
         if (fuellingEf != null)
         {

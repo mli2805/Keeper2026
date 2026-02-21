@@ -8,7 +8,7 @@ public class TrustAssetsRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<TrustAssetModel>> GetAllTrustAssetModels(List<TrustAccount> trustAccounts)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var assetsEf = await keeperDbContext.TrustAssets.ToListAsync();
         var result = new List<TrustAssetModel>(assetsEf.Count);
         foreach (var asset in assetsEf)

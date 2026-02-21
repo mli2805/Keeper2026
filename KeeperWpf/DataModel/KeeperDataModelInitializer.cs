@@ -95,7 +95,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
 
     private async Task GetOthersFromDb()
     {
-        keeperDataModel.SalaryChanges = salaryChangesRepository.GetAllSalaryChanges();
+        keeperDataModel.SalaryChanges = await salaryChangesRepository.GetAllSalaryChanges();
         keeperDataModel.CardBalanceMemoModels = await cardBalanceMemosRepository.GetAllCardBalanceMemos(keeperDataModel.AcMoDict);
         keeperDataModel.LargeExpenseThresholds = largeExpenseThresholdsRepository.GetAllLargeExpenseThresholds();
         keeperDataModel.ButtonCollections = await buttonCollectionsRepository.GetAllButtonCollections(keeperDataModel.AcMoDict);

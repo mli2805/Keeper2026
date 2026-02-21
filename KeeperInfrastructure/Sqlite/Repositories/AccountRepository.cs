@@ -9,7 +9,7 @@ public class AccountRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<(ObservableCollection<AccountItemModel>, Dictionary<int, AccountItemModel>)?> GetAccountModelsTreeAndDict()
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
 
         var accountPlaneList = await keeperDbContext.Accounts.Select(a => a.FromEf()).ToListAsync();
         if (accountPlaneList.Count == 0)
@@ -54,31 +54,31 @@ public class AccountRepository(IDbContextFactory<KeeperDbContext> factory)
 
     private async Task<List<Account>> GetAllAccounts()
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         return keeperDbContext.Accounts.Select(a => a.FromEf()).ToList();
     }
 
     private async Task<List<BankAccountModel>> GetAllBankAccountsFromDb()
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         return keeperDbContext.BankAccounts.Select(ba => ba.ToModel()).ToList();
     }
 
     private async Task<List<Deposit>> GetAllDeposits()
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         return keeperDbContext.Deposits.Select(d => d.FromEf()).ToList();
     }
 
     private async Task<List<PayCard>> GetAllPayCards()
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         return keeperDbContext.PayCards.Select(pc => pc.FromEf()).ToList();
     }
 
     public async Task Add(AccountItemModel accountItemModel)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
 
         if (accountItemModel.IsBankAccount)
         {
@@ -105,7 +105,7 @@ public class AccountRepository(IDbContextFactory<KeeperDbContext> factory)
     // обновление иерархии аккаунтов (ParentId, ChildNumber, IsExpanded) после перетаскивания в дереве
     public async Task UpdateTree(List<Account> accounts)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         foreach (var account in accounts)
         {
             var accountEf = keeperDbContext.Accounts.First(a => a.Id == account.Id);
@@ -119,7 +119,7 @@ public class AccountRepository(IDbContextFactory<KeeperDbContext> factory)
 
     public async Task Update(AccountItemModel accountItemModel)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         if (accountItemModel.IsBankAccount)
         {
             var bankAccountEf = keeperDbContext.BankAccounts.First(ba => ba.Id == accountItemModel.Id);
@@ -142,7 +142,7 @@ public class AccountRepository(IDbContextFactory<KeeperDbContext> factory)
 
     public async Task DeleteByAccountId(int id)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         await keeperDbContext.Accounts.Where(a => a.Id == id).ExecuteDeleteAsync();
         // если это не банк. счет, то никаких проблем не будет, просто ничего не удалится
         await keeperDbContext.BankAccounts.Where(ba => ba.Id == id).ExecuteDeleteAsync();

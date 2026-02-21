@@ -8,7 +8,7 @@ public class ButtonCollectionsRepository(IDbContextFactory<KeeperDbContext> fact
 {
     public async Task<List<ButtonCollectionModel>> GetAllButtonCollections(Dictionary<int, AccountItemModel> AcMoDict)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         List<ButtonCollectionEf> bcs = await keeperDbContext.ButtonCollections.ToListAsync();
         var result = new List<ButtonCollectionModel>(bcs.Count);
         foreach (var bc in bcs)

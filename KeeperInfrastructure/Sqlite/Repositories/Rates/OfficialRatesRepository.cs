@@ -14,7 +14,7 @@ public class OfficialRatesRepository(IDbContextFactory<KeeperDbContext> factory)
 
     public async Task Add(List<OfficialRates> rates)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var ratesEf = rates.Select(r=>r.ToEf());
         keeperDbContext.OfficialRates.AddRange(ratesEf);
         await keeperDbContext.SaveChangesAsync();
@@ -22,7 +22,7 @@ public class OfficialRatesRepository(IDbContextFactory<KeeperDbContext> factory)
 
     public async Task UpdateSome(List<OfficialRates> rates)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         foreach (var rate in rates)
         {
             var existingEf = keeperDbContext.OfficialRates.FirstOrDefault(r => r.Id == rate.Id);
@@ -39,7 +39,7 @@ public class OfficialRatesRepository(IDbContextFactory<KeeperDbContext> factory)
 
     public async Task DeleteRate(int rateId)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var rateEf = await keeperDbContext.OfficialRates.FirstOrDefaultAsync(r => r.Id == rateId);
         if (rateEf != null)
         {

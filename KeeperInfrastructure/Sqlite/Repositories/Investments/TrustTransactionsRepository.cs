@@ -9,7 +9,7 @@ public class TrustTransactionsRepository(IDbContextFactory<KeeperDbContext> fact
     public async Task<List<TrustTranModel>> GetAllTrustTransactionModels(Dictionary<int, AccountItemModel> acMoDict,
            List<TrustAccount> trustAccounts, List<TrustAssetModel> trustAssetModels)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var transactionsEf = await keeperDbContext.TrustTransactions.ToListAsync();
         var result = new List<TrustTranModel>(transactionsEf.Count);
         foreach (var transaction in transactionsEf)

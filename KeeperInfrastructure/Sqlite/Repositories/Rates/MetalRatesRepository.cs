@@ -14,7 +14,7 @@ public class MetalRatesRepository(IDbContextFactory<KeeperDbContext> factory)
 
     public async Task UpdateWholeList(IEnumerable<MetalRate> metalRates)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
 
         var uiRates = metalRates.ToList();
 
