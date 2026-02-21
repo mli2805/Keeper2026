@@ -39,7 +39,7 @@ public static class DepositOfferTestHelper
         return model;
     }
 
-    private static DepoCondsModel CreateDepoCondsModel(DateTime date)
+    public static DepoCondsModel CreateDepoCondsModel(DateTime date)
     {
         return new DepoCondsModel
         {
@@ -53,7 +53,7 @@ public static class DepositOfferTestHelper
         };
     }
 
-    private static DepositRateLine CreateDepositRateLine(DateTime date, decimal amountFrom, decimal amountTo, decimal rate)
+    public static DepositRateLine CreateDepositRateLine(DateTime date, decimal amountFrom, decimal amountTo, decimal rate)
     {
         return new DepositRateLine
         {

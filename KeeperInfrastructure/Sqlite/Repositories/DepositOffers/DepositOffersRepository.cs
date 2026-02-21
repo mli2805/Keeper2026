@@ -8,7 +8,7 @@ public class DepositOffersRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<DepositOfferModel>> GetDepositOffersWithConditionsAndRates(Dictionary<int, AccountItemModel> acMoDict)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var offersEf = await keeperDbContext.DepositOffers
             .Include(o => o.Conditions)
             .ThenInclude(c => c.RateLines)
@@ -20,7 +20,7 @@ public class DepositOffersRepository(IDbContextFactory<KeeperDbContext> factory)
     // возвращает добавленную офферу с условиями и ставками с заполненным Id во всех сущностях
     public async Task<DepositOfferModel> AddDepositOffer(DepositOfferModel offerModel, Dictionary<int, AccountItemModel> acMoDict)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         EntityEntry<DepositOfferEf> entityEntry = await keeperDbContext.DepositOffers.AddAsync(offerModel.FromModel());
         await keeperDbContext.SaveChangesAsync();
         return entityEntry.Entity.ToModel(acMoDict);
@@ -28,7 +28,7 @@ public class DepositOffersRepository(IDbContextFactory<KeeperDbContext> factory)
 
     public async Task<DepositOfferModel> UpdateDepositOffer(DepositOfferModel offerModel, Dictionary<int, AccountItemModel> acMoDict)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var existingOfferEf = await keeperDbContext.DepositOffers
             .Include(o => o.Conditions)
             .ThenInclude(c => c.RateLines)
@@ -109,7 +109,7 @@ public class DepositOffersRepository(IDbContextFactory<KeeperDbContext> factory)
 
     public async Task DeleteDepositOffer(int offerId)
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var offerEf = await keeperDbContext.DepositOffers
             .Include(o => o.Conditions)
             .ThenInclude(c => c.RateLines)

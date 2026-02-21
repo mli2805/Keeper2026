@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        xmlns:keeperModels="clr-namespace:KeeperModels;assembly=KeeperModels"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance keeperWpf:CarsViewModel}"
         Width="754"  Height="650" WindowStartupLocation="CenterScreen">
     <DockPanel Margin="5">
@@ -24,7 +25,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding PurchaseDate, StringFormat='{}{0:d/MM/yyyy}'}" TextAlignment="Right"
-                                           d:DataContext="{d:DesignInstance keeperWpf:CarModel}" />
+                                           d:DataContext="{d:DesignInstance keeperModels:CarModel}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -32,7 +33,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding PurchaseMileage}" TextAlignment="Right"
-                                           d:DataContext="{d:DesignInstance keeperWpf:CarModel}"/>
+                                           d:DataContext="{d:DesignInstance keeperModels:CarModel}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -40,7 +41,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding SaleDate, StringFormat='{}{0:d/MM/yyyy}'}" TextAlignment="Right"
-                                           d:DataContext="{d:DesignInstance keeperWpf:CarModel}"/>
+                                           d:DataContext="{d:DesignInstance keeperModels:CarModel}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -48,7 +49,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding SaleMileage}" TextAlignment="Right"
-                                           d:DataContext="{d:DesignInstance keeperWpf:CarModel}"/>
+                                           d:DataContext="{d:DesignInstance keeperModels:CarModel}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -56,7 +57,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding MileageDifference}" TextAlignment="Right"
-                                           d:DataContext="{d:DesignInstance keeperWpf:CarModel}"/>
+                                           d:DataContext="{d:DesignInstance keeperModels:CarModel}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -64,7 +65,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding MileageAday}" TextAlignment="Right"
-                                           d:DataContext="{d:DesignInstance keeperWpf:CarModel}"/>
+                                           d:DataContext="{d:DesignInstance keeperModels:CarModel}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

@@ -10,7 +10,7 @@
                 </ResourceDictionary>
                 <ResourceDictionary>
                     <HierarchicalDataTemplate x:Key="ComboBoxTreeViewDataTemplate" 
-                           ItemsSource="{Binding Children}" DataType="local:AccName">
+                           ItemsSource="{Binding Children}" DataType="{x:Type keeperWpf:AccName}">
                         <TextBlock Text="{Binding Name}" FontSize="12" />
                     </HierarchicalDataTemplate>
                     
