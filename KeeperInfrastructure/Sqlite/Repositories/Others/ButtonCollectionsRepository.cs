@@ -1,4 +1,3 @@
-using KeeperDomain;
 using KeeperModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,10 +26,32 @@ public class ButtonCollectionsRepository(IDbContextFactory<KeeperDbContext> fact
         return result;
     }
 
-    public List<ButtonCollection> GetAllButtonCollections()
+    public async Task SaveAll(List<ButtonCollectionModel> lines)
     {
-        using var keeperDbContext = factory.CreateDbContext();
-        var result = keeperDbContext.ButtonCollections.Select(bc => bc.FromEf()).ToList();
-        return result;
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
+        foreach (ButtonCollectionModel buttonCollection in lines)
+        {
+            var buttonCollectionEf = await keeperDbContext.ButtonCollections
+                .FirstOrDefaultAsync(s => s.Id == buttonCollection.Id);
+            if (buttonCollectionEf == null)
+            {
+                buttonCollectionEf = buttonCollection.ToEf();
+                await keeperDbContext.ButtonCollections.AddAsync(buttonCollectionEf);
+            }
+            else
+            {
+                buttonCollectionEf.Name = buttonCollection.Name;
+                buttonCollectionEf.AccountIdsString = string.Join(';', buttonCollection.AccountModels.Select(am => am.Id));
+            }
+        }
+        foreach (ButtonCollectionEf buttonCollectionEf in keeperDbContext.ButtonCollections)
+        {
+            if (lines.FirstOrDefault(l => l.Id == buttonCollectionEf.Id) == null)
+            {
+                keeperDbContext.ButtonCollections.Remove(buttonCollectionEf);
+            }
+        }
+        await keeperDbContext.SaveChangesAsync();
     }
+
 }

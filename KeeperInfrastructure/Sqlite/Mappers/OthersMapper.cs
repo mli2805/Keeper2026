@@ -1,4 +1,5 @@
 ﻿using KeeperDomain;
+using KeeperModels;
 
 namespace KeeperInfrastructure;
 
@@ -79,6 +80,16 @@ public static class OthersMapper
             AccountIdsString = bc.AccountIds.Count > 0 ? string.Join(";", bc.AccountIds) : ""
         };
     }
+
+    public static ButtonCollectionEf ToEf(this ButtonCollectionModel bcm)
+    {
+        return new ButtonCollectionEf
+        {
+            Id = bcm.Id,
+            Name = bcm.Name,
+            AccountIdsString = bcm.AccountModels.Count > 0 ? string.Join(";", bcm.AccountModels.Select(am => am.Id)) : ""
+        };
+    }   
 
     public static ButtonCollection FromEf(this ButtonCollectionEf bcEf)
     {
