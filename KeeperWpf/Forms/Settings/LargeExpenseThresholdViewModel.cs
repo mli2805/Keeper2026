@@ -1,11 +1,23 @@
-﻿namespace KeeperWpf;
+﻿using Caliburn.Micro;
+using KeeperInfrastructure;
+using System.Threading;
+using System.Threading.Tasks;
 
-public class LargeExpenseThresholdViewModel
+namespace KeeperWpf;
+
+public class LargeExpenseThresholdViewModel(KeeperDataModel keeperDataModel,
+    LargeExpenseThresholdsRepository largeExpenseThresholdsRepository) : Screen
 {
-    public KeeperDataModel KeeperDataModel { get; set; }
+    public KeeperDataModel KeeperDataModel { get; } = keeperDataModel;
 
-    public LargeExpenseThresholdViewModel(KeeperDataModel keeperDataModel)
+    protected override void OnViewLoaded(object view)
     {
-        KeeperDataModel = keeperDataModel;
+        DisplayName = "Настройка порог крупных покупок";
     }
+ 
+    public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
+    {
+        await largeExpenseThresholdsRepository.SaveAll(KeeperDataModel.LargeExpenseThresholds);
+        return true;
+    }   
 }

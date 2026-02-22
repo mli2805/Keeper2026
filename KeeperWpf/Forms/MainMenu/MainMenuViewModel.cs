@@ -21,7 +21,8 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     TrustAccountsViewModel trustAccountsViewModel, InvestmentTransactionsViewModel investmentTransactionsViewModel,
     InvestmentAnalysisViewModel investmentAnalysisViewModel,
     //
-    MemosViewModel memosViewModel, SettingsViewModel settingsViewModel, 
+    MemosViewModel memosViewModel,
+    LargeExpenseThresholdViewModel largeExpenseThresholdViewModel,
     ButtonCollectionBuilderViewModel buttonCollectionBuilderViewModel, ToTxtSaver toTxtSaver)
     : PropertyChangedBase
 {
@@ -128,9 +129,6 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
                 break;
             case Key.P:
                 await ShowPayCardsForm();
-                break;
-            case Key.F10:
-                await ShowSettingsForm();
                 break;
             case Key.S:
                 await SaveInTextFilesForBackup();
@@ -282,9 +280,9 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         await windowManager.ShowDialogAsync(memosViewModel);
     }
 
-    public async Task ShowSettingsForm()
+    public async Task ShowLargeExpenseThreholdsForm()
     {
-        await windowManager.ShowDialogAsync(settingsViewModel);
+        await windowManager.ShowDialogAsync(largeExpenseThresholdViewModel);
     }
 
     public async Task ShowButtonCollectionBuilder()

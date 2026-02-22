@@ -164,21 +164,21 @@
                 </MenuItem.Header>
                 <MenuItem Background="White" BorderBrush="White">
                     <MenuItem.Header>
-                        <TextBlock Text="Общие настройки"/>
-                    </MenuItem.Header>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <cal:ActionMessage MethodName="ShowSettingsForm"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </MenuItem>
-                <MenuItem Background="White" BorderBrush="White">
-                    <MenuItem.Header>
                         <TextBlock Text="Коллекции кнопок"/>
                     </MenuItem.Header>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <cal:ActionMessage MethodName="ShowButtonCollectionBuilder"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </MenuItem>
+                <MenuItem Background="White" BorderBrush="White">
+                    <MenuItem.Header>
+                        <TextBlock Text="Пороги больших покупок"/>
+                    </MenuItem.Header>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <cal:ActionMessage MethodName="ShowLargeExpenseThreholdsForm"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </MenuItem>

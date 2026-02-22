@@ -148,7 +148,6 @@ public sealed class AutofacWpf : Module
         builder.RegisterType<CardBalanceMemoViewModel>();
 
         // Settings view models
-        builder.RegisterType<SettingsViewModel>();
         builder.RegisterType<LargeExpenseThresholdViewModel>();
         builder.RegisterType<ButtonCollectionBuilderViewModel>();
 
