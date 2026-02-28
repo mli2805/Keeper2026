@@ -1,2 +1,2 @@
-namespace KeeperWpf; 
+﻿namespace KeeperWpf; 
 public interface IShell {}

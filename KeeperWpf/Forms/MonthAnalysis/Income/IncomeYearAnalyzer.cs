@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+п»їusing System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -18,11 +18,11 @@ public static class IncomeYearAnalyzer
         {
             var amountInUsd = dataModel.AmountInUsd(tran.Timestamp, tran.Currency, tran.Amount);
 
-            if (tran.Category!.Is(186) || tran.Category.Is(212)) // зарплата (+иррациональные)
+            if (tran.Category!.Is(186) || tran.Category.Is(212)) // Р·Р°СЂРїР»Р°С‚Р° (+РёСЂСЂР°С†РёРѕРЅР°Р»СЊРЅС‹Рµ)
             {
                 result.Employers.CreateNewOrSumValue(tran.Category, amountInUsd);
             }
-            else if (tran.Category.Id == 208 || tran.Category.Id == 209) // %% по вкладу (по карточкам тоже) или дивиденды (траст)
+            else if (tran.Category.Id == 208 || tran.Category.Id == 209) // %% РїРѕ РІРєР»Р°РґСѓ (РїРѕ РєР°СЂС‚РѕС‡РєР°Рј С‚РѕР¶Рµ) РёР»Рё РґРёРІРёРґРµРЅРґС‹ (С‚СЂР°СЃС‚)
             {
                 result.DepoByCurrency.CreateNewOrSumValue(tran.Currency, amountInUsd);
             }
@@ -30,7 +30,7 @@ public static class IncomeYearAnalyzer
             {
                 result.Cards.CreateNewOrSumValue(tran.MyAccount, amountInUsd);
             }
-            else  // остальные типы доходов
+            else  // РѕСЃС‚Р°Р»СЊРЅС‹Рµ С‚РёРїС‹ РґРѕС…РѕРґРѕРІ
             {
 
                 result.Rests.CreateNewOrSumValue(tran.Category, amountInUsd);
@@ -50,7 +50,7 @@ public static class IncomeYearAnalyzer
             var sum = $"{pair.Value:#,0.00} usd".PadLeft(14);
             list.Add($" {sum}  {pair.Key.Name}", Brushes.Blue);
         }
-        list.Add($"   Итого зарплата {employers.Values.Sum():#,0.00} usd", FontWeights.Bold, Brushes.Blue);
+        list.Add($"   РС‚РѕРіРѕ Р·Р°СЂРїР»Р°С‚Р° {employers.Values.Sum():#,0.00} usd", FontWeights.Bold, Brushes.Blue);
         return list;
     }
 
@@ -61,9 +61,9 @@ public static class IncomeYearAnalyzer
         foreach (var pair in depoByCurrency.OrderByDescending(p => p.Value))
         {
             var sum = $"{pair.Value:#,0.00} usd".PadLeft(14);
-            list.Add($" {sum} - депозиты в {pair.Key}", Brushes.Blue);
+            list.Add($" {sum} - РґРµРїРѕР·РёС‚С‹ РІ {pair.Key}", Brushes.Blue);
         }
-        list.Add($"   Итого депозиты {depoByCurrency.Values.Sum():#,0.00} usd", FontWeights.Bold, Brushes.Blue);
+        list.Add($"   РС‚РѕРіРѕ РґРµРїРѕР·РёС‚С‹ {depoByCurrency.Values.Sum():#,0.00} usd", FontWeights.Bold, Brushes.Blue);
         return list;
     }
 
@@ -78,7 +78,7 @@ public static class IncomeYearAnalyzer
             list.Add($" {sum}  {cardName}", Brushes.Blue);
 
         }
-        list.Add($"   Итого манибэк {cards.Values.Sum():#,0.00} usd", FontWeights.Bold, Brushes.Blue);
+        list.Add($"   РС‚РѕРіРѕ РјР°РЅРёР±СЌРє {cards.Values.Sum():#,0.00} usd", FontWeights.Bold, Brushes.Blue);
         return list;
     }
 
@@ -91,7 +91,7 @@ public static class IncomeYearAnalyzer
             var sum = $"{pair.Value:#,0.00} usd".PadLeft(14);
             list.Add($" {sum}  {pair.Key.Name}", Brushes.Blue);
         }
-        list.Add($"   Итого прочее {rests.Values.Sum():#,0.00} usd", FontWeights.Bold, Brushes.Blue);
+        list.Add($"   РС‚РѕРіРѕ РїСЂРѕС‡РµРµ {rests.Values.Sum():#,0.00} usd", FontWeights.Bold, Brushes.Blue);
     }
 
     private static void CreateNewOrSumValue<TKey>(this IDictionary<TKey, decimal> map, TKey key, decimal value)

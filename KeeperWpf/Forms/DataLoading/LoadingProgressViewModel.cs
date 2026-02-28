@@ -13,7 +13,7 @@ public class LoadingProgressViewModel : Screen
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
     private readonly CancellationToken _cancellationToken;
-    private readonly IConfiguration _configuration;
+    private readonly PathFinder _pathFinder;
     private readonly ToSqlite _toSqlite;
 
 
@@ -30,10 +30,10 @@ public class LoadingProgressViewModel : Screen
     }
 
 
-    public LoadingProgressViewModel(IConfiguration configuration, ToSqlite toSqlite)
+    public LoadingProgressViewModel(PathFinder pathFinder, ToSqlite toSqlite)
     {
         _cancellationToken = _cancellationTokenSource.Token;
-        _configuration = configuration;
+        _pathFinder = pathFinder;
         _toSqlite = toSqlite;
     }
 
@@ -62,7 +62,7 @@ public class LoadingProgressViewModel : Screen
 
     private async Task<KeeperDomainModel?> TryLoadAllFromTextFiles()
     {
-        var backupFolder = Path.Combine(_configuration["DataFolder"] ?? "", "backup");
+        var backupFolder = Path.Combine(_pathFinder.GetDataFolder(), "backup");
 
         KeeperDomainModel? keeperDomainModel;
         try

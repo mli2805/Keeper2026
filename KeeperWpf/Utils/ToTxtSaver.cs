@@ -15,9 +15,9 @@ public class ToTxtSaver
     private string _backupFolder;
     private readonly KeeperDataModel _keeperDataModel;
 
-    public ToTxtSaver(IConfiguration configuration, KeeperDataModel keeperDataModel)
+    public ToTxtSaver(PathFinder pathFinder, KeeperDataModel keeperDataModel)
     {
-        var dataFolderPath = configuration["DataFolder"];
+        var dataFolderPath = pathFinder.GetDataFolder();
         _backupFolder = dataFolderPath != null ? Path.Combine(dataFolderPath, "backup") : @"../backup";
         _keeperDataModel = keeperDataModel;
     }

@@ -1,4 +1,4 @@
-using Autofac;
+п»їusing Autofac;
 using Caliburn.Micro;
 using KeeperInfrastructure;
 using Microsoft.Extensions.Configuration;
@@ -57,7 +57,7 @@ public class AppBootstrapper : BootstrapperBase
         _container = builder.Build();
 
         var initializer = _container.Resolve<KeeperDbContextInitializer>();
-        // создаст базу данных, если её нет до ShellViewModel, чтобы было куда зачитывать из текстовых файлов
+        // СЃРѕР·РґР°СЃС‚ Р±Р°Р·Сѓ РґР°РЅРЅС‹С…, РµСЃР»Рё РµС‘ РЅРµС‚ РґРѕ ShellViewModel, С‡С‚РѕР±С‹ Р±С‹Р»Рѕ РєСѓРґР° Р·Р°С‡РёС‚С‹РІР°С‚СЊ РёР· С‚РµРєСЃС‚РѕРІС‹С… С„Р°Р№Р»РѕРІ
         await initializer.InitializeAsync();
 
         await DisplayRootViewForAsync<IShell>();

@@ -14,7 +14,7 @@ namespace KeeperWpf;
 
 public class PaymentWaysViewModel : Screen
 {
-    private readonly IConfiguration _configuration;
+    private readonly PathFinder _pathFinder;
     private readonly KeeperDataModel _dataModel;
     private AccountItemModel _cardAccountItemModel = null!;
     private Period _period = null!;
@@ -72,9 +72,9 @@ public class PaymentWaysViewModel : Screen
 
     public string Total => $"Итого: {_sumTo} - {_sumFrom} = {_sumTo - _sumFrom}";
 
-    public PaymentWaysViewModel(IConfiguration configuration, KeeperDataModel dataModel)
+    public PaymentWaysViewModel(PathFinder pathFinder, KeeperDataModel dataModel)
     {
-        _configuration = configuration;
+        _pathFinder = pathFinder;
         _dataModel = dataModel;
     }
 
@@ -231,9 +231,9 @@ public class PaymentWaysViewModel : Screen
 
     public void Export()
     {
-        var dbFolder = _configuration["DataFolder"] ?? "";
+        var dataFolder = _pathFinder.GetDataFolder();
 
-        var dlg = new SaveFileDialog { InitialDirectory = Path.Combine(dbFolder, @"\Reports"), DefaultExt = "csv", Filter = "Csv files|*.csv" };
+        var dlg = new SaveFileDialog { InitialDirectory = Path.Combine(dataFolder, @"\Reports"), DefaultExt = "csv", Filter = "Csv files|*.csv" };
         if (dlg.ShowDialog() != true)
             return;
 

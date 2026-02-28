@@ -1,0 +1,19 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Force text files to have LF line endings
+*.cs text eol=crlf working-tree-encoding=UTF-8
+*.csproj text eol=crlf
+*.sln text eol=crlf
+*.xaml text eol=crlf
+*.xml text eol=crlf
+*.json text eol=crlf
+*.config text eol=crlf
+*.md text eol=crlf
+
+# Denote binary files
+*.png binary
+*.jpg binary
+*.ico binary
+*.dll binary
+*.exe binary

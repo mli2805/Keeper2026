@@ -6,6 +6,9 @@ root = true
 
 #### Core EditorConfig Options ####
 
+# Character encoding
+charset = utf-8-bom
+
 # Indentation and spacing
 indent_size = 4
 indent_style = space

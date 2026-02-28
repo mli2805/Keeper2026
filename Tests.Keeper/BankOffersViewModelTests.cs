@@ -1,4 +1,4 @@
-using Caliburn.Micro;
+п»їusing Caliburn.Micro;
 using KeeperInfrastructure;
 using KeeperWpf;
 using Moq;
@@ -15,7 +15,7 @@ public sealed class BankOffersViewModelTests
         var factory = DbTestHelper.CreateIsolatedFactory();
         var depositOffersRepository = new DepositOffersRepository(factory);
 
-        // создаем новый офер без депозитов, чтобы можно было его удалить
+        // СЃРѕР·РґР°РµРј РЅРѕРІС‹Р№ РѕС„РµСЂ Р±РµР· РґРµРїРѕР·РёС‚РѕРІ, С‡С‚РѕР±С‹ РјРѕР¶РЅРѕ Р±С‹Р»Рѕ РµРіРѕ СѓРґР°Р»РёС‚СЊ
         var addedOffer = DepositOfferTestHelper.CreateDepositOfferModel(DbTestHelper.AcMoDict);
         addedOffer = await depositOffersRepository.AddDepositOffer(addedOffer, DbTestHelper.AcMoDict);
 
@@ -36,7 +36,7 @@ public sealed class BankOffersViewModelTests
         var viewModel = new BankOffersViewModel(windowManagerMock.Object, dataModel, depositOffersRepository, oneBankOfferViewModel);
         viewModel.Initialize();
 
-        // селектим добавленный оффер 
+        // СЃРµР»РµРєС‚РёРј РґРѕР±Р°РІР»РµРЅРЅС‹Р№ РѕС„С„РµСЂ 
         viewModel.SelectedDepositOffer = viewModel.Rows.First(r => r.Id == addedOffer.Id);
         var initialCount = viewModel.Rows.Count;
 
@@ -215,8 +215,8 @@ public sealed class BankOffersViewModelTests
             .Setup(wm => wm.ShowDialogAsync(oneBankOfferViewModel, It.IsAny<object>(), It.IsAny<IDictionary<string, object>>()))
             .Callback(() =>
             {
-                // вот здесь я присваиваю измененную модель, созданную в хелпере, она правильная,
-                // а вот при редактировании через реальные формы создается неправильная модель
+                // РІРѕС‚ Р·РґРµСЃСЊ СЏ РїСЂРёСЃРІР°РёРІР°СЋ РёР·РјРµРЅРµРЅРЅСѓСЋ РјРѕРґРµР»СЊ, СЃРѕР·РґР°РЅРЅСѓСЋ РІ С…РµР»РїРµСЂРµ, РѕРЅР° РїСЂР°РІРёР»СЊРЅР°СЏ,
+                // Р° РІРѕС‚ РїСЂРё СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРё С‡РµСЂРµР· СЂРµР°Р»СЊРЅС‹Рµ С„РѕСЂРјС‹ СЃРѕР·РґР°РµС‚СЃСЏ РЅРµРїСЂР°РІРёР»СЊРЅР°СЏ РјРѕРґРµР»СЊ
                 oneBankOfferViewModel.ModelInWork = DepositOfferTestHelper.ChangeDepositOfferModel(addedOffer);
                 oneBankOfferViewModel.IsCancelled = false;
             })
@@ -232,13 +232,13 @@ public sealed class BankOffersViewModelTests
 
         // Assert
         var updatedInCollection = viewModel.Rows.First(r => r.Id == addedOffer.Id);
-        Assert.AreEqual("Обновленный тестовый вклад", updatedInCollection.Title, "Title should be updated in collection");
+        Assert.AreEqual("РћР±РЅРѕРІР»РµРЅРЅС‹Р№ С‚РµСЃС‚РѕРІС‹Р№ РІРєР»Р°Рґ", updatedInCollection.Title, "Title should be updated in collection");
         Assert.AreEqual(200, updatedInCollection.MonthPaymentsMinimum, "MonthPaymentsMinimum should be updated");
 
         // Verify it's updated in database
         var offersFromDb = await depositOffersRepository.GetDepositOffersWithConditionsAndRates(DbTestHelper.AcMoDict);
         var updatedInDb = offersFromDb.First(o => o.Id == addedOffer.Id);
-        Assert.AreEqual("Обновленный тестовый вклад", updatedInDb.Title, "Title should be updated in database");
+        Assert.AreEqual("РћР±РЅРѕРІР»РµРЅРЅС‹Р№ С‚РµСЃС‚РѕРІС‹Р№ РІРєР»Р°Рґ", updatedInDb.Title, "Title should be updated in database");
         Assert.AreEqual(200, updatedInDb.MonthPaymentsMinimum, "MonthPaymentsMinimum should be updated in database");
 
         var conds1 = updatedInDb.CondsMap[DateTime.Today.AddDays(-30)];
@@ -288,7 +288,7 @@ public sealed class BankOffersViewModelTests
             {
                 // Simulate editing through the form
                 // 1. Change basic properties
-                oneBankOfferViewModel.ModelInWork.Title = "Обновленный тестовый вклад";
+                oneBankOfferViewModel.ModelInWork.Title = "РћР±РЅРѕРІР»РµРЅРЅС‹Р№ С‚РµСЃС‚РѕРІС‹Р№ РІРєР»Р°Рґ";
                 oneBankOfferViewModel.ModelInWork.MonthPaymentsMinimum = 200;
 
                 // 2. Simulate editing conditions via RulesAndRatesViewModel
@@ -331,14 +331,14 @@ public sealed class BankOffersViewModelTests
 
         // Assert - Check collection
         var updatedInCollection = viewModel.Rows.First(r => r.Id == addedOffer.Id);
-        Assert.AreEqual("Обновленный тестовый вклад", updatedInCollection.Title, "Title should be updated in collection");
+        Assert.AreEqual("РћР±РЅРѕРІР»РµРЅРЅС‹Р№ С‚РµСЃС‚РѕРІС‹Р№ РІРєР»Р°Рґ", updatedInCollection.Title, "Title should be updated in collection");
         Assert.AreEqual(200, updatedInCollection.MonthPaymentsMinimum, "MonthPaymentsMinimum should be updated");
 
         // Assert - Verify database changes
         var offersFromDb = await depositOffersRepository.GetDepositOffersWithConditionsAndRates(DbTestHelper.AcMoDict);
         var updatedInDb = offersFromDb.First(o => o.Id == addedOffer.Id);
         
-        Assert.AreEqual("Обновленный тестовый вклад", updatedInDb.Title, "Title should be updated in database");
+        Assert.AreEqual("РћР±РЅРѕРІР»РµРЅРЅС‹Р№ С‚РµСЃС‚РѕРІС‹Р№ РІРєР»Р°Рґ", updatedInDb.Title, "Title should be updated in database");
         Assert.AreEqual(200, updatedInDb.MonthPaymentsMinimum, "MonthPaymentsMinimum should be updated in database");
 
         // Assert - Verify CondsMap structure

@@ -14,7 +14,7 @@ namespace KeeperWpf;
 
 public class CarsViewModel : Screen
 {
-    private readonly IConfiguration _configuration;
+    private readonly PathFinder _pathFinder;
     private readonly KeeperDataModel _dataModel;
     private readonly IWindowManager _windowManager;
     private readonly FuelViewModel _fuelViewModel;
@@ -47,10 +47,10 @@ public class CarsViewModel : Screen
     public Visibility IsLastCarVisibility => SelectedCar.Id == Cars.Last().Id
         ? Visibility.Visible : Visibility.Collapsed;
 
-    public CarsViewModel(IConfiguration configuration, KeeperDataModel dataModel, IWindowManager windowManager,
+    public CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWindowManager windowManager,
         FuelViewModel fuelViewModel, OwnershipCostViewModel ownershipCostViewModel)
     {
-        _configuration = configuration;
+        _pathFinder = pathFinder;
         _dataModel = dataModel;
         _windowManager = windowManager;
         _fuelViewModel = fuelViewModel;
@@ -162,7 +162,7 @@ public class CarsViewModel : Screen
 
         try
         {
-            var dataFolder = _configuration["DataFolder"] ?? "";
+            var dataFolder = _pathFinder.GetDataFolder();
             string filename = $@"reports\{SelectedCar.Title}.pdf";
             var path = System.IO.Path.Combine(dataFolder, filename);
             await document.SaveAsync(path);
