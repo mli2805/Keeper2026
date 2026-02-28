@@ -1,4 +1,5 @@
 ﻿using KeeperDomain;
+using KeeperInfrastructure;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -65,6 +66,7 @@ public static class ToKeeperDomain
                         .Select(y => y.FromModel()).ToList(),
 
             CardBalanceMemos = keeperDataModel.CardBalanceMemoModels.Select(cbm => cbm.FromModel()).ToList(),
+            BankAccountMemos = keeperDataModel.BankAccountMemoModels.Select(bam => bam.FromModel()).ToList(),
             ButtonCollections = keeperDataModel.ButtonCollections.Select(bc => bc.FromModel()).ToList(),
             SalaryChanges = keeperDataModel.SalaryChanges,
             LargeExpenseThresholds = keeperDataModel.LargeExpenseThresholds,

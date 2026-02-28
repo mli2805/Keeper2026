@@ -28,7 +28,7 @@ public static class MemoExt
             new TrafficOfAccountCalculator(keeperDataModel, account,
                 new Period(new DateTime(2001, 12, 31), DateTime.Today.GetEndOfDate()));
         var balance = accountCalculator.EvaluateBalance();
-        return balance.Currencies.TryGetValue(CurrencyCode.BYN, out var currency) ? currency : 0;
+        return balance.Currencies.TryGetValue(account.BankAccount!.MainCurrency, out var currency) ? currency : 0;
     }
 
     public static decimal GetExpenseForCurrentMonth(this KeeperDataModel keeperDataModel, AccountItemModel account)

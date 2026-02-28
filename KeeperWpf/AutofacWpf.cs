@@ -70,6 +70,7 @@ public sealed class AutofacWpf : Module
 
         builder.RegisterType<SalaryChangesRepository>().InstancePerLifetimeScope();
         builder.RegisterType<CardBalanceMemosRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<BankAccountMemosRepository>().InstancePerLifetimeScope();
         builder.RegisterType<LargeExpenseThresholdsRepository>().InstancePerLifetimeScope();
         builder.RegisterType<ButtonCollectionsRepository>().InstancePerLifetimeScope();
 
@@ -146,6 +147,7 @@ public sealed class AutofacWpf : Module
         builder.RegisterType<DateMemoSetterViewModel>();
         builder.RegisterType<CardPaymentsLimitsViewModel>();
         builder.RegisterType<CardBalanceMemoViewModel>();
+        builder.RegisterType<BankAccountMemoViewModel>();
 
         // Settings view models
         builder.RegisterType<LargeExpenseThresholdViewModel>();

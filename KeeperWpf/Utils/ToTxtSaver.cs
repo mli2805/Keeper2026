@@ -63,6 +63,7 @@ public class ToTxtSaver
             WriteFileLines(keeperModel.CarYearMileages);
 
             WriteFileLines(keeperModel.CardBalanceMemos, Path.Combine(_backupFolder, "MemosCardBalance.txt"));
+            WriteFileLines(keeperModel.BankAccountMemos);
             WriteFileLines(keeperModel.ButtonCollections);
             WriteFileLines(keeperModel.SalaryChanges);
             WriteFileLines(keeperModel.LargeExpenseThresholds);

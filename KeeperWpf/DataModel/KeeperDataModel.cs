@@ -42,6 +42,7 @@ public class KeeperDataModel : PropertyChangedBase
     public List<FuellingModel> FuellingVms { get; set; } = null!;
 
     public List<CardBalanceMemoModel> CardBalanceMemoModels { get; set; } = null!;
+    public List<BankAccountMemoModel> BankAccountMemoModels { get; set; } = null!;
 
     public List<ButtonCollectionModel> ButtonCollections { get; set; } = null!;
     public List<SalaryChange> SalaryChanges { get; set; } = null!;

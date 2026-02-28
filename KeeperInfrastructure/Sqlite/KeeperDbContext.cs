@@ -31,6 +31,7 @@ public class KeeperDbContext : DbContext
 
     public DbSet<SalaryChangeEf> SalaryChanges { get; set; }
     public DbSet<CardBalanceMemoEf> CardBalanceMemos { get; set; }
+    public DbSet<BankAccountMemoEf> BankAccountMemos { get; set; }
     public DbSet<LargeExpenseThresholdEf> LargeExpenseThresholds { get; set; }
     public DbSet<ButtonCollectionEf> ButtonCollections { get; set; }
 

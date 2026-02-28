@@ -1,0 +1,156 @@
+﻿<Window x:Class="KeeperWpf.BankAccountMemoView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:keeperModels="clr-namespace:KeeperModels;assembly=KeeperModels"
+        mc:Ignorable="d"
+        Title="BankAccountMemoView" WindowStartupLocation="CenterScreen">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Bottom">
+            <Button DockPanel.Dock="Left" Name="CardsBalance" Width="280" Height="32" Margin="5" 
+                    Content="Остатки и расходы по картам"/>
+            <Button DockPanel.Dock="Right" Name="Save" Width="280" Height="32" Margin="5" 
+                    Content="Сохранить изменения"/>
+            <Button DockPanel.Dock="Right" Name="AddNew" Width="280" Height="32" Margin="5" 
+                    Content="Добавить счета/карты которых еще нету"/>
+            <StackPanel></StackPanel>
+        </DockPanel>
+        <TextBlock DockPanel.Dock="Bottom" Text="В расходах не учитываются платежи/переводы по ЕРИП, только оплаты в магазинах" Margin="15, 5, 5,5"/>
+
+        <DataGrid DockPanel.Dock="Top" ItemsSource="{Binding Rows}" Margin="5" 
+                  AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Resources>
+                <Style x:Key="WrappedColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <TextBlock TextWrapping="Wrap" Text="{Binding}"></TextBlock>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="BorderThickness" Value="0" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="{Binding RowBackground}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#B6E6FF" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.ItemContainerStyle>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Карта / Счет" Binding="{Binding Account.Name}" IsReadOnly="True" Width="280"/>
+                <DataGridTemplateColumn Header="Текущий остаток" HeaderStyle="{StaticResource WrappedColumnHeaderStyle}"
+                                        IsReadOnly="True" Width="70">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="keeperModels:BankAccountMemoModel">
+                            <DockPanel>
+                                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="5,0,12,0"
+                                           Text="{Binding CurrentBalance, StringFormat=N2}"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="не менее" HeaderStyle="{StaticResource WrappedColumnHeaderStyle}" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="keeperModels:BankAccountMemoModel">
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding BalanceLess.IsOn, 
+                                    UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                <TextBox Text="{Binding BalanceLess.LimitValue,  
+                                    Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                         IsEnabled="{Binding BalanceLess.IsOn}" 
+                                         Margin="5,0,0,0" Width="50" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="не более" HeaderStyle="{StaticResource WrappedColumnHeaderStyle}" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="keeperModels:BankAccountMemoModel">
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding BalanceMore.IsOn, 
+                                    UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                <TextBox Text="{Binding BalanceMore.LimitValue, 
+                                    Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" 
+                                         IsEnabled="{Binding BalanceMore.IsOn}" 
+                                         Margin="5,0,0,0" Width="50"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Оплаты в месяце" HeaderStyle="{StaticResource WrappedColumnHeaderStyle}" IsReadOnly="True" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="keeperModels:BankAccountMemoModel">
+                            <DockPanel>
+                                <TextBlock HorizontalAlignment="Right" Margin="5,0,20,0" VerticalAlignment="Center" 
+                                           Text="{Binding CurrentMonthPayments, StringFormat=N2}"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="не менее" HeaderStyle="{StaticResource WrappedColumnHeaderStyle}" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="keeperModels:BankAccountMemoModel">
+                            <StackPanel Orientation="Horizontal" >
+                                <CheckBox IsChecked="{Binding PaymentsLess.IsOn, 
+                                    UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                <TextBox Text="{Binding PaymentsLess.LimitValue, 
+                                    Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                         IsEnabled="{Binding PaymentsLess.IsOn}" 
+                                         Margin="5,0,0,0" Width="50" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="не более" HeaderStyle="{StaticResource WrappedColumnHeaderStyle}" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="keeperModels:BankAccountMemoModel">
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding PaymentsMore.IsOn, 
+                                    UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                <TextBox Text="{Binding PaymentsMore.LimitValue, 
+                                    Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                         IsEnabled="{Binding PaymentsMore.IsOn}" 
+                                         Margin="5,0,0,0" Width="50" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Комментарий" IsReadOnly="True" Width="600">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="keeperModels:BankAccountMemoModel">
+                            <DockPanel>
+                                <TextBlock HorizontalAlignment="Left" Margin="5,0,5,0"
+                                           Text="{Binding Comment}" TextWrapping="Wrap" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>

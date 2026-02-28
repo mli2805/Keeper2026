@@ -38,6 +38,10 @@ public static class TxtLoader
             CarYearMileages = await ReadFileLines<CarYearMileage>(),
 
             CardBalanceMemos = await ReadFileLines<CardBalanceMemo>("MemosCardBalance.txt"),
+
+            // этого файла не было в Keeper2018
+            BankAccountMemos = await ReadFileLines<BankAccountMemo>(),
+
             SalaryChanges = await ReadFileLines<SalaryChange>(),
             LargeExpenseThresholds = await ReadFileLines<LargeExpenseThreshold>(),
         };
@@ -49,6 +53,11 @@ public static class TxtLoader
         if (filename == "")
             filename = typeof(T).Name + "s.txt";
 
+        if (filename == "BankAccountMemos.txt" && !File.Exists(Path.Combine(_backupFolder, filename)))
+        {
+            // Этого файла не было в Keeper2018, поэтому если его нет, то просто возвращаем пустой список
+            return new List<T>();
+        }
         string[] fileContent = await File.ReadAllLinesAsync(Path.Combine(_backupFolder, filename));
 
         // Используем явное выделение памяти для списка, т.к. известен размер
