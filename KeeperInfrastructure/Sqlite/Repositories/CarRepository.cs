@@ -13,44 +13,7 @@ public class CarRepository(IDbContextFactory<KeeperDbContext> factory)
             .Include(c => c.YearMileages)
             .ToListAsync();
 
-        return cars.Select(carEf =>
-        {
-            var carModel = new CarModel
-            {
-                Id = carEf.Id,
-                CarAccountId = carEf.CarAccountId,
-                Title = carEf.Title,
-                IssueYear = carEf.IssueYear,
-                Vin = carEf.Vin,
-                StateRegNumber = carEf.StateRegNumber,
-                PurchaseDate = carEf.PurchaseDate,
-                PurchaseMileage = carEf.PurchaseMileage,
-                SaleDate = carEf.SaleDate,
-                SaleMileage = carEf.SaleMileage,
-                SupposedSalePrice = carEf.SupposedSalePrice,
-                Comment = carEf.Comment,
-                YearsMileage = carEf.YearMileages.Select(m => new YearMileageModel
-                {
-                    Id = m.Id,
-                    CarId = m.CarId,
-                    Odometer = m.Odometer
-                }).ToList()
-            };
-
-            return carModel;
-        }).ToList();
-    }
-
-    public async Task<List<Car>> GetAllCars()
-    {
-        await using var keeperDbContext = await factory.CreateDbContextAsync();
-        return keeperDbContext.Cars.Select(c=>c.FromEf()).ToList();
-    }
-
-    public async Task<List<CarYearMileage>> GetAllCarYearMileages()
-    {
-        await using var keeperDbContext = await factory.CreateDbContextAsync();
-        return keeperDbContext.CarYearMileages.Select(m=>m.FromEf()).ToList();
+        return cars.Select(carEf => carEf.ToModel()).ToList();
     }
 
     public async Task AddCar(Car car)
@@ -64,6 +27,53 @@ public class CarRepository(IDbContextFactory<KeeperDbContext> factory)
     {
         await using var keeperDbContext = await factory.CreateDbContextAsync();
         keeperDbContext.CarYearMileages.Add(carYearMileage.ToEf());
+        await keeperDbContext.SaveChangesAsync();
+    }
+
+    public async Task SaveCarWithMileages(CarModel carModel)
+    {
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
+        var carEf = await keeperDbContext.Cars.Include(c => c.YearMileages).FirstOrDefaultAsync(c => c.Id == carModel.Id);
+        if (carEf == null)
+        {
+            carEf = carModel.ToEf();
+            await keeperDbContext.Cars.AddAsync(carEf);
+        }
+        else
+        {
+            carEf.CarAccountId = carModel.CarAccountId;
+            carEf.Title = carModel.Title;
+            carEf.IssueYear = carModel.IssueYear;
+            carEf.Vin = carModel.Vin;
+            carEf.StateRegNumber = carModel.StateRegNumber;
+            carEf.PurchaseDate = carModel.PurchaseDate;
+            carEf.PurchaseMileage = carModel.PurchaseMileage;
+            carEf.SaleDate = carModel.SaleDate;
+            carEf.SaleMileage = carModel.SaleMileage;
+            carEf.SupposedSalePrice = carModel.SupposedSalePrice;
+            carEf.Comment = carModel.Comment;
+            foreach (var yearMileage in carModel.YearsMileage)
+            {
+                var yearMileageEf = carEf.YearMileages.FirstOrDefault(m => m.Id == yearMileage.Id);
+                if (yearMileageEf == null)
+                {
+                    yearMileageEf = yearMileage.ToEf();
+                    yearMileageEf.CarId = carEf.Id;
+                    await keeperDbContext.CarYearMileages.AddAsync(yearMileageEf);
+                }
+                else
+                {
+                    yearMileageEf.Odometer = yearMileage.Odometer;
+                }
+            }
+            foreach (var yearMileageEf in carEf.YearMileages)
+            {
+                if (carModel.YearsMileage.FirstOrDefault(m => m.Id == yearMileageEf.Id) == null)
+                {
+                    keeperDbContext.CarYearMileages.Remove(yearMileageEf);
+                }
+            }
+        }
         await keeperDbContext.SaveChangesAsync();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Caliburn.Micro;
 using KeeperDomain;
+using KeeperInfrastructure;
 using KeeperModels;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,14 +12,10 @@ using System.Windows;
 
 namespace KeeperWpf;
 
-public class CarsViewModel : Screen
+public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, 
+    IWindowManager windowManager, CarRepository carRepository,
+    FuelViewModel fuelViewModel, OwnershipCostViewModel ownershipCostViewModel) : Screen
 {
-    private readonly PathFinder _pathFinder;
-    private readonly KeeperDataModel _dataModel;
-    private readonly IWindowManager _windowManager;
-    private readonly FuelViewModel _fuelViewModel;
-    private readonly OwnershipCostViewModel _ownershipCostViewModel;
-
     public List<CarModel> Cars { get; set; } = null!;
 
     private CarModel _selectedCar = null!;
@@ -29,8 +25,9 @@ public class CarsViewModel : Screen
         set
         {
             if (Equals(value, _selectedCar)) return;
+            carRepository.SaveCarWithMileages(_selectedCar);
             _selectedCar = value;
-            YearMileagesToShow = new List<YearMileageModel>(_selectedCar.YearsMileage);
+            YearMileagesToShow = [.. _selectedCar.YearsMileage];
             EvaluateYearMileageToShow();
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(nameof(IsLastCarVisibility));
@@ -47,22 +44,16 @@ public class CarsViewModel : Screen
     public Visibility IsLastCarVisibility => SelectedCar.Id == Cars.Last().Id
         ? Visibility.Visible : Visibility.Collapsed;
 
-    public CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWindowManager windowManager,
-        FuelViewModel fuelViewModel, OwnershipCostViewModel ownershipCostViewModel)
-    {
-        _pathFinder = pathFinder;
-        _dataModel = dataModel;
-        _windowManager = windowManager;
-        _fuelViewModel = fuelViewModel;
-        _ownershipCostViewModel = ownershipCostViewModel;
-    }
-
     public void Initialize()
     {
-        _dataModel.Cars.Last().SaleDate = DateTime.Today;
+        dataModel.Cars.Last().SaleDate = DateTime.Today;
 
-        Cars = _dataModel.Cars;
-        SelectedCar = Cars.Last();
+        Cars = dataModel.Cars;
+
+
+        _selectedCar = Cars.Last();
+        YearMileagesToShow = [.. _selectedCar.YearsMileage];
+        EvaluateYearMileageToShow();
     }
 
     protected override void OnViewLoaded(object view)
@@ -73,7 +64,8 @@ public class CarsViewModel : Screen
     private void EvaluateYearMileageToShow()
     {
         var prevOdometer = SelectedCar.PurchaseMileage;
-        // меняем отдельную копию , а не то что хранится в базе
+        // это ссылки на то, что хранится в базе, если изменить, то сохранится в базе,
+        // но последняя строка добавляемая на лету не будет сохраняться
         for (int i = 0; i < YearMileagesToShow.Count; i++)
         {
             var yearMileageModel = YearMileagesToShow[i];
@@ -125,14 +117,15 @@ public class CarsViewModel : Screen
         EvaluateAmount(TotalPlus, true);
     }
 
+    // вычисляем расходы за указанный год
     private void EvaluateAmount(YearMileageModel yearMileageModel, bool includePurchase = false)
     {
-        yearMileageModel.YearAmount = _dataModel.Transactions.Values
+        yearMileageModel.YearAmount = dataModel.Transactions.Values
             .Where(t => yearMileageModel.Period.Includes(t.Timestamp) &&
                         t.Operation == OperationType.Расход &&
                         t.Category!.Parent!.Is(SelectedCar.CarAccountId) &&
                         (t.Tags.All(tag => tag.Id != 1064) || includePurchase)) // 1064 тэг покупки-продажи авто
-            .Sum(t => t.GetAmountInUsd(_dataModel));
+            .Sum(t => t.GetAmountInUsd(dataModel));
 
         if (yearMileageModel.CarId == Cars.Last().CarAccountId && includePurchase)
         {
@@ -149,8 +142,8 @@ public class CarsViewModel : Screen
 
     public async Task Fuelling()
     {
-        _fuelViewModel.Initialize();
-       await _windowManager.ShowWindowAsync(_fuelViewModel);
+        fuelViewModel.Initialize();
+       await windowManager.ShowWindowAsync(fuelViewModel);
     }
 
     public bool IsByTags { get; set; }
@@ -158,11 +151,11 @@ public class CarsViewModel : Screen
     public async Task ShowCarReport()
     {
         if (SelectedCar.Id < 3) return;
-        var document = _dataModel.CreateCarReport(SelectedCar.Id, IsByTags, IsBynInReport);
+        var document = dataModel.CreateCarReport(SelectedCar.Id, IsByTags, IsBynInReport);
 
         try
         {
-            var dataFolder = _pathFinder.GetDataFolder();
+            var dataFolder = pathFinder.GetDataFolder();
             string filename = $@"reports\{SelectedCar.Title}.pdf";
             var path = System.IO.Path.Combine(dataFolder, filename);
             await document.SaveAsync(path);
@@ -185,13 +178,13 @@ public class CarsViewModel : Screen
 
     public async Task ShowOwnershipCostChart()
     {
-        _ownershipCostViewModel.Initialize(_selectedCar);
-        await _windowManager.ShowDialogAsync(_ownershipCostViewModel);
+        ownershipCostViewModel.Initialize(_selectedCar);
+        await windowManager.ShowDialogAsync(ownershipCostViewModel);
     }
 
     public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
     {
-        Save();
+        await carRepository.SaveCarWithMileages(SelectedCar);
         return await base.CanCloseAsync(cancellationToken);
     }
 
@@ -199,20 +192,4 @@ public class CarsViewModel : Screen
     {
         await TryCloseAsync();
     }
-
-    private void Save()
-    {
-        var yId = 1;
-        foreach (var carModel in Cars)
-        {
-            foreach (var yearMileageModel in carModel.YearsMileage)
-            {
-                yearMileageModel.Id = yId++;
-                yearMileageModel.CarId = carModel.Id;
-            }
-        }
-
-        _dataModel.Cars = Cars;
-    }
-
 }
