@@ -5,16 +5,11 @@ namespace KeeperWpf;
 
 public class MemosViewModel : Screen
 {
-    public CardBalanceMemoViewModel CardBalanceMemoViewModel { get; }
-    public CardPaymentsLimitsViewModel CardPaymentsLimitsViewModel { get; }
     public DateMemoSetterViewModel DateMemoSetterViewModel { get; }
 
-    public MemosViewModel(CardBalanceMemoViewModel cardBalanceMemoViewModel, 
-        CardPaymentsLimitsViewModel cardPaymentsLimitsViewModel,
+    public MemosViewModel(
         DateMemoSetterViewModel dateMemoSetterViewModel)
     {
-        CardBalanceMemoViewModel = cardBalanceMemoViewModel;
-        CardPaymentsLimitsViewModel = cardPaymentsLimitsViewModel;
         DateMemoSetterViewModel = dateMemoSetterViewModel;
     }
 
@@ -25,8 +20,6 @@ public class MemosViewModel : Screen
 
     public async Task Initialize()
     {
-        await CardBalanceMemoViewModel.Initialize();
-        CardPaymentsLimitsViewModel.Initialize();
     }
 
 }

@@ -4,17 +4,19 @@ using KeeperInfrastructure;
 using KeeperModels;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
-public class BankAccountMemoViewModel(KeeperDataModel keeperDataModel, BankAccountMemosRepository bankAccountMemosRepository) : Screen
+public class BankAccountMemoViewModel(KeeperDataModel keeperDataModel, 
+    BankAccountMemosRepository bankAccountMemosRepository) : Screen
 {
     public ObservableCollection<BankAccountMemoModel> Rows { get; set; } = null!;
 
     protected override void OnViewLoaded(object view)
     {
-        DisplayName = "Bank account memo";
+        DisplayName = "Остатки и платежи по картам";
     }
 
     public async Task Initialize()
@@ -29,7 +31,8 @@ public class BankAccountMemoViewModel(KeeperDataModel keeperDataModel, BankAccou
         }
 
         //keeperDataModel.BankAccountMemoModels[0].IsSelected = true;
-        Rows = new ObservableCollection<BankAccountMemoModel>(keeperDataModel.BankAccountMemoModels.OrderByDescending(b => b.CurrentBalance));
+        Rows = new ObservableCollection<BankAccountMemoModel>(
+            keeperDataModel.BankAccountMemoModels.OrderByDescending(b => b.CurrentBalance));
     }
 
     // добавить новые карточки, удалить закрытые карточки
@@ -66,9 +69,14 @@ public class BankAccountMemoViewModel(KeeperDataModel keeperDataModel, BankAccou
         }
     }
 
-    public async Task Save()
+    public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
     {
         await bankAccountMemosRepository.SaveAll(Rows.ToList());
+        return await base.CanCloseAsync(cancellationToken);
     }
 
+    public async Task CloseView()
+    {
+        await TryCloseAsync();
+    }
 }

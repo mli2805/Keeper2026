@@ -184,7 +184,7 @@
                 </MenuItem>
                 <MenuItem Background="White" BorderBrush="White">
                     <MenuItem.Header>
-                        <TextBlock Text="Напоминания для карт и счетов"/>
+                        <TextBlock Text="Остатки и платежи по картам"/>
                     </MenuItem.Header>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">

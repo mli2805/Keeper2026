@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:keeperModels="clr-namespace:KeeperModels;assembly=KeeperModels"
         mc:Ignorable="d"
-        Title="BankAccountMemoView" WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen">
     <DockPanel>
         <DockPanel DockPanel.Dock="Bottom">
-            <Button DockPanel.Dock="Right" Name="Save" Width="280" Height="32" Margin="5" 
-                    Content="Сохранить изменения"/>
+            <Button DockPanel.Dock="Right" Name="CloseView" Width="120" Height="32" Margin="5" 
+                    Content="Закрыть"/>
             <StackPanel></StackPanel>
         </DockPanel>
         <TextBlock DockPanel.Dock="Bottom" Text="В расходах не учитываются платежи/переводы по ЕРИП, только оплаты в магазинах" Margin="15, 5, 5,5"/>

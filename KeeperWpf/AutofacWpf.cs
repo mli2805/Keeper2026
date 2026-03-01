@@ -160,8 +160,6 @@ public sealed class AutofacWpf : Module
         // Memos view models
         builder.RegisterType<MemosViewModel>();
         builder.RegisterType<DateMemoSetterViewModel>();
-        builder.RegisterType<CardPaymentsLimitsViewModel>();
-        builder.RegisterType<CardBalanceMemoViewModel>();
         builder.RegisterType<BankAccountMemoViewModel>();
 
         // Settings view models
