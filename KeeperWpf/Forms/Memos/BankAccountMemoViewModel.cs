@@ -2,7 +2,6 @@
 using KeeperDomain;
 using KeeperInfrastructure;
 using KeeperModels;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,54 +17,58 @@ public class BankAccountMemoViewModel(KeeperDataModel keeperDataModel, BankAccou
         DisplayName = "Bank account memo";
     }
 
-    public void Initialize()
+    public async Task Initialize()
     {
-        Rows = new ObservableCollection<BankAccountMemoModel>(keeperDataModel.BankAccountMemoModels);
-        foreach (var bankAccountMemoModel in Rows)
+        UpdateMemos();
+        await bankAccountMemosRepository.SaveAll(keeperDataModel.BankAccountMemoModels);
+
+        foreach (var bankAccountMemoModel in keeperDataModel.BankAccountMemoModels)
         {
             bankAccountMemoModel.CurrentBalance = keeperDataModel.GetCurrentBalance(bankAccountMemoModel.Account);
             bankAccountMemoModel.CurrentMonthPayments = keeperDataModel.GetExpenseForCurrentMonth(bankAccountMemoModel.Account);
         }
+
+        //keeperDataModel.BankAccountMemoModels[0].IsSelected = true;
+        Rows = new ObservableCollection<BankAccountMemoModel>(keeperDataModel.BankAccountMemoModels.OrderByDescending(b => b.CurrentBalance));
     }
 
-    public void CardsBalance()
+    // добавить новые карточки, удалить закрытые карточки
+    public void UpdateMemos()
     {
-        var sortedList = Rows
-            .Where(r=>r.Account.BankAccount!.MainCurrency == CurrencyCode.BYN)
-            .OrderByDescending(r => r.CurrentBalance)
-            .ToList();
-        Rows.Clear();
-        foreach (var m in sortedList)
-        {
-            Rows.Add(m);
-        }
-    }
-
-    public void AddNew()
-    {
-        // 161 - папка Счета и карты
+        // 161 - папка Счета и карты - берем только карты в byn
         var all = keeperDataModel.AcMoDict.Values
-             .Where(a => a.Is(161) && !a.IsFolder);
+             .Where(a => a.Is(161) && a.IsCard && a.BankAccount!.MainCurrency == CurrencyCode.BYN).ToList();
 
-        var exist = Rows.Select(b => b.Account.Id).ToHashSet();
+        // существующие Memo
+        var exist = keeperDataModel.BankAccountMemoModels.Select(b => b.Account.Id).ToHashSet();
+        // новые карточки
         var newAccs = all.Where(a => !exist.Contains(a.Id)).ToList();
 
         foreach (var a in newAccs)
         {
+            var depositOffer = keeperDataModel.DepositOffers.First(o => o.Id == a.BankAccount!.DepositOfferId);
             var model = new BankAccountMemoModel()
             {
-                Account = a, 
-                CurrentBalance = keeperDataModel.GetCurrentBalance(a), 
+                Account = a,
+                CurrentBalance = keeperDataModel.GetCurrentBalance(a),
                 CurrentMonthPayments = keeperDataModel.GetExpenseForCurrentMonth(a),
+
+                Comment = depositOffer.Comment
             };
-            Rows.Add(model);
+            keeperDataModel.BankAccountMemoModels.Add(model);
+        }
+
+        // Memo от закрытых карточек
+        var closed = keeperDataModel.BankAccountMemoModels.Where(m => !all.Any(a => a.Id == m.Account.Id)).ToList();
+        foreach (var c in closed)
+        {
+            keeperDataModel.BankAccountMemoModels.Remove(c);
         }
     }
 
     public async Task Save()
     {
-        // если отфильтровано, то удалит отфильтрованное - надо восстанавливать?
         await bankAccountMemosRepository.SaveAll(Rows.ToList());
     }
-    
+
 }

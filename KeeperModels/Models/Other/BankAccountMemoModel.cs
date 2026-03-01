@@ -1,22 +1,95 @@
 ﻿using Caliburn.Micro;
+using System.Windows.Media;
 
 namespace KeeperModels;
 
-public class BankAccountMemoModel
+public class BankAccountMemoModel : PropertyChangedBase
 {
     public int Id { get; set; }
     public AccountItemModel Account { get; set; } = null!;
 
     // если меньше на карточке, то предупреждать чтобы пополнил
-    public LimitModel BalanceLess { get; set; } = new();
+    private LimitModel _balanceLess = new();
+    public LimitModel BalanceLess
+    {
+        get => _balanceLess;
+        set
+        {
+            if (_balanceLess == value) return;
+            if (_balanceLess != null)
+                _balanceLess.PropertyChanged -= OnLimitPropertyChanged;
+            _balanceLess = value;
+            if (_balanceLess != null)
+                _balanceLess.PropertyChanged += OnLimitPropertyChanged;
+            NotifyOfPropertyChange(nameof(RowBackground));
+        }
+    }
+
     // если больше на счете/карточке, могут брать комиссию
-    public LimitModel BalanceMore { get; set; } = new();
+    private LimitModel _balanceMore = new();
+    public LimitModel BalanceMore
+    {
+        get => _balanceMore;
+        set
+        {
+            if (_balanceMore == value) return;
+            if (_balanceMore != null)
+                _balanceMore.PropertyChanged -= OnLimitPropertyChanged;
+            _balanceMore = value;
+            if (_balanceMore != null)
+                _balanceMore.PropertyChanged += OnLimitPropertyChanged;
+            NotifyOfPropertyChange(nameof(RowBackground));
+        }
+    }
 
     // условия для кэшбека:
     //   иногда требуется, чтобы не меньше определенной суммы было потрачено, иначе кэшбек не будет начислен,
     //   иногда есть ограничение сверху
-    public LimitModel PaymentsLess { get; set; } = new();
-    public LimitModel PaymentsMore { get; set; } = new();
+    private LimitModel _paymentsLess = new();
+    public LimitModel PaymentsLess
+    {
+        get => _paymentsLess;
+        set
+        {
+            if (_paymentsLess == value) return;
+            if (_paymentsLess != null)
+                _paymentsLess.PropertyChanged -= OnLimitPropertyChanged;
+            _paymentsLess = value;
+            if (_paymentsLess != null)
+                _paymentsLess.PropertyChanged += OnLimitPropertyChanged;
+            NotifyOfPropertyChange(nameof(RowBackground));
+        }
+    }
+
+    private LimitModel _paymentsMore = new();
+    public LimitModel PaymentsMore
+    {
+        get => _paymentsMore;
+        set
+        {
+            if (_paymentsMore == value) return;
+            if (_paymentsMore != null)
+                _paymentsMore.PropertyChanged -= OnLimitPropertyChanged;
+            _paymentsMore = value;
+            if (_paymentsMore != null)
+                _paymentsMore.PropertyChanged += OnLimitPropertyChanged;
+            NotifyOfPropertyChange(nameof(RowBackground));
+        }
+    }
+
+    public BankAccountMemoModel()
+    {
+        BalanceLess.PropertyChanged += OnLimitPropertyChanged;
+        BalanceMore.PropertyChanged += OnLimitPropertyChanged;
+        PaymentsLess.PropertyChanged += OnLimitPropertyChanged;
+        PaymentsMore.PropertyChanged += OnLimitPropertyChanged;
+    }
+
+    private void OnLimitPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        NotifyOfPropertyChange(nameof(IsLimitExceeded));
+        NotifyOfPropertyChange(nameof(RowBackground));
+    }
 
     // лимиты на пополнение/снятие наличных, по ЕРИП, пока пишем текстом 
     public string Comment { get; set; } = string.Empty;
@@ -26,7 +99,44 @@ public class BankAccountMemoModel
     public decimal CurrentBalance { get; set; }
     public decimal CurrentMonthPayments { get; set; }
 
-    public bool IsSelected { get; set; }
+    private bool _isSelected;
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set
+        {
+            if (_isSelected == value) return;
+            _isSelected = value;
+            NotifyOfPropertyChange();
+            NotifyOfPropertyChange(nameof(RowBackground));
+        }
+    }
+
+    public bool IsLimitExceeded => CheckIsLimitExceeded();
+    public SolidColorBrush RowBackground => IsSelected
+            ? IsLimitExceeded ? Brushes.LightCoral : (SolidColorBrush)new BrushConverter().ConvertFrom("#B6E6FF")!
+            : IsLimitExceeded ? Brushes.LightPink : Brushes.Transparent;
+
+    private bool CheckIsLimitExceeded()
+    {
+        if (BalanceLess.IsOn && CurrentBalance < BalanceLess.LimitValue)
+        {
+            return true;
+        }
+        if (BalanceMore.IsOn && CurrentBalance > BalanceMore.LimitValue)
+        {
+            return true;
+        }
+        if (PaymentsLess.IsOn && CurrentMonthPayments < PaymentsLess.LimitValue)
+        {
+            return true;
+        }
+        if (PaymentsMore.IsOn && CurrentMonthPayments > PaymentsMore.LimitValue)
+        {
+            return true;
+        }
+        return false;
+    }
 }
 
 public class LimitModel : PropertyChangedBase

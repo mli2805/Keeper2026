@@ -8,12 +8,8 @@
         Title="BankAccountMemoView" WindowStartupLocation="CenterScreen">
     <DockPanel>
         <DockPanel DockPanel.Dock="Bottom">
-            <Button DockPanel.Dock="Left" Name="CardsBalance" Width="280" Height="32" Margin="5" 
-                    Content="Остатки и расходы по картам"/>
             <Button DockPanel.Dock="Right" Name="Save" Width="280" Height="32" Margin="5" 
                     Content="Сохранить изменения"/>
-            <Button DockPanel.Dock="Right" Name="AddNew" Width="280" Height="32" Margin="5" 
-                    Content="Добавить счета/карты которых еще нету"/>
             <StackPanel></StackPanel>
         </DockPanel>
         <TextBlock DockPanel.Dock="Bottom" Text="В расходах не учитываются платежи/переводы по ЕРИП, только оплаты в магазинах" Margin="15, 5, 5,5"/>
@@ -46,11 +42,7 @@
                 <Style TargetType="{x:Type DataGridRow}">
                     <Setter Property="Background" Value="{Binding RowBackground}" />
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#B6E6FF" />
-                        </Trigger>
-                    </Style.Triggers>
+                   
                 </Style>
             </DataGrid.ItemContainerStyle>
 

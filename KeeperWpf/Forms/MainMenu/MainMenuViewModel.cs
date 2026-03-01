@@ -282,7 +282,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
 
     public async Task ShowBankAccountMemoForm()
     {
-        bankAccountMemoViewModel.Initialize();
+        await bankAccountMemoViewModel.Initialize();
         await windowManager.ShowDialogAsync(bankAccountMemoViewModel);
     }
 
