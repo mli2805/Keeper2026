@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using KeeperModels;
+using KeeperInfrastructure;
 
 namespace KeeperWpf;
 
-public class CardFeeViewModel : Screen
+public class CardFeeViewModel(KeeperDataModel dataModel, ShellPartsBinder shellPartsBinder, 
+    TransactionsRepository transactionsRepository) : Screen
 {
-    private readonly KeeperDataModel _dataModel;
-    private readonly ShellPartsBinder _shellPartsBinder;
-
     public string BankLine { get; set; } = null!;
     public string CardLine { get; set; } = null!;
     public string CardCurrency { get; set; } = null!;
@@ -23,12 +22,6 @@ public class CardFeeViewModel : Screen
     private AccountItemModel _card = null!;
     private AccountItemModel _bank = null!;
 
-    public CardFeeViewModel(KeeperDataModel dataModel, ShellPartsBinder shellPartsBinder)
-    {
-        _dataModel = dataModel;
-        _shellPartsBinder = shellPartsBinder;
-    }
-
     protected override void OnViewLoaded(object view)
     {
         DisplayName = "Списана комиссия";
@@ -37,7 +30,7 @@ public class CardFeeViewModel : Screen
     public void Initialize(AccountItemModel card)
     {
         _card = card;
-        _bank = _dataModel.AcMoDict[card.BankAccount!.BankId];
+        _bank = dataModel.AcMoDict[card.BankAccount!.BankId];
         BankLine = $"Банк \"{_bank.Name}\" списал комиссию";
         CardLine = $"с карты \"{card.Name}\"";
         CardCurrency = _card.BankAccount!.MainCurrency.ToString().ToUpper();
@@ -46,8 +39,8 @@ public class CardFeeViewModel : Screen
 
     public async void Save()
     {
-        var id = _dataModel.Transactions.Keys.Max() + 1;
-        var thisDateTrans = _dataModel.Transactions.Values
+        var id = dataModel.Transactions.Keys.Max() + 1;
+        var thisDateTrans = dataModel.Transactions.Values
             .Where(t => t.Timestamp.Date == MyDatePickerVm.SelectedDate)
             .OrderBy(l => l.Timestamp)
             .LastOrDefault();
@@ -59,15 +52,16 @@ public class CardFeeViewModel : Screen
             Operation = OperationType.Расход,
             MyAccount = _card,
             Counterparty = _bank,
-            Category = _dataModel.CardFeeCategory(),
+            Category = dataModel.CardFeeCategory(),
             Amount = Amount,
             Currency = _card.BankAccount!.MainCurrency,
             Tags = new List<AccountItemModel>(),
             Comment = Comment,
         };
-        _dataModel.Transactions.Add(tranModel1.Id, tranModel1);
+        dataModel.Transactions.Add(tranModel1.Id, tranModel1);
+        await transactionsRepository.AddTransactions(new List<TransactionModel>() { tranModel1 });
 
-        _shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
+        shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
 
         await TryCloseAsync();
     }

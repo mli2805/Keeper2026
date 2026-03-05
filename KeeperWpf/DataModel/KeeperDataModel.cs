@@ -41,7 +41,9 @@ public class KeeperDataModel : PropertyChangedBase
     public List<CarModel> Cars { get; set; } = null!;
     public List<FuellingModel> FuellingVms { get; set; } = null!;
 
+    // старая, больше не используется формами
     public List<CardBalanceMemoModel> CardBalanceMemoModels { get; set; } = null!;
+    // новая, используется формой BankAccountMemoViewModel
     public List<BankAccountMemoModel> BankAccountMemoModels { get; set; } = null!;
 
     public List<ButtonCollectionModel> ButtonCollections { get; set; } = null!;

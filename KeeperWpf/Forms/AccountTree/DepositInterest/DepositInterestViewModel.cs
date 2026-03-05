@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Caliburn.Micro;
 using KeeperDomain;
+using KeeperInfrastructure;
 using KeeperModels;
 
 namespace KeeperWpf;
 
-public class DepositInterestViewModel : Screen
+public class DepositInterestViewModel(KeeperDataModel keeperDataModel, IWindowManager windowManager,
+    ComboTreesProvider comboTreesProvider, ShellPartsBinder shellPartsBinder,
+    AccNameSelector accNameSelectionControlInitializer, TransactionsRepository transactionsRepository) : Screen
 {
-    private readonly KeeperDataModel _keeperDataModel;
-    private readonly IWindowManager _windowManager;
-    private readonly ComboTreesProvider _comboTreesProvider;
-    private readonly ShellPartsBinder _shellPartsBinder;
-    private readonly AccNameSelector _accNameSelectionControlInitializer;
     private AccountItemModel _accountItemModel = null!;
 
     private AccountItemModel _bank = null!;
@@ -65,17 +63,6 @@ public class DepositInterestViewModel : Screen
     public DatePickerWithTrianglesVm MyDatePickerVm { get; set; } = null!;
     public string Comment { get; set; } = "";
 
-    public DepositInterestViewModel(KeeperDataModel keeperDataModel, IWindowManager windowManager,
-        ComboTreesProvider comboTreesProvider, ShellPartsBinder shellPartsBinder,
-        AccNameSelector accNameSelectionControlInitializer)
-    {
-        _keeperDataModel = keeperDataModel;
-        _windowManager = windowManager;
-        _comboTreesProvider = comboTreesProvider;
-        _shellPartsBinder = shellPartsBinder;
-        _accNameSelectionControlInitializer = accNameSelectionControlInitializer;
-    }
-
     protected override void OnViewLoaded(object view)
     {
         DisplayName = "Начислены проценты/кэшбек";
@@ -84,22 +71,22 @@ public class DepositInterestViewModel : Screen
     public void Initialize(AccountItemModel accountItemModel)
     {
         _accountItemModel = accountItemModel;
-        _bank = _keeperDataModel.AcMoDict[accountItemModel.BankAccount!.BankId];
+        _bank = keeperDataModel.AcMoDict[accountItemModel.BankAccount!.BankId];
         BankTitle = _bank.Name;
         IsMoneyBack = _accountItemModel.IsCard;
         IsPercent = !IsMoneyBack;
         DepositTitle = accountItemModel.Name;
         DepositCurrency = accountItemModel.BankAccount.MainCurrency.ToString().ToUpper();
-        _comboTreesProvider.Initialize();
+        comboTreesProvider.Initialize();
         Amount = 0;
-        MyNextAccNameSelectorVm = _accNameSelectionControlInitializer.ForMyNextAccount();
+        MyNextAccNameSelectorVm = accNameSelectionControlInitializer.ForMyNextAccount();
         MyNextAccNameSelectorVm.PropertyChanged += MyNextAccNameSelectorVm_PropertyChanged;
 
         MyDatePickerVm = new DatePickerWithTrianglesVm() { SelectedDate = DateTime.Today };
         _transactionTimestamp = DateTime.Today.AddDays(1).AddMilliseconds(-1);
         MyDatePickerVm.PropertyChanged += MyDatePickerVm_PropertyChanged;
 
-        _depositBalance = _keeperDataModel.Transactions.Values.Sum(t => t.AmountForAccount(
+        _depositBalance = keeperDataModel.Transactions.Values.Sum(t => t.AmountForAccount(
             _accountItemModel, accountItemModel.BankAccount.MainCurrency, _transactionTimestamp));
     }
 
@@ -107,8 +94,8 @@ public class DepositInterestViewModel : Screen
     {
         if (e.PropertyName == "MyAccName")
         {
-            var nextAccountModel = _keeperDataModel.AcMoDict[MyNextAccNameSelectorVm.MyAccName.Id];
-            _myNextAccountBalance = _keeperDataModel.Transactions.Values.Sum(t => t.AmountForAccount(
+            var nextAccountModel = keeperDataModel.AcMoDict[MyNextAccNameSelectorVm.MyAccName.Id];
+            _myNextAccountBalance = keeperDataModel.Transactions.Values.Sum(t => t.AmountForAccount(
                 nextAccountModel, _accountItemModel.BankAccount!.MainCurrency, _transactionTimestamp));
             NotifyOfPropertyChange(nameof(MyNextAccountBalanceStr));
         }
@@ -117,7 +104,7 @@ public class DepositInterestViewModel : Screen
     private void MyDatePickerVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         var selectedDate = MyDatePickerVm.SelectedDate;
-        var dayTransactions = _keeperDataModel.Transactions.Values.Where(t => t.Timestamp.Date == selectedDate.Date).ToList();
+        var dayTransactions = keeperDataModel.Transactions.Values.Where(t => t.Timestamp.Date == selectedDate.Date).ToList();
 
         int minute = 1;
         if (dayTransactions.Any())
@@ -125,10 +112,10 @@ public class DepositInterestViewModel : Screen
 
         _transactionTimestamp = selectedDate.Date.AddMinutes(minute);
 
-        _depositBalance = _keeperDataModel.Transactions.Values.Sum(t => t.AmountForAccount(
+        _depositBalance = keeperDataModel.Transactions.Values.Sum(t => t.AmountForAccount(
             _accountItemModel, _accountItemModel.BankAccount!.MainCurrency, _transactionTimestamp));
-        var nextAccountModel = _keeperDataModel.AcMoDict[MyNextAccNameSelectorVm.MyAccName.Id];
-        _myNextAccountBalance = _keeperDataModel.Transactions.Values.Sum(t => t.AmountForAccount(
+        var nextAccountModel = keeperDataModel.AcMoDict[MyNextAccNameSelectorVm.MyAccName.Id];
+        _myNextAccountBalance = keeperDataModel.Transactions.Values.Sum(t => t.AmountForAccount(
             nextAccountModel, _accountItemModel.BankAccount!.MainCurrency, _transactionTimestamp));
 
         NotifyOfPropertyChange(nameof(DepositBalanceStr));
@@ -140,17 +127,17 @@ public class DepositInterestViewModel : Screen
         AccountItemModel? nextAccountItemModel = null;
         if (IsTransferred)
         {
-            nextAccountItemModel = _keeperDataModel.AcMoDict[MyNextAccNameSelectorVm.MyAccName.Id];
+            nextAccountItemModel = keeperDataModel.AcMoDict[MyNextAccNameSelectorVm.MyAccName.Id];
             if (_accountItemModel.Id == nextAccountItemModel.Id)
             {
                 var vm = new MyMessageBoxViewModel(MessageType.Error, "Перечисление на самого себя!");
-                await _windowManager.ShowDialogAsync(vm);
+                await windowManager.ShowDialogAsync(vm);
                 return;
             }
         }
 
-        var id = _keeperDataModel.Transactions.Keys.Max() + 1;
-        var thisDateTrans = _keeperDataModel.Transactions.Values
+        var id = keeperDataModel.Transactions.Keys.Max() + 1;
+        var thisDateTrans = keeperDataModel.Transactions.Values
             .Where(t => t.Timestamp.Date == MyDatePickerVm.SelectedDate)
             .OrderBy(l => l.Timestamp)
             .LastOrDefault();
@@ -161,14 +148,15 @@ public class DepositInterestViewModel : Screen
             Timestamp = timestamp.AddMinutes(1),
             Operation = OperationType.Доход,
             MyAccount = _accountItemModel,
-            Counterparty = _keeperDataModel.AcMoDict[_accountItemModel.BankAccount!.BankId],
-            Category = IsPercent ? _keeperDataModel.PercentsCategory() : _keeperDataModel.MoneyBackCategory(),
+            Counterparty = keeperDataModel.AcMoDict[_accountItemModel.BankAccount!.BankId],
+            Category = IsPercent ? keeperDataModel.PercentsCategory() : keeperDataModel.MoneyBackCategory(),
             Amount = Amount,
             Currency = _accountItemModel.BankAccount.MainCurrency,
             Tags = new List<AccountItemModel>(),
             Comment = Comment,
         };
-        _keeperDataModel.Transactions.Add(tranModel1.Id, tranModel1);
+        keeperDataModel.Transactions.Add(tranModel1.Id, tranModel1);
+        await transactionsRepository.AddTransactions(new List<TransactionModel>() { tranModel1 });
 
         if (IsTransferred)
         {
@@ -184,11 +172,12 @@ public class DepositInterestViewModel : Screen
                 Tags = new List<AccountItemModel>(),
                 Comment = "",
             };
-            _keeperDataModel.Transactions.Add(tranModel2.Id, tranModel2);
+            keeperDataModel.Transactions.Add(tranModel2.Id, tranModel2);
+            await transactionsRepository.AddTransactions(new List<TransactionModel>() { tranModel2 });
         }
 
-        _shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
-  
+        shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
+
         await TryCloseAsync();
     }
 
