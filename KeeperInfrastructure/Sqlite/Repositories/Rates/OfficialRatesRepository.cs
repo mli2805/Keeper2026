@@ -28,10 +28,12 @@ public class OfficialRatesRepository(IDbContextFactory<KeeperDbContext> factory)
             var existingEf = keeperDbContext.OfficialRates.FirstOrDefault(r => r.Id == rate.Id);
             if (existingEf != null)
             {
-                var existing = existingEf.FromEf();
-                existing.NbRates = rate.NbRates;
-                existing.CbrRate = rate.CbrRate;
-                existingEf = existing.ToEf();
+                existingEf.CbrUsdRate = rate.CbrRate.Usd.Value;
+
+                existingEf.UsdRate = rate.NbRates.Usd.Value;
+                existingEf.EuroRate = rate.NbRates.Euro.Value;
+                existingEf.RubRate = rate.NbRates.Rur.Value;
+                existingEf.CnyRate = rate.NbRates.Cny.Value;
             }
         }
         await keeperDbContext.SaveChangesAsync();
