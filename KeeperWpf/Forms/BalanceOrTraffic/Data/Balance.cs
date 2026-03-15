@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using KeeperDomain;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace KeeperWpf;
 
@@ -51,6 +53,13 @@ public class Balance
     public void SubBalance(Balance balance)
     {
         foreach (var currency in balance.Currencies) { Sub(currency.Key, currency.Value); }
+    }
+
+    public bool IsZero()
+    {
+        foreach (var currency in Currencies) { if (Math.Abs(currency.Value) >= 0.01m) return false; } 
+
+        return true;
     }
 
     public override string ToString()

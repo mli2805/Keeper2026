@@ -95,9 +95,12 @@ public class TrafficOfAccountBranchCalculator : ITraffic
 
         foreach (var pair in _balanceWithTurnovers.ChildAccounts)
         {
+            var child = pair.Value.Balance();
+            if (child.IsZero())
+                continue;
+
             result.Add("");
             result.Add($"   {pair.Key.Name}");
-            var child = pair.Value.Balance();
             result.AddList(_dataModel.BalanceReport(_period.FinishMoment, child, false));
         }
 
