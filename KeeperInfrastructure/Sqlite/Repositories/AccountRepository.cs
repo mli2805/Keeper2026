@@ -52,30 +52,6 @@ public class AccountRepository(IDbContextFactory<KeeperDbContext> factory)
         return (accountsTree, acMoDict);
     }
 
-    private async Task<List<Account>> GetAllAccounts()
-    {
-        await using var keeperDbContext = await factory.CreateDbContextAsync();
-        return keeperDbContext.Accounts.Select(a => a.FromEf()).ToList();
-    }
-
-    private async Task<List<BankAccountModel>> GetAllBankAccountsFromDb()
-    {
-        await using var keeperDbContext = await factory.CreateDbContextAsync();
-        return keeperDbContext.BankAccounts.Select(ba => ba.ToModel()).ToList();
-    }
-
-    private async Task<List<Deposit>> GetAllDeposits()
-    {
-        await using var keeperDbContext = await factory.CreateDbContextAsync();
-        return keeperDbContext.Deposits.Select(d => d.FromEf()).ToList();
-    }
-
-    private async Task<List<PayCard>> GetAllPayCards()
-    {
-        await using var keeperDbContext = await factory.CreateDbContextAsync();
-        return keeperDbContext.PayCards.Select(pc => pc.FromEf()).ToList();
-    }
-
     public async Task Add(AccountItemModel accountItemModel)
     {
         await using var keeperDbContext = await factory.CreateDbContextAsync();

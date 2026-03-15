@@ -43,6 +43,7 @@ public class BankAccountModel : PropertyChangedBase
     } // max для расчётных счетов
 
     public Visibility FinishVisibility => Deposit != null || PayCard != null ? Visibility.Visible : Visibility.Hidden;
+    public Visibility DepositCheckBoxVisibility => Deposit != null ? Visibility.Visible : Visibility.Collapsed;
 
     public bool IsMine { get; set; } 
 

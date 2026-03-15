@@ -71,6 +71,7 @@
                  Text="{Binding BankAccountInWork.ReplenishDetails}" VerticalContentAlignment="Center"/>
                 </StackPanel>
                 <CheckBox Margin="85, 5, 0,0" Content="Банк запретил пополнение досрочно" 
+                       Visibility="{Binding BankAccountInWork.DepositCheckBoxVisibility}"
                        IsChecked="{Binding BankAccountInWork.Deposit.IsAdditionsBanned}" />
 
                 <Rectangle Margin="3,10,3,10" Height="1"
@@ -85,16 +86,16 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="5" Width="70" Text="Кратко" VerticalAlignment="Center" HorizontalAlignment="Right" />
                     <TextBox Margin="5" Width="120" Height="25" HorizontalAlignment="Stretch" BorderBrush="#555555" 
-                     Text="{Binding AccountItemModel.ShortName, Mode=TwoWay}" />
+                     Text="{Binding AccountItemInWork.ShortName, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="5" Width="70" Text="Кнопка" VerticalAlignment="Center" HorizontalAlignment="Right" />
                     <TextBox Margin="5" Height="25" HorizontalAlignment="Left" Width="50" BorderBrush="#555555" 
-                 Text="{Binding AccountItemModel.ButtonName, Mode=TwoWay}" />
+                 Text="{Binding AccountItemInWork.ButtonName, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="5" Width="70" Text="Примечание"/>
-                    <TextBox Margin="5" Width="225" Height="100" BorderBrush="#555555" Text="{Binding AccountItemModel.Comment}"
+                    <TextBox Margin="5" Width="225" Height="100" BorderBrush="#555555" Text="{Binding AccountItemInWork.Comment}"
                      TextWrapping="Wrap" AcceptsReturn="True"/>
                 </StackPanel>
             </StackPanel>
