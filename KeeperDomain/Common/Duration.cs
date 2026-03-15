@@ -36,6 +36,11 @@ public class Duration
         }
     }
 
+    public static Duration? FromNullableString(string? s)
+    {
+        return string.IsNullOrWhiteSpace(s) ? null : new Duration().FromString(s);
+    }
+
     public Duration FromString(string s)
     {
         if (string.IsNullOrEmpty(s))

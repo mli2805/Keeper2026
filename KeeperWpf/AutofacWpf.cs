@@ -4,7 +4,6 @@ using KeeperInfrastructure;
 using KeeperInfrastructure.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
 using System.IO;
 
 namespace KeeperWpf;
@@ -86,6 +85,7 @@ public sealed class AutofacWpf : Module
         builder.RegisterType<SalaryChangesRepository>().InstancePerLifetimeScope();
         builder.RegisterType<CardBalanceMemosRepository>().InstancePerLifetimeScope();
         builder.RegisterType<BankAccountMemosRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<CustomRemindersRepository>().InstancePerLifetimeScope();
         builder.RegisterType<LargeExpenseThresholdsRepository>().InstancePerLifetimeScope();
         builder.RegisterType<ButtonCollectionsRepository>().InstancePerLifetimeScope();
 
@@ -161,6 +161,8 @@ public sealed class AutofacWpf : Module
         builder.RegisterType<MemosViewModel>();
         builder.RegisterType<DateMemoSetterViewModel>();
         builder.RegisterType<BankAccountMemoViewModel>();
+        builder.RegisterType<CustomRemindersViewModel>();
+        builder.RegisterType<OneCustomReminderViewModel>();
 
         // Settings view models
         builder.RegisterType<LargeExpenseThresholdViewModel>();

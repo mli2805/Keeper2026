@@ -89,7 +89,7 @@ public static class OthersMapper
             Name = bcm.Name,
             AccountIdsString = bcm.AccountModels.Count > 0 ? string.Join(";", bcm.AccountModels.Select(am => am.Id)) : ""
         };
-    }   
+    }
 
     public static ButtonCollection FromEf(this ButtonCollectionEf bcEf)
     {

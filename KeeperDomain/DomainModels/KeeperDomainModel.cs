@@ -41,6 +41,8 @@ public class KeeperDomainModel
 
     public List<CardBalanceMemo> CardBalanceMemos { get; set; } = null!;
     public List<BankAccountMemo> BankAccountMemos { get; set; } = null!;
+    public List<CustomReminder> CustomReminders { get; set; } = null!;
+
     public List<SalaryChange> SalaryChanges { get; set; } = null!;
     public List<LargeExpenseThreshold> LargeExpenseThresholds { get; set; } = null!;
 

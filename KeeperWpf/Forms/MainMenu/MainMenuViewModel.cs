@@ -21,7 +21,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     TrustAccountsViewModel trustAccountsViewModel, InvestmentTransactionsViewModel investmentTransactionsViewModel,
     InvestmentAnalysisViewModel investmentAnalysisViewModel,
     //
-    MemosViewModel memosViewModel, BankAccountMemoViewModel bankAccountMemoViewModel,
+    MemosViewModel memosViewModel, BankAccountMemoViewModel bankAccountMemoViewModel, CustomRemindersViewModel customReminderViewModel,
     LargeExpenseThresholdViewModel largeExpenseThresholdViewModel,
     ButtonCollectionBuilderViewModel buttonCollectionBuilderViewModel, ToTxtSaver toTxtSaver)
     : PropertyChangedBase
@@ -284,6 +284,12 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     {
         await bankAccountMemoViewModel.Initialize();
         await windowManager.ShowDialogAsync(bankAccountMemoViewModel);
+    }
+
+    public async Task ShowCustomReminderForm()
+    {
+        customReminderViewModel.Initialize();
+        await windowManager.ShowDialogAsync(customReminderViewModel);
     }
 
     public async Task ShowLargeExpenseThreholdsForm()

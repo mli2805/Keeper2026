@@ -45,6 +45,7 @@ public class KeeperDataModel : PropertyChangedBase
     public List<CardBalanceMemoModel> CardBalanceMemoModels { get; set; } = null!;
     // новая, используется формой BankAccountMemoViewModel
     public List<BankAccountMemoModel> BankAccountMemoModels { get; set; } = null!;
+    public List<CustomReminderModel> CustomReminderModels { get; set; } = null!;
 
     public List<ButtonCollectionModel> ButtonCollections { get; set; } = null!;
     public List<SalaryChange> SalaryChanges { get; set; } = null!;

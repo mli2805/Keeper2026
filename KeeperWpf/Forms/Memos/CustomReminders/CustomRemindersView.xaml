@@ -1,0 +1,16 @@
+﻿<Window x:Class="KeeperWpf.CustomRemindersView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KeeperWpf"
+        mc:Ignorable="d"
+        Height="450" Width="800">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Bottom">
+            <Button Content="Add" Name="AddReminder" Height="24" Width="60" HorizontalAlignment="Left" Margin="10,5, 0, 5"/>
+            <Button Content="Close" Name="Close" Height="24" Width="60" HorizontalAlignment="Right" Margin="0,5, 10,5"/>
+        </DockPanel>
+        <ListView ItemsSource="{Binding CustomReminders}"/>
+    </DockPanel>
+</Window>

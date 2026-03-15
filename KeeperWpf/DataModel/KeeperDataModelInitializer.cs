@@ -25,6 +25,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     TrustAssetRatesRepository trustAssetRatesRepository, TrustTransactionsRepository trustTransactionsRepository,
     TransactionsRepository transactionsRepository, FuellingsRepository fuellingsRepository,
     CardBalanceMemosRepository cardBalanceMemosRepository, BankAccountMemosRepository bankAccountMemosRepository,
+    CustomRemindersRepository customRemindersRepository,
     LargeExpenseThresholdsRepository largeExpenseThresholdsRepository,
     ButtonCollectionsRepository buttonCollectionsRepository, SalaryChangesRepository salaryChangesRepository)
 {
@@ -99,6 +100,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
         keeperDataModel.SalaryChanges = await salaryChangesRepository.GetAllSalaryChanges();
         keeperDataModel.CardBalanceMemoModels = await cardBalanceMemosRepository.GetAllCardBalanceMemos(keeperDataModel.AcMoDict);
         keeperDataModel.BankAccountMemoModels = await bankAccountMemosRepository.GetAllBankAccountMemos(keeperDataModel.AcMoDict);
+        keeperDataModel.CustomReminderModels = await customRemindersRepository.GetAllCustomReminders();
         keeperDataModel.LargeExpenseThresholds = largeExpenseThresholdsRepository.GetAllLargeExpenseThresholds();
         keeperDataModel.ButtonCollections = await buttonCollectionsRepository.GetAllButtonCollections(keeperDataModel.AcMoDict);
     }
