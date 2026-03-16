@@ -19,6 +19,7 @@
         </StackPanel>
         <DataGrid ItemsSource="{Binding Rows}" Margin="5,5,5,15"
                   SelectedItem="{Binding SelectedDepositOffer, Mode= TwoWay}"
+                  cal:Message.Attach="[Event MouseDoubleClick] = [Action EditSelectedOffer]"
                   IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single" 
                   IsSynchronizedWithCurrentItem="True">
             <i:Interaction.Behaviors>

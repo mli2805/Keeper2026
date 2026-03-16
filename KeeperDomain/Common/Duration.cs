@@ -24,11 +24,12 @@ public class Duration
         IsPerpetual = false;
     }
 
-    public string Dump()
+    // Duration or Repetition
+    public string Dump(bool isDuration = true)
     {
         if (IsPerpetual)
         {
-            return "Perpetual";
+            return isDuration ? "Perpetual" : "Once";
         }
         else
         {
@@ -36,11 +37,29 @@ public class Duration
         }
     }
 
-    public static Duration? FromNullableString(string? s)
+    public string ToRussianString(bool isDuration = true)
     {
-        return string.IsNullOrWhiteSpace(s) ? null : new Duration().FromString(s);
+        if (IsPerpetual)
+        {
+            return isDuration ? "Бессрочно" : "Однократно";
+        }
+        else
+        {
+            string scaleStr = Scale switch
+            {
+                Durations.Years => Value.YearsNumber(),
+                Durations.Months => Value.MonthsNumber(),
+                Durations.Days => Value.DaysNumber(),
+                Durations.Hours => Value.HoursNumber(),
+                Durations.Minutes => Value.MinutesNumber(),
+                Durations.Seconds => Value.SecondsNumber(),
+                _ => Scale.ToString()
+            };
+            return $"{Value} {scaleStr}";
+        }
     }
 
+    
     public Duration FromString(string s)
     {
         if (string.IsNullOrEmpty(s))
@@ -48,7 +67,7 @@ public class Duration
             return new Duration();
         }
 
-        if (s.Equals("Perpetual", StringComparison.OrdinalIgnoreCase))
+        if (s.Equals("Perpetual", StringComparison.OrdinalIgnoreCase) || s.Equals("Once", StringComparison.OrdinalIgnoreCase))
         {
             IsPerpetual = true;
             return this;

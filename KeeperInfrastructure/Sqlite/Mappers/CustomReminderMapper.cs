@@ -5,16 +5,19 @@ namespace KeeperInfrastructure;
 
 public static class CustomReminderMapper
 {
-    public static CustomReminderEf ToEf(this CustomReminder domain)
+    public static CustomReminderEf ToEf(this CustomReminderModel model)
     {
-        return new CustomReminderEf
+        model.Every.IsPerpetual = model.IsOnce;
+
+        CustomReminderEf entity = new()
         {
-            Id = domain.Id,
-            Enabled = domain.Enabled,
-            TriggerDate = domain.TriggerDate,
-            Every = domain.Every?.ToString(),
-            Memo = domain.Memo
+            Id = model.Id,
+            Enabled = model.Enabled,
+            TriggerDate = model.TriggerDate,
+            Every = model.Every.Dump(false),
+            Memo = model.Memo
         };
+        return entity;
     }
 
     public static CustomReminder FromEf(this CustomReminderEf ef)
@@ -24,7 +27,7 @@ public static class CustomReminderMapper
             Id = ef.Id,
             Enabled = ef.Enabled,
             TriggerDate = ef.TriggerDate,
-            Every = Duration.FromNullableString(ef.Every),
+            Every = new Duration().FromString(ef.Every),
             Memo = ef.Memo
         };
     }
@@ -36,7 +39,7 @@ public static class CustomReminderMapper
             Id = ef.Id,
             Enabled = ef.Enabled,
             TriggerDate = ef.TriggerDate,
-            Every = Duration.FromNullableString(ef.Every),
+            Every = new Duration().FromString(ef.Every),
             Memo = ef.Memo
         };
     }

@@ -35,6 +35,39 @@ public static class RussianNumeral
         }
     }
 
+    public static string HoursNumber(this int number)
+    {
+        switch (NumberOption(number))
+        {
+            case 1: return "час";
+            case 2: return "часа";
+            default:
+                return "часов";
+        }
+    }
+
+    public static string MinutesNumber(this int number)
+    {
+        switch (NumberOption(number))
+        {
+            case 1: return "минута";
+            case 2: return "минуты";
+            default:
+                return "минут";
+        }
+    }
+
+    public static string SecondsNumber(this int number)
+    {
+        switch (NumberOption(number))
+        {
+            case 1: return "секунда";
+            case 2: return "секунды";
+            default:
+                return "секунд";
+        }
+    }
+
     private static int NumberOption(int number)
     {
         if (number > 10 && number < 14) return 3;

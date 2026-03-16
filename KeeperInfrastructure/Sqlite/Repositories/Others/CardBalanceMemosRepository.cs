@@ -1,5 +1,4 @@
-﻿using KeeperDomain;
-using KeeperModels;
+﻿using KeeperModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
@@ -35,25 +34,6 @@ public class BankAccountMemosRepository(IDbContextFactory<KeeperDbContext> facto
         var entities = models.Select(m => m.ToEf()).ToList();
         keeperDbContext.BankAccountMemos.RemoveRange(keeperDbContext.BankAccountMemos);
         await keeperDbContext.BankAccountMemos.AddRangeAsync(entities);
-        await keeperDbContext.SaveChangesAsync();
-    }
-}
-
-public class CustomRemindersRepository(IDbContextFactory<KeeperDbContext> factory)
-{
-    public async Task<List<CustomReminderModel>> GetAllCustomReminders()
-    {
-        await using var keeperDbContext = await factory.CreateDbContextAsync();
-        var result = keeperDbContext.CustomReminders.Select(cr => cr.ToModel()).ToList();
-        return result;
-    }
-
-    public async Task SaveAll(List<CustomReminder> models)
-    {
-        await using var keeperDbContext = await factory.CreateDbContextAsync();
-        var entities = models.Select(m => m.ToEf()).ToList();
-        keeperDbContext.CustomReminders.RemoveRange(keeperDbContext.CustomReminders);
-        await keeperDbContext.CustomReminders.AddRangeAsync(entities);
         await keeperDbContext.SaveChangesAsync();
     }
 }
