@@ -5,31 +5,14 @@ using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
-public class MyResponse
-{
-    public string Content { get; set; } = string.Empty;
-    public bool Success { get; set; }
-    public string Error { get; set; } = string.Empty;
-
-    public MyResponse(string content)
-    {
-        Content = content;
-        Success = true;
-    }
-
-    public MyResponse(Exception e)
-    {
-        Success = false;
-        Error = e.Message;
-    }
-}
-
 public static class MyRequest
 {
-    private static readonly HttpClient _httpClient = new HttpClient(new HttpClientHandler
+    private static readonly HttpClientHandler handler = new HttpClientHandler
     {
-        AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
-    })
+        AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,
+        UseProxy = false // на компе настроен прокси в англию, и тогда нацбанк не отвечает
+    };
+    private static readonly HttpClient _httpClient = new HttpClient(handler)
     {
         Timeout = TimeSpan.FromSeconds(10)
     };
