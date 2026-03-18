@@ -10,6 +10,7 @@ using KeeperInfrastructure;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class OfficialRatesViewModel : PropertyChangedBase
 {
     private readonly KeeperDataModel _keeperDataModel;

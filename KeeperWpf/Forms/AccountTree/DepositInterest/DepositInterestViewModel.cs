@@ -8,6 +8,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class DepositInterestViewModel(KeeperDataModel keeperDataModel, IWindowManager windowManager,
     ComboTreesProvider comboTreesProvider, ShellPartsBinder shellPartsBinder,
     AccNameSelector accNameSelectionControlInitializer, TransactionsRepository transactionsRepository) : Screen

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace KeeperWpf;
 
 
+[ExportViewModel]
 public class ButtonCollectionBuilderViewModel(KeeperDataModel dataModel, ComboTreesProvider comboTreesProvider, 
     ButtonCollectionsRepository buttonCollectionsRepository) : Screen
 {

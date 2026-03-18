@@ -3,6 +3,7 @@ using Caliburn.Micro;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class MemosViewModel : Screen
 {
     public DateMemoSetterViewModel DateMemoSetterViewModel { get; }

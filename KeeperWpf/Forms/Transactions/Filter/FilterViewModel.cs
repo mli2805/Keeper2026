@@ -4,6 +4,7 @@ using Caliburn.Micro;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class FilterViewModel : Screen
 {
     private int _left;

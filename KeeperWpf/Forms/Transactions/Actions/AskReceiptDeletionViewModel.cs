@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class AskReceiptDeletionViewModel : Screen
 {
     public int Result { get; set; }

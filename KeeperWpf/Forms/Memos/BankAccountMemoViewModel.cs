@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class BankAccountMemoViewModel(KeeperDataModel keeperDataModel, 
     BankAccountMemosRepository bankAccountMemosRepository) : Screen
 {

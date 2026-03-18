@@ -11,6 +11,7 @@ using System.Windows.Input;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class DepoCurrResultViewModel : Screen
 {
     #region Binding properties

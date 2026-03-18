@@ -4,6 +4,7 @@ using Caliburn.Micro;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class RatesViewModel : Screen
 {
     private readonly KeeperDataModel _keeperDataModel;

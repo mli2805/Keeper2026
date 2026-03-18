@@ -7,6 +7,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class OpenDepositsViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

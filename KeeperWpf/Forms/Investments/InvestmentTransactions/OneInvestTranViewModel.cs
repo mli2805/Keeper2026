@@ -8,6 +8,7 @@ using System.Windows;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class OneInvestTranViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

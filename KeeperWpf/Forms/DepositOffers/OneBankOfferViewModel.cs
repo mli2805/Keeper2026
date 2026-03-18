@@ -9,6 +9,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class OneBankOfferViewModel(KeeperDataModel keeperDataModel, IWindowManager windowManager,
     RulesAndRatesViewModel rulesAndRatesViewModel) : Screen
 {

@@ -14,6 +14,7 @@ using LinearAxis = OxyPlot.Axes.LinearAxis;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class FuelViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

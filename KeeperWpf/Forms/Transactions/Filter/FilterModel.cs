@@ -7,6 +7,7 @@ using KeeperDomain;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class FilterModel : PropertyChangedBase
 {
     private readonly KeeperDataModel _dataModel;

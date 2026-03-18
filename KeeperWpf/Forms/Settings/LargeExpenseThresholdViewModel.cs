@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class LargeExpenseThresholdViewModel(KeeperDataModel keeperDataModel,
     LargeExpenseThresholdsRepository largeExpenseThresholdsRepository) : Screen
 {

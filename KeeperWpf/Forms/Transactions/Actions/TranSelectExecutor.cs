@@ -2,6 +2,7 @@
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class TranSelectExecutor
 {
     private readonly TranModel _model;

@@ -5,6 +5,7 @@ using KeeperDomain;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class MonthAnalysisViewModel : Screen
 {
     private readonly MonthAnalyzer _monthAnalyzer;

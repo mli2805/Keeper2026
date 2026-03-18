@@ -2,6 +2,7 @@
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class DateMemoSetterViewModel : PropertyChangedBase
 {
 }

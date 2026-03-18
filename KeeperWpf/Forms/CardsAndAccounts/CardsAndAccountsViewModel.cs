@@ -7,6 +7,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class CardsAndAccountsViewModel : Screen
 {
     private readonly LogFile _logFile;

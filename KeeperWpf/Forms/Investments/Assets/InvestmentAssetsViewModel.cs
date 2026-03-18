@@ -12,6 +12,7 @@ using System.Windows.Input;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class InvestmentAssetsViewModel : Screen
 {
     private readonly ILifetimeScope _globalScope;

@@ -8,6 +8,7 @@ using KeeperInfrastructure;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class CardFeeViewModel(KeeperDataModel dataModel, ShellPartsBinder shellPartsBinder, 
     TransactionsRepository transactionsRepository) : Screen
 {

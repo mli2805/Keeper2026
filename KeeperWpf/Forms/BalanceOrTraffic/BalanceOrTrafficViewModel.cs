@@ -3,6 +3,7 @@ using Caliburn.Micro;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class BalanceOrTrafficViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

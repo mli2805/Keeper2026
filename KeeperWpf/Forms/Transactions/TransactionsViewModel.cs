@@ -6,6 +6,7 @@ using System.Windows.Input;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class TransactionsViewModel : Screen
 {
     private readonly FilterModel _filterModel;

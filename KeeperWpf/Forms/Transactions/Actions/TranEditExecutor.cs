@@ -7,8 +7,9 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class TranEditExecutor(TranModel model, IWindowManager windowManager,
-    KeeperDataModel dataModel, OneTranViewModel oneTranViewModel, 
+    KeeperDataModel dataModel, OneTranViewModel oneTranViewModel,
     TransactionsRepository transactionsRepository, FuellingsRepository fuellingsRepository,
     AskReceiptDeletionViewModel askReceiptDeletionViewModel)
 {

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class TranMoveExecutor
 {
     public enum Destination { Up, Down }

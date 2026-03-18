@@ -4,6 +4,7 @@ using KeeperDomain;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class AssetsTableViewModel
 {
     public List<InvestmentAssetOnDate> Rows { get; set; } = new List<InvestmentAssetOnDate>();

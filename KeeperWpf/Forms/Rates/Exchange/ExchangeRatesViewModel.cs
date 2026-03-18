@@ -8,6 +8,7 @@ using KeeperInfrastructure;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class ExchangeRatesViewModel : PropertyChangedBase
 {
     private readonly KeeperDataModel _keeperDataModel;

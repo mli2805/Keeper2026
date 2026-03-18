@@ -10,6 +10,7 @@ using KeeperDomain;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class TrustAccountsViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

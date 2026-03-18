@@ -8,6 +8,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class FuellingInputViewModel : Screen
 {
     public int Top { get; set; }

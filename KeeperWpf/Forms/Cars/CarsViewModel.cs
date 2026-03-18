@@ -12,6 +12,7 @@ using System.Windows;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, 
     IWindowManager windowManager, CarRepository carRepository,
     FuelViewModel fuelViewModel, OwnershipCostViewModel ownershipCostViewModel) : Screen

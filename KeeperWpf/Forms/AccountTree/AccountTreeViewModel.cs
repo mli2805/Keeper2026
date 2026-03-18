@@ -7,6 +7,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class AccountTreeViewModel(KeeperDataModel keeperDataModel, IWindowManager windowManager, ShellPartsBinder shellPartsBinder,
     AskDragAccountActionViewModel askDragAccountActionViewModel, AccountRepository accountRepository,
     OneFolderViewModel oneFolderViewModel, OneAccountViewModel oneAccountViewModel, OneBankAccountViewModel oneBankAccountViewModel,

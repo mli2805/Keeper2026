@@ -9,6 +9,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class UniversalControlVm : PropertyChangedBase
 {
     private Visibility _visibility;

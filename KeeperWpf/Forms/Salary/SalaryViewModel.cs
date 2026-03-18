@@ -15,6 +15,7 @@ using System.Windows.Input;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class SalaryViewModel(KeeperDataModel dataModel, SalaryChangesRepository salaryChangesRepository) : Screen
 {
     private List<SalaryLineModel> _rows = new List<SalaryLineModel>();

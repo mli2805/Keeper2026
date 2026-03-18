@@ -3,6 +3,7 @@ using Caliburn.Micro;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class TwoSelectorsViewModel : Screen
 {
     public ShellPartsBinder ShellPartsBinder { get; set; }

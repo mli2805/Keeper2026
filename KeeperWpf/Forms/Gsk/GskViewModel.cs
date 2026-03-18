@@ -7,6 +7,7 @@ using KeeperDomain;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class GskViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

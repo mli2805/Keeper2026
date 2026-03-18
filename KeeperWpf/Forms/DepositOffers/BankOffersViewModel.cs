@@ -11,6 +11,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class BankOffersViewModel(IWindowManager windowManager, KeeperDataModel dataModel,
     DepositOffersRepository depositOffersRepository, OneBankOfferViewModel oneBankOfferViewModel) : Screen
 {

@@ -5,6 +5,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class AssetStatisticsViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

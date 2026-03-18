@@ -8,6 +8,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class OneAssetViewModel : Screen
 {
     private readonly KeeperDataModel _keeperDataModel;

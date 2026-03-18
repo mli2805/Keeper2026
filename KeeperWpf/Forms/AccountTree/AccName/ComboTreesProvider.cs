@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class ComboTreesProvider
 {
     private readonly KeeperDataModel _dataModel;

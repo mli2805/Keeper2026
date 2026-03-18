@@ -7,6 +7,7 @@ using KeeperInfrastructure;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class GoldRatesViewModel : PropertyChangedBase
 {
     private readonly KeeperDataModel _keeperDataModel;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class CustomRemindersViewModel(KeeperDataModel keeperDataModel, IWindowManager windowManager,
     OneCustomReminderViewModel oneCustomReminderViewModel, CustomRemindersRepository customRemindersRepository) : Screen
 {

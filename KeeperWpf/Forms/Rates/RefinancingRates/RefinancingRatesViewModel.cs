@@ -5,6 +5,7 @@ using KeeperDomain;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class RefinancingRatesViewModel : PropertyChangedBase
 {
     private readonly KeeperDataModel _keeperDataModel;

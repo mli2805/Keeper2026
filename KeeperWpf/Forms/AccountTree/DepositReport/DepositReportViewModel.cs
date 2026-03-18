@@ -5,6 +5,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class DepositReportViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

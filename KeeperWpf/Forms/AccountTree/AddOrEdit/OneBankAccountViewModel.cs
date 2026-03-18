@@ -11,6 +11,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class OneBankAccountViewModel(KeeperDataModel dataModel, AccountRepository accountRepository) : Screen
 {
     private bool _isInAddMode;

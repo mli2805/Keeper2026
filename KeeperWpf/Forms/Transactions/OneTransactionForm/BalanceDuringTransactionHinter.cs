@@ -5,6 +5,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class BalanceDuringTransactionHinter
 {
     private const string TemplateForByr = "{0:#,0} {2} -> {1:#,0} {2}";

@@ -7,6 +7,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class ShellPartsBinder : PropertyChangedBase
 {
     private readonly KeeperDataModel _keeperDataModel;

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class OneFolderViewModel(AccountRepository accountRepository) : Screen
 {
     private bool _isInAddMode;

@@ -11,6 +11,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class RulesAndRatesViewModel(KeeperDataModel dataModel, IWindowManager windowManager) : Screen
 {
     public string _title = null!;

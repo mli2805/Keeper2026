@@ -9,6 +9,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class NewExpenseControlVm : PropertyChangedBase
 {
     private Visibility _visibility;

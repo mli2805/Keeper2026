@@ -6,6 +6,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class BalanceVerificationViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

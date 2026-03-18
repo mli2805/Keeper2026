@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class OneCustomReminderViewModel(CustomRemindersRepository customRemindersRepository) : Screen
 {
     private bool _isAddMode;

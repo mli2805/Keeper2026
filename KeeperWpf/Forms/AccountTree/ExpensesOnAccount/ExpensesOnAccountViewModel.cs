@@ -6,6 +6,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class ExpensesOnAccountViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

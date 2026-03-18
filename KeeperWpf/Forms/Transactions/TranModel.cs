@@ -7,6 +7,7 @@ using Caliburn.Micro;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class TranModel : PropertyChangedBase
 {
     public ObservableCollection<TranWrappedForDataGrid> Rows { get; set; } = null!;

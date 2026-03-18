@@ -7,6 +7,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class FolderSummaryViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

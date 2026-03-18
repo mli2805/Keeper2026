@@ -11,6 +11,7 @@ using OxyPlot.Series;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class OwnershipCostViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

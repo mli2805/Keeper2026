@@ -8,6 +8,7 @@ using OxyPlot.Series;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class ExpenseByCategoriesViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

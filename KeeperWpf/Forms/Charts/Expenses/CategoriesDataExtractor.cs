@@ -4,6 +4,7 @@ using KeeperDomain;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class CategoriesDataExtractor
 {
     private readonly KeeperDataModel _dataModel;

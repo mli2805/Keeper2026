@@ -11,6 +11,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class AssetRatesViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;

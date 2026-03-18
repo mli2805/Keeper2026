@@ -3,6 +3,7 @@
 namespace KeeperWpf;
 
 public enum DragAndDropAction { Before, Inside, After, Cancel }
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class AskDragAccountActionViewModel : Screen
 {
     private readonly KeeperDataModel _keeperDataModel;

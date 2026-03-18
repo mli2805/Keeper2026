@@ -10,6 +10,7 @@ using KeeperModels;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class OneTranViewModel : Screen
 {
     public int Top { get; set; }

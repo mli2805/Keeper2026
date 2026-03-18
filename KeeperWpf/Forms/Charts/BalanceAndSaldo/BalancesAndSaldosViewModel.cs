@@ -5,6 +5,7 @@ using System.Windows.Input;
 
 namespace KeeperWpf;
 
+[ExportViewModel]
 public class BalancesAndSaldosViewModel : Screen
 {
     public PlotModel DailyBalancesModel { get; set; } = null!;

@@ -12,6 +12,7 @@ using Microsoft.Win32;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class PaymentWaysViewModel : Screen
 {
     private readonly PathFinder _pathFinder;

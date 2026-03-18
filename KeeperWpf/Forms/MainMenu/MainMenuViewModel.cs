@@ -7,6 +7,7 @@ using Caliburn.Micro;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel keeperDataModel, ShellPartsBinder shellPartsBinder,
     TransactionsViewModel transactionsViewModel, RatesViewModel ratesViewModel,
     MonthAnalysisViewModel monthAnalysisViewModel, BankOffersViewModel bankOffersViewModel,

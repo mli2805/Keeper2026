@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public partial class AccNameSelector
 {
     private readonly KeeperDataModel _dataModel;
