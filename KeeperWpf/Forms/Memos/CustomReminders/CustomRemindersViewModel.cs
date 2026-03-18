@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using KeeperInfrastructure;
 using KeeperModels;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace KeeperWpf;
@@ -8,13 +9,13 @@ namespace KeeperWpf;
 public class CustomRemindersViewModel(KeeperDataModel keeperDataModel, IWindowManager windowManager,
     OneCustomReminderViewModel oneCustomReminderViewModel, CustomRemindersRepository customRemindersRepository) : Screen
 {
-    public BindableCollection<CustomReminderModel> CustomReminders { get; set;  } = null!;
+    public BindableCollection<CustomReminderModel> CustomReminders { get; set; } = null!;
 
     public CustomReminderModel? SelectedCustomReminder { get; set; }
 
     public void Initialize()
     {
-        CustomReminders = [.. keeperDataModel.CustomReminderModels];
+        CustomReminders = [.. keeperDataModel.CustomReminderModels.OrderBy(cr => cr.TriggerDate)];
         if (CustomReminders.Count > 0)
         {
             SelectedCustomReminder = CustomReminders[0];
@@ -34,6 +35,7 @@ public class CustomRemindersViewModel(KeeperDataModel keeperDataModel, IWindowMa
         if (newCustomReminderModel != null)
         {
             CustomReminders.Add(newCustomReminderModel);
+            keeperDataModel.CustomReminderModels.Add(newCustomReminderModel);
             SelectedCustomReminder = newCustomReminderModel;
         }
     }
@@ -51,6 +53,12 @@ public class CustomRemindersViewModel(KeeperDataModel keeperDataModel, IWindowMa
                 CustomReminders[index] = updatedCustomReminderModel;
                 SelectedCustomReminder = updatedCustomReminderModel;
             }
+
+            var idx = keeperDataModel.CustomReminderModels.FindIndex(cr => cr.Id == updatedCustomReminderModel.Id);
+            if (idx >= 0)
+            {
+                keeperDataModel.CustomReminderModels[idx] = updatedCustomReminderModel;
+            }
         }
     }
 
@@ -58,11 +66,12 @@ public class CustomRemindersViewModel(KeeperDataModel keeperDataModel, IWindowMa
     {
         var vm = new MyMessageBoxViewModel(MessageType.Confirmation, "Вы уверены, что хотите удалить это напоминание?");
         var result = await windowManager.ShowDialogAsync(vm);
-        
+
         if (result.HasValue && result.Value)
         {
             await customRemindersRepository.Delete(SelectedCustomReminder!.Id);
-            CustomReminders.Remove(SelectedCustomReminder!); 
+            CustomReminders.Remove(SelectedCustomReminder!);
+            keeperDataModel.CustomReminderModels.Remove(SelectedCustomReminder!);
         }
     }
 
