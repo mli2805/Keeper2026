@@ -1,25 +1,15 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using KeeperDomain;
 using KeeperModels;
 
 namespace KeeperWpf;
 
-public static class MemoExt
+public static class BankAccountMemoExt
 {
-    public static bool HasLowBalanceAlarm(this KeeperDataModel keeperDataModel)
+    public static bool HasLowBalanceAccounts(this KeeperDataModel dataModel)
     {
-        return keeperDataModel.CardBalanceMemoModels.Any(c => c.BalanceThreshold > c.CurrentBalance);
-    }
-
-    public static Task RefreshCardBalances(this KeeperDataModel keeperDataModel)
-    {
-        foreach (var m in keeperDataModel.CardBalanceMemoModels)
-        {
-            m.CurrentBalance = keeperDataModel.GetCurrentBalance(m.Account);
-        }
-        return Task.CompletedTask;
+        return dataModel.BankAccountMemoModels.Any(m => m.IsLimitExceeded);
     }
 
     public static decimal GetCurrentBalance(this KeeperDataModel keeperDataModel, AccountItemModel account)

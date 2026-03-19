@@ -24,6 +24,7 @@
 	  <None Remove="Resources\accountmenu16\plus16.ico" />
 	  <None Remove="Resources\keeperWpf.ico" />
 	  <None Remove="Resources\mainmenu\bank_offer.png" />
+	  <None Remove="Resources\mainmenu\black-remind.png" />
 	  <None Remove="Resources\mainmenu\calculator.png" />
 	  <None Remove="Resources\mainmenu\car.png" />
 	  <None Remove="Resources\mainmenu\chart.png" />
@@ -106,6 +107,9 @@
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Include="Resources\mainmenu\bank_offer.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\black-remind.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Include="Resources\mainmenu\calculator.png">

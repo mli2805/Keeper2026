@@ -33,7 +33,7 @@ public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeper
        
         var account = keeperDataModel.AccountsTree.First(r => r.Name == "Мои");
         account.IsSelected = true;
-        MainMenuViewModel.SetBellPath();
+        MainMenuViewModel.Initialize();
         ShellPartsBinder.SelectedAccountItemModel = account;
     }
 

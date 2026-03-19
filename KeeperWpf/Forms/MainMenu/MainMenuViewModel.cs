@@ -15,7 +15,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     BalancesAndSaldosViewModel balancesAndSaldosViewModel, ExpenseByCategoriesViewModel expenseByCategoriesViewModel,
     DepoCurrResultViewModel depoCurrResultViewModel,
     //
-    SalaryViewModel salaryViewModel, GskViewModel gskViewModel, CarsViewModel carsViewModel, 
+    SalaryViewModel salaryViewModel, GskViewModel gskViewModel, CarsViewModel carsViewModel,
     OpenDepositsViewModel openDepositsViewModel, CardsAndAccountsViewModel cardsAndAccountsViewModel,
     // trust:
     InvestmentAssetsViewModel investmentAssetsViewModel, AssetRatesViewModel assetRatesViewModel,
@@ -27,52 +27,6 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     ButtonCollectionBuilderViewModel buttonCollectionBuilderViewModel, ToTxtSaver toTxtSaver)
     : PropertyChangedBase
 {
-
-    #region Reminder icon
-    private Visibility _reminderIconVisibility = Visibility.Collapsed;
-    public Visibility ReminderIconVisibility
-    {
-        get => _reminderIconVisibility;
-        set
-        {
-            if (value == _reminderIconVisibility) return;
-            _reminderIconVisibility = value;
-            NotifyOfPropertyChange();
-        }
-    }
-
-    private Visibility _reminderWaitIconVisibility = Visibility.Visible;
-    public Visibility ReminderWaitIconVisibility
-    {
-        get => _reminderWaitIconVisibility;
-        set
-        {
-            if (value == _reminderWaitIconVisibility) return;
-            _reminderWaitIconVisibility = value;
-            NotifyOfPropertyChange();
-        }
-    }
-
-    private string _bellPath = "../../Resources/mainmenu/white-bell.png";
-    public string BellPath
-    {
-        get => _bellPath;
-        set
-        {
-            if (value == _bellPath) return;
-            _bellPath = value;
-            NotifyOfPropertyChange();
-        }
-    }
-
-    public void SetBellPath()
-    {
-        var hasAlarm = keeperDataModel.HasLowBalanceAlarm();
-        BellPath = hasAlarm ? "../../Resources/mainmenu/yellow-bell.png" : "../../Resources/mainmenu/white-bell.png";
-        ReminderWaitIconVisibility = Visibility.Collapsed;
-        ReminderIconVisibility = Visibility.Visible;
-    }
-    #endregion
 
     #region Exchange icon
     private Visibility _exchangeWaitIconVisibility = Visibility.Collapsed;
@@ -107,6 +61,53 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     }
 
     #endregion
+
+    private string _lowBalanceIconPath = "../../Resources/mainmenu/white-bell.png";
+    public string LowBalanceIconPath
+    {
+        get => _lowBalanceIconPath;
+        set
+        {
+            if (Equals(_lowBalanceIconPath, value))
+                return;
+
+            _lowBalanceIconPath = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
+    public void SetLowBalanceIconPath()
+    {
+        LowBalanceIconPath = keeperDataModel.HasLowBalanceAccounts()
+            ? "../../Resources/mainmenu/yellow-bell.png"
+            : "../../Resources/mainmenu/white-bell.png";
+    }
+
+
+    private string _reminderIconPath = "../../Resources/mainmenu/black-remind.png";
+    public string ReminderIconPath
+    {
+        get => _reminderIconPath;
+        set
+        {
+            if (value == _reminderIconPath) return;
+            _reminderIconPath = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
+    public void SetReminderIconPath()
+    {
+        ReminderIconPath = keeperDataModel.HasRemindersTriggered()
+            ? "../../Resources/mainmenu/red-remind.png"
+            : "../../Resources/mainmenu/black-remind.png";
+    }
+
+    public void Initialize()
+    {
+        SetLowBalanceIconPath();
+        SetReminderIconPath();
+    }
 
     // UserControl должен быть Focusable="True" чтобы шорткаты работали
     public async Task OnPreviewKeyDown(KeyEventArgs e)
@@ -166,8 +167,8 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         if (transactionsViewModel.Model.IsCollectionChanged)
         {
             shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
-            await keeperDataModel.RefreshCardBalances();
-            SetBellPath();
+            await bankAccountMemoViewModel.Initialize();
+            SetLowBalanceIconPath();
             await SaveInTextFilesForBackup();
         }
     }
@@ -275,22 +276,18 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     }
     #endregion
 
-    public async Task ShowRemindersForm()
-    {
-        await memosViewModel.Initialize();
-        await windowManager.ShowDialogAsync(memosViewModel);
-    }
-
     public async Task ShowBankAccountMemoForm()
     {
         await bankAccountMemoViewModel.Initialize();
         await windowManager.ShowDialogAsync(bankAccountMemoViewModel);
+        SetLowBalanceIconPath();
     }
 
     public async Task ShowCustomReminderForm()
     {
         customReminderViewModel.Initialize();
         await windowManager.ShowDialogAsync(customReminderViewModel);
+        SetReminderIconPath();
     }
 
     public async Task ShowLargeExpenseThreholdsForm()
