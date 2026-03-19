@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
+[ExportRepositoryAttribute]
 public class CustomRemindersRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<CustomReminderModel>> GetAllCustomReminders()

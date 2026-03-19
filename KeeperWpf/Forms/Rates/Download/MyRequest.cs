@@ -10,7 +10,7 @@ public static class MyRequest
     private static readonly HttpClientHandler handler = new HttpClientHandler
     {
         AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,
-        UseProxy = false // на компе настроен прокси в англию, и тогда нацбанк не отвечает
+        UseProxy = false // на компе настроен прокси в англию, и тогда нацбанк не отвечает, остальным сайтам без разницы
     };
     private static readonly HttpClient _httpClient = new HttpClient(handler)
     {

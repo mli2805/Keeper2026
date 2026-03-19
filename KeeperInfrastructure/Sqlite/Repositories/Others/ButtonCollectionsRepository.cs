@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
+[ExportRepositoryAttribute]
 public class ButtonCollectionsRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<ButtonCollectionModel>> GetAllButtonCollections(Dictionary<int, AccountItemModel> AcMoDict)

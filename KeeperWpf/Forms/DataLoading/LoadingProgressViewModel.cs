@@ -9,6 +9,7 @@ using System.Windows;
 
 namespace KeeperWpf;
 
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class LoadingProgressViewModel : Screen
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();

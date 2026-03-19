@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using KeeperInfrastructure;
-using KeeperInfrastructure.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System.IO;
@@ -65,40 +64,30 @@ public sealed class AutofacWpf : Module
 
         // Register DbContext Initializer
         builder.RegisterType<KeeperDbContextInitializer>().AsSelf();
-        builder.RegisterType<LoadingProgressViewModel>().InstancePerLifetimeScope();
+
+        RegisterRepositories(builder);
+
         builder.RegisterType<ToSqlite>().InstancePerLifetimeScope();
         builder.RegisterType<ToTxtSaver>().InstancePerLifetimeScope();
-
-        builder.RegisterType<AccountRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<OfficialRatesRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<ExchangeRatesRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<MetalRatesRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<RefinancingRatesRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<TransactionsRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<FuellingsRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<DepositOffersRepository>().InstancePerLifetimeScope();
-
-        builder.RegisterType<TrustAccountsRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<TrustAssetsRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<TrustAssetRatesRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<TrustTransactionsRepository>().InstancePerLifetimeScope();
-
-        builder.RegisterType<SalaryChangesRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<CardBalanceMemosRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<BankAccountMemosRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<CustomRemindersRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<LargeExpenseThresholdsRepository>().InstancePerLifetimeScope();
-        builder.RegisterType<ButtonCollectionsRepository>().InstancePerLifetimeScope();
-
-        builder.RegisterType<CarRepository>().InstancePerLifetimeScope();
 
         // глобальная модель данных приложения
         builder.RegisterType<KeeperDataModel>().InstancePerLifetimeScope();
         builder.RegisterType<KeeperDataModelInitializer>().InstancePerLifetimeScope();
 
-
-        // Register ViewModels
         RegisterViewModels(builder);
+    }
+
+    private static void RegisterRepositories(ContainerBuilder builder)
+    {
+        var assembly = typeof(AccountRepository).Assembly;
+        var repositoryTypes = assembly.GetTypes()
+            .Where(t => t.IsClass && !t.IsAbstract
+                        && t.IsDefined(typeof(ExportRepositoryAttribute), true));
+
+        foreach (var type in repositoryTypes)
+        {
+            builder.RegisterType(type).InstancePerLifetimeScope();
+        }
     }
 
     private static void RegisterViewModels(ContainerBuilder builder)

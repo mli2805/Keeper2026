@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace KeeperInfrastructure.Sqlite;
+namespace KeeperInfrastructure;
 
 public class KeeperDbContextFactory : IDbContextFactory<KeeperDbContext>
 {

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
+[ExportRepositoryAttribute]
 public class SalaryChangesRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<SalaryChange>> GetAllSalaryChanges()

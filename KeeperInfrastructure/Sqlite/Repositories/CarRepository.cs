@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
+[ExportRepositoryAttribute]
 public class CarRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<CarModel>> GetAllCarsWithMileages()

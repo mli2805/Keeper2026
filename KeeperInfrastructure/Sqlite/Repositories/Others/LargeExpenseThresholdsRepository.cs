@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
+[ExportRepositoryAttribute]
 public class LargeExpenseThresholdsRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public List<LargeExpenseThreshold> GetAllLargeExpenseThresholds()

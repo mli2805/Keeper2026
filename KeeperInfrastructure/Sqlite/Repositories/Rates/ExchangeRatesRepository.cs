@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
+[ExportRepositoryAttribute]
 public class ExchangeRatesRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public List<ExchangeRates> GetAllExchangeRates()
