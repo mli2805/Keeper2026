@@ -25,10 +25,10 @@ public class BankAccountMemo : IDumpable, IParsable<BankAccountMemo>
         var substrings = s.Split(';');
         Id = int.Parse(substrings[0]);
         AccountId = int.Parse(substrings[1]);
-        BalanceLess = !string.IsNullOrWhiteSpace(substrings[2]) ? Convert.ToInt32(substrings[2], new CultureInfo("en-US")) : (int?)null;
-        BalanceMore = !string.IsNullOrWhiteSpace(substrings[3]) ? Convert.ToInt32(substrings[3], new CultureInfo("en-US")) : (int?)null;
-        PaymentsLess = !string.IsNullOrWhiteSpace(substrings[4]) ? Convert.ToInt32(substrings[4], new CultureInfo("en-US")) : (int?)null;
-        PaymentsMore = !string.IsNullOrWhiteSpace(substrings[5]) ? Convert.ToInt32(substrings[5], new CultureInfo("en-US")) : (int?)null;
+        BalanceLess = !string.IsNullOrWhiteSpace(substrings[2]) ? Convert.ToInt32(substrings[2], new CultureInfo("en-US")) : null;
+        BalanceMore = !string.IsNullOrWhiteSpace(substrings[3]) ? Convert.ToInt32(substrings[3], new CultureInfo("en-US")) : null;
+        PaymentsLess = !string.IsNullOrWhiteSpace(substrings[4]) ? Convert.ToInt32(substrings[4], new CultureInfo("en-US")) : null;
+        PaymentsMore = !string.IsNullOrWhiteSpace(substrings[5]) ? Convert.ToInt32(substrings[5], new CultureInfo("en-US")) : null;
         Comment = substrings[6].Trim();
         return this;
     }

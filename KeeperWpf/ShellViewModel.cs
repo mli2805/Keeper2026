@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using KeeperInfrastructure;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,7 +36,7 @@ public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeper
         ShellPartsBinder.SelectedAccountItemModel = account;
     }
 
-    public async Task<bool> LoadAccountsTree()
+    private async Task<bool> LoadAccountsTree()
     {
         // если БД удалили, она будет создана пустая в AppBootstrapper еще до ShellViewModel
         // GetAccountTreeFromDb вернет false, если в БД нет данных
@@ -47,10 +46,7 @@ public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeper
         }
 
         var mb = new MyMessageBoxViewModel(MessageType.Confirmation,
-            new List<string>()
-            {
-                "База данных пуста!", "Загрузить данные из текстовых файлов?"
-            });
+            ["База данных пуста!", "Загрузить данные из текстовых файлов?"]);
         var confirmation = await windowManager.ShowDialogAsync(mb);
         if (confirmation == null || confirmation.Value == false)
         {
@@ -63,7 +59,7 @@ public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeper
             return false;
         }
 
-        var success = await dataModelInitializer.GetFullModelFromDb();
+        await dataModelInitializer.GetFullModelFromDb();
         return true;
     }
 

@@ -27,11 +27,10 @@ public class TrustAsset : IDumpable, IParsable<TrustAsset>
 
     public string Dump()
     {
-        var durationDump = BondCouponPeriod != null ? BondCouponPeriod.Dump() : new Duration().Dump();
         return Id + " ; " + TrustAccountId + " ; " + Ticker.Trim() + " ; " + Title.Trim() + " ; " +
                StockMarket + " ; " + AssetType + " ; " +
-               Nominal + " ; " + durationDump + " ; " +
-           CouponRate.ToString(new CultureInfo("en-US")) + " ; " + PreviousCouponDate.ToString("dd/MM/yyyy") + " ; " +
+               Nominal + " ; " + BondCouponPeriod.Dump() + " ; " +
+               CouponRate.ToString(new CultureInfo("en-US")) + " ; " + PreviousCouponDate.ToString("dd/MM/yyyy") + " ; " +
                BondExpirationDate.ToString("dd/MM/yyyy") + " ; " + Comment.Trim();
     }
 

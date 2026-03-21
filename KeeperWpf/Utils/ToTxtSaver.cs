@@ -1,5 +1,4 @@
 ﻿using KeeperDomain;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +17,7 @@ public class ToTxtSaver
     public ToTxtSaver(PathFinder pathFinder, KeeperDataModel keeperDataModel)
     {
         var dataFolderPath = pathFinder.GetDataFolder();
-        _backupFolder = dataFolderPath != null ? Path.Combine(dataFolderPath, "backup") : @"../backup";
+        _backupFolder = Path.Combine(dataFolderPath, "backup");
         _keeperDataModel = keeperDataModel;
     }
 

@@ -31,10 +31,9 @@ public class DepositOffer : IDumpable, IParsable<DepositOffer>
 
     public string Dump()
     {
-            var durationDump = DepositTerm != null ? DepositTerm.Dump() : new Duration().Dump();
         return Id + " ; " + BankId + " ; " + Title + " ; " + IsNotRevocable + " ; " +
                RateType + " ; " + IsAddLimited + " ; " + AddLimitInDays + " ; " +
-               MainCurrency + " ; " + durationDump + " ; " + 
+               MainCurrency + " ; " + DepositTerm.Dump() + " ; " + 
                MonthPaymentsMinimum + " ; " + MonthPaymentsMaximum + " ; " + Comment;
     }
 

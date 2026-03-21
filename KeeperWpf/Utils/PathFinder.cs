@@ -13,7 +13,7 @@ public class PathFinder(IMemoryCache memoryCache)
         return Path.Combine(GetGoogleDrivePath(), "Keeper2026");
     }
 
-    public string GetGoogleDrivePath()
+    private string GetGoogleDrivePath()
     {
         if (memoryCache.TryGetValue(GoogleDriveKey, out string? path))
         {

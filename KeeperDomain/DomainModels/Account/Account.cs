@@ -29,7 +29,7 @@ public class Account : IDumpable, IParsable<Account>
                ChildNumber + " ; " + IsFolder + " ; " + IsExpanded + " ; " + 
                AssociatedIncomeId + " ; " + AssociatedExpenseId + " ; " + AssociatedExternalId + " ; " + AssociatedTagId + " ; " + 
                ShortName + " ; " + ButtonName + " ; " + 
-               (Comment?.Replace("\r\n", "|") ?? "");
+               Comment.Replace("\r\n", "|");
     }
 
     public Account FromString(string s)

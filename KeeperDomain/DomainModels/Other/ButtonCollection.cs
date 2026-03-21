@@ -11,7 +11,7 @@ public class ButtonCollection : IDumpable, IParsable<ButtonCollection>
     public string Dump()
     {
         var result = Id + " ; " + Name;
-        if (AccountIds != null && AccountIds.Count > 0)
+        if (AccountIds.Count > 0)
         {
             var ids = string.Join(" ; ", AccountIds);
             result += " ; " + ids;
