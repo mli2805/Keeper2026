@@ -20,17 +20,20 @@ public static class CustomReminderMapper
         return entity;
     }
 
-    public static CustomReminder FromEf(this CustomReminderEf ef)
+    public static CustomReminderEf ToEf(this CustomReminder item)
     {
-        return new CustomReminder
+        CustomReminderEf entity = new()
         {
-            Id = ef.Id,
-            Enabled = ef.Enabled,
-            TriggerDate = ef.TriggerDate,
-            Every = new Duration().FromString(ef.Every),
-            Memo = ef.Memo
+            Id = item.Id,
+            Enabled = item.Enabled,
+            TriggerDate = item.TriggerDate,
+            Every = item.Every.Dump(false),
+            Memo = item.Memo
         };
+        return entity;
     }
+
+  
 
     public static CustomReminderModel ToModel(this CustomReminderEf ef)
     {

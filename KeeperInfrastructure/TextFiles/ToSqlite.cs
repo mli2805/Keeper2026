@@ -36,6 +36,8 @@ public class ToSqlite(IDbContextFactory<KeeperDbContext> factory)
         keeperDbContext.SalaryChanges.AddRange(keeperDomainModel.SalaryChanges.Select(item => item.ToEf()));
         keeperDbContext.LargeExpenseThresholds.AddRange(keeperDomainModel.LargeExpenseThresholds.Select(item => item.ToEf()));
         keeperDbContext.CardBalanceMemos.AddRange(keeperDomainModel.CardBalanceMemos.Select(item => item.ToEf()));
+        keeperDbContext.BankAccountMemos.AddRange(keeperDomainModel.BankAccountMemos.Select(item => item.ToEf()));
+        keeperDbContext.CustomReminders.AddRange(keeperDomainModel.CustomReminders.Select(item => item.ToEf()));
         keeperDbContext.ButtonCollections.AddRange(keeperDomainModel.ButtonCollections.Select(item => item.ToEf()));
 
         await keeperDbContext.SaveChangesAsync();

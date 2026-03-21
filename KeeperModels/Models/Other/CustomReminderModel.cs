@@ -9,12 +9,13 @@ public class CustomReminderModel
 
     public DateTime TriggerDate { get; set; } = DateTime.Now.Date; // когда сработает напоминание (подсветится колокольчик)
     public Duration Every { get; set; } = new Duration(1, Durations.Years); // сколько добавить к дате сработки, если не одноразовое напоминание
-  public string EveryStr => Every.ToRussianString(false);
 
     public string Memo { get; set; } = string.Empty;
 
+
     // -------------------------
 
+    public string EveryStr => Every.ToRussianString(false);
     public bool IsOnce { get; set; }
     public bool IsRepeated { get; set; }
     

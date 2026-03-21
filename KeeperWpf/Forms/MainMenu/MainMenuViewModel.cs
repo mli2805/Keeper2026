@@ -22,7 +22,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     TrustAccountsViewModel trustAccountsViewModel, InvestmentTransactionsViewModel investmentTransactionsViewModel,
     InvestmentAnalysisViewModel investmentAnalysisViewModel,
     //
-    MemosViewModel memosViewModel, BankAccountMemoViewModel bankAccountMemoViewModel, CustomRemindersViewModel customReminderViewModel,
+    BankAccountMemoViewModel bankAccountMemoViewModel, CustomRemindersViewModel customReminderViewModel,
     LargeExpenseThresholdViewModel largeExpenseThresholdViewModel,
     ButtonCollectionBuilderViewModel buttonCollectionBuilderViewModel, ToTxtSaver toTxtSaver)
     : PropertyChangedBase

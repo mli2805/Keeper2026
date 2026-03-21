@@ -67,6 +67,7 @@ public static class ToKeeperDomain
 
             CardBalanceMemos = keeperDataModel.CardBalanceMemoModels.Select(cbm => cbm.FromModel()).ToList(),
             BankAccountMemos = keeperDataModel.BankAccountMemoModels.Select(bam => bam.FromModel()).ToList(),
+            CustomReminders = keeperDataModel.CustomReminderModels.Select(crm => crm.FromModel()).ToList(),
             ButtonCollections = keeperDataModel.ButtonCollections.Select(bc => bc.FromModel()).ToList(),
             SalaryChanges = keeperDataModel.SalaryChanges,
             LargeExpenseThresholds = keeperDataModel.LargeExpenseThresholds,

@@ -342,7 +342,7 @@ public sealed class BankOffersViewModelTests
         Assert.AreEqual(200, updatedInDb.MonthPaymentsMinimum, "MonthPaymentsMinimum should be updated in database");
 
         // Assert - Verify CondsMap structure
-        Assert.AreEqual(2, updatedInDb.CondsMap.Count, "Should have 2 conditions after edit");
+        Assert.HasCount(2, updatedInDb.CondsMap, "Should have 2 conditions after edit");
         Assert.IsTrue(updatedInDb.CondsMap.ContainsKey(DateTime.Today.AddDays(-30)), "Should contain first date");
         Assert.IsTrue(updatedInDb.CondsMap.ContainsKey(DateTime.Today.AddDays(-15)), "Should contain new date");
         Assert.IsFalse(updatedInDb.CondsMap.ContainsKey(DateTime.Today), "Should not contain removed date");
@@ -351,7 +351,7 @@ public sealed class BankOffersViewModelTests
         var conds1 = updatedInDb.CondsMap[DateTime.Today.AddDays(-30)];
         Assert.IsNotNull(conds1, "First conditions should exist");
         Assert.IsFalse(conds1.IsFactDays, "IsFactDays should be toggled");
-        Assert.AreEqual(3, conds1.RateLines.Count, "Should have 3 rate lines after adding one");
+        Assert.HasCount(3, conds1.RateLines, "Should have 3 rate lines after adding one");
         
         // Verify rate lines in first conditions
         Assert.AreEqual(0, conds1.RateLines[0].AmountFrom, "First line AmountFrom");
@@ -369,7 +369,7 @@ public sealed class BankOffersViewModelTests
         // Assert - Verify second conditions (newly added)
         var conds2 = updatedInDb.CondsMap[DateTime.Today.AddDays(-15)];
         Assert.IsNotNull(conds2, "Second conditions should exist");
-        Assert.AreEqual(2, conds2.RateLines.Count, "New conditions should have 2 rate lines");
+        Assert.HasCount(2, conds2.RateLines, "New conditions should have 2 rate lines");
 
         // Verify the updated offer is still selected
         Assert.AreEqual(addedOffer.Id, viewModel.SelectedDepositOffer.Id);
