@@ -24,4 +24,8 @@ public class CustomReminderModel
         return Enabled && TriggerDate.Date <= DateTime.Now.Date;
     }
 
+    public CustomReminderModel ShallowCopy()
+    {
+        return (CustomReminderModel)MemberwiseClone();
+    }
 }

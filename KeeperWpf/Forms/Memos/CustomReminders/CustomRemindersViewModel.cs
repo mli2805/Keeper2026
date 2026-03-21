@@ -31,36 +31,35 @@ public class CustomRemindersViewModel(KeeperDataModel keeperDataModel, IWindowMa
     public async Task AddReminder()
     {
         oneCustomReminderViewModel.Initialize(null);
-        await windowManager.ShowDialogAsync(oneCustomReminderViewModel);
+        var confirmation = await windowManager.ShowDialogAsync(oneCustomReminderViewModel);
+        if (confirmation == false) return;
+
         var newCustomReminderModel = oneCustomReminderViewModel.CustomReminderInWork;
-        if (newCustomReminderModel != null)
-        {
-            CustomReminders.Add(newCustomReminderModel);
-            keeperDataModel.CustomReminderModels.Add(newCustomReminderModel);
-            SelectedCustomReminder = newCustomReminderModel;
-        }
+        keeperDataModel.CustomReminderModels.Add(newCustomReminderModel);
+        CustomReminders.Clear();
+        CustomReminders.AddRange(keeperDataModel.CustomReminderModels.OrderBy(cr => cr.TriggerDate));
+
+        SelectedCustomReminder = CustomReminders.FirstOrDefault(cr => cr.Id == newCustomReminderModel.Id);
     }
 
     public async Task EditReminder()
     {
-        oneCustomReminderViewModel.Initialize(SelectedCustomReminder);
-        await windowManager.ShowDialogAsync(oneCustomReminderViewModel);
-        var updatedCustomReminderModel = oneCustomReminderViewModel.CustomReminderInWork;
-        if (updatedCustomReminderModel != null)
-        {
-            var index = CustomReminders.IndexOf(SelectedCustomReminder!);
-            if (index >= 0)
-            {
-                CustomReminders[index] = updatedCustomReminderModel;
-                SelectedCustomReminder = updatedCustomReminderModel;
-            }
+        var clone = SelectedCustomReminder!.ShallowCopy();
 
-            var idx = keeperDataModel.CustomReminderModels.FindIndex(cr => cr.Id == updatedCustomReminderModel.Id);
-            if (idx >= 0)
-            {
-                keeperDataModel.CustomReminderModels[idx] = updatedCustomReminderModel;
-            }
+        oneCustomReminderViewModel.Initialize(clone);
+        var confirmation = await windowManager.ShowDialogAsync(oneCustomReminderViewModel);
+        if (confirmation == false) return;
+
+        var updatedCustomReminderModel = oneCustomReminderViewModel.CustomReminderInWork;
+        var idx = keeperDataModel.CustomReminderModels.FindIndex(cr => cr.Id == updatedCustomReminderModel.Id);
+        if (idx >= 0)
+        {
+            keeperDataModel.CustomReminderModels[idx] = updatedCustomReminderModel;
         }
+        CustomReminders.Clear();
+        CustomReminders.AddRange(keeperDataModel.CustomReminderModels.OrderBy(cr => cr.TriggerDate));
+
+        SelectedCustomReminder = CustomReminders.FirstOrDefault(cr => cr.Id == updatedCustomReminderModel.Id);
     }
 
     public async Task DeleteReminder()

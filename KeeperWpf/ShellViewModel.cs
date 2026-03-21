@@ -8,7 +8,7 @@ namespace KeeperWpf;
 
 public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeperDataModel, AccountRepository accountRepository,
     KeeperDataModelInitializer dataModelInitializer, LoadingProgressViewModel loadingProgressViewModel,
-    ShellPartsBinder shellPartsBinder, MainMenuViewModel mainMenuViewModel,
+    ShellPartsBinder shellPartsBinder, MainMenuViewModel mainMenuViewModel, BankAccountMemoViewModel bankAccountMemoViewModel,
     AccountTreeViewModel accountTreeViewModel, BalanceOrTrafficViewModel balanceOrTrafficViewModel,
     TwoSelectorsViewModel twoSelectorsViewModel) : Screen, IShell
 {
@@ -32,6 +32,9 @@ public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeper
        
         var account = keeperDataModel.AccountsTree.First(r => r.Name == "Мои");
         account.IsSelected = true;
+
+        // зажигает колокольчик если остатки или обороты на счетах exceeded, значит надо их посчитать
+        await bankAccountMemoViewModel.Initialize();
         MainMenuViewModel.Initialize();
         ShellPartsBinder.SelectedAccountItemModel = account;
     }

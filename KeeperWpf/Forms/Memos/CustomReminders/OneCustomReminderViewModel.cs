@@ -42,11 +42,11 @@ public class OneCustomReminderViewModel(CustomRemindersRepository customReminder
             CustomReminderInWork = await customRemindersRepository.Update(CustomReminderInWork);
         }
 
-        await TryCloseAsync();
+        await TryCloseAsync(true);
     }
 
     public async Task Cancel()
     {
-        await TryCloseAsync();
+        await TryCloseAsync(false);
     }
 }

@@ -62,6 +62,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
 
     #endregion
 
+    #region Low Balance Icon
     private string _lowBalanceIconPath = "../../Resources/mainmenu/white-bell.png";
     public string LowBalanceIconPath
     {
@@ -82,8 +83,9 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
             ? "../../Resources/mainmenu/yellow-bell.png"
             : "../../Resources/mainmenu/white-bell.png";
     }
+    #endregion
 
-
+    #region Reminder Icon
     private string _reminderIconPath = "../../Resources/mainmenu/black-remind.png";
     public string ReminderIconPath
     {
@@ -102,6 +104,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
             ? "../../Resources/mainmenu/red-remind.png"
             : "../../Resources/mainmenu/black-remind.png";
     }
+    #endregion
 
     public void Initialize()
     {
@@ -167,8 +170,8 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         if (transactionsViewModel.Model.IsCollectionChanged)
         {
             shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
-            await bankAccountMemoViewModel.Initialize();
-            SetLowBalanceIconPath();
+            await bankAccountMemoViewModel.Initialize(); // вот здесь считаются остатки и обороты по счетам
+            SetLowBalanceIconPath(); // и тогда можно вкл/выкл колокольчик
             await SaveInTextFilesForBackup();
         }
     }
@@ -278,9 +281,15 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
 
     public async Task ShowBankAccountMemoForm()
     {
-        await bankAccountMemoViewModel.Initialize();
+        // перед входом в форму пересобираем список карт (могли добавить, перенести в закрытие)
+        // и считаем остатки/обороты по карточкам (могли зачислить/списать ср-ва)
+        await bankAccountMemoViewModel.Initialize(); 
+
         await windowManager.ShowDialogAsync(bankAccountMemoViewModel);
-        SetLowBalanceIconPath();
+        // вышли
+        // в этой форме мы не могли изменить остатки/обороты по карточкам,
+        // можно не пересчитывать остатки/обороты, только лимиты могли измениться
+        SetLowBalanceIconPath(); // проверяет лимиты
     }
 
     public async Task ShowCustomReminderForm()

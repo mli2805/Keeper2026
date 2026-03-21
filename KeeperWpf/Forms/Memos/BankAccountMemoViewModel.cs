@@ -22,22 +22,16 @@ public class BankAccountMemoViewModel(KeeperDataModel keeperDataModel,
 
     public async Task Initialize()
     {
-        UpdateMemos();
-        await bankAccountMemosRepository.SaveAll(keeperDataModel.BankAccountMemoModels);
+        await RecollectCardsListWithMemos();
+        EvaluateBalanceAndMonthPayments();
 
-        foreach (var bankAccountMemoModel in keeperDataModel.BankAccountMemoModels)
-        {
-            bankAccountMemoModel.CurrentBalance = keeperDataModel.GetCurrentBalance(bankAccountMemoModel.Account);
-            bankAccountMemoModel.CurrentMonthPayments = keeperDataModel.GetExpenseForCurrentMonth(bankAccountMemoModel.Account);
-        }
-
-        //keeperDataModel.BankAccountMemoModels[0].IsSelected = true;
         Rows = new ObservableCollection<BankAccountMemoModel>(
             keeperDataModel.BankAccountMemoModels.OrderByDescending(b => b.CurrentBalance));
     }
 
-    // добавить новые карточки, удалить закрытые карточки
-    public void UpdateMemos()
+    // добавить только что заведенные новые карточки,
+    // удалить закрытые карточки (перенесенные в закрытые)
+    private async Task RecollectCardsListWithMemos()
     {
         // 161 - папка Счета и карты - берем только карты в byn
         var all = keeperDataModel.AcMoDict.Values
@@ -67,6 +61,17 @@ public class BankAccountMemoViewModel(KeeperDataModel keeperDataModel,
         foreach (var c in closed)
         {
             keeperDataModel.BankAccountMemoModels.Remove(c);
+        }
+
+        await bankAccountMemosRepository.SaveAll(keeperDataModel.BankAccountMemoModels);
+    }
+
+    private void EvaluateBalanceAndMonthPayments()
+    {
+        foreach (var bankAccountMemoModel in keeperDataModel.BankAccountMemoModels)
+        {
+            bankAccountMemoModel.CurrentBalance = keeperDataModel.GetCurrentBalance(bankAccountMemoModel.Account);
+            bankAccountMemoModel.CurrentMonthPayments = keeperDataModel.GetExpenseForCurrentMonth(bankAccountMemoModel.Account);
         }
     }
 
