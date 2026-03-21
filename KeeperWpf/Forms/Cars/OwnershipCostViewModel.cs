@@ -12,9 +12,8 @@ using OxyPlot.Series;
 namespace KeeperWpf;
 
 [ExportViewModel]
-public class OwnershipCostViewModel : Screen
+public class OwnershipCostViewModel(KeeperDataModel dataModel) : Screen
 {
-    private readonly KeeperDataModel _dataModel;
     private CarModel _carModel = null!;
 
     public PlotModel MonthlyOwnershipCostPlotModel { get; set; } = null!;
@@ -45,20 +44,15 @@ public class OwnershipCostViewModel : Screen
     }
 
 
-    public OwnershipCostViewModel(KeeperDataModel dataModel)
-    {
-        _dataModel = dataModel;
-    }
-
     public void Initialize(CarModel carModel)
     {
         _carModel = carModel;
 
-        var carAccountModel = _dataModel.AcMoDict[_carModel.CarAccountId];
+        var carAccountModel = dataModel.AcMoDict[_carModel.CarAccountId];
 
         // покупка, продажа, обмен авто не учитываются
         var buySellIds = new List<int> { 707, 709, 713, 717 };
-        var trans = _dataModel.Transactions.Values.OrderBy(t => t.Timestamp)
+        var trans = dataModel.Transactions.Values.OrderBy(t => t.Timestamp)
             .Where(m => m.Category != null && m.Category.Is(carAccountModel) && !buySellIds.Contains(m.Category.Id)).ToList();
 
         MonthlyOwnershipCostPlotModel = InitializePlot(trans, carModel.PurchaseDate, "month");
@@ -99,7 +93,7 @@ public class OwnershipCostViewModel : Screen
         DateTime currentDate = purchaseDate.Date;
         var yearCount = 0;
         var totalSum = 0m;
-        int columnIndex = 0;
+        // int columnIndex = 0;
         do
         {
             DateTime nextPeriodStart = period == "year" ? currentDate.AddYears(1) : currentDate.AddMonths(1);
@@ -110,7 +104,7 @@ public class OwnershipCostViewModel : Screen
                 .ToList();
             foreach (var transaction in yearTrans)
             {
-                sumInUsd += transaction.GetAmountInUsd(_dataModel);
+                sumInUsd += transaction.GetAmountInUsd(dataModel);
             }
             var item = new BarItem((double)sumInUsd);
             barSeries.Items.Add(item);
@@ -118,7 +112,7 @@ public class OwnershipCostViewModel : Screen
                 ? currentDate.ToString("dd/MM/yy") + "-" + currentDate.AddYears(1).AddDays(-1).ToString("dd/MM/yy")
                 : currentDate.ToString("MMMyy");
             categoryAxis.Labels.Add(label);
-            columnIndex++;
+            // columnIndex++;
 
             currentDate = period == "year" ? currentDate.AddYears(1) : currentDate.AddMonths(1);
 

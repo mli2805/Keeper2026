@@ -77,7 +77,7 @@ public sealed class BankOffersViewModelTests
         MyMessageBoxViewModel? capturedViewModel = null;
         windowManagerMock
             .Setup(wm => wm.ShowDialogAsync(It.IsAny<MyMessageBoxViewModel>(), It.IsAny<object>(), It.IsAny<IDictionary<string, object>>()))
-            .Callback<object, object, IDictionary<string, object>>((vm, context, settings) =>
+            .Callback<object, object, IDictionary<string, object>>((vm, _, _) =>
             {
                 capturedViewModel = vm as MyMessageBoxViewModel;
             })

@@ -4,8 +4,6 @@
         xmlns:keeperWpf="clr-namespace:KeeperWpf"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
         Width="1087" Height="777" WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance keeperWpf:ShellViewModel}"

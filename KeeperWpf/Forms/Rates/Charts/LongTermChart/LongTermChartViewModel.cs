@@ -25,7 +25,7 @@ public class LongTermChartViewModel : Screen
     }
 
 
-    public void ToggleLogarithm(KeyEventArgs e)
+    public void ToggleLogarithm(KeyEventArgs? e)
     {
         if (e != null && e.Key != Key.L) return;
 

@@ -144,6 +144,6 @@ public class ShellPartsBinder : PropertyChangedBase
         return _keeperDataModel.Transactions.Values.Any(t =>
             t.MyAccount.Id == accountId ||
             (t.MySecondAccount != null && t.MySecondAccount.Id == accountId) ||
-            t.Tags != null && t.Tags.Select(tag => tag.Id).Contains(accountId));
+            t.Tags.Select(tag => tag.Id).Contains(accountId));
     }
 }

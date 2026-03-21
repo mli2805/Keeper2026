@@ -12,7 +12,7 @@ namespace KeeperWpf;
 public class ReceiptViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    private readonly AccNameSelector _accNameSelectionControlInitializer = null!;
+    private readonly AccNameSelector _accNameSelectionControlInitializer;
     public int Top { get; set; }
     private int _left;
     public int Left

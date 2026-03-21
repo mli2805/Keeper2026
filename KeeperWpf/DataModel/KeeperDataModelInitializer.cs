@@ -54,8 +54,8 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
         {
             return false;
         }
-        keeperDataModel.AccountsTree = pair!.Value.Item1;
-        keeperDataModel.AcMoDict = pair!.Value.Item2;
+        keeperDataModel.AccountsTree = pair.Value.Item1;
+        keeperDataModel.AcMoDict = pair.Value.Item2;
         return true;
     }
 

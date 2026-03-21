@@ -8,8 +8,6 @@ public static class RefinancingRatesExt
 {
     public static void UpdateDepoRatesLinkedToCp(this KeeperDataModel keeperDataModel)
     {
-        var id = keeperDataModel.GetDepoRateLinesMaxId();
-
         foreach (var depositOfferModel in 
                  keeperDataModel.DepositOffers.Where(o => o.RateType == RateType.Linked))
         {
@@ -17,7 +15,7 @@ public static class RefinancingRatesExt
             foreach (var conditions in 
                      depositOfferModel.CondsMap.Values.Where(c=>c.RateFormula.Contains("СР")))
             {
-                UpdateRateLinesInConditions(keeperDataModel, conditions);
+                keeperDataModel.UpdateRateLinesInConditions(conditions);
             }
         }
     }

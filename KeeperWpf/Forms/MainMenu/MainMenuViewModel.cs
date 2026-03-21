@@ -333,7 +333,6 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
             if (deleteException != null)
             {
                 MessageBox.Show("Ошибка при удалении текстовых файлов резервной копии: " + deleteException.Message);
-                return;
             }
         }
         finally

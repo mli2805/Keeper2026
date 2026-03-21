@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using KeeperModels;
@@ -13,25 +12,18 @@ public enum AccountCantBeDeletedReasons
 
 public static class AccountTreeExt
 {
-    public static AccountItemModel? GetSelectedAccountModel(this KeeperDataModel dataModel)
+    private static AccountItemModel? GetSelectedAccountModel(this KeeperDataModel dataModel)
     {
-        foreach (var root in dataModel.AccountsTree)
-        {
-            var selected = GetSelectedAccountModelInBranch(root);
-            if (selected != null) return selected;
-        }
-        return null;
+        return dataModel.AccountsTree
+            .Select(root => GetSelectedAccountModelInBranch(root)).OfType<AccountItemModel>().FirstOrDefault();
     }
 
     private static AccountItemModel? GetSelectedAccountModelInBranch(AccountItemModel branch)
     {
         if (branch.IsSelected) return branch;
-        foreach (var child in branch.Children)
-        {
-            var selected = GetSelectedAccountModelInBranch((AccountItemModel)child);
-            if (selected != null) return selected;
-        }
-        return null;
+        return branch.Children
+            .Select(child => GetSelectedAccountModelInBranch((AccountItemModel)child)).OfType<AccountItemModel>()
+            .FirstOrDefault();
     }
 
     public static async Task<int> RemoveSelectedAccount(this KeeperDataModel dataModel)
@@ -39,21 +31,20 @@ public static class AccountTreeExt
         var accountModel = dataModel.GetSelectedAccountModel();
         if (accountModel == null) return -1;
         var windowManager = new WindowManager();
-        switch (CheckIfAccountCanBeDeleted(dataModel, accountModel))
+        switch (dataModel.CheckIfAccountCanBeDeleted(accountModel))
         {
             case AccountCantBeDeletedReasons.CanDelete:
                 var myMessageBoxViewModel = new MyMessageBoxViewModel(MessageType.Confirmation,
-                    new List<string>()
-                    {
-                        "Проверено, счет не используется в транзакциях.",
-                        "Удаление счета", "",
-                        $"<<{accountModel.Name}>>", "",
-                        "Удалить?"
-                    });
+                [
+                    "Проверено, счет не используется в транзакциях.",
+                    "Удаление счета", "",
+                    $"<<{accountModel.Name}>>", "",
+                    "Удалить?"
+                ]);
                 var answer = await windowManager.ShowDialogAsync(myMessageBoxViewModel);
-                if (answer.Value)
+                if (answer != null && answer.Value)
                 {
-                    RemoveAccountLowLevel(dataModel, accountModel);
+                    dataModel.RemoveAccountLowLevel(accountModel);
                     return accountModel.Id;
                 }
                 break;
@@ -63,7 +54,7 @@ public static class AccountTreeExt
                 break;
             case AccountCantBeDeletedReasons.HasChildren:
                 await windowManager.ShowDialogAsync(new MyMessageBoxViewModel(MessageType.Error,
-                    new List<string>() { "Разрешено удалять", "", "только конечные листья дерева счетов!" }, -1));
+                    ["Разрешено удалять", "", "только конечные листья дерева счетов!"], -1));
                 break;
             case AccountCantBeDeletedReasons.HasRelatedTransactions:
                 await windowManager.ShowDialogAsync(new MyMessageBoxViewModel(MessageType.Error,
@@ -81,7 +72,7 @@ public static class AccountTreeExt
         if (dataModel.Transactions.Values.Any(t =>
             t.MyAccount.Id == account.Id ||
             (t.MySecondAccount != null && t.MySecondAccount.Id == account.Id) ||
-            t.Tags != null && t.Tags.Select(tag => tag.Id).Contains(account.Id)))
+            t.Tags.Select(tag => tag.Id).Contains(account.Id)))
             return AccountCantBeDeletedReasons.HasRelatedTransactions;
         return AccountCantBeDeletedReasons.CanDelete;
     }

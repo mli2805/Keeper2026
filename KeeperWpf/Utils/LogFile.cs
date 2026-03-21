@@ -42,9 +42,7 @@ public class LogFile
         lock (_obj)
         {
             string message = new string(ch, 78);
-            if (_logFile != null)
-                _logFile.WriteLine(message);
-            else Console.WriteLine(message);
+            _logFile.WriteLine(message);
         }
     }
 
@@ -54,8 +52,6 @@ public class LogFile
     {
         lock (_obj)
         {
-            if (_logFile == null)
-                return;
             if (messageLevel > LogLevel)
                 return;
 

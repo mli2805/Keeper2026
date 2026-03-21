@@ -143,14 +143,14 @@ public class OneAccountViewModel(ComboTreesProvider comboTreesProvider, AccNameS
     {
         if (AccountItemInWork.IsCategory())
         {
-            AccountItemInWork.AssociatedExternalId = MyAccNameSelectorVm.MyAccName?.Id ?? 0;
-            AccountItemInWork.AssociatedTagId = AccNameSelectorForTag.MyAccName?.Id ?? 0;
+            AccountItemInWork.AssociatedExternalId = MyAccNameSelectorVm.MyAccName.Id;
+            AccountItemInWork.AssociatedTagId = AccNameSelectorForTag.MyAccName.Id;
         }
         else if (AccountItemInWork.IsCounterparty())
         {
-            AccountItemInWork.AssociatedIncomeId = MyAccNameSelectorVm.MyAccName?.Id ?? 0;
-            AccountItemInWork.AssociatedExpenseId = MyAccNameSelectorVm2.MyAccName?.Id ?? 0;
-            AccountItemInWork.AssociatedTagId = AccNameSelectorForTag.MyAccName?.Id ?? 0;
+            AccountItemInWork.AssociatedIncomeId = MyAccNameSelectorVm.MyAccName.Id;
+            AccountItemInWork.AssociatedExpenseId = MyAccNameSelectorVm2.MyAccName.Id;
+            AccountItemInWork.AssociatedTagId = AccNameSelectorForTag.MyAccName.Id;
         }
     }
 

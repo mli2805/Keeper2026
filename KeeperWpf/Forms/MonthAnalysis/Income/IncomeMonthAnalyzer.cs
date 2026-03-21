@@ -24,7 +24,7 @@ public static class IncomeMonthAnalyzer
             }
             else if (tran.Category.Id == 208 || tran.Category.Id == 209) // %% по вкладу (по карточкам тоже) или дивиденды (траст)
             {
-                var depo = tran.MyAccount.ShortName ?? tran.MyAccount.Name;
+                var depo = !string.IsNullOrWhiteSpace(tran.MyAccount.ShortName) ? tran.MyAccount.ShortName : tran.MyAccount.Name;
                 result.Add(IncomeCategories.Депозиты, $"{amStr} {depo} {tran.Comment} {tran.Timestamp:dd MMM}", amountInUsd);
             }
             else if (tran.Category.Id == 701) // manyback

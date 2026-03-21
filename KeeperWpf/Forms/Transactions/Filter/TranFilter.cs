@@ -9,7 +9,6 @@ public class TranFilter
     public bool Filter(TranWrappedForDataGrid wrappedTran, FilterModel filterModel)
     {
         _wrappedTran = wrappedTran;
-        if (filterModel == null) return true;
         _filterModel = filterModel;
         return FilterOperationType() && FilterAccount() && FilterCounterparty() && FilterPaymentWay()
                && FilterCategory() && FilterAmount() && FilterCurrency() && FilterTags() && FilterComment();
@@ -17,12 +16,11 @@ public class TranFilter
 
     private bool FilterOperationType()
     {
-        if (_filterModel.MyOperationType == null || !_filterModel.MyOperationType.IsOn) return true;
+        if (!_filterModel.MyOperationType.IsOn) return true;
         return _filterModel.MyOperationType.Operation == _wrappedTran.Tran.Operation;
     }
     private bool FilterAccount()
     {
-        if (_filterModel.MyAccName == null) return true;
         if (_filterModel.IsAccNamePosition1) return _wrappedTran.Tran.MyAccount.Is(_filterModel.MyAccName.Id);
         if (_filterModel.IsAccNamePosition2)
             return _wrappedTran.Tran.MySecondAccount != null && _wrappedTran.Tran.MySecondAccount.Is(_filterModel.MyAccName.Id);
@@ -39,7 +37,7 @@ public class TranFilter
 
     private bool FilterPaymentWay()
     {
-        if (_filterModel.MyPaymentWay == null || !_filterModel.MyPaymentWay.IsOn) return true;
+        if (!_filterModel.MyPaymentWay.IsOn) return true;
         return _filterModel.MyPaymentWay.PaymentWay == _wrappedTran.Tran.PaymentWay;
     }
 
@@ -60,7 +58,7 @@ public class TranFilter
 
     private bool FilterCurrency()
     {
-        if (_filterModel.MyCurrency == null || !_filterModel.MyCurrency.IsOn) return true;
+        if (!_filterModel.MyCurrency.IsOn) return true;
         if (_filterModel.IsCurrencyPosition1) return _wrappedTran.Tran.Currency == _filterModel.MyCurrency.Currency;
         if (_filterModel.IsCurrencyPosition2) return _wrappedTran.Tran.CurrencyInReturn != null && _wrappedTran.Tran.CurrencyInReturn == _filterModel.MyCurrency.Currency;
         // if (_filterModel.IsCurrencyPosition12)
@@ -70,7 +68,7 @@ public class TranFilter
 
     private bool FilterTags()
     {
-        if (_filterModel.MyTagPickerVm.Tags == null || _filterModel.MyTagPickerVm.Tags.Count == 0) return true;
+        if (_filterModel.MyTagPickerVm.Tags.Count == 0) return true;
         return _filterModel.IsTagsJoinedByOr
             ? _filterModel.MyTagPickerVm.Tags.Select(t => t.Id).Any(_wrappedTran.Tran.Tags.Select(t => t.Id).Contains)
             : _filterModel.MyTagPickerVm.Tags.Select(t => t.Id).All(_wrappedTran.Tran.Tags.Select(t => t.Id).Contains); // if (_filterModel.IsTagsJoinedByAnd)
@@ -78,7 +76,6 @@ public class TranFilter
 
     private bool FilterComment()
     {
-        if (_filterModel.MyComment == null) return true;
         return _wrappedTran.Tran.Comment.Contains(_filterModel.MyComment);
     }
 

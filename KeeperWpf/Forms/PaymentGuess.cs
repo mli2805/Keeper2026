@@ -86,7 +86,6 @@ public static class PaymentGuess
                         return paymantWay;
             }
 
-            return PaymentWay.НеЗадано;
         }
         return PaymentWay.НеЗадано;
     }

@@ -35,7 +35,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Width="40" Binding="{Binding Id}" />
 
-                <DataGridComboBoxColumn  Header="Тикер" Width="80" SelectedValueBinding="{Binding TickerId}"
+                <DataGridComboBoxColumn  Header="Тикер" Width="80" SelectedValueBinding="{Binding TrustAssetId}"
                                          DisplayMemberPath="Ticker" SelectedValuePath="Id">
                     <DataGridComboBoxColumn.ElementStyle>
                         <Style TargetType="{x:Type ComboBox}">

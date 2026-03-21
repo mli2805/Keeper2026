@@ -1,5 +1,4 @@
 ﻿using KeeperModels;
-using System.Collections.Generic;
 
 namespace KeeperWpf;
 
@@ -7,7 +6,7 @@ public static class TranExtentions
 {
     public static TransactionModel Clone(this TransactionModel tran)
     {
-        var result = new TransactionModel
+        return new TransactionModel
         {
             Id = tran.Id,
             Timestamp = tran.Timestamp,
@@ -20,18 +19,10 @@ public static class TranExtentions
             Amount = tran.Amount,
             Currency = tran.Currency,
             AmountInReturn = tran.AmountInReturn,
-            CurrencyInReturn = tran.CurrencyInReturn
+            CurrencyInReturn = tran.CurrencyInReturn,
+            Tags = [.. tran.Tags],
+            Comment = tran.Comment
         };
-        if (tran.Tags != null)
-        {
-            result.Tags = new List<AccountItemModel>();
-            foreach (var tag in tran.Tags)
-            {
-                result.Tags.Add(tag);
-            }
-        }
-        result.Comment = tran.Comment;
-        return result;
     }
 
     public static void CopyInto(this TransactionModel tran, TransactionModel destinationTran)
@@ -48,16 +39,7 @@ public static class TranExtentions
         destinationTran.Currency = tran.Currency;
         destinationTran.AmountInReturn = tran.AmountInReturn;
         destinationTran.CurrencyInReturn = tran.CurrencyInReturn;
-
-        destinationTran.Tags?.Clear();
-        if (tran.Tags != null)
-        {
-            if (destinationTran.Tags == null) destinationTran.Tags = new List<AccountItemModel>();
-            foreach (var tag in tran.Tags)
-            {
-                destinationTran.Tags.Add(tag);
-            }
-        }
+        destinationTran.Tags = [.. tran.Tags];
         destinationTran.Comment = tran.Comment;
     }
 }

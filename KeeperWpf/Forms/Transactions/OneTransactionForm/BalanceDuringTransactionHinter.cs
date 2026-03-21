@@ -43,7 +43,7 @@ public class BalanceDuringTransactionHinter
 
     public string GetMyAccountBalance(TransactionModel transactionInWork)
     {
-        if (transactionInWork?.MyAccount == null || !transactionInWork.MyAccount.Is(158)) return "было ххх - стало ххх";
+        if (!transactionInWork.MyAccount.Is(158)) return "было ххх - стало ххх";
 
         var balanceBefore =
             _dataModel.Transactions.Values.Sum(t => t.AmountForAccount(

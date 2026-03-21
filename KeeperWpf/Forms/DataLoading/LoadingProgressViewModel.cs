@@ -9,12 +9,9 @@ using System.Windows;
 namespace KeeperWpf;
 
 [ExportViewModel(ViewModelLifetime.SingleInstance)]
-public class LoadingProgressViewModel : Screen
+public class LoadingProgressViewModel(PathFinder pathFinder, ToSqlite toSqlite) : Screen
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-    private readonly CancellationToken _cancellationToken;
-    private readonly PathFinder _pathFinder;
-    private readonly ToSqlite _toSqlite;
 
 
     private string _writingToDbMessage = null!;
@@ -30,13 +27,6 @@ public class LoadingProgressViewModel : Screen
     }
 
 
-    public LoadingProgressViewModel(PathFinder pathFinder, ToSqlite toSqlite)
-    {
-        _cancellationToken = _cancellationTokenSource.Token;
-        _pathFinder = pathFinder;
-        _toSqlite = toSqlite;
-    }
-
     protected async override void OnViewLoaded(object view)
     {
         DisplayName = "Загрузка...";
@@ -48,21 +38,16 @@ public class LoadingProgressViewModel : Screen
     private async Task<bool> Load()
     {
         var keeperDomainModel = await TryLoadAllFromTextFiles();
-        if (keeperDomainModel != null)
-        {
-            WritingToDbMessage = "Запись в базу данных...";
-            await _toSqlite.SaveModelToDb(keeperDomainModel!);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        if (keeperDomainModel == null) return false;
+
+        WritingToDbMessage = "Запись в базу данных...";
+        await toSqlite.SaveModelToDb(keeperDomainModel);
+        return true;
     }
 
     private async Task<KeeperDomainModel?> TryLoadAllFromTextFiles()
     {
-        var backupFolder = Path.Combine(_pathFinder.GetDataFolder(), "backup");
+        var backupFolder = Path.Combine(pathFinder.GetDataFolder(), "backup");
 
         KeeperDomainModel? keeperDomainModel;
         try

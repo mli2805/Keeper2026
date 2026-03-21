@@ -36,9 +36,9 @@ public class OneBankOfferViewModel(KeeperDataModel keeperDataModel, IWindowManag
         Banks = keeperDataModel.AcMoDict[220].Children.Select(c=>(AccountItemModel)c).ToList();
         BankNames = Banks.Select(b => b.Name).ToList();
         SelectedBankName = BankNames.First(n => n == model.Bank.Name);
-        Currencies = Enum.GetValues<CurrencyCode>().OfType<CurrencyCode>().ToList();
-        RateTypes = Enum.GetValues<RateType>().OfType<RateType>().ToList();
-        Durations = Enum.GetValues<Durations>().OfType<Durations>().ToList();
+        Currencies = Enum.GetValues<CurrencyCode>().ToList();
+        RateTypes = Enum.GetValues<RateType>().ToList();
+        Durations = Enum.GetValues<Durations>().ToList();
         ModelInWork = model;
         ConditionDates = ModelInWork.CondsMap.Keys.Select(d => d.ToString(_dateTemplate)).ToList();
         if (ConditionDates.Count > 0) SelectedDate = ConditionDates.Last();

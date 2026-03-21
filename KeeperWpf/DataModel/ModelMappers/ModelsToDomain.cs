@@ -1,6 +1,5 @@
 ﻿using KeeperDomain;
 using KeeperModels;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace KeeperWpf;
@@ -24,21 +23,9 @@ public static class ModelsToDomain
             AmountInReturn = transactionModel.AmountInReturn,
             Currency = transactionModel.Currency,
             CurrencyInReturn = transactionModel.CurrencyInReturn,
-            Tags = transactionModel.Tags.MapTags(),
+            Tags = string.Join(" | ", transactionModel.Tags.Select(t => t.Id)),
             Comment = transactionModel.Comment,
         };
-    }
-
-    private static string MapTags(this List<AccountItemModel> tags)
-    {
-        if (tags == null || tags.Count == 0) return " ";
-        string result = "";
-        foreach (var t in tags)
-        {
-            result = result + t.Id + " | ";
-        }
-        result = result.Substring(0, result.Length - 3);
-        return result;
     }
 
     public static Account FromModel(this AccountItemModel model)
@@ -151,7 +138,7 @@ public static class ModelsToDomain
         return new TrustAsset()
         {
             Id = asset.Id,
-            TrustAccountId = asset.TrustAccount?.Id ?? 0,
+            TrustAccountId = asset.TrustAccount.Id,
             Ticker = asset.Ticker,
             Title = asset.Title,
             StockMarket = asset.StockMarket,
@@ -173,12 +160,12 @@ public static class ModelsToDomain
             InvestOperationType = transaction.InvestOperationType,
             Timestamp = transaction.Timestamp,
             AccountId = transaction.AccountItemModel?.Id ?? 0,
-            TrustAccountId = transaction.TrustAccount?.Id ?? 0,
+            TrustAccountId = transaction.TrustAccount.Id,
             CurrencyAmount = transaction.CurrencyAmount,
             CouponAmount = transaction.CouponAmount,
             Currency = transaction.Currency,
             AssetAmount = transaction.AssetAmount,
-            AssetId = transaction.Asset?.Id ?? 0,
+            AssetId = transaction.Asset.Id,
             PurchaseFee = transaction.BuySellFee,
             PurchaseFeeCurrency = transaction.BuySellFeeCurrency,
             FeePaymentOperationId = transaction.FeePaymentOperationId,
