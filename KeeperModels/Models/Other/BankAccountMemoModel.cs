@@ -16,11 +16,9 @@ public class BankAccountMemoModel : PropertyChangedBase
         set
         {
             if (_balanceLess == value) return;
-            if (_balanceLess != null)
-                _balanceLess.PropertyChanged -= OnLimitPropertyChanged;
+            _balanceLess.PropertyChanged -= OnLimitPropertyChanged;
             _balanceLess = value;
-            if (_balanceLess != null)
-                _balanceLess.PropertyChanged += OnLimitPropertyChanged;
+            _balanceLess.PropertyChanged += OnLimitPropertyChanged;
             NotifyOfPropertyChange(nameof(RowBackground));
         }
     }
@@ -33,11 +31,9 @@ public class BankAccountMemoModel : PropertyChangedBase
         set
         {
             if (_balanceMore == value) return;
-            if (_balanceMore != null)
-                _balanceMore.PropertyChanged -= OnLimitPropertyChanged;
+            _balanceMore.PropertyChanged -= OnLimitPropertyChanged;
             _balanceMore = value;
-            if (_balanceMore != null)
-                _balanceMore.PropertyChanged += OnLimitPropertyChanged;
+            _balanceMore.PropertyChanged += OnLimitPropertyChanged;
             NotifyOfPropertyChange(nameof(RowBackground));
         }
     }
@@ -52,11 +48,9 @@ public class BankAccountMemoModel : PropertyChangedBase
         set
         {
             if (_paymentsLess == value) return;
-            if (_paymentsLess != null)
-                _paymentsLess.PropertyChanged -= OnLimitPropertyChanged;
+            _paymentsLess.PropertyChanged -= OnLimitPropertyChanged;
             _paymentsLess = value;
-            if (_paymentsLess != null)
-                _paymentsLess.PropertyChanged += OnLimitPropertyChanged;
+            _paymentsLess.PropertyChanged += OnLimitPropertyChanged;
             NotifyOfPropertyChange(nameof(RowBackground));
         }
     }
@@ -68,11 +62,9 @@ public class BankAccountMemoModel : PropertyChangedBase
         set
         {
             if (_paymentsMore == value) return;
-            if (_paymentsMore != null)
-                _paymentsMore.PropertyChanged -= OnLimitPropertyChanged;
+            _paymentsMore.PropertyChanged -= OnLimitPropertyChanged;
             _paymentsMore = value;
-            if (_paymentsMore != null)
-                _paymentsMore.PropertyChanged += OnLimitPropertyChanged;
+            _paymentsMore.PropertyChanged += OnLimitPropertyChanged;
             NotifyOfPropertyChange(nameof(RowBackground));
         }
     }

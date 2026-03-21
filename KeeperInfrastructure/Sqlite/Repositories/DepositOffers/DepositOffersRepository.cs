@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace KeeperInfrastructure;
 
-[ExportRepositoryAttribute]
+[ExportRepository]
 public class DepositOffersRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<DepositOfferModel>> GetDepositOffersWithConditionsAndRates(Dictionary<int, AccountItemModel> acMoDict)

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-[ExportRepositoryAttribute]
+[ExportRepository]
 public class OfficialRatesRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public List<OfficialRates> GetAllOfficialRates()

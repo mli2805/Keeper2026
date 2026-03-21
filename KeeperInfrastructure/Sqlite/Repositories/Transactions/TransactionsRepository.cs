@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-[ExportRepositoryAttribute]
+[ExportRepository]
 public class TransactionsRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<TransactionModel>> GetAllTransactionModels(Dictionary<int, AccountItemModel> acMoDict)

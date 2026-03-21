@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-[ExportRepositoryAttribute]
+[ExportRepository]
 public class CardBalanceMemosRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<CardBalanceMemoModel>> GetAllCardBalanceMemos(Dictionary<int, AccountItemModel> acMoDict)
@@ -20,7 +20,7 @@ public class CardBalanceMemosRepository(IDbContextFactory<KeeperDbContext> facto
     }
 }
 
-[ExportRepositoryAttribute]
+[ExportRepository]
 public class BankAccountMemosRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<BankAccountMemoModel>> GetAllBankAccountMemos(Dictionary<int, AccountItemModel> acMoDict)

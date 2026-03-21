@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-[ExportRepositoryAttribute]
+[ExportRepository]
 public class AccountRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<(ObservableCollection<AccountItemModel>, Dictionary<int, AccountItemModel>)?> GetAccountModelsTreeAndDict()
@@ -91,7 +91,7 @@ public class AccountRepository(IDbContextFactory<KeeperDbContext> factory)
             accountEf.ChildNumber = account.ChildNumber;
             accountEf.IsExpanded = account.IsExpanded;
         }
-        var d = await keeperDbContext.SaveChangesAsync();
+        await keeperDbContext.SaveChangesAsync();
     }
 
     public async Task Update(AccountItemModel accountItemModel)

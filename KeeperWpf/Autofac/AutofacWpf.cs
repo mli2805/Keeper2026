@@ -15,7 +15,7 @@ public sealed class AutofacWpf : Module
         builder.RegisterType<ShellViewModel>().As<IShell>();
         builder.RegisterType<WindowManager>().As<IWindowManager>().InstancePerLifetimeScope();
 
-        builder.Register(c => new MemoryCache(new MemoryCacheOptions()))
+        builder.Register(_ => new MemoryCache(new MemoryCacheOptions()))
             .As<IMemoryCache>()
             .SingleInstance();
 

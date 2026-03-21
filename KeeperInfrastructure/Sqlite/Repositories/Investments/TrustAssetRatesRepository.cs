@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-[ExportRepositoryAttribute]
+[ExportRepository]
 public class TrustAssetRatesRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public List<TrustAssetRate> GetAllTrustAssetRates()

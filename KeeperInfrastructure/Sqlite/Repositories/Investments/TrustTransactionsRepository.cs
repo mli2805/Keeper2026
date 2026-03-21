@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-[ExportRepositoryAttribute]
+[ExportRepository]
 public class TrustTransactionsRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<TrustTranModel>> GetAllTrustTransactionModels(Dictionary<int, AccountItemModel> acMoDict,

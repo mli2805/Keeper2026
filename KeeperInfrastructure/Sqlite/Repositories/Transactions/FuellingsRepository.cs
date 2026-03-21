@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-[ExportRepositoryAttribute]
+[ExportRepository]
 public class FuellingsRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public List<Fuelling> GetAllFuellings()

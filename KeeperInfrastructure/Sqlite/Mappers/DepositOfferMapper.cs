@@ -15,9 +15,9 @@ public static class DepositOfferMapper
         depositOfferEf.BankId = depositOfferModel.Bank.Id;
         depositOfferEf.MainCurrency = depositOfferModel.MainCurrency;
 
-        depositOfferEf.IsPerpetual = depositOfferModel.DepositTerm?.IsPerpetual ?? true;
-        depositOfferEf.DepositTermValue = depositOfferModel.DepositTerm?.Value ?? 0;
-        depositOfferEf.DepositTermDuration = depositOfferModel.DepositTerm?.Scale ?? Durations.Days;
+        depositOfferEf.IsPerpetual = depositOfferModel.DepositTerm.IsPerpetual;
+        depositOfferEf.DepositTermValue = depositOfferModel.DepositTerm.Value;
+        depositOfferEf.DepositTermDuration = depositOfferModel.DepositTerm.Scale;
 
         depositOfferEf.MonthPaymentsMinimum = depositOfferModel.MonthPaymentsMinimum;
         depositOfferEf.MonthPaymentsMaximum = depositOfferModel.MonthPaymentsMaximum;
@@ -104,9 +104,9 @@ public static class DepositOfferMapper
             AddLimitInDays = depositOfferModel.AddLimitInDays,
             BankId = depositOfferModel.Bank.Id,
             MainCurrency = depositOfferModel.MainCurrency,
-            IsPerpetual = depositOfferModel.DepositTerm?.IsPerpetual ?? true,
-            DepositTermValue = depositOfferModel.DepositTerm?.Value ?? 0,
-            DepositTermDuration = depositOfferModel.DepositTerm?.Scale ?? Durations.Days,
+            IsPerpetual = depositOfferModel.DepositTerm.IsPerpetual,
+            DepositTermValue = depositOfferModel.DepositTerm.Value,
+            DepositTermDuration = depositOfferModel.DepositTerm.Scale,
             MonthPaymentsMinimum = depositOfferModel.MonthPaymentsMinimum,
             MonthPaymentsMaximum = depositOfferModel.MonthPaymentsMaximum,
             Conditions = depositOfferModel.CondsMap.Values.Select(c => c.FromModel()).ToList(),
@@ -148,9 +148,9 @@ public static class DepositOfferMapper
             AddLimitInDays = depositOffer.AddLimitInDays,
             BankId = depositOffer.BankId,
             MainCurrency = depositOffer.MainCurrency,
-            IsPerpetual = depositOffer.DepositTerm?.IsPerpetual ?? true,
-            DepositTermValue = depositOffer.DepositTerm?.Value ?? 0,
-            DepositTermDuration = depositOffer.DepositTerm?.Scale ?? Durations.Days,
+            IsPerpetual = depositOffer.DepositTerm.IsPerpetual,
+            DepositTermValue = depositOffer.DepositTerm.Value,
+            DepositTermDuration = depositOffer.DepositTerm.Scale,
             MonthPaymentsMinimum = depositOffer.MonthPaymentsMinimum,
             MonthPaymentsMaximum = depositOffer.MonthPaymentsMaximum,
             Comment = depositOffer.Comment

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-[ExportRepositoryAttribute]
+[ExportRepository]
 public class ButtonCollectionsRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<ButtonCollectionModel>> GetAllButtonCollections(Dictionary<int, AccountItemModel> AcMoDict)
@@ -14,7 +14,7 @@ public class ButtonCollectionsRepository(IDbContextFactory<KeeperDbContext> fact
         foreach (var bc in bcs)
         {
             var ids = bc.AccountIdsString
-                .Split(';', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList()!;
+                .Split(';', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
             var bcm = new ButtonCollectionModel()
             {
                 Id = bc.Id,
