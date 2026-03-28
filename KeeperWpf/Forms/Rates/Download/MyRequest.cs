@@ -7,12 +7,13 @@ namespace KeeperWpf;
 
 public static class MyRequest
 {
-    private static readonly HttpClientHandler handler = new HttpClientHandler
+    private static readonly HttpClientHandler _handler = new HttpClientHandler
     {
         AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,
         UseProxy = false // на компе настроен прокси в англию, и тогда нацбанк не отвечает, остальным сайтам без разницы
     };
-    private static readonly HttpClient _httpClient = new HttpClient(handler)
+
+    private static readonly HttpClient _httpClient = new HttpClient(_handler)
     {
         Timeout = TimeSpan.FromSeconds(10)
     };
@@ -27,7 +28,7 @@ public static class MyRequest
     {
         try
         {
-            HttpResponseMessage? response = await _httpClient.GetAsync(uri);
+            HttpResponseMessage response = await _httpClient.GetAsync(uri);
             if (response.IsSuccessStatusCode)
             {
                 var str = await response.Content.ReadAsStringAsync();

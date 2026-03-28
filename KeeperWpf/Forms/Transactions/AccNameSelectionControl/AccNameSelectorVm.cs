@@ -8,8 +8,9 @@ public class AccNameSelectorVm : PropertyChangedBase
 {
     public List<AccNameButtonVm> Buttons { get; set; } = null!;
 
-    private AccName _myAccName = null!;
-    public AccName MyAccName
+    // пока пользователь не выбрал счет это поле null
+    private AccName? _myAccName;
+    public AccName? MyAccName
     {
         get { return _myAccName; }
         set
