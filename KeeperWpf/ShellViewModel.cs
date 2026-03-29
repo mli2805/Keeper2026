@@ -1,6 +1,9 @@
 ﻿using Caliburn.Micro;
 using KeeperInfrastructure;
+using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,7 +25,12 @@ public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeper
 
     protected override async void OnViewLoaded(object view)
     {
-        DisplayName = "Keeper 2026";
+        var assembly = Assembly.GetExecutingAssembly();
+        var path = assembly.Location;
+
+        DateTime buildDate = File.GetLastWriteTime(path);
+
+        DisplayName = $"Keeper built {buildDate:yyyy.MM.dd}";
         var success = await LoadAccountsTree();
         if (!success)
         {
