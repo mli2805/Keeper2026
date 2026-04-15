@@ -12,10 +12,10 @@ namespace KeeperWpf;
 
 public class LongTermChartModel
 {
-    private readonly DateTime _dt20160701 = new DateTime(2016, 07, 01); // 10000000;
-    private readonly DateTime _dt20000101 = new DateTime(2000, 01, 01); // 1000;
+    private readonly DateTime _dt20160701 = new DateTime(2016, 07, 01); // 10_000_000;
+    private readonly DateTime _dt20000101 = new DateTime(2000, 01, 01); // 1_000;
     private readonly DateTime _dt19990111 = new DateTime(1999, 01, 11); // EURO
-    private readonly DateTime _dt19980101 = new DateTime(1998, 01, 01); // 1000 RUB
+    private readonly DateTime _dt19980101 = new DateTime(1998, 01, 01); // 1_000 RUB
 
     public PlotModel LongTermModel { get; set; } = null!;
     public LineSeries UsdNbSeries { get; set; } = null!;
@@ -143,8 +143,48 @@ public class LongTermChartModel
             MajorGridlineStyle = LineStyle.Solid,
             MinorGridlineStyle = LineStyle.Dash,
         });
-        LongTermModel.Axes.Add(new LinearAxis() { Position = AxisPosition.Left, MajorGridlineStyle = LineStyle.DashDashDotDot });
+        LongTermModel.Axes.Add(GetLinearAxis());
     }
+
+    public void ToggleLogarithm()
+    {
+        var currentIsLogarithmic = LongTermModel.Axes[1].GetType() == typeof(LogarithmicAxis);
+        if (currentIsLogarithmic)
+            LongTermModel.Axes[1] = GetLinearAxis();
+        else
+            LongTermModel.Axes[1] = GetLogarithmicAxis();
+        LongTermModel.InvalidatePlot(true);
+    }
+
+    private LinearAxis GetLinearAxis()
+    {
+        return new LinearAxis()
+        {
+            Position = AxisPosition.Left,
+            MajorGridlineStyle = LineStyle.DashDashDotDot,
+            LabelFormatter = value => FormatLabel(value)
+        };
+    }
+
+    private LogarithmicAxis GetLogarithmicAxis()
+    {
+        return new LogarithmicAxis
+        {
+            Position = AxisPosition.Left,
+            MajorGridlineStyle = LineStyle.DashDashDotDot,
+            LabelFormatter = value => FormatLabel(value)
+        };
+    }
+
+    private string FormatLabel(double value)
+    {
+        return value switch
+        {
+            >= 1_000_000 => $"{value / 1_000_000:N1}M",
+            >= 1_000 => $"{value / 1_000:N1}K",
+            _ => $"{value:N1}"
+        };
+    }   
 
     private void PrepareSeries(List<OfficialRatesModel> rates, KeeperDataModel keeperDataModel)
     {
@@ -183,21 +223,21 @@ public class LongTermChartModel
         var result = new NormalizedRates();
         if (officialRates.Date >= _dt20160701)
         {
-            result.UsdNb = officialRates.NbRates.Usd.Value * 10000000;
-            result.EurNb = officialRates.NbRates.Euro.Value * 10000000;
-            result.RubNb = officialRates.NbRates.Rur.Value / officialRates.NbRates.Rur.Unit * 10000000;
-            result.UsdMy = exchangeRates != null ? exchangeRates.BynToUsd * 10000000 : 0;
-            result.RubUsd = officialRates.CbrRate.Usd.Value * 1000;
+            result.UsdNb = officialRates.NbRates.Usd.Value * 10_000_000;
+            result.EurNb = officialRates.NbRates.Euro.Value * 10_000_000;
+            result.RubNb = officialRates.NbRates.Rur.Value / officialRates.NbRates.Rur.Unit * 10_000_000;
+            result.UsdMy = exchangeRates != null ? exchangeRates.BynToUsd * 10_000_000 : 0;
+            result.RubUsd = officialRates.CbrRate.Usd.Value * 1_000;
             result.Basket = BelBaskets.Calculate(officialRates);
         }
         else if (officialRates.Date >= _dt20000101)
         {
-            result.UsdNb = officialRates.NbRates.Usd.Value * 1000;
-            result.EurNb = officialRates.NbRates.Euro.Value * 1000;
-            result.RubNb = officialRates.NbRates.Rur.Value * 1000;
-            result.UsdMy = exchangeRates != null ? exchangeRates.BynToUsd * 1000 : 0;
-            result.RubUsd = officialRates.CbrRate.Usd.Value * 1000;
-            result.Basket = BelBaskets.Calculate(officialRates) / 10000;
+            result.UsdNb = officialRates.NbRates.Usd.Value * 1_000;
+            result.EurNb = officialRates.NbRates.Euro.Value * 1_000;
+            result.RubNb = officialRates.NbRates.Rur.Value * 1_000;
+            result.UsdMy = exchangeRates != null ? exchangeRates.BynToUsd * 1_000 : 0;
+            result.RubUsd = officialRates.CbrRate.Usd.Value * 1_000;
+            result.Basket = BelBaskets.Calculate(officialRates) / 10_000;
         }
         else if (officialRates.Date >= _dt19990111) // euro and basket start
         {
@@ -205,15 +245,15 @@ public class LongTermChartModel
             result.EurNb = officialRates.NbRates.Euro.Value;
             result.RubNb = officialRates.NbRates.Rur.Value;
             result.UsdMy = exchangeRates?.BynToUsd ?? 0;
-            result.RubUsd = officialRates.CbrRate.Usd.Value * 1000;
-            result.Basket = BelBaskets.Calculate(officialRates) / 10000000;
+            result.RubUsd = officialRates.CbrRate.Usd.Value * 1_000;
+            result.Basket = BelBaskets.Calculate(officialRates) / 10_000_000;
         }
         else if (officialRates.Date >= _dt19980101) // russian denomination
         {
             result.UsdNb = officialRates.NbRates.Usd.Value;
             result.RubNb = officialRates.NbRates.Rur.Value;
             result.UsdMy = exchangeRates?.BynToUsd ?? 0;
-            result.RubUsd = officialRates.CbrRate.Usd.Value * 1000;
+            result.RubUsd = officialRates.CbrRate.Usd.Value * 1_000;
         }
         else
         {

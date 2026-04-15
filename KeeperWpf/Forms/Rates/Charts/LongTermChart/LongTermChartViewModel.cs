@@ -29,12 +29,7 @@ public class LongTermChartViewModel : Screen
     {
         if (e != null && e.Key != Key.L) return;
 
-        var currentIsLogarithmic = Model.LongTermModel.Axes[1].GetType() == typeof(LogarithmicAxis);
-        if (currentIsLogarithmic)
-            Model.LongTermModel.Axes[1] = new LinearAxis { Position = AxisPosition.Left };
-        else
-            Model.LongTermModel.Axes[1] = new LogarithmicAxis { Position = AxisPosition.Left };
-        Model.LongTermModel.InvalidatePlot(true);
+        Model.ToggleLogarithm();
     }
 
 }
