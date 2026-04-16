@@ -4,16 +4,10 @@ using System.Windows.Media;
 
 namespace KeeperWpf;
 
-public class TransactionTooltipLine
+public class TransactionTooltipLine(string label, string value)
 {
-    public string Label { get; set; }
-    public string Value { get; set; }
-
-    public TransactionTooltipLine(string label, string value)
-    {
-        Label = label;
-        Value = value;
-    }
+    public string Label { get; set; } = label;
+    public string Value { get; set; } = value;
 }
 
 public class ListLine
@@ -25,7 +19,7 @@ public class ListLine
     public Brush Foreground { get; set; } = Brushes.Black;
 
     // используется на BalanceOrTrafficView
-    public List<TransactionTooltipLine> TooltipLines { get; set; } = null!;
+    public List<TransactionTooltipLine>? TooltipLines { get; set; }
     public bool IsTooltipEnabled => TooltipLines != null;
 
     public FontFamily FontFamily { get; set; } = new FontFamily("Lucida Sans Typewriter");
