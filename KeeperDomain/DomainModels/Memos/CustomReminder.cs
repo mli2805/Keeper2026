@@ -21,7 +21,7 @@ public class CustomReminder : IDumpable, IParsable<CustomReminder>
         Id = int.Parse(substrings[0]);
         Enabled = bool.Parse(substrings[1]);
         TriggerDate = DateTime.ParseExact(substrings[2].Trim(), "dd/MM/yyyy HH:mm", null);
-        Every = new Duration().FromString(substrings[3]);
+        Every = new Duration().FromString(substrings[3].Trim());
         Memo = substrings[4].Trim();
         return this;
     }

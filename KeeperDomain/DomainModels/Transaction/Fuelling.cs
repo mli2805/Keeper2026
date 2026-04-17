@@ -1,8 +1,12 @@
-﻿namespace KeeperDomain;
+﻿using System.Globalization;
+
+namespace KeeperDomain;
 
 [Serializable]
 public class Fuelling : IDumpable, IParsable<Fuelling>
 {
+    private static readonly CultureInfo _enUsCulture = CultureInfo.GetCultureInfo("en-US");
+  
     public int Id { get; set; } //PK
     public int TransactionId { get; set; }
 
@@ -22,7 +26,7 @@ public class Fuelling : IDumpable, IParsable<Fuelling>
         Id = int.Parse(substrings[0].Trim());
         TransactionId = int.Parse(substrings[1].Trim());
         CarAccountId = int.Parse(substrings[2].Trim());
-        Volume = double.Parse(substrings[3].Trim());
+        Volume = double.Parse(substrings[3].Trim(), _enUsCulture);
         FuelType = (FuelType)Enum.Parse(typeof(FuelType), substrings[4]);
         return this;
     }
