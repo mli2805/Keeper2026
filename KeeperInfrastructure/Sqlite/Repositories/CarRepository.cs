@@ -17,20 +17,6 @@ public class CarRepository(IDbContextFactory<KeeperDbContext> factory)
         return cars.Select(carEf => carEf.ToModel()).ToList();
     }
 
-    public async Task AddCar(Car car)
-    {
-        await using var keeperDbContext = await factory.CreateDbContextAsync();
-        keeperDbContext.Cars.Add(car.ToEf());
-        await keeperDbContext.SaveChangesAsync();
-    }
-
-    public async Task AddCarYearMileage(CarYearMileage carYearMileage)
-    {
-        await using var keeperDbContext = await factory.CreateDbContextAsync();
-        keeperDbContext.CarYearMileages.Add(carYearMileage.ToEf());
-        await keeperDbContext.SaveChangesAsync();
-    }
-
     public async Task SaveCarWithMileages(CarModel carModel)
     {
         await using var keeperDbContext = await factory.CreateDbContextAsync();

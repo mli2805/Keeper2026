@@ -13,10 +13,10 @@ using System.Windows;
 namespace KeeperWpf;
 
 [ExportViewModel]
-public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWindowManager windowManager, 
+public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWindowManager windowManager,
     CarRepository carRepository, FuelViewModel fuelViewModel, OwnershipCostViewModel ownershipCostViewModel) : Screen
 {
-    public List<CarModel> Cars { get; set; } = null!;
+    public BindableCollection<CarModel> Cars { get; set; } = null!;
 
     private CarModel _selectedCar = null!;
     public CarModel SelectedCar
@@ -34,10 +34,11 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
             NotifyOfPropertyChange(nameof(YearMileagesToShow));
             NotifyOfPropertyChange(nameof(Total));
             NotifyOfPropertyChange(nameof(TotalPlus));
+            NotifyOfPropertyChange(nameof(CanStartNewYearMileage));
         }
     }
 
-    public List<YearMileageModel> YearMileagesToShow { get; set; } = null!;
+    public BindableCollection<YearMileageModel> YearMileagesToShow { get; set; } = null!;
     public YearMileageModel Total { get; set; } = null!;
     public YearMileageModel TotalPlus { get; set; } = null!;
 
@@ -48,9 +49,7 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
     {
         dataModel.Cars.Last().SaleDate = DateTime.Today;
 
-        Cars = dataModel.Cars;
-
-
+        Cars = [.. dataModel.Cars];
         _selectedCar = Cars.Last();
         YearMileagesToShow = [.. _selectedCar.YearsMileage];
         EvaluateYearMileageToShow();
@@ -135,6 +134,31 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
         yearMileageModel.DayAmount = yearMileageModel.YearAmount / yearMileageModel.Period.ToDays();
     }
 
+    public bool CanStartNewYearMileage => SelectedCar.Id == Cars.Last().Id &&
+                                YearMileagesToShow.Last().Period.FinishMoment.Date > DateTime.Today;
+
+    public async Task StartNewYearMileage()
+    {
+        if (SelectedCar.Id != Cars.Last().Id) return;
+        if (YearMileagesToShow.Last().Period.FinishMoment.Date < DateTime.Today) return;
+
+        var lastYear = YearMileagesToShow.Last();
+        lastYear.Period = new Period(lastYear.Period.StartDate, lastYear.Period.StartDate.AddYears(1).AddMicroseconds(-1));
+
+        var newYearMileage = new YearMileageModel()
+        {
+            CarId = SelectedCar.Id,
+            Period = new Period(lastYear.Period.StartDate.Date.AddYears(1), DateTime.Today.AddDays(1).AddMilliseconds(-1)),
+            YearNumber = lastYear.YearNumber + 1,
+            Odometer = lastYear.Odometer,
+            Mileage = 0
+        };
+        EvaluateAmount(newYearMileage);
+        YearMileagesToShow.Add(newYearMileage);
+        Cars.Last().YearsMileage = [.. YearMileagesToShow];
+        await carRepository.SaveCarWithMileages(SelectedCar);
+    }
+
     public void AddNewCar()
     {
 
@@ -143,7 +167,7 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
     public async Task Fuelling()
     {
         fuelViewModel.Initialize();
-       await windowManager.ShowWindowAsync(fuelViewModel);
+        await windowManager.ShowWindowAsync(fuelViewModel);
     }
 
     public bool IsByTags { get; set; }
