@@ -98,9 +98,27 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         }
     }
 
+    private int _triggeredRemindersCount;
+    public int TriggeredRemindersCount
+    {
+        get => _triggeredRemindersCount;
+        set
+        {
+            if (value == _triggeredRemindersCount) return;
+            _triggeredRemindersCount = value;
+            NotifyOfPropertyChange();
+            NotifyOfPropertyChange(nameof(TriggeredRemindersBadgeVisibility));
+        }
+    }
+
+    public Visibility TriggeredRemindersBadgeVisibility =>
+        _triggeredRemindersCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+
     public void SetReminderIconPath()
     {
-        ReminderIconPath = keeperDataModel.HasRemindersTriggered()
+        var count = keeperDataModel.TriggeredRemindersCount();
+        TriggeredRemindersCount = count;
+        ReminderIconPath = count > 0
             ? "../../Resources/mainmenu/red-remind.png"
             : "../../Resources/mainmenu/black-remind.png";
     }

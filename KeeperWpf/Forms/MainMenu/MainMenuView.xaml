@@ -154,7 +154,17 @@
         
         <Button Name="ShowCustomReminderForm" Margin="2,0,4,0" Padding="0, 3, 4, 0" Background="White" 
                 BorderBrush="White" ToolTip="Custom Reminders" Opacity="0.7">
-            <Image Source="{Binding ReminderIconPath}" Width="26" Height="26"  />
+            <Grid Width="26" Height="26">
+                <Image Source="{Binding ReminderIconPath}" Width="26" Height="26" />
+                <Border Width="13" Height="13" CornerRadius="6"
+                        Background="White" BorderBrush="Red" BorderThickness="1"
+                        HorizontalAlignment="Right" VerticalAlignment="Top"
+                        Visibility="{Binding TriggeredRemindersBadgeVisibility}">
+                    <TextBlock Text="{Binding TriggeredRemindersCount}"
+                               FontSize="8" FontWeight="Bold" Foreground="Red"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+            </Grid>
         </Button>
 
         <Menu Margin="0,0,0,0" Background="White" BorderBrush="White">

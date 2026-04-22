@@ -8,4 +8,9 @@ public static class ReminderExt
     {
         return keeperDataModel.CustomReminderModels.Any(r => r.IsTimeToTrigger);
     }
+
+    public static int TriggeredRemindersCount(this KeeperDataModel keeperDataModel)
+    {
+        return keeperDataModel.CustomReminderModels.Count(r => r.IsTimeToTrigger);
+    }
 }
