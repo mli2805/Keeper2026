@@ -19,10 +19,7 @@ public class CustomReminderModel
     public bool IsOnce { get; set; }
     public bool IsRepeated { get; set; }
     
-    public bool IsTimeToTrigger()
-    {
-        return Enabled && TriggerDate.Date <= DateTime.Now.Date;
-    }
+    public bool IsTimeToTrigger => Enabled && TriggerDate.Date <= DateTime.Now.Date;
 
     public CustomReminderModel ShallowCopy()
     {
