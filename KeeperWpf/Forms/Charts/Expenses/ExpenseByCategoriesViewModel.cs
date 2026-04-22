@@ -1,18 +1,19 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using KeeperInfrastructure;
+using OxyPlot;
+using OxyPlot.Series;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Caliburn.Micro;
-using OxyPlot;
-using OxyPlot.Series;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
 [ExportViewModel]
-public class ExpenseByCategoriesViewModel : Screen
+public class ExpenseByCategoriesViewModel(KeeperDataModel dataModel, CategoriesDataExtractor categoriesDataExtractor) : Screen
 {
-    private readonly KeeperDataModel _dataModel;
-    private readonly CategoriesDataExtractor _categoriesDataExtractor;
     private List<CategoriesDataElement> _fullData = null!;
  
     private PlotModel _myPlotModel = null!;
@@ -63,11 +64,6 @@ public class ExpenseByCategoriesViewModel : Screen
         }
     }
 
-    public ExpenseByCategoriesViewModel(KeeperDataModel dataModel, CategoriesDataExtractor categoriesDataExtractor)
-    {
-        _dataModel = dataModel;
-        _categoriesDataExtractor = categoriesDataExtractor;
-    }
     protected override void OnViewLoaded(object view)
     {
         DisplayName = "Распределение расходов";
@@ -75,7 +71,7 @@ public class ExpenseByCategoriesViewModel : Screen
 
     public void Initialize()
     {
-        _fullData = _categoriesDataExtractor.GetExpenseGrouppedByCategoryAndMonth();
+        _fullData = categoriesDataExtractor.GetExpenseGrouppedByCategoryAndMonth();
         MyIntervalMode = DiagramIntervalMode.Months;
         MyPeriod = new Tuple<DateTime, DateTime>(new DateTime(2002,1,1), DateTime.Today);
         InitializeDiagram();
@@ -95,7 +91,7 @@ public class ExpenseByCategoriesViewModel : Screen
         var series = new PieSeries();
         foreach (var element in pieData)
         {
-            var category = _dataModel.AcMoDict[element.CategoryId];
+            var category = dataModel.AcMoDict[element.CategoryId];
             series.Slices.Add(new PieSlice(category.Name, (double)element.Amount));
         }
         return series;
@@ -107,7 +103,7 @@ public class ExpenseByCategoriesViewModel : Screen
         var sum = pieData.Sum(a => a.Amount);
         foreach (var element in pieData)
         {
-            var category = _dataModel.AcMoDict[element.CategoryId];
+            var category = dataModel.AcMoDict[element.CategoryId];
             result.Add(
                 $"{category.Name} - {Math.Round(element.Amount/sum*100, 0)}%  (${Math.Round(element.Amount, 0):0,0})");
         }

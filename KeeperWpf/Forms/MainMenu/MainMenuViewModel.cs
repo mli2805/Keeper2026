@@ -12,10 +12,10 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     TransactionsViewModel transactionsViewModel, RatesViewModel ratesViewModel,
     MonthAnalysisViewModel monthAnalysisViewModel, BankOffersViewModel bankOffersViewModel,
     // charts:
-    BalancesAndSaldosViewModel balancesAndSaldosViewModel, ExpenseByCategoriesViewModel expenseByCategoriesViewModel,
+    BalancesAndSaldosViewModel balancesAndSaldosViewModel, 
     DepoCurrResultViewModel depoCurrResultViewModel,
     //
-    SalaryViewModel salaryViewModel, GskViewModel gskViewModel, CarsViewModel carsViewModel,
+    GskViewModel gskViewModel, CarsViewModel carsViewModel,
     OpenDepositsViewModel openDepositsViewModel, CardsAndAccountsViewModel cardsAndAccountsViewModel,
     // trust:
     InvestmentAssetsViewModel investmentAssetsViewModel, AssetRatesViewModel assetRatesViewModel,
@@ -223,8 +223,11 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
 
     public async Task ShowExpensesChart()
     {
-        expenseByCategoriesViewModel.Initialize();
-        await windowManager.ShowDialogAsync(expenseByCategoriesViewModel);
+        // некоторые формы c OxyPlot (например, balancesAndSaldosViewModel) стабильно работают и в single instance режиме,
+        // а эта, даже без CanCloseAsync не всегда открывается во второй раз, не знаю почему.
+        var vm = IoC.Get<ExpenseByCategoriesViewModel>();
+        vm.Initialize();
+        await windowManager.ShowDialogAsync(vm);
     }
 
     public async Task ShowDepoPlusCurrenciesChart()
@@ -235,8 +238,12 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
 
     public async Task ShowSalaryForm()
     {
-        salaryViewModel.Initialize();
-        await windowManager.ShowDialogAsync(salaryViewModel);
+        // наличие CanCloseAsync в SalaryViewModel делает невозможным повторное открытие формы, не знаю почему.
+        // CanCloseAsync нужен чтобы сохранять изменения при закрытии формы.
+        // Поэтому для SalaryViewModel мы будем каждый раз создавать новый экземпляр.
+        var vm = IoC.Get<SalaryViewModel>();
+        vm.Initialize();
+        await windowManager.ShowDialogAsync(vm);
     }
 
     public async Task ShowGskForm()

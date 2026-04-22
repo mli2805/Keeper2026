@@ -280,16 +280,10 @@ public class SalaryViewModel(KeeperDataModel dataModel, SalaryChangesRepository 
         AggregateButtonCaption = _isAggregated ? "In details" : "Aggregate";
     }
 
-    public async Task Close()
-    {
-        await TryCloseAsync();
-    }
-
     public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
     {
         await salaryChangesRepository.SaveAll(SalaryChanges);
 
         return await base.CanCloseAsync(cancellationToken);
-
     }
 }
