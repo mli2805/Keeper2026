@@ -52,4 +52,6 @@ public class YearMileageModel : PropertyChangedBase
         get => _dayAmount;
         set { _dayAmount = value; NotifyOfPropertyChange(); }
     }
+
+    public decimal PricePerKm => Mileage > 0 ? YearAmount / Mileage : 0;
 }

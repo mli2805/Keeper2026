@@ -238,7 +238,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
 
     public async Task ShowSalaryForm()
     {
-        // наличие CanCloseAsync в SalaryViewModel делает невозможным повторное открытие формы, не знаю почему.
+        // наличие OxyPlot и CanCloseAsync в SalaryViewModel делает невозможным повторное открытие формы, не знаю почему.
         // CanCloseAsync нужен чтобы сохранять изменения при закрытии формы.
         // Поэтому для SalaryViewModel мы будем каждый раз создавать новый экземпляр.
         var vm = IoC.Get<SalaryViewModel>();

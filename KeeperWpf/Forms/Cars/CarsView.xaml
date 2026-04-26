@@ -127,6 +127,14 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
+                        <DataGridTextColumn Header="$ цена за км" Width="60" Binding="{Binding PricePerKm, StringFormat=N2}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    <Setter Property="Padding" Value="0,0,5,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
                 <DockPanel DockPanel.Dock="Top" >
@@ -155,15 +163,17 @@
                     <TextBlock Text="$"/>
                     <TextBlock Margin="15,0, 2, 0" Text="{Binding Total.DayAmount, StringFormat=N1}"/>
                     <TextBlock Text="$ в день"/>
+                    <TextBlock Margin="15,0, 2, 0" Text="{Binding Total.PricePerKm, StringFormat=N2}"/>
+                    <TextBlock Text="$ за км"/>
                 </StackPanel> 
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Text="С учетом покупки-продажи:"/>
-                    <TextBlock Margin="105,0, 2, 0" 
-                               Text="{Binding TotalPlus.YearAmount, StringFormat={}{0:# ###}}"/>
+                    <TextBlock Margin="105,0, 2, 0" Text="{Binding TotalPlus.YearAmount, StringFormat={}{0:# ###}}"/>
                     <TextBlock Text="$"/>
-                    <TextBlock Margin="15,0, 2, 0" 
-                               Text="{Binding TotalPlus.DayAmount, StringFormat=N1}"/>
+                    <TextBlock Margin="15,0, 2, 0" Text="{Binding TotalPlus.DayAmount, StringFormat=N1}"/>
                     <TextBlock Text="$ в день"/>
+                    <TextBlock Margin="15,0, 2, 0" Text="{Binding TotalPlus.PricePerKm, StringFormat=N2}"/>
+                    <TextBlock Text="$ за км"/>
                 </StackPanel>
 
 
