@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:keeperWpf="clr-namespace:KeeperWpf"
         xmlns:keeperModels="clr-namespace:KeeperModels;assembly=KeeperModels"
+        xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance keeperWpf:CarsViewModel}"
         Width="754"  Height="650" WindowStartupLocation="CenterScreen">
     <DockPanel Margin="5">
@@ -89,8 +90,14 @@
                 </StackPanel>
 
                 <DataGrid DockPanel.Dock="Top" ItemsSource="{Binding YearMileagesToShow}" 
+                          SelectedItem="{Binding SelectedYearMileage, Mode=TwoWay}"
                           Margin="5,0,5,5"  AutoGenerateColumns="False"
                           HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LavenderBlush" >
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Расходы за год" cal:Message.Attach="ShowYearExpenses" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
                     <DataGrid.Resources>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="ContentTemplate">

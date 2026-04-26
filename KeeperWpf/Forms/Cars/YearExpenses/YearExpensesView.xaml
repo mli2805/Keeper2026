@@ -1,0 +1,71 @@
+<Window x:Class="KeeperWpf.YearExpensesView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance keeperWpf:YearExpensesViewModel}"
+        Width="960" Height="500" WindowStartupLocation="CenterScreen">
+    <DockPanel Margin="5">
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" FontWeight="Bold" Margin="5"/>
+        <Button DockPanel.Dock="Bottom" Content="Закрыть" Width="120" Margin="5" Name="CloseView" HorizontalAlignment="Right"/>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="5,0,5,5">
+            <TextBlock Text="Итого:" FontWeight="Bold" Margin="0,0,10,0"/>
+            <TextBlock Text="{Binding CategoryTotalUsd, StringFormat=N2}" FontWeight="Bold"/>
+            <TextBlock Text=" $" FontWeight="Bold"/>
+        </StackPanel>
+        <DataGrid DockPanel.Dock="Bottom" ItemsSource="{Binding CategorySummaries}" Margin="5"
+                  IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single" MaxHeight="200">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Категория" Width="200" Binding="{Binding CategoryName}"/>
+                <DataGridTextColumn Header="$ сумма" Width="100" Binding="{Binding TotalUsd, StringFormat=N2}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                            <Setter Property="Padding" Value="0,0,5,0"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="%" Width="60" Binding="{Binding Percent, StringFormat=N1}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                            <Setter Property="Padding" Value="0,0,5,0"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid ItemsSource="{Binding Expenses}" Margin="5"
+                  IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Дата" Width="90" Binding="{Binding Timestamp, StringFormat='{}{0:dd.MM.yyyy}'}"/>
+                <DataGridTextColumn Header="Категория" Width="200" Binding="{Binding Category.Name}"/>
+                <DataGridTextColumn Header="Сумма" Width="80" Binding="{Binding Amount, StringFormat=N2}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                            <Setter Property="Padding" Value="0,0,5,0"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Валюта" Width="50" Binding="{Binding Currency}"/>
+                <DataGridTextColumn Header="$ сумма" Width="80" FontWeight="Bold" Binding="{Binding AmountInUsd, StringFormat=N2}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                            <Setter Property="Padding" Value="0,0,5,0"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="Комментарий" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Comment}" TextWrapping="Wrap"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>

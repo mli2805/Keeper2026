@@ -14,7 +14,8 @@ namespace KeeperWpf;
 
 [ExportViewModel]
 public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWindowManager windowManager,
-    CarRepository carRepository, FuelViewModel fuelViewModel, OwnershipCostViewModel ownershipCostViewModel) : Screen
+    CarRepository carRepository, FuelViewModel fuelViewModel, OwnershipCostViewModel ownershipCostViewModel,
+    YearExpensesViewModel yearExpensesViewModel) : Screen
 {
     public BindableCollection<CarModel> Cars { get; set; } = null!;
 
@@ -39,6 +40,7 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
     }
 
     public BindableCollection<YearMileageModel> YearMileagesToShow { get; set; } = null!;
+    public YearMileageModel? SelectedYearMileage { get; set; }
     public YearMileageModel Total { get; set; } = null!;
     public YearMileageModel TotalPlus { get; set; } = null!;
 
@@ -157,6 +159,13 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
         YearMileagesToShow.Add(newYearMileage);
         Cars.Last().YearsMileage = [.. YearMileagesToShow];
         await carRepository.SaveCarWithMileages(SelectedCar);
+    }
+
+    public async Task ShowYearExpenses()
+    {
+        if (SelectedYearMileage == null) return;
+        yearExpensesViewModel.Initialize(SelectedCar, SelectedYearMileage);
+        await windowManager.ShowWindowAsync(yearExpensesViewModel);
     }
 
     public void AddNewCar()
