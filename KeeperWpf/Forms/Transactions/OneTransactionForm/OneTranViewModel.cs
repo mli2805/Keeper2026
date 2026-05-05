@@ -186,9 +186,10 @@ public class OneTranViewModel : Screen
         return true;
     }
 
-    public async Task Calculator()
+    public Task Calculator()
     {
         System.Diagnostics.Process.Start("calc");
+        return Task.CompletedTask;
     }
 
     public async Task Save()

@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using OxyPlot.Axes;
 using System.Collections.Generic;
 using System.Windows.Input;
 

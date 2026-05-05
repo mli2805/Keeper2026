@@ -147,7 +147,7 @@ public class ButtonCollectionBuilderViewModel(KeeperDataModel dataModel, ComboTr
             case 16:
                 selectedAccName = comboTreesProvider.ExpenseCategories.FindThroughTheForestById(257);
                 return comboTreesProvider.ExpenseCategories;
-            case 17:
+            // case 17:
             default:
                 selectedAccName = comboTreesProvider.AccNamesForExchangeTags.FindThroughTheForestById(477);
                 return comboTreesProvider.ExpenseCategories;

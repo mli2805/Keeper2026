@@ -162,22 +162,22 @@ public class ToTxtSaver
         }
     }
 
-    public async Task<Exception?> DeleteTxtFiles()
+    public Task<Exception?> DeleteTxtFiles()
     {
         try
         {
             if (!Directory.Exists(_backupFolder))
             {
-                return new Exception("Backup directory does not exist");
+                return Task.FromResult<Exception?>(new Exception("Backup directory does not exist"));
             }
             var filenames = Directory.GetFiles(_backupFolder, "*.txt"); // note: this does not recurse directories! 
             foreach (var filename in filenames)
                 File.Delete(filename);
-            return null;
+            return Task.FromResult<Exception?>(null);
         }
         catch (Exception e)
         {
-            return e;
+            return Task.FromResult<Exception?>(e);
         }
     }
 }
