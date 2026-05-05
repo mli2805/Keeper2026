@@ -183,12 +183,13 @@ public class SalaryViewModel(KeeperDataModel dataModel, SalaryChangesRepository 
     private IEnumerable<SalaryLineModel> BuildFor(AccountItemModel employersFolder, bool includeIrregulars)
     {
         var transactionModels = dataModel.Transactions.Values
-            .Where(t => t.Counterparty != null && t.Counterparty.Is(employersFolder));
+            .Where(t => t.Counterparty != null && t.Counterparty.Is(employersFolder))
+            .OrderBy(t => t.Timestamp).ToList();
 
         if (!includeIrregulars)
         {
             // 772 - официальн зарплата
-            transactionModels = transactionModels.Where(t => t.Category!.Is(772));
+            transactionModels = transactionModels.Where(t => t.Category!.Is(772)).ToList();
         }
 
         return transactionModels.Select(ToSalaryLine);
