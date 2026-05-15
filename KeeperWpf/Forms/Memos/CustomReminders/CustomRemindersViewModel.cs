@@ -70,8 +70,10 @@ public class CustomRemindersViewModel(KeeperDataModel keeperDataModel, IWindowMa
         if (result.HasValue && result.Value)
         {
             await customRemindersRepository.Delete(SelectedCustomReminder!.Id);
+            var selectedCustomReminderId = SelectedCustomReminder!.Id;  
             CustomReminders.Remove(SelectedCustomReminder!);
-            keeperDataModel.CustomReminderModels.Remove(SelectedCustomReminder!);
+            var modelInList = keeperDataModel.CustomReminderModels.FirstOrDefault(cr => cr.Id == selectedCustomReminderId);
+            keeperDataModel.CustomReminderModels.Remove(modelInList!);
         }
     }
 
