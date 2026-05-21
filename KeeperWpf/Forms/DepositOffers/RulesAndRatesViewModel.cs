@@ -128,6 +128,7 @@ public class RulesAndRatesViewModel(KeeperDataModel dataModel, IWindowManager wi
     public void RecalculateRates()
     {
         UpdateTable();
+        RecalculateExistingLines();
     }
 
     // эта функция нужна только если введены неправильные ставки
