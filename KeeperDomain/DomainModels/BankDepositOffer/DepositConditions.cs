@@ -62,7 +62,7 @@ public class DepositConditions : IDumpable, IParsable<DepositConditions>
 
         IsCapitalized = bool.Parse(substrings[10]);
         HasAdditionalPercent = bool.Parse(substrings[11]);
-        AdditionalPercent = double.Parse(substrings[12]);
+        AdditionalPercent = double.Parse(substrings[12], CultureInfo.InvariantCulture);
 
         Comment = substrings[13].Trim();
         return this;

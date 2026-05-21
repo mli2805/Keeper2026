@@ -2,23 +2,19 @@
 using System.Linq;
 using Caliburn.Micro;
 using KeeperDomain;
+using KeeperInfrastructure;
 
 namespace KeeperWpf;
 
 [ExportViewModel]
-public class RefinancingRatesViewModel : PropertyChangedBase
+public class RefinancingRatesViewModel(KeeperDataModel keeperDataModel, 
+    RefinancingRatesRepository refinancingRatesRepository) : PropertyChangedBase
 {
-    private readonly KeeperDataModel _keeperDataModel;
     public ObservableCollection<RefinancingRate> Rows { get; set; } = null!;
-
-    public RefinancingRatesViewModel(KeeperDataModel keeperDataModel)
-    {
-        _keeperDataModel = keeperDataModel;
-    }
 
     public void Initialize()
     {
-        Rows = new ObservableCollection<RefinancingRate>(_keeperDataModel.RefinancingRates);
+        Rows = new ObservableCollection<RefinancingRate>(keeperDataModel.RefinancingRates);
     }
 
     public async void Download()
@@ -26,19 +22,20 @@ public class RefinancingRatesViewModel : PropertyChangedBase
         var rates = await NbRbRatesDownloader.GetRefinanceRatesAsync();
         if (rates == null) return;
 
-        if (rates.Count > _keeperDataModel.RefinancingRates.Count)
+        if (rates.Count > keeperDataModel.RefinancingRates.Count)
         {
             var lastId = 0;
             foreach (var refinancingRate in rates.OrderBy(r => r.Date))
             {
-                var dr = _keeperDataModel.RefinancingRates.FirstOrDefault(r => r.Date == refinancingRate.Date);
+                var dr = keeperDataModel.RefinancingRates.FirstOrDefault(r => r.Date == refinancingRate.Date);
                 if (dr != null)
                     lastId = dr.Id;
                 else
                 {
                     refinancingRate.Id = ++lastId;
-                    _keeperDataModel.RefinancingRates.Add(refinancingRate);
+                    keeperDataModel.RefinancingRates.Add(refinancingRate);
                     Rows.Add(refinancingRate);
+                    refinancingRatesRepository.Add(refinancingRate);
                 }
             }
         }
@@ -46,7 +43,7 @@ public class RefinancingRatesViewModel : PropertyChangedBase
 
     public void UpdateRates()
     {
-        _keeperDataModel.UpdateDepoRatesLinkedToCp();
+        keeperDataModel.UpdateDepoRatesLinkedToCp();
     }
 
 }

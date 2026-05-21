@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 
 namespace KeeperWpf;
 
@@ -21,7 +22,7 @@ public static class RateFormula
         if (ss.Length != 3) return false;
 
         operation = ss[1].Trim();
-        if (!double.TryParse(ss[2].Trim(), out k)) return false;
+        if (!double.TryParse(ss[2].Trim(), CultureInfo.InvariantCulture, out k)) return false;
 
         return true;
     }

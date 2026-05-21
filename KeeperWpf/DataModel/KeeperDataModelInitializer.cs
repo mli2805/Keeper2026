@@ -68,7 +68,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
         // на вью преобразуем в GoldCoinsModel (это можно было бы делать в репозитории, вместо FromEf)
         keeperDataModel.MetalRates = metalRatesRepository.GetAllMetalRates();
         // так и показываем на вью
-        keeperDataModel.RefinancingRates = refinancingRatesRepository.GetAllRefinancingRates();
+        keeperDataModel.RefinancingRates = refinancingRatesRepository.GetAll();
         Debug.WriteLine($"Loaded {keeperDataModel.ExchangeRates.Count} exchange rates from DB");
     }
 

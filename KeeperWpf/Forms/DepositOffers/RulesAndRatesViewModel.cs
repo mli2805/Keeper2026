@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,7 +46,7 @@ public class RulesAndRatesViewModel(KeeperDataModel dataModel, IWindowManager wi
         {
             if (value.Equals(_formulaK)) return;
             _formulaK = value;
-            Conditions.RateFormula = $"СР {SelectedOperation} {FormulaK}";
+            Conditions.RateFormula = $"СР {SelectedOperation} {FormulaK.ToString(CultureInfo.InvariantCulture)}";
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(nameof(SaveFormulaAs));
         }
