@@ -149,7 +149,7 @@ public class OpenDepositsViewModel : Screen
             MainCurrency = depoOffer.MainCurrency,
             DepoName = accountItemModel.Name,
             RateType = depoOffer.RateType,
-            Rate = rate,
+            Rate = Math.Round(rate, 2),
             RateFormula = formula,
             AdditionsStr = addLimitStr,
             IsAddOpen = isAddOpen,

@@ -5,8 +5,6 @@ namespace KeeperDomain;
 [Serializable]
 public class Fuelling : IDumpable, IParsable<Fuelling>
 {
-    private static readonly CultureInfo _enUsCulture = CultureInfo.GetCultureInfo("en-US");
-  
     public int Id { get; set; } //PK
     public int TransactionId { get; set; }
 
@@ -17,7 +15,7 @@ public class Fuelling : IDumpable, IParsable<Fuelling>
     public string Dump()
     {
         return Id + " ; " + TransactionId + " ; " + CarAccountId + " ; " +
-               Volume + " ; " + FuelType;
+               Volume.ToString(CultureInfo.InvariantCulture) + " ; " + FuelType;
     }
 
     public Fuelling FromString(string s)
@@ -26,7 +24,7 @@ public class Fuelling : IDumpable, IParsable<Fuelling>
         Id = int.Parse(substrings[0].Trim());
         TransactionId = int.Parse(substrings[1].Trim());
         CarAccountId = int.Parse(substrings[2].Trim());
-        Volume = double.Parse(substrings[3].Trim(), _enUsCulture);
+        Volume = double.Parse(substrings[3].Trim(), CultureInfo.InvariantCulture);
         FuelType = (FuelType)Enum.Parse(typeof(FuelType), substrings[4]);
         return this;
     }
