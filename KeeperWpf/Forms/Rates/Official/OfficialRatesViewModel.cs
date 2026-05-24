@@ -10,10 +10,35 @@ using KeeperInfrastructure;
 
 namespace KeeperWpf;
 
-[ExportViewModel]
+[ExportViewModel(ViewModelLifetime.SingleInstance)]
 public class OfficialRatesViewModel(KeeperDataModel keeperDataModel, OfficialRatesRepository officialRatesRepository)
     : PropertyChangedBase
 {
+    private string _tabHeader = "вычисление...";
+    public string TabHeader
+    {
+        get { return _tabHeader; }
+        set
+        {
+            if (Equals(value, _tabHeader)) return;
+            _tabHeader = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
+    private bool _isReady;
+    public bool IsReady
+    {
+        get { return _isReady; }
+        set
+        {
+            if (Equals(value, _isReady)) return;
+            _isReady = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
+
     public RangeObservableCollection<OfficialRatesModel> Rows { get; set; } = new RangeObservableCollection<OfficialRatesModel>();
 
     private OfficialRatesModel _selectedRow = null!;
@@ -31,7 +56,7 @@ public class OfficialRatesViewModel(KeeperDataModel keeperDataModel, OfficialRat
     private OfficialRatesModel? _lastDayOfYear;
     public OfficialRatesModel? LastDayOfYear
     {
-        get => _lastDayOfYear; 
+        get => _lastDayOfYear;
         set
         {
             if (Equals(value, _lastDayOfYear)) return;
@@ -63,10 +88,18 @@ public class OfficialRatesViewModel(KeeperDataModel keeperDataModel, OfficialRat
         }
     }
 
+    private bool _isInitialized;
+    private bool _isInitializing;
+
     public async Task Initialize()
     {
+        if (_isInitialized || _isInitializing) return;
+        _isInitializing = true;
+
         await Task.Factory.StartNew(Init);
         IsDownloadEnabled = true;
+        _isInitializing = false;
+        _isInitialized = true;
     }
 
     private void Init()
@@ -97,6 +130,8 @@ public class OfficialRatesViewModel(KeeperDataModel keeperDataModel, OfficialRat
                 Rows.AddRange(data);
                 LastDayOfYear = endOfLastYear;
                 DayYearAgo = yearAgo;
+                TabHeader = "Официальные курсы НБ РБ";
+                IsReady = true;
             });
     }
 

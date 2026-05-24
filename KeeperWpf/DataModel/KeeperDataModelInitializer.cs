@@ -27,7 +27,8 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     CardBalanceMemosRepository cardBalanceMemosRepository, BankAccountMemosRepository bankAccountMemosRepository,
     CustomRemindersRepository customRemindersRepository,
     LargeExpenseThresholdsRepository largeExpenseThresholdsRepository,
-    ButtonCollectionsRepository buttonCollectionsRepository, SalaryChangesRepository salaryChangesRepository)
+    ButtonCollectionsRepository buttonCollectionsRepository, SalaryChangesRepository salaryChangesRepository,
+    OfficialRatesViewModel officialRatesViewModel)
 {
     public async Task<bool> GetFullModelFromDb()
     {
@@ -37,7 +38,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
             // на случай если БД пустая, только что удалили и создали новую (будем грузить из текстового бэкапа)
             return false;
         }
-        GetRatesFromDb();
+        await GetRatesFromDb();
         await GetTransactionsFromDb();
         keeperDataModel.Cars = await carRepository.GetAllCarsWithMileages();
         keeperDataModel.DepositOffers = await depositOffersRepository.GetDepositOffersWithConditionsAndRates(keeperDataModel.AcMoDict);
@@ -59,12 +60,13 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
         return true;
     }
 
-    private void GetRatesFromDb()
+    private async Task GetRatesFromDb()
     {
         // так и показываем на вью
         keeperDataModel.ExchangeRates = exchangeRatesRepository.GetAllExchangeRates().ToDictionary(r => r.Date);
         // на вью преобразуем в OfficialRatesModel (долгое преобразование с дельтами, в отдельном потоке)
         keeperDataModel.OfficialRates = officialRatesRepository.GetAllOfficialRates().ToDictionary(r => r.Date);
+        _ = Task.Run(officialRatesViewModel.Initialize);
         // на вью преобразуем в GoldCoinsModel (это можно было бы делать в репозитории, вместо FromEf)
         keeperDataModel.MetalRates = metalRatesRepository.GetAllMetalRates();
         // так и показываем на вью

@@ -9,8 +9,8 @@ namespace KeeperWpf;
 
 public class KeeperDataModel : PropertyChangedBase
 {
-    public Dictionary<DateTime, OfficialRates> OfficialRates { get; set; } = null!;
     public Dictionary<DateTime, ExchangeRates> ExchangeRates { get; set; } = null!;
+    public Dictionary<DateTime, OfficialRates> OfficialRates { get; set; } = null!;
     public List<MetalRate> MetalRates { get; set; } = null!;
     public List<RefinancingRate> RefinancingRates { get; set; } = null!;
 

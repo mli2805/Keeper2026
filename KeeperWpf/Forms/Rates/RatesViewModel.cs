@@ -15,46 +15,7 @@ public class RatesViewModel : Screen
     public GoldRatesViewModel GoldRatesViewModel { get; }
     public RefinancingRatesViewModel RefinancingRatesViewModel { get; }
 
-    private string _officialRatesTabHeader = "loading...";
-    public string OfficialRatesTabHeader
-    {
-        get => _officialRatesTabHeader;
-        set
-        {
-            if (Equals(_officialRatesTabHeader, value)) return;
-            _officialRatesTabHeader = value;
-            NotifyOfPropertyChange();
-        }
-    }
-
-    private string _metalRatesTabHeader = "loading...";
-    public string MetalRatesTabHeader
-    {
-        get => _metalRatesTabHeader;
-        set
-        {
-            if (Equals(_metalRatesTabHeader, value)) return;
-            _metalRatesTabHeader = value;
-            NotifyOfPropertyChange();
-        }
-    }
-
-
-    private string _refinancingRatesTabHeader = "loading...";
-    public string RefinancingRatesTabHeader
-    {
-        get => _refinancingRatesTabHeader;
-        set
-        {
-            if (Equals(_refinancingRatesTabHeader, value)) return;
-            _refinancingRatesTabHeader = value;
-            NotifyOfPropertyChange();
-        }
-    }
-
-
-
-
+   
     public RatesViewModel(KeeperDataModel keeperDataModel, IWindowManager windowManager,
         OfficialRatesViewModel officialRatesViewModel, ExchangeRatesViewModel exchangeRatesViewModel,
         GoldRatesViewModel goldRatesViewModel, RefinancingRatesViewModel refinancingRatesViewModel)
@@ -71,23 +32,11 @@ public class RatesViewModel : Screen
     {
         ExchangeRatesViewModel.Initialize();
 
-        // остальные страницы инициализируем в фоне
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-        Task.Run(InitializeOtherPages);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-    }
+        // инициализация официальных курсов происходит долго и её запустил сразу после вычитки из DB в KeeperDataModelInitializer
+        // Task.Run(OfficialRatesViewModel.Initialize();
 
-    // происходит быстро, можно было и не заморачиваться с названиями на табиках
-    private async Task InitializeOtherPages()
-    {
-        RefinancingRatesViewModel.Initialize();
-        RefinancingRatesTabHeader = "Ставка рефинансирования НБ РБ";
-        
-        await OfficialRatesViewModel.Initialize();
-        OfficialRatesTabHeader = "Официальные курсы НБ РБ";
-        
         GoldRatesViewModel.Initialize();
-        MetalRatesTabHeader = "Золото, закупока минфина";
+        RefinancingRatesViewModel.Initialize();
     }
 
     protected override void OnViewLoaded(object view)
