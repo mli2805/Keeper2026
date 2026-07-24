@@ -45,7 +45,7 @@
 
 
                 <DataGridTextColumn Header="" Width="130" />
-                <DataGridTextColumn Header="Все" Width="100" Binding="{Binding AllMine.SumStr}"   
+                <DataGridTextColumn Header="Все (депо + шкаф + карточки)" Width="100" Binding="{Binding AllMine.SumStr}"   
                                     ElementStyle="{StaticResource CellRightAlign}"/>
                 <DataGridTextColumn Header="" Width="100" Binding="{Binding AllMine.SumUsdStr}"  
                                     ElementStyle="{StaticResource CellRightAlign}"/>

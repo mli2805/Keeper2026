@@ -38,10 +38,16 @@ public class OpenDepositsViewModel : Screen
 
     private void EvaluateDepoAndMatras()
     {
-        var matras = _dataModel.AcMoDict[167]; // шкаф
-        var calc = new TrafficOfAccountBranchCalculator(_dataModel, matras,
-            new Period() { FinishMoment = DateTime.Now });
-        var balance = calc.Evaluate();
+        var matras = new[] { 167, 168, 1097 };  // шкаф
+
+        var balance = new Balance();
+        foreach (var id in matras)
+        {
+            var accountItemModel = _dataModel.AcMoDict[id];
+            var calc = new TrafficOfAccountBranchCalculator(_dataModel, accountItemModel,
+                new Period() { FinishMoment = DateTime.Now });
+            balance.AddBalance(calc.Evaluate());
+        }
 
         decimal total = 0;
         foreach (var pair in balance.Currencies)
@@ -66,7 +72,7 @@ public class OpenDepositsViewModel : Screen
         full.DepoAndMatras.SumUsd = total;
         full.DepoAndMatras.Currency = CurrencyCode.USD;
 
-        foreach (var line in Totals.Where(t=>t.DepoAndMatras.Sum > 0))
+        foreach (var line in Totals.Where(t => t.DepoAndMatras.Sum > 0))
             line.DepoAndMatras.Percent = line.DepoAndMatras.SumUsd / total;
     }
 
@@ -92,7 +98,7 @@ public class OpenDepositsViewModel : Screen
         full.AllMine.SumUsd = total;
         full.AllMine.Currency = CurrencyCode.USD;
 
-        foreach (var line in Totals.Where(t=>t.AllMine.Sum > 0))
+        foreach (var line in Totals.Where(t => t.AllMine.Sum > 0))
             line.AllMine.Percent = line.AllMine.SumUsd / total;
     }
 
