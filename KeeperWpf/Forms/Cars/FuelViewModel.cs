@@ -19,7 +19,7 @@ public class FuelViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
     public List<FuellingModel> Rows { get; set; } = null!;
-    public string Total => $"Итого {Rows.Sum(f => f.Volume)} литров";
+    public string Total => $"Итого {Rows.Sum(f => f.Volume):F2} литров";
 
     public PlotModel FuelPricePlotModel { get; set; } = null!;
 
