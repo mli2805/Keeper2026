@@ -82,6 +82,7 @@
 		<PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
 		<PackageReference Include="PDFsharp" Version="6.2.4" />
 		<PackageReference Include="PDFsharp-MigraDoc" Version="6.2.4" />
+		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.12" />
 	</ItemGroup>
 
 	<ItemGroup>
