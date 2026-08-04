@@ -57,7 +57,7 @@ public class OneBankAccountViewModel(KeeperDataModel dataModel, AccountRepositor
         get => _selectedDepositOffer;
         set
         {
-            if (Equals(value, _selectedDepositOffer)) return;
+            if (Equals(value, _selectedDepositOffer) || value == null) return;
             _selectedDepositOffer = value;
             BankAccountInWork.BankId = _selectedDepositOffer.Bank.Id;
             BankAccountInWork.DepositOfferId =_selectedDepositOffer.Id;
@@ -65,8 +65,26 @@ public class OneBankAccountViewModel(KeeperDataModel dataModel, AccountRepositor
             BankAccountInWork.StartDate = DateTime.Today;
             var finish = _selectedDepositOffer.DepositTerm.AddTo(BankAccountInWork.StartDate);
             BankAccountInWork.FinishDate = _isCard ? finish.GetEndOfMonth() : finish;
+            RateStr = RateToString();
             NotifyOfPropertyChange();
+            NotifyOfPropertyChange(nameof(RateStr));
         }
+    }
+
+    public string RateStr { get; set; } = null!;
+
+    private string RateToString()
+    {
+        var startDate = BankAccountInWork.StartDate;
+        var currentRate = SelectedDepositOffer.GetCurrentRate(startDate, out string rateFormula);
+
+        return SelectedDepositOffer.RateType switch
+        {
+            RateType.Fixed => $"{currentRate}% (фиксированная)",
+            RateType.Linked => $"{currentRate}% ({rateFormula})",
+            RateType.Floating => $"{currentRate}% (плавающая)",
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
 
     public string ParentName { get; set; } = null!;
@@ -125,6 +143,8 @@ public class OneBankAccountViewModel(KeeperDataModel dataModel, AccountRepositor
             DepositOffers = dataModel.DepositOffers.Where(o => o.Bank.Name == SelectedBankName).ToList();
             _selectedDepositOffer = DepositOffers.First(o => o.Id == BankAccountInWork.DepositOfferId);
         }
+        
+        RateStr = RateToString();
     }
 
     protected override void OnViewLoaded(object view)
@@ -132,6 +152,19 @@ public class OneBankAccountViewModel(KeeperDataModel dataModel, AccountRepositor
         var cap = _isInAddMode ? "Добавить счет в банке" : "Изменить счет в банке";
         DisplayName = $"{cap} (id = {AccountItemInWork.Id})";
     }
+
+    //public string RateToString()
+    //{
+    //    var startDate = BankAccountInWork.StartDate;
+    //    DepoCondsModel? depoConds = SelectedDepositOffer.CondsMap
+
+    //    return SelectedDepositOffer.RateType switch
+    //    {
+    //        RateType.Fixed => $"{SelectedDepositOffer.RateValue}%",
+    //        RateType.Variable => $"от {SelectedDepositOffer.MinRateValue}% до {SelectedDepositOffer.MaxRateValue}%",
+    //        _ => throw new ArgumentOutOfRangeException()
+    //    };
+    //}
 
     public void BuildDepoName()
     {

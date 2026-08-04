@@ -241,17 +241,17 @@ public sealed class BankOffersViewModelTests
         Assert.AreEqual("Обновленный тестовый вклад", updatedInDb.Title, "Title should be updated in database");
         Assert.AreEqual(200, updatedInDb.MonthPaymentsMinimum, "MonthPaymentsMinimum should be updated in database");
 
-        var conds1 = updatedInDb.CondsMap[DateTime.Today.AddDays(-30)];
+        var conds1 = updatedInDb.CondsList.First(c => c.DateFrom == DateTime.Today.AddDays(-30));
         Assert.IsNotNull(conds1);
         Assert.IsFalse(conds1.IsFactDays);
         Assert.HasCount(3, conds1.RateLines);
         Assert.AreEqual(4.5m, conds1.RateLines[1].Rate);
 
-        var conds2 = updatedInDb.CondsMap[DateTime.Today.AddDays(-15)];
+        var conds2 = updatedInDb.CondsList.First(c => c.DateFrom == DateTime.Today.AddDays(-15));
         Assert.IsNotNull(conds2);
         Assert.HasCount(2, conds2.RateLines);
 
-        Assert.IsFalse(updatedInDb.CondsMap.ContainsKey(DateTime.Today));
+        Assert.IsFalse(updatedInDb.CondsList.Any(c => c.DateFrom == DateTime.Today));
 
         // Verify the updated offer is still selected
         Assert.AreEqual(addedOffer.Id, viewModel.SelectedDepositOffer.Id);
@@ -292,7 +292,7 @@ public sealed class BankOffersViewModelTests
                 oneBankOfferViewModel.ModelInWork.MonthPaymentsMinimum = 200;
 
                 // 2. Simulate editing conditions via RulesAndRatesViewModel
-                var conds1 = oneBankOfferViewModel.ModelInWork.CondsMap[DateTime.Today.AddDays(-30)];
+                var conds1 = oneBankOfferViewModel.ModelInWork.CondsList.First(c => c.DateFrom == DateTime.Today.AddDays(-30));
                 
                 // Simulate opening RulesAndRatesViewModel for first conditions
                 rulesAndRatesViewModel.Initialize(oneBankOfferViewModel.ModelInWork.Title, conds1, oneBankOfferViewModel.ModelInWork.RateType);
@@ -312,10 +312,10 @@ public sealed class BankOffersViewModelTests
 
                 // 3. Add new conditions for another date
                 var conds2 = DepositOfferTestHelper.CreateDepoCondsModel(DateTime.Today.AddDays(-15));
-                oneBankOfferViewModel.ModelInWork.CondsMap[DateTime.Today.AddDays(-15)] = conds2;
+                oneBankOfferViewModel.ModelInWork.CondsList.Add(conds2);
 
                 // 4. Remove existing conditions
-                oneBankOfferViewModel.ModelInWork.CondsMap.Remove(DateTime.Today);
+                oneBankOfferViewModel.ModelInWork.CondsList.RemoveAll(c => c.DateFrom == DateTime.Today);
 
                 oneBankOfferViewModel.IsCancelled = false;
             })
@@ -341,14 +341,14 @@ public sealed class BankOffersViewModelTests
         Assert.AreEqual("Обновленный тестовый вклад", updatedInDb.Title, "Title should be updated in database");
         Assert.AreEqual(200, updatedInDb.MonthPaymentsMinimum, "MonthPaymentsMinimum should be updated in database");
 
-        // Assert - Verify CondsMap structure
-        Assert.HasCount(2, updatedInDb.CondsMap, "Should have 2 conditions after edit");
-        Assert.IsTrue(updatedInDb.CondsMap.ContainsKey(DateTime.Today.AddDays(-30)), "Should contain first date");
-        Assert.IsTrue(updatedInDb.CondsMap.ContainsKey(DateTime.Today.AddDays(-15)), "Should contain new date");
-        Assert.IsFalse(updatedInDb.CondsMap.ContainsKey(DateTime.Today), "Should not contain removed date");
+        // Assert - Verify CondsList structure
+        Assert.HasCount(2, updatedInDb.CondsList, "Should have 2 conditions after edit");
+        Assert.IsTrue(updatedInDb.CondsList.Any(c => c.DateFrom == DateTime.Today.AddDays(-30)), "Should contain first date");
+        Assert.IsTrue(updatedInDb.CondsList.Any(c => c.DateFrom == DateTime.Today.AddDays(-15)), "Should contain new date");
+        Assert.IsFalse(updatedInDb.CondsList.Any(c => c.DateFrom == DateTime.Today), "Should not contain removed date");
 
         // Assert - Verify first conditions (edited through RulesAndRatesViewModel)
-        var conds1 = updatedInDb.CondsMap[DateTime.Today.AddDays(-30)];
+        var conds1 = updatedInDb.CondsList.First(c => c.DateFrom == DateTime.Today.AddDays(-30));
         Assert.IsNotNull(conds1, "First conditions should exist");
         Assert.IsFalse(conds1.IsFactDays, "IsFactDays should be toggled");
         Assert.HasCount(3, conds1.RateLines, "Should have 3 rate lines after adding one");
@@ -367,7 +367,7 @@ public sealed class BankOffersViewModelTests
         Assert.AreEqual(5m, conds1.RateLines[2].Rate, "Third line Rate");
 
         // Assert - Verify second conditions (newly added)
-        var conds2 = updatedInDb.CondsMap[DateTime.Today.AddDays(-15)];
+        var conds2 = updatedInDb.CondsList.First(c => c.DateFrom == DateTime.Today.AddDays(-15));
         Assert.IsNotNull(conds2, "Second conditions should exist");
         Assert.HasCount(2, conds2.RateLines, "New conditions should have 2 rate lines");
 

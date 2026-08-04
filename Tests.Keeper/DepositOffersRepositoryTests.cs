@@ -32,7 +32,7 @@ public sealed class DepositOffersRepositoryTests
 
         Assert.IsNotNull(addedOffer);
         Assert.AreEqual(offerModel.MonthPaymentsMinimum, addedOffer.MonthPaymentsMinimum);
-        Assert.HasCount(expected: offerModel.CondsMap.Count, addedOffer.CondsMap);
+        Assert.HasCount(expected: offerModel.CondsList.Count, addedOffer.CondsList);
     }
 
     [TestMethod]
@@ -54,16 +54,16 @@ public sealed class DepositOffersRepositoryTests
         Assert.IsNotNull(updatedOffer);
         Assert.AreEqual("Обновленный тестовый вклад", updatedOffer.Title);
         Assert.AreEqual(offerModel.MonthPaymentsMinimum + 100, updatedOffer.MonthPaymentsMinimum);
-        var conds1 = updatedOffer.CondsMap[DateTime.Today.AddDays(-30)];
+        var conds1 = updatedOffer.CondsList.First(c => c.DateFrom == DateTime.Today.AddDays(-30));
         Assert.IsNotNull(conds1);
         Assert.IsFalse(conds1.IsFactDays);
         Assert.HasCount(3, conds1.RateLines);
         Assert.AreEqual(4.5m, conds1.RateLines[1].Rate);
 
-        var conds2 = updatedOffer.CondsMap[DateTime.Today.AddDays(-15)];
+        var conds2 = updatedOffer.CondsList.First(c => c.DateFrom == DateTime.Today.AddDays(-15));
         Assert.IsNotNull(conds2);
         Assert.HasCount(2, conds2.RateLines);
 
-        Assert.IsFalse(updatedOffer.CondsMap.ContainsKey(DateTime.Today));
+        Assert.IsFalse(updatedOffer.CondsList.Any(c => c.DateFrom == DateTime.Today));
     }
 }

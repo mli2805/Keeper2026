@@ -14,11 +14,11 @@ public static class DepositOfferTestHelper
             MainCurrency = CurrencyCode.BYN,
             MonthPaymentsMinimum = 100,
             Comment = "Комментарий к тестовому вкладу",
-            CondsMap = []
+            CondsList = []
         };
 
-        model.CondsMap.Add(DateTime.Today.AddDays(-30), CreateDepoCondsModel(DateTime.Today.AddDays(-30)));
-        model.CondsMap.Add(DateTime.Today, CreateDepoCondsModel(DateTime.Today));
+        model.CondsList.Add(CreateDepoCondsModel(DateTime.Today.AddDays(-30)));
+        model.CondsList.Add(CreateDepoCondsModel(DateTime.Today));
         return model;
     }
 
@@ -27,14 +27,14 @@ public static class DepositOfferTestHelper
         model.Title = "Обновленный тестовый вклад";
         model.MonthPaymentsMinimum += 100;
 
-        var conds1 = model.CondsMap[DateTime.Today.AddDays(-30)];
+        var conds1 = model.CondsList.First(c => c.DateFrom == DateTime.Today.AddDays(-30));
         conds1.IsFactDays = !conds1.IsFactDays;
         var rateLine2 = conds1.RateLines[1];
         rateLine2.Rate += 0.5m;
         conds1.RateLines.Add(CreateDepositRateLine(DateTime.Today.AddDays(-30), 5000, 10000, 5));
         var conds2 = CreateDepoCondsModel(DateTime.Today.AddDays(-15));
-        model.CondsMap[DateTime.Today.AddDays(-15)] = conds2;
-        model.CondsMap.Remove(DateTime.Today);
+        model.CondsList.Add(conds2);
+        model.CondsList.RemoveAll(c => c.DateFrom == DateTime.Today);
 
         return model;
     }

@@ -67,7 +67,8 @@ public class DepositOfferModel : PropertyChangedBase
     // Conditions of offer could be changed (especially rates, initial sum while Title remains the same)
     // only for newly opened deposits
     // Conditions are applied from some date - key in dictionary
-    public Dictionary<DateTime, DepoCondsModel> CondsMap { get; set; } = new Dictionary<DateTime, DepoCondsModel>();
+    //public Dictionary<DateTime, DepoCondsModel> CondsMap { get; set; } = new Dictionary<DateTime, DepoCondsModel>();
+    public List<DepoCondsModel> CondsList { get; set; } = new List<DepoCondsModel>();
     public int MonthPaymentsMinimum { get; set; }
     public int MonthPaymentsMaximum { get; set; }
     public string Comment { get; set; } = string.Empty;
@@ -90,15 +91,20 @@ public class DepositOfferModel : PropertyChangedBase
             AddLimitInDays = AddLimitInDays,
             MainCurrency = MainCurrency,
             DepositTerm = DepositTerm.Clone(),
-            CondsMap = new Dictionary<DateTime, DepoCondsModel>(),
+            //CondsMap = new Dictionary<DateTime, DepoCondsModel>(),
+            CondsList = new List<DepoCondsModel>(),
             MonthPaymentsMinimum = MonthPaymentsMinimum,
             MonthPaymentsMaximum = MonthPaymentsMaximum,
             Comment = Comment,
             BackgroundColor = BackgroundColor,
         };
-        foreach (var pair in CondsMap)
+        //foreach (var pair in CondsMap)
+        //{
+        //    result.CondsMap.Add(pair.Key, pair.Value.DeepCopyXml()!);
+        //}
+        foreach (var cond in CondsList)
         {
-            result.CondsMap.Add(pair.Key, pair.Value.DeepCopyXml()!);
+            result.CondsList.Add(cond.DeepCopyXml()!);
         }
         return result;
     }

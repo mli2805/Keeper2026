@@ -40,7 +40,7 @@ public class DepositOffersRepository(IDbContextFactory<KeeperDbContext> factory)
         existingOfferEf.UpdateEf(offerModel);
 
         // Обновляем условия и ставки
-        var modelConditions = offerModel.CondsMap.Values.ToList();
+        var modelConditions = offerModel.CondsList.ToList();
         var modelConditionsIds = modelConditions.Where(c => c.Id > 0).Select(c => c.Id).ToList();
 
         // Удаляем условия, которых нет в модели

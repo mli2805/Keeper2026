@@ -29,6 +29,8 @@ public class OneBankOfferViewModel(KeeperDataModel keeperDataModel, IWindowManag
 
     public string SelectedDate { get; set; } = null!;
 
+    private IEnumerable<DepoCondsModel> OrderedConditions => ModelInWork.CondsList.OrderBy(c => c.DateFrom);
+
     public bool IsCancelled { get; set; }
 
     public void Initialize(DepositOfferModel model)
@@ -40,7 +42,7 @@ public class OneBankOfferViewModel(KeeperDataModel keeperDataModel, IWindowManag
         RateTypes = Enum.GetValues<RateType>().ToList();
         Durations = Enum.GetValues<Durations>().ToList();
         ModelInWork = model;
-        ConditionDates = ModelInWork.CondsMap.Keys.Select(d => d.ToString(_dateTemplate)).ToList();
+        ConditionDates = OrderedConditions.Select(c => c.DateFrom.ToString(_dateTemplate)).ToList();
         if (ConditionDates.Count > 0) SelectedDate = ConditionDates.Last();
     }
 
@@ -52,50 +54,39 @@ public class OneBankOfferViewModel(KeeperDataModel keeperDataModel, IWindowManag
     public async Task AddConditions()
     {
         var date = DateTime.Today;
-        while (ModelInWork.CondsMap.ContainsKey(date)) date = date.AddDays(1);
-
-        //var lastIdInDb = _keeperDataModel.GetDepoConditionsMaxId();
-        //var lastIdHere = ModelInWork.CondsMap.Any()
-        //    ? ModelInWork.CondsMap.Values.ToList().Max(c => c.Id)
-        //    : 0;
-        //var maxId = Math.Max(lastIdInDb, lastIdHere);
+        while (ModelInWork.CondsList.Any(c => c.DateFrom == date)) date = date.AddDays(1);
 
         var depoCondsModel = new DepoCondsModel()
         {
-            //DepositOfferId = ModelInWork.Id,
             DateFrom = date,
         };
         rulesAndRatesViewModel.Initialize(ModelInWork.Title, depoCondsModel, ModelInWork.RateType);
         await windowManager.ShowDialogAsync(rulesAndRatesViewModel);
-        ModelInWork.CondsMap.Add(depoCondsModel.DateFrom, depoCondsModel);
-        ConditionDates = ModelInWork.CondsMap.Keys.Select(d => d.ToString(_dateTemplate)).ToList();
+        ModelInWork.CondsList.Add(depoCondsModel);
+        ConditionDates = OrderedConditions.Select(c => c.DateFrom.ToString(_dateTemplate)).ToList();
+        SelectedDate = depoCondsModel.DateFrom.ToString(_dateTemplate);
         NotifyOfPropertyChange(nameof(ConditionDates));
+        NotifyOfPropertyChange(nameof(SelectedDate));
     }
-
-    //private int GetMaxDepoRateLineId()
-    //{
-    //    var lastInDb = _keeperDataModel.GetDepoRateLinesMaxId();
-    //    var lastIdHere = ModelInWork.CondsMap.Any()
-    //        ? ModelInWork.CondsMap.Values.ToList()
-    //            .SelectMany(c => c.RateLines).Max(r => r.Id)
-    //        : 0;
-    //    return Math.Max(lastInDb, lastIdHere);
-    //}
 
     public async Task EditConditions()
     {
         if (SelectedDate == null) return;
         var date = DateTime.ParseExact(SelectedDate, _dateTemplate, new DateTimeFormatInfo());
-        rulesAndRatesViewModel.Initialize(ModelInWork.Title, ModelInWork.CondsMap[date], ModelInWork.RateType);
+        var condition = ModelInWork.CondsList.First(c => c.DateFrom == date);
+        rulesAndRatesViewModel.Initialize(ModelInWork.Title, condition, ModelInWork.RateType);
         await windowManager.ShowDialogAsync(rulesAndRatesViewModel);
-        if (date == ModelInWork.CondsMap[date].DateFrom) return;
+        if (date == condition.DateFrom) return;
+        if (ModelInWork.CondsList.Any(c => c != condition && c.DateFrom == condition.DateFrom))
+        {
+            condition.DateFrom = date;
+            return;
+        }
 
-        var depoCondsModel = ModelInWork.CondsMap[date];
-        ModelInWork.CondsMap.Remove(date);
-        ModelInWork.CondsMap.Add(depoCondsModel.DateFrom, depoCondsModel);
-
-        ConditionDates = ModelInWork.CondsMap.Keys.Select(d => d.ToString(_dateTemplate)).ToList();
+        ConditionDates = OrderedConditions.Select(c => c.DateFrom.ToString(_dateTemplate)).ToList();
+        SelectedDate = condition.DateFrom.ToString(_dateTemplate);
         NotifyOfPropertyChange(nameof(ConditionDates));
+        NotifyOfPropertyChange(nameof(SelectedDate));
     }
 
     public void RemoveConditions()
@@ -103,15 +94,20 @@ public class OneBankOfferViewModel(KeeperDataModel keeperDataModel, IWindowManag
         if (SelectedDate == null) return;
         var date = DateTime.ParseExact(SelectedDate, _dateTemplate, new DateTimeFormatInfo());
 
-        ModelInWork.CondsMap.Remove(date);
+        var condition = ModelInWork.CondsList.FirstOrDefault(c => c.DateFrom == date);
+        if (condition == null) return;
 
-        ConditionDates = ModelInWork.CondsMap.Keys.Select(d => d.ToString(_dateTemplate)).ToList();
+        ModelInWork.CondsList.Remove(condition);
+
+        ConditionDates = OrderedConditions.Select(c => c.DateFrom.ToString(_dateTemplate)).ToList();
+        SelectedDate = ConditionDates.LastOrDefault()!;
         NotifyOfPropertyChange(nameof(ConditionDates));
+        NotifyOfPropertyChange(nameof(SelectedDate));
     }
 
     public async Task Save()
     {
-        if (ModelInWork.CondsMap.Count == 0)
+        if (ModelInWork.CondsList.Count == 0)
         {
             await AddConditions();
             return;

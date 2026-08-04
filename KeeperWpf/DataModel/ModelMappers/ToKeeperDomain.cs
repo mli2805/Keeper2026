@@ -28,10 +28,16 @@ public static class ToKeeperDomain
         var depositConditions = new List<DepositConditions>();
         foreach (var depositOffer in keeperDataModel.DepositOffers)
         {
-            foreach (var pair in depositOffer.CondsMap)
+            //foreach (var pair in depositOffer.CondsMap)
+            //{
+            //    depositRateLines.AddRange(pair.Value.RateLines);
+            //    depositConditions.Add(pair.Value.FromModel());
+            //}
+
+            foreach (var conds in depositOffer.CondsList)
             {
-                depositRateLines.AddRange(pair.Value.RateLines);
-                depositConditions.Add(pair.Value.FromModel());
+                depositRateLines.AddRange(conds.RateLines);
+                depositConditions.Add(conds.FromModel());
             }
             depositOffers.Add(depositOffer.FromModel());
         }

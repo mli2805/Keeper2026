@@ -12,9 +12,9 @@ public static class DepoRevenueInThisMonthCalculator
         GetRevenuesInThisMonth(this AccountItemModel depo, KeeperDataModel dataModel)
     {
         var depositOffer = dataModel.DepositOffers.First(o => o.Id == depo.BankAccount!.DepositOfferId);
-        var conditions = depositOffer.CondsMap
-            .OrderBy(k => k.Key)
-            .LastOrDefault(e => e.Key <= depo.BankAccount!.StartDate).Value;
+        var conditions = depositOffer.CondsList
+            .OrderBy(c => c.DateFrom)
+            .Last(c => c.DateFrom <= depo.BankAccount!.StartDate);
         var lastRevenueTran = dataModel.Transactions.LastOrDefault(t =>
             t.Value.MyAccount.Id == depo.Id && t.Value.Operation == OperationType.Доход).Value;
         var lastReceivedRevenueDate = lastRevenueTran?.Timestamp ?? depo.BankAccount!.StartDate;

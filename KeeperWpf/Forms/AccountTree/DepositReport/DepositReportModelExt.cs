@@ -64,7 +64,9 @@ public static class DepositReportModelExt
     private static decimal GetRevenueUptoDepoFinish
         (BankAccountModel bankAccount, DepositOfferModel depositOffer, DateTime lastReceivedRevenueDate, decimal currentAmount)
     {
-        var conditionses = depositOffer.CondsMap.OrderBy(k => k.Key).LastOrDefault(e => e.Key <= bankAccount.StartDate).Value;
+        var conditionses = depositOffer.CondsList
+            .OrderBy(c => c.DateFrom)
+            .Last(c => c.DateFrom <= bankAccount.StartDate);
 
         var rateLines =
             conditionses.RateLines.Where(l => l.AmountFrom <= currentAmount && l.AmountTo >= currentAmount).

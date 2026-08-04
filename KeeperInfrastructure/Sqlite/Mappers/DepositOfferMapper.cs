@@ -65,7 +65,7 @@ public static class DepositOfferMapper
                 : new DurationModel(depositOfferEf.DepositTermValue, depositOfferEf.DepositTermDuration),
             MonthPaymentsMinimum = depositOfferEf.MonthPaymentsMinimum,
             MonthPaymentsMaximum = depositOfferEf.MonthPaymentsMaximum,
-            CondsMap = depositOfferEf.Conditions.ToDictionary(c => c.DateFrom, c => c.ToModel()),
+            CondsList = depositOfferEf.Conditions.Select(c => c.ToModel()).OrderBy(c => c.DateFrom).ToList(),
             Comment = depositOfferEf.Comment
         };
     }
@@ -109,7 +109,7 @@ public static class DepositOfferMapper
             DepositTermDuration = depositOfferModel.DepositTerm.Scale,
             MonthPaymentsMinimum = depositOfferModel.MonthPaymentsMinimum,
             MonthPaymentsMaximum = depositOfferModel.MonthPaymentsMaximum,
-            Conditions = depositOfferModel.CondsMap.Values.Select(c => c.FromModel()).ToList(),
+            Conditions = depositOfferModel.CondsList.Select(c => c.FromModel()).ToList(),
             Comment = depositOfferModel.Comment
         };
     }

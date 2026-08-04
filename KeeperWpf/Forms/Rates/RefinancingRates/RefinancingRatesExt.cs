@@ -13,7 +13,7 @@ public static class RefinancingRatesExt
         {
             // русские буквы СР
             foreach (var conditions in 
-                     depositOfferModel.CondsMap.Values.Where(c=>c.RateFormula.Contains("СР")))
+                     depositOfferModel.CondsList.Where(c=>c.RateFormula.Contains("СР")))
             {
                 keeperDataModel.UpdateRateLinesInConditions(conditions);
             }
