@@ -167,6 +167,16 @@
             </Grid>
         </Button>
 
+        <Button Name="ShowToDoForm" Margin="0,0,5,0" Padding="0, 0, 0, 0" Background="White" 
+                BorderBrush="White" ToolTip="ToDo" Opacity="1">
+            <Image Source="../../Resources/mainmenu/list.png" Width="26" Height="26" />
+        </Button>
+        
+        <Button Name="ShowNotesForm" Margin="0,0,5,0" Padding="0, 0, 0, 0" Background="White" 
+                BorderBrush="White" ToolTip="Notes" Opacity="1">
+            <Image Source="../../Resources/mainmenu/sticky-notes.png" Width="26" Height="26" />
+        </Button>
+
         <Menu Margin="0,0,0,0" Background="White" BorderBrush="White">
             <MenuItem Background="White" BorderBrush="White">
                 <MenuItem.Header>

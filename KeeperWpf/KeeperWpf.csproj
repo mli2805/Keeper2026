@@ -31,12 +31,14 @@
 	  <None Remove="Resources\mainmenu\deposits.png" />
 	  <None Remove="Resources\mainmenu\exchange3.png" />
 	  <None Remove="Resources\mainmenu\gsk.png" />
+	  <None Remove="Resources\mainmenu\list.png" />
 	  <None Remove="Resources\mainmenu\loading.png" />
 	  <None Remove="Resources\mainmenu\month_analysis.png" />
 	  <None Remove="Resources\mainmenu\paycard.png" />
 	  <None Remove="Resources\mainmenu\salary1.png" />
 	  <None Remove="Resources\mainmenu\save.png" />
 	  <None Remove="Resources\mainmenu\settings.png" />
+	  <None Remove="Resources\mainmenu\sticky-notes.png" />
 	  <None Remove="Resources\mainmenu\stock.png" />
 	  <None Remove="Resources\mainmenu\transactions.png" />
 	  <None Remove="Resources\mainmenu\white-bell.png" />
@@ -131,6 +133,9 @@
 	  <Resource Include="Resources\mainmenu\gsk.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
+	  <Resource Include="Resources\mainmenu\list.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
 	  <Resource Include="Resources\mainmenu\red-remind.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
@@ -150,6 +155,9 @@
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Include="Resources\mainmenu\settings.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\mainmenu\sticky-notes.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Include="Resources\mainmenu\stock.png">

@@ -24,6 +24,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     //
     BankAccountMemoViewModel bankAccountMemoViewModel, CustomRemindersViewModel customReminderViewModel,
     LargeExpenseThresholdViewModel largeExpenseThresholdViewModel,
+    ToDoViewModel toDoViewModel, NotesViewModel notesViewModel,
     ButtonCollectionBuilderViewModel buttonCollectionBuilderViewModel, ToTxtSaver toTxtSaver)
     : PropertyChangedBase
 {
@@ -322,6 +323,16 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         customReminderViewModel.Initialize();
         await windowManager.ShowDialogAsync(customReminderViewModel);
         SetReminderIconPath();
+    }
+
+    public async Task ShowToDoForm()
+    {
+        await windowManager.ShowDialogAsync(toDoViewModel);
+    }
+
+    public async Task ShowNotesForm()
+    {
+        await windowManager.ShowDialogAsync(notesViewModel);
     }
 
     public async Task ShowLargeExpenseThreholdsForm()
