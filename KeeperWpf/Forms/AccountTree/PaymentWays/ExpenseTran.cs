@@ -41,7 +41,7 @@ public class ExpenseTran
 
     private string TagsToString(KeeperDataModel dataModel)
     {
-        if (Tags == null || Tags.Count == 0) return " ";
+        if (Tags.Count == 0) return " ";
 
 
         string result = "";

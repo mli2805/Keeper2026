@@ -115,13 +115,12 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
     public bool CanToggleTaskCompletion => SelectedTask != null;
     public string TaskCompletionButtonCaption => SelectedTask?.IsCompleted == true ? "Открыть задачу" : "Завершить задачу";
 
-    public void Initialize()
+    private void Initialize()
     {
-        dataModel.TodoTasks ??= [];
         RefreshTasks();
     }
 
-    override protected void OnViewLoaded(object view)
+    protected override void OnViewLoaded(object view)
     {
         base.OnViewLoaded(view);
         DisplayName = "ToDo";
@@ -131,7 +130,7 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
     private void RefreshTasks(int? selectedTaskId = null)
     {
         selectedTaskId ??= SelectedTask?.Id;
-        var tasks = dataModel.TodoTasks ?? [];
+        var tasks = dataModel.TodoTasks;
         var filtered = tasks.Where(t => ShowCompleted || !t.IsCompleted);
 
         if (!string.IsNullOrWhiteSpace(SearchText))

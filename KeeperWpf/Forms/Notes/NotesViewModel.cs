@@ -4,9 +4,9 @@ namespace KeeperWpf;
 
 
 [ExportViewModel]
-public class NotesViewModel(KeeperDataModel dataModel) : Screen
+public class NotesViewModel : Screen
 {
-    override protected void OnViewLoaded(object view)
+    protected override void OnViewLoaded(object view)
     {
         base.OnViewLoaded(view);
         DisplayName = "Notes";

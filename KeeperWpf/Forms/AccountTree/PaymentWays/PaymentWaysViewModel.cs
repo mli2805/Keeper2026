@@ -265,11 +265,12 @@ public class PaymentWaysViewModel : Screen
 
     private List<string> ShrinkReceipts(List<TransactionModel> trans)
     {
-        var singles = trans.Where(t => t.Receipt == 0).Select(t => new ExpenseTran(t)).ToList();
-        var groups = trans.Where(t => t.Receipt > 0).GroupBy(t => t.Receipt.ToString() + "_" + t.Timestamp.Date).ToList();
+        var singles = trans.Where(t => t.Receipt == 0)
+            .Select(t => new ExpenseTran(t)).ToList();
+        var groups = trans.Where(t => t.Receipt > 0)
+            .GroupBy(t => t.Receipt.ToString() + "_" + t.Timestamp.Date).ToList();
         foreach (var group in groups)
         {
-            if (group == null) continue; // just because of warning
             var tr = new ExpenseTran(group.AsEnumerable().First())
             {
                 Amount = group.Sum(t => t.Amount),
