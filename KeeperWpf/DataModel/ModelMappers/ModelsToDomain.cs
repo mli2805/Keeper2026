@@ -212,4 +212,29 @@ public static class ModelsToDomain
         };
     }
 
+    public static TodoTask FromModel(this TodoTaskModel model)
+    {
+        model.NormalizeCompletion(System.DateOnly.FromDateTime(System.DateTime.Now));
+
+        return new TodoTask()
+        {
+            Id = model.Id,
+            Title = model.Title,
+            CreatedAt = model.CreatedAt,
+            CompletedAt = model.CompletedAt,
+            Importance = model.Importance,
+        };
+    }
+
+    public static TodoSubtask FromModel(this TodoSubtaskModel model)
+    {
+        return new TodoSubtask()
+        {
+            Id = model.Id,
+            TodoTaskId = model.TodoTaskId,
+            Title = model.Title,
+            IsCompleted = model.IsCompleted,
+        };
+    }
+
 }

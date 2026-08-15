@@ -70,6 +70,10 @@ public static class ToKeeperDomain
             CarYearMileages = keeperDataModel.Cars
                         .SelectMany(c => c.YearsMileage)
                         .Select(y => y.FromModel()).ToList(),
+            TodoTasks = keeperDataModel.TodoTasks.Select(t => t.FromModel()).ToList(),
+            TodoSubtasks = keeperDataModel.TodoTasks
+                        .SelectMany(t => t.Subtasks)
+                        .Select(s => s.FromModel()).ToList(),
 
             CardBalanceMemos = keeperDataModel.CardBalanceMemoModels.Select(cbm => cbm.FromModel()).ToList(),
             BankAccountMemos = keeperDataModel.BankAccountMemoModels.Select(bam => bam.FromModel()).ToList(),

@@ -39,6 +39,7 @@ public class KeeperDataModel : PropertyChangedBase
 
     public List<DepositOfferModel> DepositOffers { get; set; } = null!;
     public List<CarModel> Cars { get; set; } = null!;
+    public List<TodoTaskModel> TodoTasks { get; set; } = null!;
     public List<FuellingModel> FuellingVms { get; set; } = null!;
 
     // старая, больше не используется формами

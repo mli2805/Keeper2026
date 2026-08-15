@@ -35,6 +35,9 @@ public class KeeperDomainModel
     public List<CarYearMileage> CarYearMileages { get; set; } = null!;
     public List<Fuelling> Fuellings { get; set; } = null!;
 
+    public List<TodoTask> TodoTasks { get; set; } = null!;
+    public List<TodoSubtask> TodoSubtasks { get; set; } = null!;
+
     public List<DepositOffer> DepositOffers { get; set; } = null!;
     public List<DepositRateLine> DepositRateLines { get; set; } = null!;
     public List<DepositConditions> DepositConditions { get; set; } = null!;

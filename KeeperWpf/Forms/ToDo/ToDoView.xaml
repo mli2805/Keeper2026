@@ -4,10 +4,139 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeeperWpf"
+        xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        d:DataContext="{d:DesignInstance local:ToDoViewModel}"
+        Height="650" Width="1300">
+    <DockPanel Margin="5">
+        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,5">
+            <Button DockPanel.Dock="Right" Content="Закрыть" Name="CloseView" Width="90" Height="24" Margin="5,0,0,0"/>
+            <Button DockPanel.Dock="Right" Content="Удалить" Name="DeleteTask" IsEnabled="{Binding CanDeleteTask}" Width="80" Height="24" Margin="5,0,0,0"/>
+            <Button DockPanel.Dock="Right" Content="Сохранить" Name="SaveTask" IsEnabled="{Binding CanSaveTask}" Width="90" Height="24" Margin="5,0,0,0"/>
+            <Button DockPanel.Dock="Right" Content="Добавить" Name="AddTask" Width="90" Height="24" Margin="5,0,0,0"/>
+            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="220" Height="24" Margin="0,0,10,0"/>
+                <TextBlock Text="Сортировка:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ComboBox ItemsSource="{Binding SortModes}" SelectedItem="{Binding SelectedSortMode}" Width="140" Height="24" Margin="0,0,10,0"/>
+                <CheckBox Content="Показывать завершенные" IsChecked="{Binding ShowCompleted}" VerticalAlignment="Center"/>
+            </StackPanel>
+        </DockPanel>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="230"/>
+            </Grid.RowDefinitions>
+
+            <DataGrid Grid.Row="0"
+                      ItemsSource="{Binding TodoTasks}"
+                      SelectedItem="{Binding SelectedTask, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      GridLinesVisibility="Horizontal"
+                      HorizontalGridLinesBrush="AliceBlue">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="Готово" Binding="{Binding IsCompleted}" Width="60"/>
+                    <DataGridTextColumn Header="Важность" Binding="{Binding Importance}" Width="80"/>
+                    <DataGridTemplateColumn Header="Задача" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                                                    <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Создана" Binding="{Binding CreatedAt, StringFormat='{}{0:d/MM/yyyy}'}" Width="90"/>
+                    <DataGridTextColumn Header="Закрыта" Binding="{Binding CompletedAt, StringFormat='{}{0:d/MM/yyyy}'}" Width="90"/>
+                    <DataGridTextColumn Header="Подзадачи" Binding="{Binding ProgressText}" Width="75"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
+
+            <Grid Grid.Row="2" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+
+                <GroupBox Grid.Column="0" Header="Задача" Padding="5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Название:" VerticalAlignment="Top" Margin="0,3,5,3"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedTask.Title, UpdateSourceTrigger=PropertyChanged}" MaxLength="1000" AcceptsReturn="True" TextWrapping="Wrap" Height="70" Margin="0,0,0,5"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Важность:" VerticalAlignment="Center" Margin="0,3,5,3"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding ImportanceLevels}" SelectedItem="{Binding SelectedTask.Importance}" Width="130" HorizontalAlignment="Left" Margin="0,0,0,5"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Готово:" VerticalAlignment="Center" Margin="0,3,5,3"/>
+                        <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding SelectedTask.IsCompleted}" VerticalAlignment="Center" Margin="0,0,0,5"
+                                  cal:Message.Attach="[Event Click] = [Action TaskCompletionChanged]"/>
+
+                        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                            <TextBlock Text="Создана: " FontWeight="Bold"/>
+                            <TextBlock Text="{Binding SelectedTask.CreatedAt, StringFormat='{}{0:d/MM/yyyy}'}" Margin="0,0,15,0"/>
+                            <TextBlock Text="Закрыта: " FontWeight="Bold"/>
+                            <TextBlock Text="{Binding SelectedTask.CompletedAt, StringFormat='{}{0:d/MM/yyyy}'}"/>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+
+                <DockPanel Grid.Column="2">
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,5">
+                        <Button DockPanel.Dock="Right" Content="Удалить подзадачу" Name="DeleteSubtask" IsEnabled="{Binding CanDeleteSubtask}" Width="120" Height="24" Margin="5,0,0,0"/>
+                        <Button DockPanel.Dock="Right" Content="↓" Name="MoveSubtaskDown" IsEnabled="{Binding CanMoveSubtaskDown}" Width="28" Height="24" Margin="5,0,0,0"/>
+                        <Button DockPanel.Dock="Right" Content="↑" Name="MoveSubtaskUp" IsEnabled="{Binding CanMoveSubtaskUp}" Width="28" Height="24" Margin="5,0,0,0"/>
+                        <Button DockPanel.Dock="Right" Content="Добавить подзадачу" Name="AddSubtask" IsEnabled="{Binding CanAddSubtask}" Width="130" Height="24"/>
+                        <TextBlock Text="Подзадачи" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </DockPanel>
+
+                    <DataGrid ItemsSource="{Binding Subtasks}"
+                          SelectedItem="{Binding SelectedSubtask, Mode=TwoWay}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserSortColumns="False"
+                          GridLinesVisibility="Horizontal"
+                          HorizontalGridLinesBrush="AliceBlue">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Готово" Width="60">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsCompleted, UpdateSourceTrigger=PropertyChanged}"
+                                              HorizontalAlignment="Center"
+                                              cal:Message.Attach="[Event Click] = [Action SubtaskCompletionChanged]"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Название" Binding="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                </DockPanel>
+            </Grid>
+        </Grid>
+    </DockPanel>
 </Window>

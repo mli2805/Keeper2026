@@ -28,6 +28,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     CustomRemindersRepository customRemindersRepository,
     LargeExpenseThresholdsRepository largeExpenseThresholdsRepository,
     ButtonCollectionsRepository buttonCollectionsRepository, SalaryChangesRepository salaryChangesRepository,
+    TodoTaskRepository todoTaskRepository,
     OfficialRatesViewModel officialRatesViewModel)
 {
     public async Task<bool> GetFullModelFromDb()
@@ -41,6 +42,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
         await GetRatesFromDb();
         await GetTransactionsFromDb();
         keeperDataModel.Cars = await carRepository.GetAllCarsWithMileages();
+        keeperDataModel.TodoTasks = await todoTaskRepository.GetAllTodoTasksWithSubtasks();
         keeperDataModel.DepositOffers = await depositOffersRepository.GetDepositOffersWithConditionsAndRates(keeperDataModel.AcMoDict);
         await GetTrustDataFromDb(keeperDataModel.AcMoDict);
         await GetOthersFromDb();

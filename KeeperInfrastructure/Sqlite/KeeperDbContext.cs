@@ -22,6 +22,9 @@ public class KeeperDbContext : DbContext
     public DbSet<CarEf> Cars { get; set; }
     public DbSet<CarYearMileageEf> CarYearMileages { get; set; }
 
+    public DbSet<TodoTaskEf> TodoTasks { get; set; }
+    public DbSet<TodoSubtaskEf> TodoSubtasks { get; set; }
+
     public DbSet<DepositOfferEf> DepositOffers { get; set; }
     public DbSet<DepositConditionsEf> DepositConditions { get; set; }
     public DbSet<DepositRateLineEf> DepositRateLines { get; set; }
@@ -47,6 +50,12 @@ public class KeeperDbContext : DbContext
             .HasMany(c => c.YearMileages)
             .WithOne(m => m.Car)
             .HasForeignKey(m => m.CarId);
+
+        modelBuilder.Entity<TodoTaskEf>()
+            .HasMany(t => t.Subtasks)
+            .WithOne(s => s.TodoTask)
+            .HasForeignKey(s => s.TodoTaskId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<DepositOfferEf>()
             .HasMany(o => o.Conditions)

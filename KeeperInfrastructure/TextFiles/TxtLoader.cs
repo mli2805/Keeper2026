@@ -36,6 +36,8 @@ public static class TxtLoader
             Fuellings = await ReadFileLines<Fuelling>(),
             Cars = await ReadFileLines<Car>(),
             CarYearMileages = await ReadFileLines<CarYearMileage>(),
+            TodoTasks = await ReadFileLines<TodoTask>(),
+            TodoSubtasks = await ReadFileLines<TodoSubtask>(),
 
             SalaryChanges = await ReadFileLines<SalaryChange>(),
             LargeExpenseThresholds = await ReadFileLines<LargeExpenseThreshold>(),
@@ -54,7 +56,8 @@ public static class TxtLoader
         if (filename == "")
             filename = typeof(T).Name + "s.txt";
 
-        if ((filename == "BankAccountMemos.txt" || filename == "CustomReminders.txt")
+        if ((filename == "BankAccountMemos.txt" || filename == "CustomReminders.txt" ||
+             filename == "TodoTasks.txt" || filename == "TodoSubtasks.txt")
             && !File.Exists(Path.Combine(_backupFolder, filename)))
         {
             // Этих файлов не было в Keeper2018, поэтому если их нет, то просто возвращаем пустой список
