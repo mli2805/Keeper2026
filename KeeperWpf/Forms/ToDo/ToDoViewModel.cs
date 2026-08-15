@@ -5,6 +5,8 @@ using KeeperModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace KeeperWpf;
@@ -15,6 +17,22 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
     public BindableCollection<TodoTaskModel> TodoTasks { get; set; } = [];
     public BindableCollection<TodoSubtaskModel> Subtasks { get; set; } = [];
 
+    private string? _cleanTaskSnapshot;
+    private Task _pendingSaveTask = Task.CompletedTask;
+
+    private bool _hasUnsavedChanges;
+    public bool HasUnsavedChanges
+    {
+        get => _hasUnsavedChanges;
+        private set
+        {
+            if (value == _hasUnsavedChanges) return;
+            _hasUnsavedChanges = value;
+            NotifyOfPropertyChange();
+            NotifyOfPropertyChange(nameof(CanSaveTask));
+        }
+    }
+
     private TodoTaskModel? _selectedTask;
     public TodoTaskModel? SelectedTask
     {
@@ -22,8 +40,10 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
         set
         {
             if (Equals(value, _selectedTask)) return;
+            SavePendingSelectionChanges();
             _selectedTask = value;
             RefreshSubtasks();
+            ResetDirtyState();
             NotifyOfPropertyChange();
             NotifyTaskCommandStates();
         }
@@ -86,12 +106,14 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
     public List<TodoTaskSortMode> SortModes { get; } = Enum.GetValues(typeof(TodoTaskSortMode)).OfType<TodoTaskSortMode>().ToList();
     public List<TodoImportance> ImportanceLevels { get; } = Enum.GetValues(typeof(TodoImportance)).OfType<TodoImportance>().ToList();
 
-    public bool CanSaveTask => SelectedTask != null;
+    public bool CanSaveTask => SelectedTask != null && HasUnsavedChanges;
     public bool CanDeleteTask => SelectedTask != null;
     public bool CanAddSubtask => SelectedTask != null;
     public bool CanDeleteSubtask => SelectedTask != null && SelectedSubtask != null;
     public bool CanMoveSubtaskUp => SelectedSubtask != null && Subtasks.IndexOf(SelectedSubtask) > 0;
     public bool CanMoveSubtaskDown => SelectedSubtask != null && Subtasks.IndexOf(SelectedSubtask) >= 0 && Subtasks.IndexOf(SelectedSubtask) < Subtasks.Count - 1;
+    public bool CanToggleTaskCompletion => SelectedTask != null;
+    public string TaskCompletionButtonCaption => SelectedTask?.IsCompleted == true ? "Открыть задачу" : "Завершить задачу";
 
     public void Initialize()
     {
@@ -151,6 +173,88 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
         NotifyOfPropertyChange(nameof(CanDeleteSubtask));
         NotifyOfPropertyChange(nameof(CanMoveSubtaskUp));
         NotifyOfPropertyChange(nameof(CanMoveSubtaskDown));
+        NotifyOfPropertyChange(nameof(CanToggleTaskCompletion));
+        NotifyOfPropertyChange(nameof(TaskCompletionButtonCaption));
+    }
+
+    public void MarkDirty()
+    {
+        if (SelectedTask == null) return;
+
+        HasUnsavedChanges = !CurrentTaskMatchesSnapshot();
+    }
+
+    private void ResetDirtyState()
+    {
+        _cleanTaskSnapshot = SelectedTask == null ? null : BuildTaskSnapshot(SelectedTask, Subtasks);
+        HasUnsavedChanges = false;
+    }
+
+    private bool CurrentTaskMatchesSnapshot()
+    {
+        return SelectedTask != null && _cleanTaskSnapshot == BuildTaskSnapshot(SelectedTask, Subtasks);
+    }
+
+    private static string BuildTaskSnapshot(TodoTaskModel task, IEnumerable<TodoSubtaskModel> subtasks)
+    {
+        var builder = new StringBuilder();
+        builder.Append(task.Id).Append('|')
+            .Append(task.Title).Append('|')
+            .Append(task.Importance).Append('|')
+            .Append(task.IsCompleted).Append('|')
+            .Append(task.CompletedAt?.ToString() ?? string.Empty);
+
+        foreach (var subtask in subtasks)
+        {
+            builder.Append("||")
+                .Append(subtask.Id).Append('|')
+                .Append(subtask.TodoTaskId).Append('|')
+                .Append(subtask.Ordinal).Append('|')
+                .Append(subtask.Title).Append('|')
+                .Append(subtask.IsCompleted);
+        }
+
+        return builder.ToString();
+    }
+
+    private void SavePendingSelectionChanges()
+    {
+        if (SelectedTask == null || !HasUnsavedChanges) return;
+
+        var taskToSave = CloneTask(SelectedTask, Subtasks);
+        _pendingSaveTask = SavePendingSelectionChangesAsync(taskToSave);
+    }
+
+    private async Task SavePendingSelectionChangesAsync(TodoTaskModel taskToSave)
+    {
+        await _pendingSaveTask;
+        await SaveTaskCore(taskToSave, taskToSave.Subtasks);
+    }
+
+    private static TodoTaskModel CloneTask(TodoTaskModel task, IEnumerable<TodoSubtaskModel> subtasks)
+    {
+        return new TodoTaskModel
+        {
+            Id = task.Id,
+            Title = task.Title,
+            CreatedAt = task.CreatedAt,
+            CompletedAt = task.CompletedAt,
+            Importance = task.Importance,
+            IsCompleted = task.IsCompleted,
+            Subtasks = subtasks.Select(CloneSubtask).ToList()
+        };
+    }
+
+    private static TodoSubtaskModel CloneSubtask(TodoSubtaskModel subtask)
+    {
+        return new TodoSubtaskModel
+        {
+            Id = subtask.Id,
+            TodoTaskId = subtask.TodoTaskId,
+            Ordinal = subtask.Ordinal,
+            Title = subtask.Title,
+            IsCompleted = subtask.IsCompleted
+        };
     }
 
     private void SyncSelectedTaskSubtasks()
@@ -184,18 +288,27 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
 
     public async Task SaveTask()
     {
-        if (SelectedTask == null) return;
+        if (SelectedTask == null || !HasUnsavedChanges) return;
 
-        foreach (var subtask in Subtasks)
+        var savedTask = await SaveTaskCore(SelectedTask, Subtasks);
+        RefreshTasks(savedTask.Id);
+        ResetDirtyState();
+    }
+
+    private async Task<TodoTaskModel> SaveTaskCore(TodoTaskModel task, IEnumerable<TodoSubtaskModel> subtasks)
+    {
+        var taskSubtasks = subtasks.ToList();
+
+        foreach (var subtask in taskSubtasks)
         {
-            subtask.TodoTaskId = SelectedTask.Id;
+            subtask.TodoTaskId = task.Id;
         }
-        SelectedTask.Subtasks = [.. Subtasks];
-        SelectedTask.NormalizeCompletion(DateOnly.FromDateTime(DateTime.Now));
+        task.Subtasks = [.. taskSubtasks];
+        task.NormalizeCompletion(DateOnly.FromDateTime(DateTime.Now));
 
-        var savedTask = SelectedTask.Id == 0
-            ? await todoTaskRepository.Add(SelectedTask)
-            : await todoTaskRepository.Update(SelectedTask);
+        var savedTask = task.Id == 0
+            ? await todoTaskRepository.Add(task)
+            : await todoTaskRepository.Update(task);
 
         var idx = dataModel.TodoTasks.FindIndex(t => t.Id == savedTask.Id);
         if (idx >= 0)
@@ -207,7 +320,7 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
             dataModel.TodoTasks.Add(savedTask);
         }
 
-        RefreshTasks(savedTask.Id);
+        return savedTask;
     }
 
     public async Task DeleteTask()
@@ -242,6 +355,7 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
         Subtasks.Add(subtask);
         SelectedSubtask = subtask;
         SyncSelectedTaskSubtasks();
+        MarkDirty();
     }
 
     public void DeleteSubtask()
@@ -251,6 +365,7 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
         Subtasks.Remove(SelectedSubtask);
         SelectedSubtask = Subtasks.FirstOrDefault();
         SyncSelectedTaskSubtasks();
+        MarkDirty();
     }
 
     public void MoveSubtaskUp()
@@ -263,6 +378,7 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
         Subtasks.Move(idx, idx - 1);
         SelectedSubtask = Subtasks[idx - 1];
         SyncSelectedTaskSubtasks();
+        MarkDirty();
     }
 
     public void MoveSubtaskDown()
@@ -275,6 +391,7 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
         Subtasks.Move(idx, idx + 1);
         SelectedSubtask = Subtasks[idx + 1];
         SyncSelectedTaskSubtasks();
+        MarkDirty();
     }
 
     public void SubtaskCompletionChanged()
@@ -282,24 +399,27 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
         if (SelectedTask == null) return;
 
         SyncSelectedTaskSubtasks();
+        MarkDirty();
     }
 
-    public void TaskCompletionChanged()
+    public void ToggleTaskCompletion()
     {
         if (SelectedTask == null) return;
 
+        SelectedTask.IsCompleted = !SelectedTask.IsCompleted;
         SelectedTask.NormalizeCompletion(DateOnly.FromDateTime(DateTime.Now));
         NotifyOfPropertyChange(nameof(SelectedTask));
+        NotifyOfPropertyChange(nameof(TaskCompletionButtonCaption));
         TodoTasks.Refresh();
+        MarkDirty();
     }
 
-    public async Task CloseView()
+    public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
     {
-        if (SelectedTask != null)
-        {
-            await SaveTask();
-        }
-        await TryCloseAsync();
+        await _pendingSaveTask;
+        await SaveTask();
+
+        return await base.CanCloseAsync(cancellationToken);
     }
 }
 

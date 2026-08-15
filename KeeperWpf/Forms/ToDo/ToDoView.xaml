@@ -9,9 +9,19 @@
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance local:ToDoViewModel}"
         Height="650" Width="1300">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <Style TargetType="DataGridRow">
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#B6E6FF"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#B6E6FF"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black"/>
+            </Style.Resources>
+        </Style>
+    </Window.Resources>
     <DockPanel Margin="5">
         <DockPanel DockPanel.Dock="Top" Margin="0,0,0,5">
-            <Button DockPanel.Dock="Right" Content="Закрыть" Name="CloseView" Width="90" Height="24" Margin="5,0,0,0"/>
             <Button DockPanel.Dock="Right" Content="Удалить" Name="DeleteTask" IsEnabled="{Binding CanDeleteTask}" 
                     Width="80" Height="24" Margin="5,0,0,0"/>
             <Button DockPanel.Dock="Right" Content="Сохранить" Name="SaveTask" IsEnabled="{Binding CanSaveTask}" 
@@ -41,10 +51,14 @@
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       IsReadOnly="True"
-                      GridLinesVisibility="Horizontal"
-                      HorizontalGridLinesBrush="AliceBlue">
+                      SelectionMode="Single"
+                      GridLinesVisibility="All"
+                      VerticalGridLinesBrush="LightGray"
+                      HorizontalGridLinesBrush="LightGray">
+                
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Header="Готово" Binding="{Binding IsCompleted}" Width="60"/>
+                    <DataGridTextColumn Header="Создана" Binding="{Binding CreatedAt, StringFormat='{}{0:d/MM/yyyy}'}" 
+                                        Width="90"/>
                     <DataGridTextColumn Header="Важность" Binding="{Binding Importance}" Width="80"/>
                     <DataGridTemplateColumn Header="Задача" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
@@ -63,7 +77,6 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Создана" Binding="{Binding CreatedAt, StringFormat='{}{0:d/MM/yyyy}'}" Width="90"/>
                     <DataGridTextColumn Header="Закрыта" Binding="{Binding CompletedAt, StringFormat='{}{0:d/MM/yyyy}'}" Width="90"/>
                     <DataGridTextColumn Header="Подзадачи" Binding="{Binding ProgressText}" Width="75"/>
                 </DataGrid.Columns>
@@ -93,25 +106,28 @@
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Название:" VerticalAlignment="Top" Margin="0,3,5,3"/>
                         <TextBox Grid.Row="0" Grid.Column="1" 
-                                 Text="{Binding SelectedTask.Title, UpdateSourceTrigger=PropertyChanged}" MaxLength="1000" 
-                                 AcceptsReturn="True" TextWrapping="Wrap" Height="70" Margin="0,0,0,5"/>
+                                 Text="{Binding SelectedTask.Title, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" 
+                                 MaxLength="1000" AcceptsReturn="True" TextWrapping="Wrap" Height="70" Margin="0,0,0,5"
+                                 cal:Message.Attach="[Event SourceUpdated] = [Action MarkDirty]"/>
 
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Важность:" VerticalAlignment="Center" Margin="0,3,5,3"/>
                         <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding ImportanceLevels}" 
-                                  SelectedItem="{Binding SelectedTask.Importance}" Width="130" HorizontalAlignment="Left"
-                                  Margin="0,0,0,5"/>
+                                  SelectedItem="{Binding SelectedTask.Importance, NotifyOnSourceUpdated=True}" Width="130" 
+                                  HorizontalAlignment="Left"  Margin="0,0,0,5"
+                                  cal:Message.Attach="[Event SourceUpdated] = [Action MarkDirty]"/>
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Готово:" VerticalAlignment="Center" Margin="0,3,5,3"/>
-                        <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding SelectedTask.IsCompleted}" 
-                                  VerticalAlignment="Center" Margin="0,0,0,5"
-                                  cal:Message.Attach="[Event Click] = [Action TaskCompletionChanged]"/>
-
-                        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
-                            <TextBlock Text="Создана: " FontWeight="Bold"/>
+                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Text="Создана: " FontWeight="Bold" Margin="5,0,0,0"/>
                             <TextBlock Text="{Binding SelectedTask.CreatedAt, StringFormat='{}{0:d/MM/yyyy}'}" Margin="0,0,15,0"/>
-                            <TextBlock Text="Закрыта: " FontWeight="Bold"/>
-                            <TextBlock Text="{Binding SelectedTask.CompletedAt, StringFormat='{}{0:d/MM/yyyy}'}"/>
+                            <TextBlock Text="Закрыта: " FontWeight="Bold" 
+                                       Visibility="{Binding SelectedTask.IsCompleted, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <TextBlock Text="{Binding SelectedTask.CompletedAt, StringFormat='{}{0:d/MM/yyyy}'}"
+                                       Visibility="{Binding SelectedTask.IsCompleted, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         </StackPanel>
+
+                        <Button Grid.Row="3" Grid.Column="1" Content="{Binding TaskCompletionButtonCaption}" 
+                                Name="ToggleTaskCompletion" IsEnabled="{Binding CanToggleTaskCompletion}"
+                                Width="130" Height="24" HorizontalAlignment="Left" Margin="0,10,0,0"/>
                     </Grid>
                 </GroupBox>
 
@@ -133,8 +149,9 @@
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           CanUserSortColumns="False"
+                          SelectionMode="Single"
                           GridLinesVisibility="Horizontal"
-                          HorizontalGridLinesBrush="AliceBlue">
+                          HorizontalGridLinesBrush="LightGray">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="Готово" Width="60">
                             <DataGridTemplateColumn.CellTemplate>
@@ -145,8 +162,19 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="Название" Binding="{Binding Title, UpdateSourceTrigger=PropertyChanged}" 
-                                            Width="*"/>
+                        <DataGridTemplateColumn Header="Название" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Title}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
+                                             cal:Message.Attach="[Event SourceUpdated] = [Action MarkDirty]"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
                 </DockPanel>
