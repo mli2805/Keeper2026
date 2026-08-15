@@ -12,14 +12,18 @@
     <DockPanel Margin="5">
         <DockPanel DockPanel.Dock="Top" Margin="0,0,0,5">
             <Button DockPanel.Dock="Right" Content="Закрыть" Name="CloseView" Width="90" Height="24" Margin="5,0,0,0"/>
-            <Button DockPanel.Dock="Right" Content="Удалить" Name="DeleteTask" IsEnabled="{Binding CanDeleteTask}" Width="80" Height="24" Margin="5,0,0,0"/>
-            <Button DockPanel.Dock="Right" Content="Сохранить" Name="SaveTask" IsEnabled="{Binding CanSaveTask}" Width="90" Height="24" Margin="5,0,0,0"/>
+            <Button DockPanel.Dock="Right" Content="Удалить" Name="DeleteTask" IsEnabled="{Binding CanDeleteTask}" 
+                    Width="80" Height="24" Margin="5,0,0,0"/>
+            <Button DockPanel.Dock="Right" Content="Сохранить" Name="SaveTask" IsEnabled="{Binding CanSaveTask}" 
+                    Width="90" Height="24" Margin="5,0,0,0"/>
             <Button DockPanel.Dock="Right" Content="Добавить" Name="AddTask" Width="90" Height="24" Margin="5,0,0,0"/>
             <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
                 <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="220" Height="24" Margin="0,0,10,0"/>
+                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                         Width="220" Height="24" Margin="0,0,10,0"/>
                 <TextBlock Text="Сортировка:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <ComboBox ItemsSource="{Binding SortModes}" SelectedItem="{Binding SelectedSortMode}" Width="140" Height="24" Margin="0,0,10,0"/>
+                <ComboBox ItemsSource="{Binding SortModes}" SelectedItem="{Binding SelectedSortMode}" 
+                          Width="140" Height="24" Margin="0,0,10,0"/>
                 <CheckBox Content="Показывать завершенные" IsChecked="{Binding ShowCompleted}" VerticalAlignment="Center"/>
             </StackPanel>
         </DockPanel>
@@ -88,13 +92,18 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Название:" VerticalAlignment="Top" Margin="0,3,5,3"/>
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedTask.Title, UpdateSourceTrigger=PropertyChanged}" MaxLength="1000" AcceptsReturn="True" TextWrapping="Wrap" Height="70" Margin="0,0,0,5"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" 
+                                 Text="{Binding SelectedTask.Title, UpdateSourceTrigger=PropertyChanged}" MaxLength="1000" 
+                                 AcceptsReturn="True" TextWrapping="Wrap" Height="70" Margin="0,0,0,5"/>
 
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Важность:" VerticalAlignment="Center" Margin="0,3,5,3"/>
-                        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding ImportanceLevels}" SelectedItem="{Binding SelectedTask.Importance}" Width="130" HorizontalAlignment="Left" Margin="0,0,0,5"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding ImportanceLevels}" 
+                                  SelectedItem="{Binding SelectedTask.Importance}" Width="130" HorizontalAlignment="Left"
+                                  Margin="0,0,0,5"/>
 
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Готово:" VerticalAlignment="Center" Margin="0,3,5,3"/>
-                        <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding SelectedTask.IsCompleted}" VerticalAlignment="Center" Margin="0,0,0,5"
+                        <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding SelectedTask.IsCompleted}" 
+                                  VerticalAlignment="Center" Margin="0,0,0,5"
                                   cal:Message.Attach="[Event Click] = [Action TaskCompletionChanged]"/>
 
                         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
@@ -108,10 +117,14 @@
 
                 <DockPanel Grid.Column="2">
                     <DockPanel DockPanel.Dock="Top" Margin="0,0,0,5">
-                        <Button DockPanel.Dock="Right" Content="Удалить подзадачу" Name="DeleteSubtask" IsEnabled="{Binding CanDeleteSubtask}" Width="120" Height="24" Margin="5,0,0,0"/>
-                        <Button DockPanel.Dock="Right" Content="↓" Name="MoveSubtaskDown" IsEnabled="{Binding CanMoveSubtaskDown}" Width="28" Height="24" Margin="5,0,0,0"/>
-                        <Button DockPanel.Dock="Right" Content="↑" Name="MoveSubtaskUp" IsEnabled="{Binding CanMoveSubtaskUp}" Width="28" Height="24" Margin="5,0,0,0"/>
-                        <Button DockPanel.Dock="Right" Content="Добавить подзадачу" Name="AddSubtask" IsEnabled="{Binding CanAddSubtask}" Width="130" Height="24"/>
+                        <Button DockPanel.Dock="Right" Content="Удалить подзадачу" Name="DeleteSubtask" 
+                                IsEnabled="{Binding CanDeleteSubtask}" Width="120" Height="24" Margin="5,0,0,0"/>
+                        <Button DockPanel.Dock="Right" Content="↓" Name="MoveSubtaskDown" 
+                                IsEnabled="{Binding CanMoveSubtaskDown}" Width="28" Height="24" Margin="5,0,0,0"/>
+                        <Button DockPanel.Dock="Right" Content="↑" Name="MoveSubtaskUp" 
+                                IsEnabled="{Binding CanMoveSubtaskUp}" Width="28" Height="24" Margin="5,0,0,0"/>
+                        <Button DockPanel.Dock="Right" Content="Добавить подзадачу" Name="AddSubtask" 
+                                IsEnabled="{Binding CanAddSubtask}" Width="130" Height="24"/>
                         <TextBlock Text="Подзадачи" FontWeight="Bold" VerticalAlignment="Center"/>
                     </DockPanel>
 
@@ -132,7 +145,8 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="Название" Binding="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        <DataGridTextColumn Header="Название" Binding="{Binding Title, UpdateSourceTrigger=PropertyChanged}" 
+                                            Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 </DockPanel>

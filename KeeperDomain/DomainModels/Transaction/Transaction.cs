@@ -35,7 +35,7 @@ public class Transaction : IDumpable, IParsable<Transaction>
                Counterparty + " ; " + Category + " ; " +
                Amount.ToString(_enUsCulture) + " ; " + Currency + " ; " +
                AmountInReturn.ToString(_enUsCulture) + " ; " + CurrencyInReturn + " ; " +
-               Tags + " ; " + Comment;
+               Tags + " ; " + Comment.Replace("\r\n", "|");
     }
 
     public Transaction FromString(string s)
@@ -57,7 +57,7 @@ public class Transaction : IDumpable, IParsable<Transaction>
             ? (CurrencyCode?)Enum.Parse(typeof(CurrencyCode), substrings[12])
             : null;
         Tags = substrings[13].Trim();
-        Comment = substrings[14].Trim();
+        Comment = substrings[14].Trim().Replace("|", "\r\n");
         return this;
     }
 }

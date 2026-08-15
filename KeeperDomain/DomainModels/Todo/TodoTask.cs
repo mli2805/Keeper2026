@@ -13,9 +13,10 @@ public class TodoTask : IDumpable, IParsable<TodoTask>
 
     public string Dump()
     {
-        var completedAt = CompletedAt.HasValue ? CompletedAt.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) : string.Empty;
-        return Id + " ; " + Title + " ; " + CreatedAt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + " ; "
-               + completedAt + " ; " + Importance;
+        var completedAt = CompletedAt.HasValue 
+            ? CompletedAt.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) : string.Empty;
+        return Id + " ; " + Title.Replace("\r\n", "|") + " ; " + 
+            CreatedAt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + " ; " + completedAt + " ; " + Importance;
     }
 
     public TodoTask FromString(string s)
@@ -23,7 +24,7 @@ public class TodoTask : IDumpable, IParsable<TodoTask>
         var substrings = s.Split(';');
 
         Id = int.Parse(substrings[0].Trim());
-        Title = substrings[1].Trim();
+        Title = substrings[1].Trim().Replace("|", "\r\n");
         CreatedAt = DateOnly.ParseExact(substrings[2].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
         var completedAt = substrings[3].Trim();

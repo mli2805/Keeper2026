@@ -72,7 +72,7 @@
         </GroupBox>
         <StackPanel Margin="5,0,5,5">
             <TextBlock Text="Комментарий" Margin="5" Width="100" HorizontalAlignment="Left"/>
-            <TextBox Margin="5" Text="{Binding ModelInWork.Comment}" 
+            <TextBox Margin="5" Text="{Binding ModelInWork.Comment}" AcceptsReturn="True" 
                      Height="80" TextWrapping="Wrap"/>
         </StackPanel>
         <GroupBox Header="Условия и ставки для депозитов открытых в период" Margin="5">

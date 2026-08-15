@@ -34,7 +34,7 @@ public class DepositOffer : IDumpable, IParsable<DepositOffer>
         return Id + " ; " + BankId + " ; " + Title + " ; " + IsNotRevocable + " ; " +
                RateType + " ; " + IsAddLimited + " ; " + AddLimitInDays + " ; " +
                MainCurrency + " ; " + DepositTerm.Dump() + " ; " + 
-               MonthPaymentsMinimum + " ; " + MonthPaymentsMaximum + " ; " + Comment;
+               MonthPaymentsMinimum + " ; " + MonthPaymentsMaximum + " ; " + Comment.Replace("\r\n", "|");
     }
 
     public DepositOffer FromString(string s)
@@ -51,12 +51,7 @@ public class DepositOffer : IDumpable, IParsable<DepositOffer>
         DepositTerm = new Duration().FromString(substrings[8].Trim());
         MonthPaymentsMinimum = int.Parse(substrings[9]);
         MonthPaymentsMaximum = int.Parse(substrings[10]);
-        Comment = substrings[11].Trim();
+        Comment = substrings[11].Trim().Replace("|", "\r\n");
         return this;
-    }
-
-    private Duration DurationFromStrings(string a, string b, string c)
-    {
-        return Convert.ToBoolean(a) ? new Duration() : new Duration(int.Parse(b), (Durations)Enum.Parse(typeof(Durations), c));
     }
 }

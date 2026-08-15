@@ -47,7 +47,7 @@ public class Account : IDumpable, IParsable<Account>
         AssociatedTagId = int.Parse(substrings[9]);
         ShortName = substrings[10].Trim();
         ButtonName = substrings[11].Trim();
-        Comment = substrings[12].Trim();
+        Comment = substrings[12].Trim().Replace("|", "\r\n");
         return this;
     }
 }

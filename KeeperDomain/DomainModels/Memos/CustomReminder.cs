@@ -12,7 +12,8 @@ public class CustomReminder : IDumpable, IParsable<CustomReminder>
 
     public string Dump()
     {
-        return Id + " ; " + Enabled + " ; " + TriggerDate.ToString("dd/MM/yyyy HH:mm") + " ; " + Every.Dump(false) + " ; " + Memo;
+        return Id + " ; " + Enabled + " ; " + TriggerDate.ToString("dd/MM/yyyy HH:mm") + " ; " + 
+            Every.Dump(false) + " ; " + Memo.Replace("\r\n", "|");
     }
 
     public CustomReminder FromString(string s)
@@ -22,7 +23,7 @@ public class CustomReminder : IDumpable, IParsable<CustomReminder>
         Enabled = bool.Parse(substrings[1]);
         TriggerDate = DateTime.ParseExact(substrings[2].Trim(), "dd/MM/yyyy HH:mm", null);
         Every = new Duration().FromString(substrings[3].Trim());
-        Memo = substrings[4].Trim();
+        Memo = substrings[4].Trim().Replace("|", "\r\n");
         return this;
     }
 }

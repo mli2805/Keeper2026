@@ -13,8 +13,9 @@ public static class ColoredLineFactory
     {
         var amount = isInReturn ? tran.AmountInReturn : tran.Amount;
         var currency = isInReturn ? tran.CurrencyInReturn : tran.Currency;
-        var shortLine = $@"{tran.Timestamp.Date.ToShortDateString()}  {dataModel.AmountInUsdString(tran.Timestamp, currency!.Value, amount * sign)}";
-        return new ListLine($"  {shortLine}   {GetPp(tran)} {tran.Comment}", GetColor(tran, sign))
+        var shortLine = $@"{tran.Timestamp.Date.ToShortDateString()}  {
+            dataModel.AmountInUsdString(tran.Timestamp, currency!.Value, amount * sign)}";
+        return new ListLine($"  {shortLine}   {GetPp(tran)} {tran.Comment.Replace("\r\n", " ")}", GetColor(tran, sign))
         {
             TooltipLines = dataModel.BuildTooltip(tran)
         };
@@ -31,8 +32,9 @@ public static class ColoredLineFactory
     {
         var amount = isInReturn ? tran.AmountInReturn : tran.Amount;
         var currency = isInReturn ? tran.CurrencyInReturn : tran.Currency;
-        var shortLine = $"{tran.Timestamp.Date.ToShortDateString()}  {dataModel.AmountInUsdString(tran.Timestamp, currency!.Value, amount * sign, out inUsd)}";
-        return new ListLine($"  {shortLine}   {tran.Comment}", GetColor(tran, sign))
+        var shortLine = $"{tran.Timestamp.Date.ToShortDateString()}  {
+            dataModel.AmountInUsdString(tran.Timestamp, currency!.Value, amount * sign, out inUsd)}";
+        return new ListLine($"  {shortLine}   {tran.Comment.Replace("\r\n", " ")}", GetColor(tran, sign))
         {
             TooltipLines = dataModel.BuildTooltip(tran)
         };
@@ -43,7 +45,7 @@ public static class ColoredLineFactory
         var minus = $"{dataModel.AmountInUsdString(tran.Timestamp, tran.Currency, tran.Amount * -1)}";
         var plus = $"{dataModel.AmountInUsdString(tran.Timestamp, tran.CurrencyInReturn!.Value, tran.AmountInReturn)}";
         var shortLine = $"{tran.Timestamp.Date.ToShortDateString()}  {minus} -> {plus}";
-        return new ListLine($"  {shortLine}   {tran.Comment}", Brushes.Black)
+        return new ListLine($"  {shortLine}   {tran.Comment.Replace("\r\n", " ")}", Brushes.Black)
         {
             TooltipLines = dataModel.BuildTooltip(tran)
         };

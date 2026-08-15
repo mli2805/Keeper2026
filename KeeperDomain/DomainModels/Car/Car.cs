@@ -26,7 +26,7 @@ public class Car : IDumpable, IParsable<Car>
         return Id + " ; " + CarAccountId + " ; " + Title + " ; " + IssueYear + " ; " + Vin + " ; " + StateRegNumber + " ; " 
                + PurchaseDate.ToString("dd/MM/yyyy") + " ; " + PurchaseMileage + " ; "
                + SaleDate.ToString("dd/MM/yyyy") + " ; " + SaleMileage + " ; " + SupposedSalePrice + " ; "
-               + Comment;
+               + Comment.Replace("\r\n", "|");
     }
 
     public Car FromString(string s)
@@ -46,7 +46,7 @@ public class Car : IDumpable, IParsable<Car>
         SaleMileage = int.Parse(substrings[9].Trim());
 
         SupposedSalePrice = int.Parse(substrings[10].Trim());
-        Comment = substrings[11].Trim();
+        Comment = substrings[11].Trim().Replace("|", "\r\n");
         return this;
     }
 }

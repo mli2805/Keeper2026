@@ -15,7 +15,8 @@ public class TrustAccount : IDumpable, IParsable<TrustAccount>
 
     public string Dump()
     {
-        return Id + " ; " + Title + " ; " + StockMarket + " ; " + Number + " ; " + Currency + " ; " + AccountId + " ; " + Comment;
+        return Id + " ; " + Title + " ; " + StockMarket + " ; " + Number + " ; " + 
+            Currency + " ; " + AccountId + " ; " + Comment;
     }
 
     public TrustAccount FromString(string s)

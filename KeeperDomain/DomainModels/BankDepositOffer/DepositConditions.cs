@@ -41,7 +41,7 @@ public class DepositConditions : IDumpable, IParsable<DepositConditions>
                EveryLastDayOfMonth + " ; " + EveryNDays + " ; " + NDays + " ; " + 
                IsCapitalized + " ; " + 
                HasAdditionalPercent + " ; " + AdditionalPercent.ToString(new CultureInfo("en-US")) + " ; " + 
-               Comment;
+               Comment.Replace("\r\n", "|");
     }
 
     public DepositConditions FromString(string s)
@@ -64,7 +64,7 @@ public class DepositConditions : IDumpable, IParsable<DepositConditions>
         HasAdditionalPercent = bool.Parse(substrings[11]);
         AdditionalPercent = double.Parse(substrings[12], CultureInfo.InvariantCulture);
 
-        Comment = substrings[13].Trim();
+        Comment = substrings[13].Trim().Replace("|", "\r\n");
         return this;
     }
 }
