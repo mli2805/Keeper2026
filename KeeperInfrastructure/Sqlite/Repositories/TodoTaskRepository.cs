@@ -54,7 +54,9 @@ public class TodoTaskRepository(IDbContextFactory<KeeperDbContext> factory)
 
         foreach (var subtask in model.Subtasks)
         {
-            var subtaskEf = entity.Subtasks.FirstOrDefault(s => s.Id == subtask.Id);
+            var subtaskEf = subtask.Id == 0
+                ? null
+                : entity.Subtasks.FirstOrDefault(s => s.Id == subtask.Id);
             if (subtaskEf == null)
             {
                 subtaskEf = subtask.ToEf();

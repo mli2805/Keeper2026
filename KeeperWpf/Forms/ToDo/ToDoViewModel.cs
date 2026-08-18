@@ -18,6 +18,7 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
     public BindableCollection<TodoSubtaskModel> Subtasks { get; set; } = [];
 
     private string? _cleanTaskSnapshot;
+    private TodoTaskModel? _cleanTaskModel;
     private Task _pendingSaveTask = Task.CompletedTask;
 
     private bool _hasUnsavedChanges;
@@ -30,6 +31,7 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
             _hasUnsavedChanges = value;
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(nameof(CanSaveTask));
+            NotifyOfPropertyChange(nameof(CanCancelTask));
         }
     }
 
@@ -90,23 +92,10 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
         }
     }
 
-    private TodoTaskSortMode _selectedSortMode = TodoTaskSortMode.CreatedAt;
-    public TodoTaskSortMode SelectedSortMode
-    {
-        get => _selectedSortMode;
-        set
-        {
-            if (value == _selectedSortMode) return;
-            _selectedSortMode = value;
-            NotifyOfPropertyChange();
-            RefreshTasks();
-        }
-    }
-
-    public List<TodoTaskSortMode> SortModes { get; } = Enum.GetValues(typeof(TodoTaskSortMode)).OfType<TodoTaskSortMode>().ToList();
     public List<TodoImportance> ImportanceLevels { get; } = Enum.GetValues(typeof(TodoImportance)).OfType<TodoImportance>().ToList();
 
     public bool CanSaveTask => SelectedTask != null && HasUnsavedChanges;
+    public bool CanCancelTask => SelectedTask != null && HasUnsavedChanges;
     public bool CanDeleteTask => SelectedTask != null;
     public bool CanAddSubtask => SelectedTask != null;
     public bool CanDeleteSubtask => SelectedTask != null && SelectedSubtask != null;
@@ -138,14 +127,11 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
             filtered = filtered.Where(t => t.SearchText.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase));
         }
 
-        filtered = SelectedSortMode switch
-        {
-            TodoTaskSortMode.CompletedAt => filtered.OrderBy(t => t.IsCompleted).ThenBy(t => t.CompletedAt ?? DateOnly.MaxValue).ThenBy(t => t.Title),
-            TodoTaskSortMode.Importance => filtered.OrderBy(t => t.IsCompleted).ThenByDescending(t => t.Importance).ThenBy(t => t.Title),
-            TodoTaskSortMode.Title => filtered.OrderBy(t => t.IsCompleted).ThenBy(t => t.Title),
-            TodoTaskSortMode.CompletionStatus => filtered.OrderBy(t => t.IsCompleted).ThenByDescending(t => t.Importance).ThenBy(t => t.Title),
-            _ => filtered.OrderBy(t => t.IsCompleted).ThenByDescending(t => t.CreatedAt).ThenByDescending(t => t.Importance).ThenBy(t => t.Title)
-        };
+        filtered = filtered
+            .OrderBy(t => t.IsCompleted)
+            .ThenByDescending(t => t.Importance)
+            .ThenByDescending(t => t.CreatedAt)
+            .ThenBy(t => t.Title);
 
         TodoTasks.Clear();
         TodoTasks.AddRange(filtered);
@@ -167,6 +153,7 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
     private void NotifyTaskCommandStates()
     {
         NotifyOfPropertyChange(nameof(CanSaveTask));
+        NotifyOfPropertyChange(nameof(CanCancelTask));
         NotifyOfPropertyChange(nameof(CanDeleteTask));
         NotifyOfPropertyChange(nameof(CanAddSubtask));
         NotifyOfPropertyChange(nameof(CanDeleteSubtask));
@@ -181,11 +168,13 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
         if (SelectedTask == null) return;
 
         HasUnsavedChanges = !CurrentTaskMatchesSnapshot();
+        TodoTasks.Refresh();
     }
 
     private void ResetDirtyState()
     {
         _cleanTaskSnapshot = SelectedTask == null ? null : BuildTaskSnapshot(SelectedTask, Subtasks);
+        _cleanTaskModel = SelectedTask == null ? null : CloneTask(SelectedTask, Subtasks);
         HasUnsavedChanges = false;
     }
 
@@ -227,7 +216,12 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
     private async Task SavePendingSelectionChangesAsync(TodoTaskModel taskToSave)
     {
         await _pendingSaveTask;
-        await SaveTaskCore(taskToSave, taskToSave.Subtasks);
+        var savedTask = await SaveTaskCore(taskToSave, taskToSave.Subtasks);
+        await Execute.OnUIThreadAsync(() =>
+        {
+            RefreshTasks(savedTask.Id);
+            return Task.CompletedTask;
+        });
     }
 
     private static TodoTaskModel CloneTask(TodoTaskModel task, IEnumerable<TodoSubtaskModel> subtasks)
@@ -291,6 +285,22 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
 
         var savedTask = await SaveTaskCore(SelectedTask, Subtasks);
         RefreshTasks(savedTask.Id);
+        ResetDirtyState();
+    }
+
+    public void CancelTask()
+    {
+        if (SelectedTask == null || !HasUnsavedChanges || _cleanTaskModel == null) return;
+
+        var taskToRestore = CloneTask(_cleanTaskModel, _cleanTaskModel.Subtasks);
+        var idx = dataModel.TodoTasks.FindIndex(t => t.Id == taskToRestore.Id);
+        if (idx >= 0)
+        {
+            dataModel.TodoTasks[idx] = taskToRestore;
+        }
+
+        HasUnsavedChanges = false;
+        RefreshTasks(taskToRestore.Id);
         ResetDirtyState();
     }
 
@@ -422,11 +432,3 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
     }
 }
 
-public enum TodoTaskSortMode
-{
-    CreatedAt,
-    CompletedAt,
-    Importance,
-    Title,
-    CompletionStatus
-}

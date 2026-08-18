@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="TxtFiles\" />
+    <Folder Include="TxtFiles\" />
   </ItemGroup>
 
 </Project>

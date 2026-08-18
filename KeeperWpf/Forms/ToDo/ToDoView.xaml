@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance local:ToDoViewModel}"
-        Height="650" Width="1300">
+        Height="850" Width="1300">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <Style TargetType="DataGridRow">
@@ -22,21 +22,18 @@
     </Window.Resources>
     <DockPanel Margin="5">
         <DockPanel DockPanel.Dock="Top" Margin="0,0,0,5">
-            <Button DockPanel.Dock="Right" Content="Удалить" Name="DeleteTask" IsEnabled="{Binding CanDeleteTask}" 
-                    Width="80" Height="24" Margin="5,0,0,0"/>
-            <Button DockPanel.Dock="Right" Content="Сохранить" Name="SaveTask" IsEnabled="{Binding CanSaveTask}" 
-                    Width="90" Height="24" Margin="5,0,0,0"/>
-            <Button DockPanel.Dock="Right" Content="Добавить" Name="AddTask" Width="90" Height="24" Margin="5,0,0,0"/>
             <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
                 <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="0,0,5,0"/>
                 <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
                          Width="220" Height="24" Margin="0,0,10,0"/>
-                <TextBlock Text="Сортировка:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <ComboBox ItemsSource="{Binding SortModes}" SelectedItem="{Binding SelectedSortMode}" 
-                          Width="140" Height="24" Margin="0,0,10,0"/>
                 <CheckBox Content="Показывать завершенные" IsChecked="{Binding ShowCompleted}" VerticalAlignment="Center"/>
             </StackPanel>
         </DockPanel>
+
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,5,0,0">
+            <Button Content="Сохранить" Name="SaveTask" IsEnabled="{Binding CanSaveTask}" Width="90" Height="24"/>
+            <Button Content="Отмена" Name="CancelTask" IsEnabled="{Binding CanCancelTask}" Width="90" Height="24" Margin="5,0,0,0"/>
+        </StackPanel>
 
         <Grid>
             <Grid.RowDefinitions>
@@ -45,7 +42,8 @@
                 <RowDefinition Height="230"/>
             </Grid.RowDefinitions>
 
-            <DataGrid Grid.Row="0"
+            <DataGrid Name="TodoTasksGrid"
+                      Grid.Row="0"
                       ItemsSource="{Binding TodoTasks}"
                       SelectedItem="{Binding SelectedTask, Mode=TwoWay}"
                       AutoGenerateColumns="False"
@@ -54,7 +52,16 @@
                       SelectionMode="Single"
                       GridLinesVisibility="All"
                       VerticalGridLinesBrush="LightGray"
-                      HorizontalGridLinesBrush="LightGray">
+                      HorizontalGridLinesBrush="LightGray"
+                      PreviewMouseRightButtonDown="TodoTasksGrid_PreviewMouseRightButtonDown">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Добавить" cal:Message.Attach="[Event Click] = [Action AddTask]"
+                                  BorderBrush="{x:Null}" Background="White"/>
+                        <MenuItem Header="Удалить" cal:Message.Attach="[Event Click] = [Action DeleteTask]"
+                                  IsEnabled="{Binding CanDeleteTask}" BorderBrush="{x:Null}" Background="White"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
                 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Создана" Binding="{Binding CreatedAt, StringFormat='{}{0:d/MM/yyyy}'}" 
@@ -63,17 +70,38 @@
                     <DataGridTemplateColumn Header="Задача" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Title}">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsCompleted}" Value="True">
-                                                    <Setter Property="TextDecorations" Value="Strikethrough"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                                                        <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <ItemsControl ItemsSource="{Binding Subtasks}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock TextWrapping="Wrap">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                                                                    <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                    <Run Text=" - "/>
+                                                    <Run Text="{Binding Title}"/>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -165,7 +193,17 @@
                         <DataGridTemplateColumn Header="Название" Width="*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Title}"/>
+                                    <TextBlock Text="{Binding Title}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                                                        <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>

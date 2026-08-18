@@ -11,6 +11,7 @@ public static class DepositOfferTestHelper
         {
             Bank = acMoDict.Values.First(a => a.Name == "БАПБ"),
             Title = "Тестовый вклад",
+            DepositTerm = new DurationModel { IsPerpetual = true },
             MainCurrency = CurrencyCode.BYN,
             MonthPaymentsMinimum = 100,
             Comment = "Комментарий к тестовому вкладу",
