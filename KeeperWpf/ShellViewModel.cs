@@ -29,8 +29,11 @@ public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeper
         var path = assembly.Location;
 
         DateTime buildDate = File.GetLastWriteTime(path);
+        var commit = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+            .InformationalVersion.Split('+').LastOrDefault();
+        commit = commit is { Length: >= 6 } ? commit[..6] : "unknown";
 
-        DisplayName = $"Keeper built {buildDate:yyyy.MM.dd}";
+        DisplayName = $"Keeper built {buildDate:yyyy.MM.dd} from commit {commit}";
         var success = await LoadAccountsTree();
         if (!success)
         {
