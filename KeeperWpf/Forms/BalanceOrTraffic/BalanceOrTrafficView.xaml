@@ -6,7 +6,6 @@
              xmlns:keeperWpf="clr-namespace:KeeperWpf"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="400" 
              cal:Bind.ModelWithoutContext="{Binding .}"
              d:DataContext="{d:DesignInstance keeperWpf:BalanceOrTrafficViewModel}">
     <UserControl.Resources>
@@ -34,11 +33,11 @@
                                         <ListView.View>
                                             <GridView ColumnHeaderContainerStyle="{StaticResource MyHeaderStyle}">
                                                 <GridViewColumn DisplayMemberBinding="{Binding Label}" Width="100"/>
-                                                <GridViewColumn DisplayMemberBinding="{Binding Value}">
+                                                <GridViewColumn>
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <TextBlock Text="{Binding }"  
-                                                                         Width="200" TextWrapping="Wrap"/>
+                                                            <TextBlock Text="{Binding Value}"
+                                                                         MaxWidth="400" TextWrapping="Wrap"/>
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
