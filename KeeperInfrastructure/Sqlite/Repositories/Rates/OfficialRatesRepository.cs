@@ -40,6 +40,26 @@ public class OfficialRatesRepository(IDbContextFactory<KeeperDbContext> factory)
         await keeperDbContext.SaveChangesAsync();
     }
 
+    public async Task Fix()
+    {
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
+        var from = new DateTime(2026, 2, 18);
+        var rates = await keeperDbContext.OfficialRates
+            .Where(r => r.Date >= from && (r.RubRate > 1 || r.CnyRate > 1))
+            .ToListAsync();
+
+        foreach (var rate in rates)
+        {
+            if (rate.RubRate > 1)
+                rate.RubRate /= 100;
+
+            if (rate.CnyRate > 1)
+                rate.CnyRate /= 10;
+        }
+
+        await keeperDbContext.SaveChangesAsync();
+    }
+
     public async Task DeleteRate(int rateId)
     {
         await using var keeperDbContext = await factory.CreateDbContextAsync();
