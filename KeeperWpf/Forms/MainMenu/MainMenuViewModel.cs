@@ -15,7 +15,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     BalancesAndSaldosViewModel balancesAndSaldosViewModel, 
     DepoCurrResultViewModel depoCurrResultViewModel,
     //
-    GskViewModel gskViewModel, HouseholdBillsViewModel householdBillsViewModel, CarsViewModel carsViewModel,
+    GskViewModel gskViewModel, CarsViewModel carsViewModel,
     OpenDepositsViewModel openDepositsViewModel, CardsAndAccountsViewModel cardsAndAccountsViewModel,
     // trust:
     InvestmentAssetsViewModel investmentAssetsViewModel, AssetRatesViewModel assetRatesViewModel,
@@ -255,8 +255,9 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
 
     public async Task ShowHouseholdBillsForm()
     {
-        householdBillsViewModel.Initialize();
-        await windowManager.ShowDialogAsync(householdBillsViewModel);
+        var vm = IoC.Get<HouseholdBillsViewModel>();
+        vm.Initialize();
+        await windowManager.ShowDialogAsync(vm);
     }
 
     public async Task ShowCarForm()

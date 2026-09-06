@@ -4,9 +4,111 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeeperWpf"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        >
-    <Grid>
-        
+        d:DataContext="{d:DesignInstance local:HouseholdBillsViewModel}"
+        WindowState="Maximized">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="PreviewKeyDown">
+            <cal:ActionMessage MethodName="ToggleView">
+                <cal:Parameter Value="$eventArgs" />
+            </cal:ActionMessage>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid Margin="8">
+        <Grid Visibility="{Binding TableVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <DataGrid Grid.Row="0"
+                      ItemsSource="{Binding Rows}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      CanUserAddRows="False"
+                      HeadersVisibility="Column"
+                      SelectionMode="Single"
+                      GridLinesVisibility="Horizontal">
+                <i:Interaction.Behaviors>
+                    <local:ScrollToBottomOnLoadBehavior />
+                </i:Interaction.Behaviors>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="{Binding MonthBackground}" />
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Дата"
+                                        Binding="{Binding Date, StringFormat='{}{0:d/MM/yyyy}'}"
+                                        Width="110" />
+                    <DataGridTextColumn Header="Счет"
+                                        Binding="{Binding AccountName}"
+                                        Width="2*" />
+                    <DataGridTextColumn Header="Сумма, BYN"
+                                        Binding="{Binding Amount, StringFormat={}{0:N2}}"
+                                        Width="130" />
+                    <DataGridTextColumn Header="Сумма в $"
+                                        Binding="{Binding AmountInUsd, StringFormat={}{0:N2}}"
+                                        Width="130" />
+                    <DataGridTextColumn Header="Комментарий"
+                                        Binding="{Binding Comment}"
+                                        Width="3*" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <StackPanel Grid.Row="1"
+                        Margin="0,8,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                <TextBlock Margin="0,0,12,0" VerticalAlignment="Center" Text="Отображение:" />
+                <RadioButton Margin="0,0,12,0"
+                             VerticalAlignment="Center"
+                             Content="раздельно"
+                             GroupName="TableMode"
+                             IsChecked="{Binding IsSeparateTableMode}" />
+                <RadioButton Margin="0,0,12,0"
+                             VerticalAlignment="Center"
+                             Content="по месяцам"
+                             GroupName="TableMode"
+                             IsChecked="{Binding IsMonthlyTableMode}" />
+                <RadioButton VerticalAlignment="Center"
+                             Content="по годам"
+                             GroupName="TableMode"
+                             IsChecked="{Binding IsAnnualTableMode}" />
+            </StackPanel>
+        </Grid>
+
+        <Grid Visibility="{Binding ChartVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <oxy:PlotView Grid.Row="0" Model="{Binding ChartModel}" />
+
+            <StackPanel Grid.Row="1"
+                        Margin="0,8,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                <CheckBox Margin="0,0,24,0"
+                          VerticalAlignment="Center"
+                          Content="Суммы в USD"
+                          IsChecked="{Binding IsUsdChart}" />
+                <TextBlock Margin="0,0,12,0" VerticalAlignment="Center" Text="Группировка:" />
+                <RadioButton Margin="0,0,12,0"
+                             VerticalAlignment="Center"
+                             Content="по месяцам"
+                             GroupName="ChartMode"
+                             IsChecked="{Binding IsMonthlyChartMode}" />
+                <RadioButton VerticalAlignment="Center"
+                             Content="по годам"
+                             GroupName="ChartMode"
+                             IsChecked="{Binding IsAnnualChartMode}" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
