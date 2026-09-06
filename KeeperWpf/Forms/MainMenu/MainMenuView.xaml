@@ -76,10 +76,36 @@
         <Button Name="ShowSalaryForm" Margin="1,0,5,0" Background="White" BorderBrush="White" ToolTip="Salary">
             <Image Source="../../Resources/mainmenu/salary1.png" Width="24" Height="24" />
         </Button>
-        <Button Name="ShowGskForm" Margin="2,0,0,0" Background="White" BorderBrush="White" ToolTip="ЖСК">
-            <Image Source="../../Resources/mainmenu/gsk.png" Width="24" Height="24" />
-        </Button>
-        <Button Name="ShowCarForm" Margin="6,0,0,0" Background="White" BorderBrush="White" ToolTip="Cars">
+        
+        <Menu Margin="1,0,0,0" Background="White" BorderBrush="White" ToolTip="Apartment">
+            <MenuItem Background="White" BorderBrush="White">
+                <MenuItem.Header>
+                    <Image Source="../../Resources/mainmenu/apartment.png" Margin="0,3,0,0" Width="24" Height="24"/>
+                </MenuItem.Header>
+                <MenuItem Background="White" BorderBrush="White">
+                    <MenuItem.Header>
+                        <TextBlock Text="Платежи по кредиту"/>
+                    </MenuItem.Header>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <cal:ActionMessage MethodName="ShowGskForm"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </MenuItem>
+                <MenuItem Background="White" BorderBrush="White">
+                    <MenuItem.Header>
+                        <TextBlock Text="Коммунальные платежи"/>
+                    </MenuItem.Header>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <cal:ActionMessage MethodName="ShowHouseholdBillsForm"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <Button Name="ShowCarForm" Margin="4,0,0,0" Background="White" BorderBrush="White" ToolTip="Cars">
             <Image Source="../../Resources/mainmenu/car.png" Width="32" Height="32"  />
         </Button>
         <Button Name="ShowDepositsForm" Margin="8,0,0,0" Background="White" BorderBrush="White" ToolTip="Deposits (D)">
