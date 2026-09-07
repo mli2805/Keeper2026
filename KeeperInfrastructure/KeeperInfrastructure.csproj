@@ -26,4 +26,8 @@
 		<ProjectReference Include="..\KeeperModels\KeeperModels.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Sqlite\Scripts\" />
+	</ItemGroup>
+
 </Project>

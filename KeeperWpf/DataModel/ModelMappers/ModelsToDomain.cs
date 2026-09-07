@@ -223,6 +223,7 @@ public static class ModelsToDomain
             CreatedAt = model.CreatedAt,
             CompletedAt = model.CompletedAt,
             Importance = model.Importance,
+            Category = model.Category,
         };
     }
 

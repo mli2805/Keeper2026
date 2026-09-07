@@ -1,5 +1,6 @@
 ﻿namespace KeeperDomain;
 
+[StoreEnumAsString]
 public enum TodoImportance
 {
     Low,

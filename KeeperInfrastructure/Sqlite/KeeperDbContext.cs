@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using KeeperDomain;
+using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
@@ -75,5 +76,19 @@ public class KeeperDbContext : DbContext
 
         modelBuilder.Entity<TransactionEf>()
             .HasIndex(t => t.Timestamp);
+
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            foreach (var property in entityType.GetProperties())
+            {
+                var enumType = Nullable.GetUnderlyingType(property.ClrType) ?? property.ClrType;
+                if (enumType.IsEnum && Attribute.IsDefined(enumType, typeof(StoreEnumAsStringAttribute)))
+                {
+                    modelBuilder.Entity(entityType.ClrType)
+                        .Property(property.Name)
+                        .HasConversion(typeof(string));
+                }
+            }
+        }
     }
 }

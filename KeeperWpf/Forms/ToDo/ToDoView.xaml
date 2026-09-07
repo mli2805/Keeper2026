@@ -26,7 +26,15 @@
                 <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="0,0,5,0"/>
                 <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
                          Width="220" Height="24" Margin="0,0,10,0"/>
-                <CheckBox Content="Показывать завершенные" IsChecked="{Binding ShowCompleted}" VerticalAlignment="Center"/>
+                <CheckBox Content="Показывать завершенные" IsChecked="{Binding ShowCompleted}"
+                          VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <TextBlock Text="Категория:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <RadioButton Content="Дача" GroupName="TodoCategory"
+                             IsChecked="{Binding IsCountryHouseSelected}"
+                             VerticalAlignment="Center" Margin="0,2,10,0"/>
+                <RadioButton Content="Общие" GroupName="TodoCategory"
+                             IsChecked="{Binding IsCommonSelected}"
+                             VerticalAlignment="Center" Margin="0,2,0,0"/>
             </StackPanel>
         </DockPanel>
 

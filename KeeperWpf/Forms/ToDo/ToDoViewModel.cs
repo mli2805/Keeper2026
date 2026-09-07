@@ -92,6 +92,25 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
         }
     }
 
+    private TodoCategory _selectedCategory = TodoCategory.CountryHouse;
+    public bool IsCountryHouseSelected
+    {
+        get => _selectedCategory == TodoCategory.CountryHouse;
+        set
+        {
+            if (value) SelectCategory(TodoCategory.CountryHouse);
+        }
+    }
+
+    public bool IsCommonSelected
+    {
+        get => _selectedCategory == TodoCategory.Common;
+        set
+        {
+            if (value) SelectCategory(TodoCategory.Common);
+        }
+    }
+
     public List<TodoImportance> ImportanceLevels { get; } = Enum.GetValues(typeof(TodoImportance)).OfType<TodoImportance>().ToList();
 
     public bool CanSaveTask => SelectedTask != null && HasUnsavedChanges;
@@ -120,7 +139,7 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
     {
         selectedTaskId ??= SelectedTask?.Id;
         var tasks = dataModel.TodoTasks;
-        var filtered = tasks.Where(t => ShowCompleted || !t.IsCompleted);
+        var filtered = tasks.Where(t => t.Category == _selectedCategory && (ShowCompleted || !t.IsCompleted));
 
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
@@ -138,6 +157,16 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
         SelectedTask = selectedTaskId.HasValue
             ? TodoTasks.FirstOrDefault(t => t.Id == selectedTaskId.Value) ?? TodoTasks.FirstOrDefault()
             : TodoTasks.FirstOrDefault();
+    }
+
+    private void SelectCategory(TodoCategory category)
+    {
+        if (_selectedCategory == category) return;
+
+        _selectedCategory = category;
+        NotifyOfPropertyChange(nameof(IsCountryHouseSelected));
+        NotifyOfPropertyChange(nameof(IsCommonSelected));
+        RefreshTasks();
     }
 
     private void RefreshSubtasks()
@@ -189,6 +218,7 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
         builder.Append(task.Id).Append('|')
             .Append(task.Title).Append('|')
             .Append(task.Importance).Append('|')
+            .Append(task.Category).Append('|')
             .Append(task.IsCompleted).Append('|')
             .Append(task.CompletedAt?.ToString() ?? string.Empty);
 
@@ -233,6 +263,7 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
             CreatedAt = task.CreatedAt,
             CompletedAt = task.CompletedAt,
             Importance = task.Importance,
+            Category = task.Category,
             IsCompleted = task.IsCompleted,
             Subtasks = subtasks.Select(CloneSubtask).ToList()
         };
@@ -271,7 +302,8 @@ public class ToDoViewModel(KeeperDataModel dataModel, TodoTaskRepository todoTas
         {
             Title = "Новая задача",
             CreatedAt = DateOnly.FromDateTime(DateTime.Now),
-            Importance = TodoImportance.Normal
+            Importance = TodoImportance.Normal,
+            Category = _selectedCategory
         };
 
         var savedTask = await todoTaskRepository.Add(newTask);

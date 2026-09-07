@@ -13,7 +13,8 @@ public static class TodoTaskMapper
             Title = task.Title,
             CreatedAt = task.CreatedAt,
             CompletedAt = task.CompletedAt,
-            Importance = task.Importance
+            Importance = task.Importance,
+            Category = task.Category
         };
     }
 
@@ -38,6 +39,7 @@ public static class TodoTaskMapper
             CreatedAt = taskEf.CreatedAt,
             CompletedAt = taskEf.CompletedAt,
             Importance = taskEf.Importance,
+            Category = taskEf.Category,
             IsCompleted = taskEf.CompletedAt != null,
             Subtasks = taskEf.Subtasks.OrderBy(s => s.Ordinal).ThenBy(s => s.Id).Select(s => s.ToModel()).ToList()
         };
@@ -66,6 +68,7 @@ public static class TodoTaskMapper
             CreatedAt = taskModel.CreatedAt,
             CompletedAt = taskModel.CompletedAt,
             Importance = taskModel.Importance,
+            Category = taskModel.Category,
             Subtasks = taskModel.Subtasks.Select(s => s.ToEf()).ToList()
         };
     }
@@ -92,7 +95,8 @@ public static class TodoTaskMapper
             Title = model.Title,
             CreatedAt = model.CreatedAt,
             CompletedAt = model.CompletedAt,
-            Importance = model.Importance
+            Importance = model.Importance,
+            Category = model.Category
         };
     }
 

@@ -10,6 +10,7 @@ public class TodoTaskEf
     public DateOnly CreatedAt { get; set; }
     public DateOnly? CompletedAt { get; set; }
     public TodoImportance Importance { get; set; } = TodoImportance.Normal;
+    public TodoCategory Category { get; set; } = TodoCategory.CountryHouse;
 
     public List<TodoSubtaskEf> Subtasks { get; set; } = [];
 }

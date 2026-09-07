@@ -10,13 +10,15 @@ public class TodoTask : IDumpable, IParsable<TodoTask>
     public DateOnly CreatedAt { get; set; }
     public DateOnly? CompletedAt { get; set; }
     public TodoImportance Importance { get; set; } = TodoImportance.Normal;
+    public TodoCategory Category { get; set; } = TodoCategory.CountryHouse;
 
     public string Dump()
     {
         var completedAt = CompletedAt.HasValue 
             ? CompletedAt.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) : string.Empty;
         return Id + " ; " + Title.Replace("\r\n", "|") + " ; " + 
-            CreatedAt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + " ; " + completedAt + " ; " + Importance;
+            CreatedAt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + " ; " + completedAt + " ; " +
+            Importance + " ; " + Category;
     }
 
     public TodoTask FromString(string s)
@@ -33,6 +35,9 @@ public class TodoTask : IDumpable, IParsable<TodoTask>
             : DateOnly.ParseExact(completedAt, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
         Importance = Enum.Parse<TodoImportance>(substrings[4].Trim());
+        Category = substrings.Length > 5 && !string.IsNullOrWhiteSpace(substrings[5])
+            ? Enum.Parse<TodoCategory>(substrings[5].Trim())
+            : TodoCategory.CountryHouse;
         return this;
     }
 }
