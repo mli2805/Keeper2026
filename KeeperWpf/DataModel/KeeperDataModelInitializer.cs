@@ -62,7 +62,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
         return true;
     }
 
-    private async Task GetRatesFromDb()
+    private Task GetRatesFromDb()
     {
         // так и показываем на вью
         keeperDataModel.ExchangeRates = exchangeRatesRepository.GetAllExchangeRates().ToDictionary(r => r.Date);
@@ -74,6 +74,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
         // так и показываем на вью
         keeperDataModel.RefinancingRates = refinancingRatesRepository.GetAll();
         Debug.WriteLine($"Loaded {keeperDataModel.ExchangeRates.Count} exchange rates from DB");
+        return Task.CompletedTask;
     }
 
     private async Task GetTrustDataFromDb(Dictionary<int, AccountItemModel> acMoDict)

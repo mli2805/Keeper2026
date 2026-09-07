@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using KeeperModels;
 using KeeperInfrastructure;
+using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
@@ -67,7 +68,7 @@ public class CardFeeViewModel(KeeperDataModel dataModel, ShellPartsBinder shellP
         await TryCloseAsync();
     }
 
-    public async void Cancel()
+    public async Task Cancel()
     {
         await TryCloseAsync();
     }

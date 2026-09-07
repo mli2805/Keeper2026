@@ -57,7 +57,7 @@ public class OneBankAccountViewModel(KeeperDataModel dataModel, AccountRepositor
         get => _selectedDepositOffer;
         set
         {
-            if (Equals(value, _selectedDepositOffer) || value == null) return;
+            if (Equals(value, _selectedDepositOffer)) return;
             _selectedDepositOffer = value;
             BankAccountInWork.BankId = _selectedDepositOffer.Bank.Id;
             BankAccountInWork.DepositOfferId =_selectedDepositOffer.Id;

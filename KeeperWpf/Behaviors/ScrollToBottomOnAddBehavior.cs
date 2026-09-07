@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using Microsoft.Xaml.Behaviors;
 
-
 namespace KeeperWpf;
 
 public class ScrollToBottomOnAddBehavior : Behavior<DataGrid>
@@ -19,12 +18,12 @@ public class ScrollToBottomOnAddBehavior : Behavior<DataGrid>
         if (AssociatedObject.Items.Count == 0) return;
 
         if (AssociatedObject.SelectedIndex == -1)
-            AssociatedObject.ScrollIntoView(AssociatedObject.Items[AssociatedObject.Items.Count - 1]);
+            AssociatedObject.ScrollIntoView(AssociatedObject.Items[^1]!);
         else
         { // если при загрузке мы возвращаемся не к последней записи, то желательно ее поставить в середину таблицы
             int itemNumber = AssociatedObject.SelectedIndex + 1;
             if (itemNumber > AssociatedObject.Items.Count - 1) itemNumber = AssociatedObject.Items.Count - 1;
-            AssociatedObject.ScrollIntoView(AssociatedObject.Items[itemNumber]);
+            AssociatedObject.ScrollIntoView(AssociatedObject.Items[itemNumber]!);
         }
     }
 }

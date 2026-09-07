@@ -5,6 +5,7 @@ using Caliburn.Micro;
 using KeeperDomain;
 using KeeperInfrastructure;
 using KeeperModels;
+using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
@@ -95,7 +96,7 @@ public class DepositInterestViewModel(KeeperDataModel keeperDataModel, IWindowMa
     {
         if (e.PropertyName == "MyAccName")
         {
-            var nextAccountModel = keeperDataModel.AcMoDict[MyNextAccNameSelectorVm.MyAccName.Id];
+            var nextAccountModel = keeperDataModel.AcMoDict[MyNextAccNameSelectorVm.MyAccName!.Id];
             _myNextAccountBalance = keeperDataModel.Transactions.Values.Sum(t => t.AmountForAccount(
                 nextAccountModel, _accountItemModel.BankAccount!.MainCurrency, _transactionTimestamp));
             NotifyOfPropertyChange(nameof(MyNextAccountBalanceStr));
@@ -115,7 +116,7 @@ public class DepositInterestViewModel(KeeperDataModel keeperDataModel, IWindowMa
 
         _depositBalance = keeperDataModel.Transactions.Values.Sum(t => t.AmountForAccount(
             _accountItemModel, _accountItemModel.BankAccount!.MainCurrency, _transactionTimestamp));
-        var nextAccountModel = keeperDataModel.AcMoDict[MyNextAccNameSelectorVm.MyAccName.Id];
+        var nextAccountModel = keeperDataModel.AcMoDict[MyNextAccNameSelectorVm.MyAccName!.Id];
         _myNextAccountBalance = keeperDataModel.Transactions.Values.Sum(t => t.AmountForAccount(
             nextAccountModel, _accountItemModel.BankAccount!.MainCurrency, _transactionTimestamp));
 
@@ -123,12 +124,12 @@ public class DepositInterestViewModel(KeeperDataModel keeperDataModel, IWindowMa
         NotifyOfPropertyChange(nameof(MyNextAccountBalanceStr));
     }
 
-    public async void Save()
+    public async Task Save()
     {
         AccountItemModel? nextAccountItemModel = null;
         if (IsTransferred)
         {
-            nextAccountItemModel = keeperDataModel.AcMoDict[MyNextAccNameSelectorVm.MyAccName.Id];
+            nextAccountItemModel = keeperDataModel.AcMoDict[MyNextAccNameSelectorVm.MyAccName!.Id];
             if (_accountItemModel.Id == nextAccountItemModel.Id)
             {
                 var vm = new MyMessageBoxViewModel(MessageType.Error, "Перечисление на самого себя!");
@@ -157,7 +158,7 @@ public class DepositInterestViewModel(KeeperDataModel keeperDataModel, IWindowMa
             Comment = Comment,
         };
         keeperDataModel.Transactions.Add(tranModel1.Id, tranModel1);
-        await transactionsRepository.AddTransactions(new List<TransactionModel>() { tranModel1 });
+        await transactionsRepository.AddTransactions([tranModel1]);
 
         if (IsTransferred)
         {
@@ -174,7 +175,7 @@ public class DepositInterestViewModel(KeeperDataModel keeperDataModel, IWindowMa
                 Comment = "",
             };
             keeperDataModel.Transactions.Add(tranModel2.Id, tranModel2);
-            await transactionsRepository.AddTransactions(new List<TransactionModel>() { tranModel2 });
+            await transactionsRepository.AddTransactions([tranModel2]);
         }
 
         shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
@@ -182,7 +183,7 @@ public class DepositInterestViewModel(KeeperDataModel keeperDataModel, IWindowMa
         await TryCloseAsync();
     }
 
-    public async void Cancel()
+    public async Task Cancel()
     {
         await TryCloseAsync();
     }

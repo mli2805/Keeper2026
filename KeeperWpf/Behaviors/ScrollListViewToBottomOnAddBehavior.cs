@@ -14,8 +14,9 @@ public class ScrollListViewToBottomOnAddBehavior : Behavior<ListView>
 
     private void ItemCollectionOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
     {
-        if (args.Action == NotifyCollectionChangedAction.Reset) return; // Reset приходит при начальной инициализации Rows и обрабатывается в ScrollToPreviousExitPointOrBottomOnLoadBehavior
+        if (args.Action == NotifyCollectionChangedAction.Reset) 
+            return; // Reset приходит при начальной инициализации Rows и обрабатывается в ScrollToPreviousExitPointOrBottomOnLoadBehavior
         if (AssociatedObject.Items.Count > 0)
-            AssociatedObject.ScrollIntoView(AssociatedObject.Items[AssociatedObject.Items.Count - 1]);
+            AssociatedObject.ScrollIntoView(AssociatedObject.Items[^1]!);
     }
 }
