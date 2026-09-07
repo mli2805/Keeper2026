@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using KeeperModels;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -34,14 +35,22 @@ namespace KeeperWpf;
 /// При загрузке скрол вниз, к свежим оплатам.
 /// 
 /// Чарт рисовать с помощью OxyPlot, столбцовую диаграмму, по оси X - даты, по оси Y - сумма.
-/// предусмотреть возможность переключения между отображением суммы в BYN и в USD (например, через чекбокс),
+/// предусмотреть возможность переключения между отображением суммы в BYN и в USD по клавише C,
 /// а также возможность переключения между отображением сумм по годам и по месяцам.
 /// Рабочий пример столбцовой диаграммы с OxyPlot можно посмотреть в DepoCurrResultViewModel.cs
+/// 
+/// Добавить в чарте выбор между отображением сумм по всем счетам вместе и по каждому счету отдельно,
+/// радиобаттоны (все/жировка/газ/электричество и т.п.) в верхнем левом углу чарта.
+/// Перенесем эту радиогруппу вниз слева в ту же строку где радиогруппа группировки месяц-год, а месяц-год прижмем вправо
+/// 
+/// Иногда по счету нету платежей несколько месяцев подряд, соответственно на графике нету столбцов и 
+/// нижняя ось (время) искажается. Надо для таких случаев вставлять столбец со значением 0. При агрегировании по годам тоже
 /// </summary>
 
 [ExportViewModel]
 public class HouseholdBillsViewModel : Screen
 {
+    private const int HouseholdBillsCategoryId = 192;
     private static readonly DateTime BynIntroductionDate = new(2016, 7, 1);
 
     private readonly KeeperDataModel _dataModel;
@@ -51,8 +60,10 @@ public class HouseholdBillsViewModel : Screen
     private bool _isUsdChart;
     private bool _isChartVisible;
     private PlotModel _chartModel = new();
+    private int? _selectedChartAccountId;
 
     public BindableCollection<HouseholdBillRow> Rows { get; } = new();
+    public BindableCollection<HouseholdBillChartAccountOption> ChartAccountOptions { get; } = new();
 
     public Visibility TableVisibility => _isChartVisible ? Visibility.Collapsed : Visibility.Visible;
     public Visibility ChartVisibility => _isChartVisible ? Visibility.Visible : Visibility.Collapsed;
@@ -67,28 +78,20 @@ public class HouseholdBillsViewModel : Screen
         }
     }
 
-    public bool IsUsdChart
-    {
-        get => _isUsdChart;
-        set
-        {
-            if (_isUsdChart == value)
-                return;
-
-            _isUsdChart = value;
-            NotifyOfPropertyChange();
-            RebuildChart();
-        }
-    }
-
     public void ToggleView(KeyEventArgs e)
     {
-        if (e.Key != Key.T)
-            return;
-
-        _isChartVisible = !_isChartVisible;
-        NotifyOfPropertyChange(nameof(TableVisibility));
-        NotifyOfPropertyChange(nameof(ChartVisibility));
+        switch (e.Key)
+        {
+            case Key.T:
+                _isChartVisible = !_isChartVisible;
+                NotifyOfPropertyChange(nameof(TableVisibility));
+                NotifyOfPropertyChange(nameof(ChartVisibility));
+                break;
+            case Key.C:
+                _isUsdChart = !_isUsdChart;
+                RebuildChart();
+                break;
+        }
     }
 
     public bool IsMonthlyChartMode
@@ -144,19 +147,37 @@ public class HouseholdBillsViewModel : Screen
     public HouseholdBillsViewModel(KeeperDataModel dataModel)
     {
         _dataModel = dataModel;
-        DisplayName = "Счета за коммунальные услуги. T - таблица/график";
+        DisplayName = "Счета за коммунальные услуги. T - таблица/график, C - BYN/USD";
     }
 
     public void Initialize()
     {
+        var householdBillsCategory = _dataModel.AcMoDict[HouseholdBillsCategoryId];
+        var chartAccounts = householdBillsCategory.Children
+            .OfType<AccountItemModel>()
+            .OrderBy(account => account.ChildNumber)
+            .ToList();
+
+        ChartAccountOptions.Clear();
+        ChartAccountOptions.Add(new HouseholdBillChartAccountOption(
+            null,
+            "Все",
+            SelectChartAccount));
+        ChartAccountOptions.AddRange(chartAccounts.Select(account => new HouseholdBillChartAccountOption(
+            account.Id,
+            account.Name,
+            SelectChartAccount)));
+        ChartAccountOptions[0].IsSelected = true;
+
         _allRows = _dataModel.Transactions.Values
-            .Where(transaction => transaction.Category?.Is(192) == true)
+            .Where(transaction => transaction.Category?.Is(HouseholdBillsCategoryId) == true)
             .OrderBy(transaction => transaction.Timestamp)
             .ThenBy(transaction => transaction.Id)
             .Select(transaction => new HouseholdBillRow
             {
                 Date = transaction.Timestamp,
                 AccountName = transaction.Category!.Name,
+                ChartAccountId = FindChartAccountId(transaction.Category, chartAccounts),
                 Amount = NormalizeAmountInByn(transaction.Timestamp, transaction.Amount),
                 AmountInUsd = transaction.GetAmountInUsd(_dataModel),
                 Comment = transaction.Comment
@@ -164,6 +185,22 @@ public class HouseholdBillsViewModel : Screen
             .ToList();
 
         RebuildTableRows();
+        RebuildChart();
+    }
+
+    private static int? FindChartAccountId(
+        AccountItemModel category,
+        IEnumerable<AccountItemModel> chartAccounts)
+    {
+        return chartAccounts.FirstOrDefault(category.Is)?.Id;
+    }
+
+    private void SelectChartAccount(HouseholdBillChartAccountOption selectedOption)
+    {
+        foreach (var option in ChartAccountOptions.Where(option => option != selectedOption))
+            option.IsSelected = false;
+
+        _selectedChartAccountId = selectedOption.AccountId;
         RebuildChart();
     }
 
@@ -222,21 +259,48 @@ public class HouseholdBillsViewModel : Screen
         RebuildChart();
     }
 
+    private static List<(DateTime Date, decimal Amount)> BuildChartPoints(
+        IEnumerable<HouseholdBillRow> rows,
+        Func<HouseholdBillRow, DateTime> periodSelector,
+        Func<DateTime, DateTime> nextPeriodSelector,
+        Func<HouseholdBillRow, decimal> amountSelector)
+    {
+        var amountsByPeriod = rows
+            .GroupBy(periodSelector)
+            .ToDictionary(group => group.Key, group => group.Sum(amountSelector));
+
+        if (amountsByPeriod.Count == 0)
+            return [];
+
+        var lastPeriod = amountsByPeriod.Keys.Max();
+        var points = new List<(DateTime Date, decimal Amount)>();
+        for (var period = amountsByPeriod.Keys.Min();; period = nextPeriodSelector(period))
+        {
+            var amount = amountsByPeriod.ContainsKey(period) ? amountsByPeriod[period] : 0m;
+            points.Add((period, amount));
+            if (period == lastPeriod)
+                return points;
+        }
+    }
+
     private void RebuildChart()
     {
         Func<HouseholdBillRow, DateTime> periodSelector = _chartInterval == HouseholdBillsChartInterval.Monthly
             ? row => new DateTime(row.Date.Year, row.Date.Month, 1)
             : row => new DateTime(row.Date.Year, 1, 1);
+        Func<DateTime, DateTime> nextPeriodSelector = _chartInterval == HouseholdBillsChartInterval.Monthly
+            ? period => period.AddMonths(1)
+            : period => period.AddYears(1);
 
-        var points = _allRows
-            .GroupBy(periodSelector)
-            .OrderBy(group => group.Key)
-            .Select(group => (
-                Date: group.Key,
-                Amount: _isUsdChart
-                    ? group.Sum(row => row.AmountInUsd)
-                    : group.Sum(row => row.Amount)))
-            .ToList();
+        var chartRows = _selectedChartAccountId.HasValue
+            ? _allRows.Where(row => row.ChartAccountId == _selectedChartAccountId)
+            : _allRows;
+
+        var points = BuildChartPoints(
+            chartRows,
+            periodSelector,
+            nextPeriodSelector,
+            _isUsdChart ? row => row.AmountInUsd : row => row.Amount);
 
         var currencyName = _isUsdChart ? "USD" : "BYN";
         var model = new PlotModel
