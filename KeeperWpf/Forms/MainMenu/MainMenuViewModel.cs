@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Caliburn.Micro;
+using KeeperDomain;
 
 namespace KeeperWpf;
 
@@ -332,8 +333,15 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         SetReminderIconPath();
     }
 
-    public async Task ShowToDoForm()
+    public async Task ShowToDoCountryHouseForm()
     {
+        toDoViewModel.Initialize(TodoCategory.CountryHouse);
+        await windowManager.ShowDialogAsync(toDoViewModel);
+    }
+
+    public async Task ShowToDoCommonForm()
+    {
+        toDoViewModel.Initialize(TodoCategory.Common);
         await windowManager.ShowDialogAsync(toDoViewModel);
     }
 
