@@ -13,7 +13,6 @@
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
             <Button Margin="15, 5" Width="220" Name="Download" Content="Обновить курсы НБРБ и ЦБРФ" IsEnabled="{Binding IsDownloadEnabled}"/>
             <Button Margin="15, 5" Width="220" Name="UpdateCbRf" Content="Заполнить пробелы ЦБРФ"/>
-            <Button Margin="15, 5" Width="220" Name="Fix" Content="Fix"/>
         </StackPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="5, 5,5, 0" >
             <TextBlock FontSize="13" Text="{Binding DayYearAgo.Date, StringFormat='{}{0:dd/MM/yyyy}'}" Margin="8,0,0,0" />

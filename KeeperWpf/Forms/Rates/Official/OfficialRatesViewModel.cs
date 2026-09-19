@@ -214,15 +214,6 @@ public class OfficialRatesViewModel(KeeperDataModel keeperDataModel, OfficialRat
         }
     }
 
-    public async Task Fix()
-    {
-        using (new WaitCursor())
-        {
-            await officialRatesRepository.Fix();
-        }
-    }
-
-
     public async Task RemoveLine()
     {
         var id = SelectedRow.Id;
