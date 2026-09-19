@@ -139,7 +139,9 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}" Width="80"/>
+                <DataGridTextColumn Header="Date"
+                                    Binding="{Binding Date, StringFormat='{}{0:dd/MM/yyyy ddd}', ConverterCulture=ru-RU}"
+                                    Width="95"/>
                 <DataGridTemplateColumn Header="НБРБ USD" CellTemplate="{StaticResource UsdTemplate}"/>
                 <DataGridTemplateColumn Header=" к 31 дек" CellTemplate="{StaticResource UsdAnnualTemplate}"/>
                 <DataGridTemplateColumn Header=" год к году" CellTemplate="{StaticResource UsdY2YTemplate}"/>

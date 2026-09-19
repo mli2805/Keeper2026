@@ -25,7 +25,7 @@
         <ListView ItemsSource="{Binding Rows}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="110" DisplayMemberBinding="{Binding Path=Date, StringFormat=dd MMM yyyy}">Дата</GridViewColumn>
+                    <GridViewColumn Width="110" DisplayMemberBinding="{Binding Path=Date, StringFormat='{}{0:dd MMM yyyy ddd}', ConverterCulture=ru-RU}">Дата</GridViewColumn>
                     <GridViewColumn Width="110" DisplayMemberBinding="{Binding Path=BynUsd}">Byn/Usd</GridViewColumn>
                     <GridViewColumn Width="110" DisplayMemberBinding="{Binding Path=BynEur}">Byn/Euro</GridViewColumn>
                     <GridViewColumn Width="110" DisplayMemberBinding="{Binding Path=BynRub}">Byn/Rub</GridViewColumn>
