@@ -64,42 +64,30 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
 
     #endregion
 
-    #region Low Balance Icon
-    private string _lowBalanceIconPath = "../../Resources/mainmenu/white-bell.png";
-    public string LowBalanceIconPath
+    #region Accounts With Limit Exceeded
+    private int _accountsWithLimitExceededCount;
+    public int AccountsWithLimitExceededCount
     {
-        get => _lowBalanceIconPath;
+        get => _accountsWithLimitExceededCount;
         set
         {
-            if (Equals(_lowBalanceIconPath, value))
-                return;
-
-            _lowBalanceIconPath = value;
+            if (value == _accountsWithLimitExceededCount) return;
+            _accountsWithLimitExceededCount = value;
             NotifyOfPropertyChange();
+            NotifyOfPropertyChange(nameof(AccountsWithLimitExceededBadgeVisibility));
         }
     }
 
-    public void SetLowBalanceIconPath()
+    public Visibility AccountsWithLimitExceededBadgeVisibility =>
+        _accountsWithLimitExceededCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+    public void SetAccountsWithLimitExceededCount()
     {
-        LowBalanceIconPath = keeperDataModel.HasLowBalanceAccounts()
-            ? "../../Resources/mainmenu/yellow-bell.png"
-            : "../../Resources/mainmenu/white-bell.png";
+        AccountsWithLimitExceededCount = keeperDataModel.AccountsWithLimitExceeded();
     }
     #endregion
 
-    #region Reminder Icon
-    private string _reminderIconPath = "../../Resources/mainmenu/black-remind.png";
-    public string ReminderIconPath
-    {
-        get => _reminderIconPath;
-        set
-        {
-            if (value == _reminderIconPath) return;
-            _reminderIconPath = value;
-            NotifyOfPropertyChange();
-        }
-    }
-
+    #region Reminders
     private int _triggeredRemindersCount;
     public int TriggeredRemindersCount
     {
@@ -116,20 +104,16 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     public Visibility TriggeredRemindersBadgeVisibility =>
         _triggeredRemindersCount > 0 ? Visibility.Visible : Visibility.Collapsed;
 
-    public void SetReminderIconPath()
+    public void SetRemindersCount()
     {
-        var count = keeperDataModel.TriggeredRemindersCount();
-        TriggeredRemindersCount = count;
-        ReminderIconPath = count > 0
-            ? "../../Resources/mainmenu/red-remind.png"
-            : "../../Resources/mainmenu/black-remind.png";
+        TriggeredRemindersCount = keeperDataModel.TriggeredRemindersCount();
     }
     #endregion
 
     public void Initialize()
     {
-        SetLowBalanceIconPath();
-        SetReminderIconPath();
+        SetAccountsWithLimitExceededCount();
+        SetRemindersCount();
     }
 
     // UserControl должен быть Focusable="True" чтобы шорткаты работали
@@ -191,7 +175,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         {
             shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
             await bankAccountMemoViewModel.Initialize(); // вот здесь считаются остатки и обороты по счетам
-            SetLowBalanceIconPath(); // и тогда можно вкл/выкл колокольчик
+            SetAccountsWithLimitExceededCount();
             await SaveInTextFilesForBackup();
         }
     }
@@ -323,14 +307,14 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         // вышли
         // в этой форме мы не могли изменить остатки/обороты по карточкам,
         // можно не пересчитывать остатки/обороты, только лимиты могли измениться
-        SetLowBalanceIconPath(); // проверяет лимиты
+        SetAccountsWithLimitExceededCount();
     }
 
     public async Task ShowCustomReminderForm()
     {
         customReminderViewModel.Initialize();
         await windowManager.ShowDialogAsync(customReminderViewModel);
-        SetReminderIconPath();
+        SetRemindersCount();
     }
 
     public async Task ShowToDoCountryHouseForm()

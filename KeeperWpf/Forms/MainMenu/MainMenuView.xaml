@@ -111,9 +111,6 @@
         <Button Name="ShowDepositsForm" Margin="8,0,0,0" Background="White" BorderBrush="White" ToolTip="Deposits (D)">
             <Image Source="../../Resources/mainmenu/deposits.png" Width="24" Height="24"  />
         </Button>
-        <Button Name="ShowPayCardsForm" Margin="6,-3,0,0" Background="White" BorderBrush="White" ToolTip="Cards-n-Accounts (P)" Opacity="0.7">
-            <Image Source="../../Resources/mainmenu/paycard.png" Width="32" Height="32"  />
-        </Button>
 
         <Menu Margin="-1,0,0,0" Background="White" BorderBrush="White" ToolTip="Trust">
             <MenuItem Background="White" BorderBrush="White">
@@ -173,26 +170,59 @@
             </MenuItem>
         </Menu>
 
-        <Button Name="ShowBankAccountMemoForm" Margin="4,0,2,0" Padding="4, 1, 0, 0" Background="White" 
-                BorderBrush="White" ToolTip="Card Balances And Payments" Opacity="0.7">
-            <Image Source="{Binding LowBalanceIconPath}" Width="28" Height="28"  />
-        </Button>
+        <Menu Margin="6,0,0,0" Background="White" BorderBrush="White" ToolTip="Card Balances And Payments" Opacity="0.6">
+            <MenuItem Background="White" BorderBrush="White">
+                <MenuItem.Header>
+                    <Grid Width="30" Height="30">
+                        <Image Source="../../Resources/mainmenu/paycard.png" Width="30" Height="30" />
+                        <Border Width="17" Height="17" CornerRadius="8"
+                            Background="White" BorderBrush="Red" BorderThickness="1"
+                            HorizontalAlignment="Right" VerticalAlignment="Top"
+                            Visibility="{Binding AccountsWithLimitExceededBadgeVisibility}">
+                            <TextBlock Text="{Binding AccountsWithLimitExceededCount}"
+                                   FontSize="12" FontWeight="Bold" Foreground="Red"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </Grid>
+                </MenuItem.Header>
+                <MenuItem Background="White" BorderBrush="White">
+                    <MenuItem.Header>
+                        <TextBlock Text="Пороги по картам"/>
+                    </MenuItem.Header>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <cal:ActionMessage MethodName="ShowBankAccountMemoForm"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </MenuItem>
+                <MenuItem Background="White" BorderBrush="White">
+                    <MenuItem.Header>
+                        <TextBlock Text="Все карты и счета"/>
+                    </MenuItem.Header>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <cal:ActionMessage MethodName="ShowPayCardsForm"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
         
-        <Button Name="ShowCustomReminderForm" Margin="2,0,4,0" Padding="0, 3, 4, 0" Background="White" 
-                BorderBrush="White" ToolTip="Custom Reminders" Opacity="0.7">
-            <Grid Width="26" Height="26">
-                <Image Source="{Binding ReminderIconPath}" Width="26" Height="26" />
-                <Border Width="13" Height="13" CornerRadius="6"
-                        Background="White" BorderBrush="Red" BorderThickness="1"
-                        HorizontalAlignment="Right" VerticalAlignment="Top"
-                        Visibility="{Binding TriggeredRemindersBadgeVisibility}">
+        <Button Name="ShowCustomReminderForm" Margin="0,-1,4,0" Padding="0, 1, 4, 0" Background="White" 
+           BorderBrush="White" ToolTip="Custom Reminders" Opacity="0.7">
+            <Grid Width="34" Height="28">
+                <Image Source="../../Resources/mainmenu/black-remind.png" Width="26" Height="26" Margin="-4,2,0,0" />
+                <Border Width="17" Height="17" CornerRadius="8" Margin="0,0,0,0"
+                   Background="White" BorderBrush="Red" BorderThickness="1"
+                   HorizontalAlignment="Right" VerticalAlignment="Top"
+                   Visibility="{Binding TriggeredRemindersBadgeVisibility}">
                     <TextBlock Text="{Binding TriggeredRemindersCount}"
-                               FontSize="8" FontWeight="Bold" Foreground="Red"
-                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                          FontSize="12" FontWeight="Bold" Foreground="Red"
+                          HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Border>
             </Grid>
         </Button>
-
+        
         <Menu Margin="0,0,1,0" Background="White" BorderBrush="White" ToolTip="ToDo" Opacity="1">
             <MenuItem Background="White" BorderBrush="White">
                 <MenuItem.Header>

@@ -8,9 +8,9 @@ namespace KeeperWpf;
 public static class BankAccountMemoExt
 {
     // надо вызывать только когда текущие остатки на счетах уже вычислены
-    public static bool HasLowBalanceAccounts(this KeeperDataModel dataModel)
+    public static int AccountsWithLimitExceeded(this KeeperDataModel dataModel)
     {
-        return dataModel.BankAccountMemoModels.Any(m => m.IsLimitExceeded);
+        return dataModel.BankAccountMemoModels.Count(m => m.IsLimitExceeded);
     }
 
     public static decimal GetCurrentBalance(this KeeperDataModel keeperDataModel, AccountItemModel account)

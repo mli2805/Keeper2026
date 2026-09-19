@@ -5,6 +5,7 @@
 
 ## General Guidelines
 - Create new tests only when the task explicitly requests them; otherwise validate changes using existing tests and builds without adding tests.
+- Prefer removing obsolete view-model properties and simplifying related state after UI controls that used them are deleted.
 
 ## Project-Specific Rules
 - In Keeper2026 WPF forms, display all dates using `StringFormat='{}{0:d/MM/yyyy}'`.
