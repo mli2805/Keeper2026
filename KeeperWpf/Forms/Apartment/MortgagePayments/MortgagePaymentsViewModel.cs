@@ -8,13 +8,13 @@ using KeeperDomain;
 namespace KeeperWpf;
 
 [ExportViewModel]
-public class GskViewModel : Screen
+public class MortgagePaymentsViewModel : Screen
 {
     private readonly KeeperDataModel _dataModel;
-    public ObservableCollection<GskLineModel> Rows { get; set; } = null!;
+    public ObservableCollection<MortgagePayment> Rows { get; set; } = null!;
 
-    private GskLineModel _selectedRow = null!;
-    public GskLineModel SelectedRow
+    private MortgagePayment _selectedRow = null!;
+    public MortgagePayment SelectedRow
     {
         get => _selectedRow;
         set
@@ -34,7 +34,7 @@ public class GskViewModel : Screen
 
     public decimal TotalAmountInUsd { get; set; }
 
-    public GskViewModel(KeeperDataModel dataModel)
+    public MortgagePaymentsViewModel(KeeperDataModel dataModel)
     {
         _dataModel = dataModel;
     }
@@ -46,12 +46,12 @@ public class GskViewModel : Screen
 
     public void Initialize()
     {
-        Rows = new ObservableCollection<GskLineModel>();
+        Rows = new ObservableCollection<MortgagePayment>();
         var list = _dataModel.Transactions.Values
             .Where(t => t.Category != null && t.Category.Id == 285).ToList(); // погашение кредита ЖСК
         foreach (var tr in list)
         {
-            var paymentLine = new GskLineModel()
+            var paymentLine = new MortgagePayment()
             {
                 Date = tr.Timestamp.ToShortDateString(),
                 Sum = _dataModel.AmountInUsdString(tr.Timestamp, tr.Currency, tr.Amount, out decimal amountIsUsd),

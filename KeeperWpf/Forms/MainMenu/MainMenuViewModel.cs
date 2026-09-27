@@ -9,14 +9,16 @@ using KeeperDomain;
 namespace KeeperWpf;
 
 [ExportViewModel(ViewModelLifetime.SingleInstance)]
-public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel keeperDataModel, ShellPartsBinder shellPartsBinder,
+public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel keeperDataModel, 
+    ShellPartsBinder shellPartsBinder,
     TransactionsViewModel transactionsViewModel, RatesViewModel ratesViewModel,
     MonthAnalysisViewModel monthAnalysisViewModel, BankOffersViewModel bankOffersViewModel,
     // charts:
     BalancesAndSaldosViewModel balancesAndSaldosViewModel, 
     DepoCurrResultViewModel depoCurrResultViewModel,
     //
-    GskViewModel gskViewModel, CarsViewModel carsViewModel,
+    MortgagePaymentsViewModel mortgagePaymentsViewModel, BillsParsingViewModel billsParsingViewModel, 
+    CarsViewModel carsViewModel,
     OpenDepositsViewModel openDepositsViewModel, CardsAndAccountsViewModel cardsAndAccountsViewModel,
     // trust:
     InvestmentAssetsViewModel investmentAssetsViewModel, AssetRatesViewModel assetRatesViewModel,
@@ -232,10 +234,10 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         await windowManager.ShowDialogAsync(vm);
     }
 
-    public async Task ShowGskForm()
+    public async Task ShowMortgagePaymentsForm()
     {
-        gskViewModel.Initialize();
-        await windowManager.ShowDialogAsync(gskViewModel);
+        mortgagePaymentsViewModel.Initialize();
+        await windowManager.ShowDialogAsync(mortgagePaymentsViewModel);
     }
 
     public async Task ShowHouseholdBillsForm()
@@ -243,6 +245,11 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         var vm = IoC.Get<HouseholdBillsViewModel>();
         vm.Initialize();
         await windowManager.ShowDialogAsync(vm);
+    }
+
+    public async Task ShowBillsParsingForm()
+    {
+        await windowManager.ShowDialogAsync(billsParsingViewModel);
     }
 
     public async Task ShowCarForm()

@@ -1,6 +1,6 @@
 ﻿namespace KeeperWpf;
 
-public class GskLineModel 
+public class MortgagePayment 
 {
     public string Date { get; set; } = null!;
     public string Sum { get; set; } = null!;
