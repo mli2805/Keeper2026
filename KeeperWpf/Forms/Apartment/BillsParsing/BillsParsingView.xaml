@@ -6,19 +6,80 @@
         xmlns:local="clr-namespace:KeeperWpf"
         xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
-        Title="BillsParsingView" Height="450" Width="800">
-    <Grid>
+        Title="Разбор жировок" Height="700" Width="1150"
+        MinHeight="500" MinWidth="850"
+        Background="White" Foreground="Black" Opacity="1"
+        WindowState="Normal" WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize" ShowActivated="True" ShowInTaskbar="True">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <DockPanel Margin="10">
+        <DockPanel>
             <TextBlock Text="Каталог:" VerticalAlignment="Center" Margin="0,0,8,0"/>
             <Button Content="Выбрать..." DockPanel.Dock="Right" Padding="12,3"
+                    IsEnabled="{Binding CanSelectDirectory}"
                     cal:Message.Attach="SelectDirectory"/>
             <TextBox Text="{Binding DirectoryPath, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding CanSelectDirectory}"
                      VerticalContentAlignment="Center" Margin="0,0,8,0"/>
         </DockPanel>
+
+        <DockPanel Grid.Row="1" Margin="0,10,0,10">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <Button Content="Разобрать PDF" Padding="14,5" Margin="0,0,8,0"
+                        IsEnabled="{Binding CanParse}" cal:Message.Attach="Parse"/>
+                <Button Content="Сохранить CSV" Padding="14,5" Margin="0,0,8,0"
+                        IsEnabled="{Binding CanSave}" cal:Message.Attach="Save"/>
+                <Button Content="Загрузить CSV" Padding="14,5"
+                        IsEnabled="{Binding CanLoad}" cal:Message.Attach="Load"/>
+            </StackPanel>
+            <ProgressBar Minimum="0" Maximum="{Binding ProgressMaximum}"
+                         Value="{Binding ProgressValue, Mode=OneWay}" Height="18" Margin="20,4,0,4"/>
+        </DockPanel>
+
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Rows}"
+                  AutoGenerateColumns="False" IsReadOnly="True"
+                  CanUserAddRows="False" CanUserDeleteRows="False"
+                  GridLinesVisibility="Horizontal">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="{Binding MonthBackground}"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Период предоставления услуги"
+                                    Binding="{Binding Period, StringFormat='{}{0:d/MM/yyyy}'}"
+                                    Width="175"/>
+                <DataGridTextColumn Header="Название услуги" Binding="{Binding ServiceName}"
+                                    Width="*" MinWidth="260"/>
+                <DataGridTextColumn Header="Единица измерения" Binding="{Binding Unit}"
+                                    Width="130"/>
+                <DataGridTextColumn Header="Объём" Binding="{Binding Volume}"
+                                    Width="100"/>
+                <DataGridTextColumn Header="Тариф" Binding="{Binding Tariff}"
+                                    Width="110"/>
+                <DataGridTextColumn Header="Начислено" Binding="{Binding Charged}"
+                                    Width="110"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="3" Text="{Binding Status}" Margin="0,8,0,4"
+                   TextWrapping="Wrap"/>
+
+        <Expander Grid.Row="4" Header="Диагностика файлов" IsExpanded="False">
+            <DataGrid ItemsSource="{Binding Diagnostics}" AutoGenerateColumns="False"
+                      IsReadOnly="True" CanUserAddRows="False" MaxHeight="140">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Файл" Binding="{Binding SourceFile}" Width="260"/>
+                    <DataGridTextColumn Header="Сообщение" Binding="{Binding Message}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Expander>
     </Grid>
 </Window>

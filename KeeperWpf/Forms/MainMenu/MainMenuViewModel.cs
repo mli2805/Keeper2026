@@ -17,7 +17,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     BalancesAndSaldosViewModel balancesAndSaldosViewModel, 
     DepoCurrResultViewModel depoCurrResultViewModel,
     //
-    MortgagePaymentsViewModel mortgagePaymentsViewModel, BillsParsingViewModel billsParsingViewModel, 
+    MortgagePaymentsViewModel mortgagePaymentsViewModel, BillsParsingViewModel billsParsingViewModel,
     CarsViewModel carsViewModel,
     OpenDepositsViewModel openDepositsViewModel, CardsAndAccountsViewModel cardsAndAccountsViewModel,
     // trust:

@@ -83,6 +83,7 @@
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 		<PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
+		<PackageReference Include="PdfPig" Version="0.1.16" />
 		<PackageReference Include="PDFsharp" Version="6.2.4" />
 		<PackageReference Include="PDFsharp-MigraDoc" Version="6.2.4" />
 		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.12" />
