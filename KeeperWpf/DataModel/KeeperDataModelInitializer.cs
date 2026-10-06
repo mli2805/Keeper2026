@@ -28,6 +28,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     CustomRemindersRepository customRemindersRepository,
     LargeExpenseThresholdsRepository largeExpenseThresholdsRepository,
     ButtonCollectionsRepository buttonCollectionsRepository, SalaryChangesRepository salaryChangesRepository,
+    SalaryPaymentsRepository salaryPaymentsRepository,
     TodoTaskRepository todoTaskRepository,
     OfficialRatesViewModel officialRatesViewModel)
 {
@@ -103,6 +104,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     private async Task GetOthersFromDb()
     {
         keeperDataModel.SalaryChanges = await salaryChangesRepository.GetAllSalaryChanges();
+        keeperDataModel.SalaryPayments = await salaryPaymentsRepository.GetAllSalaryPayments();
         keeperDataModel.CardBalanceMemoModels = await cardBalanceMemosRepository.GetAllCardBalanceMemos(keeperDataModel.AcMoDict);
         keeperDataModel.BankAccountMemoModels = await bankAccountMemosRepository.GetAllBankAccountMemos(keeperDataModel.AcMoDict);
         keeperDataModel.CustomReminderModels = await customRemindersRepository.GetAllCustomReminders();

@@ -108,6 +108,63 @@
                     <DataGridTextColumn Header="Примечание" Width="320" Binding="{Binding Comment}" />
                 </DataGrid.Columns>
             </DataGrid>
+            <DataGrid Margin="60,520,0,0" Width="638" Height="125" BorderThickness="0"
+                      HorizontalAlignment="Left" VerticalAlignment="Top" Background="Beige"
+                      ItemsSource="{Binding SalaryPayments}" AutoGenerateColumns="False"
+                      CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
+                      ColumnHeaderHeight="25" RowHeight="25"
+                      Visibility="{Binding SalaryChangesVisibility}">
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Background" Value="Beige"/>
+                    </Style>
+                    <Style TargetType="{x:Type DataGridRowHeader}">
+                        <Setter Property="Background" Value="Beige"/>
+                    </Style>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="Beige"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                        <Setter Property="BorderBrush" Value="Black"/>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridComboBoxColumn Header="Наниматель" Width="180"
+                                            SelectedValueBinding="{Binding EmployerId}"
+                                            DisplayMemberPath="Name" SelectedValuePath="Id">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="{x:Type ComboBox}">
+                                <Setter Property="ItemsSource" Value="{Binding Path=DataContext.Employers,
+                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="{x:Type ComboBox}">
+                                <Setter Property="ItemsSource" Value="{Binding Path=DataContext.Employers,
+                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+                    <DataGridTextColumn Header="Число" Width="80" Binding="{Binding Day}" />
+                    <DataGridComboBoxColumn Header="Категория" Width="*"
+                                            SelectedValueBinding="{Binding Category}"
+                                            DisplayMemberPath="Name" SelectedValuePath="Id">
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="{x:Type ComboBox}">
+                                <Setter Property="ItemsSource" Value="{Binding Path=DataContext.Categories,
+                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="{x:Type ComboBox}">
+                                <Setter Property="ItemsSource" Value="{Binding Path=DataContext.Categories,
+                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+                    <DataGridTextColumn Header="Сумма" Width="100" Binding="{Binding Amount}" />
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
     </DockPanel>
 </Window>

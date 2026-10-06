@@ -69,6 +69,7 @@ public class ToTxtSaver
             WriteFileLines(keeperModel.CustomReminders);
             WriteFileLines(keeperModel.ButtonCollections);
             WriteFileLines(keeperModel.SalaryChanges);
+            WriteFileLines(keeperModel.SalaryPayments);
             WriteFileLines(keeperModel.LargeExpenseThresholds);
 
 

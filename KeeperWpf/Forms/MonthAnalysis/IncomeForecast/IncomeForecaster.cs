@@ -15,18 +15,6 @@ public class ForeseenIncome
 
 public static class IncomeForecaster
 {
-    private const int SalaryCategory = 204;
-    private const int PrepaymentCategory = 1008;
-    private const int IitAccountId = 443;
-    private const int OptixsoftAccountId = 172;
-
-    private const decimal IitSalary = 700;
-    private const decimal OptixsoftSalary = 1100;
-    private const int SalaryDay = 5;
-    private const decimal IitPrepayment = 100;
-    private const decimal OptixsoftPrepayment = 100;
-    private const int PrepaymentDay = 25;
-
     public static List<ForeseenIncome> ForecastIncome2(
         this KeeperDataModel dataModel, DateTime fromDate, DateTime finishMoment)
     {
@@ -49,47 +37,23 @@ public static class IncomeForecaster
             .Where(t => t.Operation == OperationType.Доход
                         && t.Timestamp >= firstOfMonth && t.Timestamp <= finishMoment).ToList();
 
-        var salaryDate = firstOfMonth.AddDays(SalaryDay - 1);
-        if (!receivedIncome.Any(t => t.Category!.Id == SalaryCategory
-                                         && t.Counterparty!.Id == IitAccountId))
+        foreach (var payment in dataModel.SalaryPayments)
         {
-            yield return new ForeseenIncome()
+            if (receivedIncome.Any(t => t.Category!.Id == payment.Category
+                                        && t.Counterparty!.Id == payment.EmployerId))
             {
-                ExpectedAt = salaryDate,
-                AmountUsd = IitSalary,
-                Title = $"{salaryDate:dd MMM} зарплата ИИТ {IitSalary} usd"
-            };
-        }
-        if (!receivedIncome.Any(t => t.Category!.Id == SalaryCategory
-                                     && t.Counterparty!.Id == OptixsoftAccountId))
-        {
-            yield return new ForeseenIncome()
-            {
-                ExpectedAt = salaryDate,
-                AmountUsd = OptixsoftSalary,
-                Title = $"{salaryDate:dd MMM} зарплата OptixSoft {OptixsoftSalary} usd"
-            };
-        }
+                continue;
+            }
 
-        var prepaymentDate = firstOfMonth.AddDays(PrepaymentDay - 1);
-        if (!receivedIncome.Any(t => t.Category!.Id == PrepaymentCategory
-                                     && t.Counterparty!.Id == IitAccountId))
-        {
-            yield return new ForeseenIncome()
+            var paymentDate = firstOfMonth.AddDays(payment.Day - 1);
+            var category = dataModel.AcMoDict[payment.Category];
+            var employer = dataModel.AcMoDict[payment.EmployerId];
+
+            yield return new ForeseenIncome
             {
-                ExpectedAt = prepaymentDate,
-                AmountUsd = IitPrepayment,
-                Title = $"{prepaymentDate:dd MMM} аванс ИИТ {IitPrepayment} usd"
-            };
-        }
-        if (!receivedIncome.Any(t => t.Category!.Id == PrepaymentCategory
-                                     && t.Counterparty!.Id == OptixsoftAccountId))
-        {
-            yield return new ForeseenIncome()
-            {
-                ExpectedAt = prepaymentDate,
-                AmountUsd = OptixsoftPrepayment,
-                Title = $"{prepaymentDate:dd MMM} аванс OptixSoft {OptixsoftPrepayment} usd"
+                ExpectedAt = paymentDate,
+                AmountUsd = payment.Amount,
+                Title = $"{paymentDate:dd MMM} {category.Name} {employer.Name} {payment.Amount} usd"
             };
         }
     }

@@ -71,6 +71,30 @@ public static class OthersMapper
         };
     }
 
+    public static SalaryPaymentEf ToEf(this SalaryPayment domain)
+    {
+        return new SalaryPaymentEf
+        {
+            Id = domain.Id,
+            EmployerId = domain.EmployerId,
+            Day = domain.Day,
+            Category = domain.Category,
+            Amount = domain.Amount
+        };
+    }
+
+    public static SalaryPayment FromEf(this SalaryPaymentEf ef)
+    {
+        return new SalaryPayment
+        {
+            Id = ef.Id,
+            EmployerId = ef.EmployerId,
+            Day = ef.Day,
+            Category = ef.Category,
+            Amount = ef.Amount
+        };
+    }
+
     public static ButtonCollectionEf ToEf(this ButtonCollection bc)
     {
         return new ButtonCollectionEf

@@ -80,6 +80,7 @@ public static class ToKeeperDomain
             CustomReminders = keeperDataModel.CustomReminderModels.Select(crm => crm.FromModel()).ToList(),
             ButtonCollections = keeperDataModel.ButtonCollections.Select(bc => bc.FromModel()).ToList(),
             SalaryChanges = keeperDataModel.SalaryChanges,
+            SalaryPayments = keeperDataModel.SalaryPayments,
             LargeExpenseThresholds = keeperDataModel.LargeExpenseThresholds,
         };
         return result;

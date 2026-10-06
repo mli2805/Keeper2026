@@ -50,5 +50,6 @@ public class KeeperDataModel : PropertyChangedBase
 
     public List<ButtonCollectionModel> ButtonCollections { get; set; } = null!;
     public List<SalaryChange> SalaryChanges { get; set; } = null!;
+    public List<SalaryPayment> SalaryPayments { get; set; } = null!;
     public List<LargeExpenseThreshold> LargeExpenseThresholds { get; set; } = null!;
 }

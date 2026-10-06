@@ -16,7 +16,8 @@ using System.Windows.Input;
 namespace KeeperWpf;
 
 [ExportViewModel]
-public class SalaryViewModel(KeeperDataModel dataModel, SalaryChangesRepository salaryChangesRepository) : Screen
+public class SalaryViewModel(KeeperDataModel dataModel, SalaryChangesRepository salaryChangesRepository,
+    SalaryPaymentsRepository salaryPaymentsRepository) : Screen
 {
     private List<SalaryLineModel> _rows = new List<SalaryLineModel>();
     public List<SalaryLineModel> Rows
@@ -85,7 +86,9 @@ public class SalaryViewModel(KeeperDataModel dataModel, SalaryChangesRepository 
     }
 
     public List<SalaryChange> SalaryChanges { get; set; } = null!;
+    public List<SalaryPayment> SalaryPayments { get; set; } = null!;
     public List<AccountItemModel> Employers { get; set; } = null!;
+    public List<AccountItemModel> Categories { get; set; } = null!;
 
     private Visibility _salaryChangesVisibility = Visibility.Collapsed;
     public Visibility SalaryChangesVisibility
@@ -107,7 +110,9 @@ public class SalaryViewModel(KeeperDataModel dataModel, SalaryChangesRepository 
     public void Initialize()
     {
         SalaryChanges = dataModel.SalaryChanges;
+        SalaryPayments = dataModel.SalaryPayments;
         Employers = dataModel.AcMoDict[171].Children.Cast<AccountItemModel>().ToList();
+        Categories = dataModel.AcMoDict[772].Children.Cast<AccountItemModel>().ToList();
 
         var myEmployersFolder = dataModel.AcMoDict[171];
         _onlySalary = BuildFor(myEmployersFolder, false).ToList();
@@ -284,6 +289,7 @@ public class SalaryViewModel(KeeperDataModel dataModel, SalaryChangesRepository 
     public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
     {
         await salaryChangesRepository.SaveAll(SalaryChanges);
+        await salaryPaymentsRepository.SaveAll(SalaryPayments);
 
         return await base.CanCloseAsync(cancellationToken);
     }

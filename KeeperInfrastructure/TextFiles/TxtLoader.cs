@@ -40,6 +40,7 @@ public static class TxtLoader
             TodoSubtasks = await ReadFileLines<TodoSubtask>(),
 
             SalaryChanges = await ReadFileLines<SalaryChange>(),
+            SalaryPayments = await ReadFileLines<SalaryPayment>(),
             LargeExpenseThresholds = await ReadFileLines<LargeExpenseThreshold>(),
 
             CardBalanceMemos = await ReadFileLines<CardBalanceMemo>("MemosCardBalance.txt"),
@@ -57,6 +58,7 @@ public static class TxtLoader
             filename = typeof(T).Name + "s.txt";
 
         if ((filename == "BankAccountMemos.txt" || filename == "CustomReminders.txt" ||
+             filename == "SalaryPayments.txt" ||
              filename == "TodoTasks.txt" || filename == "TodoSubtasks.txt")
             && !File.Exists(Path.Combine(_backupFolder, filename)))
         {

@@ -47,6 +47,7 @@ public class KeeperDomainModel
     public List<CustomReminder> CustomReminders { get; set; } = null!;
 
     public List<SalaryChange> SalaryChanges { get; set; } = null!;
+    public List<SalaryPayment> SalaryPayments { get; set; } = null!;
     public List<LargeExpenseThreshold> LargeExpenseThresholds { get; set; } = null!;
 
 }
