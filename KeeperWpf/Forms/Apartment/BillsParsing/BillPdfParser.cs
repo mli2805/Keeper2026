@@ -73,13 +73,82 @@ public sealed class BillPdfParser
         foreach (var page in document.GetPages())
         {
             var words = page.GetWords().Select(PositionedWord.From).ToList();
-            if (!TryDetectColumns(words, out var columns))
-                continue;
+            var additionalPaymentsHeader = words
+                .Where(word => string.Equals(word.Text, "Итого", StringComparison.OrdinalIgnoreCase))
+                .Where(word => words.Any(next =>
+                    string.Equals(next.Text, "начислено", StringComparison.OrdinalIgnoreCase) &&
+                    next.Left >= word.Right && next.Left - word.Right <= 10 &&
+                    Math.Abs(next.CenterY - word.CenterY) <= 2))
+                .OrderByDescending(word => word.CenterY)
+                .FirstOrDefault();
 
-            rows.AddRange(ParseRows(words, columns, period, Path.GetFileName(filePath)));
+            if (TryDetectColumns(words, out var columns))
+            {
+                var mainTableWords = additionalPaymentsHeader is null
+                    ? words
+                    : words.Where(word => word.CenterY > additionalPaymentsHeader.CenterY + RowTolerance)
+                        .ToList();
+                rows.AddRange(ParseRows(mainTableWords, columns, period, Path.GetFileName(filePath)));
+            }
+
+            if (additionalPaymentsHeader is not null)
+                rows.AddRange(ParseAdditionalPayments(words, additionalPaymentsHeader, period,
+                    Path.GetFileName(filePath)));
         }
 
         return rows;
+    }
+
+    private static IEnumerable<ParsedBillRow> ParseAdditionalPayments(
+        IReadOnlyList<PositionedWord> words,
+        PositionedWord header,
+        DateTime period,
+        string sourceFile)
+    {
+        var headerAmount = words
+            .Where(word => word.Left > header.Right &&
+                           Math.Abs(word.CenterY - header.CenterY) <= 2 &&
+                           NumberPattern.IsMatch(word.Text))
+            .OrderByDescending(word => word.Right)
+            .FirstOrDefault();
+        var footer = words
+            .Where(word => word.CenterY < header.CenterY &&
+                           word.Left >= header.Left - 2 && word.Left <= header.Left + 30 &&
+                           string.Equals(word.Text, "ОПЛАТЕ", StringComparison.OrdinalIgnoreCase))
+            .OrderByDescending(word => word.CenterY)
+            .FirstOrDefault();
+        if (headerAmount is null || footer is null)
+            yield break;
+
+        var amountStart = headerAmount.Right - 65;
+        var amountEnd = headerAmount.Right + 2;
+        var tableWords = words
+            .Where(word => word.Left >= header.Left - 2 && word.Left < amountEnd &&
+                           word.CenterY < header.CenterY - 2 && word.CenterY > footer.CenterY + 2)
+            .ToList();
+        var rowAnchors = tableWords
+            .Where(word => Math.Abs(word.Right - headerAmount.Right) <= 2 &&
+                           NumberPattern.IsMatch(word.Text))
+            .OrderByDescending(word => word.CenterY)
+            .ToList();
+
+        foreach (var anchor in rowAnchors)
+        {
+            var rowWords = tableWords
+                .Where(word => Math.Abs(word.CenterY - anchor.CenterY) <= RowTolerance)
+                .Where(word => ReferenceEquals(word, anchor) || IsNearestAnchor(word, anchor, rowAnchors))
+                .ToList();
+            var total = ParseRightmostNumber(rowWords, amountStart, amountEnd);
+            if (total is null or 0)
+                continue;
+
+            var service = JoinText(rowWords, header.Left - 2, amountStart);
+            if (string.IsNullOrWhiteSpace(service) || IsSummary(service))
+                continue;
+
+            yield return new ParsedBillRow(period, service, string.Empty, null, null, null, sourceFile,
+                Total: total);
+        }
     }
 
     private static bool TryDetectColumns(IReadOnlyList<PositionedWord> words, out TableColumns columns)
@@ -89,14 +158,20 @@ public sealed class BillPdfParser
                 StringComparison.OrdinalIgnoreCase))
             .OrderBy(word => word.Left)
             .FirstOrDefault();
+        if (tariffHeader is null)
+        {
+            columns = default;
+            return false;
+        }
+
         var chargedHeader = words
             .Where(word => string.Equals(word.Text.Trim('*', '/'), "Начислено",
                                StringComparison.OrdinalIgnoreCase) &&
-                           Math.Abs(word.CenterY - tariffHeader!.CenterY) <= 10)
+                           Math.Abs(word.CenterY - tariffHeader.CenterY) <= 10)
             .OrderBy(word => word.Left)
             .FirstOrDefault();
 
-        if (tariffHeader is null || chargedHeader is null)
+        if (chargedHeader is null)
         {
             columns = default;
             return false;
@@ -112,12 +187,26 @@ public sealed class BillPdfParser
         var volumeHeader = headerWords.FirstOrDefault(word =>
             word.Text.StartsWith("Объ", StringComparison.OrdinalIgnoreCase) ||
             word.Text.StartsWith("Кол-во", StringComparison.OrdinalIgnoreCase));
-        var nextColumnHeader = headerWords
+        var totalHeader = headerWords
             .Where(word => word.Left > chargedHeader.Left &&
-                           (word.Text.StartsWith("Сумма", StringComparison.OrdinalIgnoreCase) ||
-                            word.Text.StartsWith("Итого", StringComparison.OrdinalIgnoreCase)))
+                           word.Text.StartsWith("Итого", StringComparison.OrdinalIgnoreCase))
             .OrderBy(word => word.Left)
             .FirstOrDefault();
+        var recalculationHeader = headerWords
+            .Where(word => word.Left > chargedHeader.Left &&
+                           (totalHeader is null || word.Left < totalHeader.Left) &&
+                           (word.Text.StartsWith("Сумма", StringComparison.OrdinalIgnoreCase) ||
+                            word.Text.StartsWith("перерасч", StringComparison.OrdinalIgnoreCase)))
+            .OrderBy(word => word.Left)
+            .FirstOrDefault();
+        var totalEnd = totalHeader is null
+            ? double.PositiveInfinity
+            : headerWords
+                .Where(word => word.Left > totalHeader.Right + 8 &&
+                               !word.Text.StartsWith("сумма", StringComparison.OrdinalIgnoreCase))
+                .Select(word => word.Left)
+                .DefaultIfEmpty(double.PositiveInfinity)
+                .Min();
 
         if (unitHeader is null || volumeHeader is null)
         {
@@ -131,7 +220,10 @@ public sealed class BillPdfParser
             volumeHeader.Left - 5,
             tariffHeader.Left,
             chargedHeader.Left,
-            nextColumnHeader?.Left ?? chargedHeader.Left + 55);
+            recalculationHeader?.Left ?? totalHeader?.Left ?? chargedHeader.Left + 55,
+            recalculationHeader?.Left,
+            totalHeader?.Left,
+            totalEnd);
         return true;
     }
 
@@ -168,8 +260,15 @@ public sealed class BillPdfParser
             var unit = JoinText(rowWords, columns.UnitStart, columns.VolumeStart);
             var volume = ParseRightmostNumber(rowWords, columns.VolumeStart, columns.TariffStart);
             var tariff = ParseRightmostNumber(rowWords, columns.TariffStart, columns.ChargedStart);
+            var recalculation = columns.RecalculationStart is { } recalculationStart
+                ? ParseRightmostNumber(rowWords, recalculationStart, columns.TotalStart ?? columns.TotalEnd)
+                : null;
+            var total = columns.TotalStart is { } totalStart
+                ? ParseRightmostNumber(rowWords, totalStart, columns.TotalEnd)
+                : null;
 
-            yield return new ParsedBillRow(period, service, unit, volume, tariff, charged, sourceFile);
+            yield return new ParsedBillRow(period, service, unit, volume, tariff, charged, sourceFile,
+                recalculation, total);
         }
     }
 
@@ -267,5 +366,8 @@ public sealed class BillPdfParser
         double VolumeStart,
         double TariffStart,
         double ChargedStart,
-        double ChargedEnd);
+        double ChargedEnd,
+        double? RecalculationStart,
+        double? TotalStart,
+        double TotalEnd);
 }

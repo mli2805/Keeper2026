@@ -66,6 +66,10 @@
                                     Width="110"/>
                 <DataGridTextColumn Header="Начислено" Binding="{Binding Charged}"
                                     Width="110"/>
+                <DataGridTextColumn Header="Перерасчет" Binding="{Binding Recalculation}"
+                                    Width="110"/>
+                <DataGridTextColumn Header="Итого" Binding="{Binding Total}"
+                                    Width="110"/>
             </DataGrid.Columns>
         </DataGrid>
 

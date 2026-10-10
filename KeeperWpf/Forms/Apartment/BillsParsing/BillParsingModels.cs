@@ -11,7 +11,9 @@ public sealed record ParsedBillRow(
     decimal? Volume,
     decimal? Tariff,
     decimal? Charged,
-    string SourceFile)
+    string SourceFile,
+    decimal? Recalculation = null,
+    decimal? Total = null)
 {
     private static readonly Brush AlternateMonthBackground = CreateAlternateMonthBackground();
 

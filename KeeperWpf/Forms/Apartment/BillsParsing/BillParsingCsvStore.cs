@@ -10,7 +10,8 @@ namespace KeeperWpf;
 
 public sealed class BillParsingCsvStore
 {
-    private const string Header = "Период;Услуга;Единица измерения;Объем;Тариф;Начислено";
+    private const string LegacyHeader = "Период;Услуга;Единица измерения;Объем;Тариф;Начислено";
+    private const string Header = LegacyHeader + ";Перерасчет;Итого";
 
     public async Task SaveAsync(
         string filePath,
@@ -28,7 +29,9 @@ public sealed class BillParsingCsvStore
                 .Append(Escape(row.Unit)).Append(';')
                 .Append(Format(row.Volume)).Append(';')
                 .Append(Format(row.Tariff)).Append(';')
-                .Append(Format(row.Charged))
+                .Append(Format(row.Charged)).Append(';')
+                .Append(Format(row.Recalculation)).Append(';')
+                .Append(Format(row.Total))
                 .AppendLine();
         }
 
@@ -40,9 +43,11 @@ public sealed class BillParsingCsvStore
         CancellationToken cancellationToken = default)
     {
         var lines = await File.ReadAllLinesAsync(filePath, cancellationToken);
-        if (lines.Length == 0 || lines[0].TrimStart('\uFEFF') != Header)
+        var header = lines.Length > 0 ? lines[0].TrimStart('\uFEFF') : string.Empty;
+        if (header != Header && header != LegacyHeader)
             throw new InvalidDataException("Файл не содержит ожидаемый заголовок таблицы жировок.");
 
+        var fieldCount = header == LegacyHeader ? 6 : 8;
         var rows = new List<ParsedBillRow>();
         for (var index = 1; index < lines.Length; index++)
         {
@@ -51,7 +56,7 @@ public sealed class BillParsingCsvStore
                 continue;
 
             var fields = ParseLine(lines[index]);
-            if (fields.Count != 6 ||
+            if (fields.Count != fieldCount ||
                 !DateTime.TryParseExact(fields[0], "yyyy-MM", CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out var period))
             {
@@ -65,7 +70,9 @@ public sealed class BillParsingCsvStore
                 ParseNullableDecimal(fields[3], index),
                 ParseNullableDecimal(fields[4], index),
                 ParseNullableDecimal(fields[5], index),
-                string.Empty));
+                string.Empty,
+                fieldCount == 8 ? ParseNullableDecimal(fields[6], index) : null,
+                fieldCount == 8 ? ParseNullableDecimal(fields[7], index) : null));
         }
 
         return rows;
