@@ -13,7 +13,8 @@ public sealed record ParsedBillRow(
     decimal? Charged,
     string SourceFile,
     decimal? Recalculation = null,
-    decimal? Total = null)
+    decimal? Total = null,
+    int Number = 0)
 {
     private static readonly Brush AlternateMonthBackground = CreateAlternateMonthBackground();
 
@@ -33,4 +34,5 @@ public sealed record BillParsingDiagnostic(string SourceFile, string Message);
 
 public sealed record BillParsingResult(
     IReadOnlyList<ParsedBillRow> Rows,
-    IReadOnlyList<BillParsingDiagnostic> Diagnostics);
+    IReadOnlyList<BillParsingDiagnostic> Diagnostics,
+    IReadOnlyList<BillFooter>? Footers = null);

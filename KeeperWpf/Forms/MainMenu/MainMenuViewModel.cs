@@ -240,9 +240,9 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         await windowManager.ShowDialogAsync(mortgagePaymentsViewModel);
     }
 
-    public async Task ShowHouseholdBillsForm()
+    public async Task ShowHouseholdPaymentsForm()
     {
-        var vm = IoC.Get<HouseholdBillsViewModel>();
+        var vm = IoC.Get<HouseholdPaymentsViewModel>();
         vm.Initialize();
         await windowManager.ShowDialogAsync(vm);
     }

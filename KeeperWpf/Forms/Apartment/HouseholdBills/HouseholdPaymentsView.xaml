@@ -1,4 +1,4 @@
-﻿<Window x:Class="KeeperWpf.HouseholdBillsView"
+﻿<Window x:Class="KeeperWpf.HouseholdPaymentsView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +8,7 @@
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance local:HouseholdBillsViewModel}"
+        d:DataContext="{d:DesignInstance local:HouseholdPaymentsViewModel}"
         WindowState="Maximized">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="PreviewKeyDown">

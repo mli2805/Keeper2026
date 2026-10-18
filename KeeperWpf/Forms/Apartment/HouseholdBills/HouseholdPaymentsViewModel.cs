@@ -14,6 +14,7 @@ namespace KeeperWpf;
 /// <summary>
 /// Utility bills — счета за коммунальные услуги.
 /// Household bills — все счета по дому (включая интернет и телефон).
+/// Household payments - платежи за коммунальные услуги из таблицы транзакций
 /// 
 /// В дереве счетов (к дереву можно обращаться _dataModel.AccountsTree или _dataModel.AcMoDict) 
 /// папка Коммунальные платежи ID=192 содержит счета, по которым отражается все коммунальные платежи за квартиру.
@@ -48,22 +49,22 @@ namespace KeeperWpf;
 /// </summary>
 
 [ExportViewModel]
-public class HouseholdBillsViewModel : Screen
+public class HouseholdPaymentsViewModel : Screen
 {
-    private const int HouseholdBillsCategoryId = 192;
+    private const int HouseholdPaymentsCategoryId = 192;
     private static readonly DateTime BynIntroductionDate = new(2016, 7, 1);
 
     private readonly KeeperDataModel _dataModel;
-    private IReadOnlyList<HouseholdBillRow> _allRows = [];
-    private HouseholdBillsTableMode _tableMode = HouseholdBillsTableMode.Separate;
-    private HouseholdBillsChartInterval _chartInterval = HouseholdBillsChartInterval.Monthly;
+    private IReadOnlyList<HouseholdPaymentRow> _allRows = [];
+    private HouseholdPaymentsTableMode _tableMode = HouseholdPaymentsTableMode.Separate;
+    private HouseholdPaymentsChartInterval _chartInterval = HouseholdPaymentsChartInterval.Monthly;
     private bool _isUsdChart;
     private bool _isChartVisible;
     private PlotModel _chartModel = new();
     private int? _selectedChartAccountId;
 
-    public BindableCollection<HouseholdBillRow> Rows { get; } = new();
-    public BindableCollection<HouseholdBillChartAccountOption> ChartAccountOptions { get; } = new();
+    public BindableCollection<HouseholdPaymentRow> Rows { get; } = new();
+    public BindableCollection<HouseholdPaymentChartAccountOption> ChartAccountOptions { get; } = new();
 
     public Visibility TableVisibility => _isChartVisible ? Visibility.Collapsed : Visibility.Visible;
     public Visibility ChartVisibility => _isChartVisible ? Visibility.Visible : Visibility.Collapsed;
@@ -96,55 +97,55 @@ public class HouseholdBillsViewModel : Screen
 
     public bool IsMonthlyChartMode
     {
-        get => _chartInterval == HouseholdBillsChartInterval.Monthly;
+        get => _chartInterval == HouseholdPaymentsChartInterval.Monthly;
         set
         {
             if (value)
-                SetChartInterval(HouseholdBillsChartInterval.Monthly);
+                SetChartInterval(HouseholdPaymentsChartInterval.Monthly);
         }
     }
 
     public bool IsAnnualChartMode
     {
-        get => _chartInterval == HouseholdBillsChartInterval.Annual;
+        get => _chartInterval == HouseholdPaymentsChartInterval.Annual;
         set
         {
             if (value)
-                SetChartInterval(HouseholdBillsChartInterval.Annual);
+                SetChartInterval(HouseholdPaymentsChartInterval.Annual);
         }
     }
 
     public bool IsSeparateTableMode
     {
-        get => _tableMode == HouseholdBillsTableMode.Separate;
+        get => _tableMode == HouseholdPaymentsTableMode.Separate;
         set
         {
             if (value)
-                SetTableMode(HouseholdBillsTableMode.Separate);
+                SetTableMode(HouseholdPaymentsTableMode.Separate);
         }
     }
 
     public bool IsMonthlyTableMode
     {
-        get => _tableMode == HouseholdBillsTableMode.Monthly;
+        get => _tableMode == HouseholdPaymentsTableMode.Monthly;
         set
         {
             if (value)
-                SetTableMode(HouseholdBillsTableMode.Monthly);
+                SetTableMode(HouseholdPaymentsTableMode.Monthly);
         }
     }
 
     public bool IsAnnualTableMode
     {
-        get => _tableMode == HouseholdBillsTableMode.Annual;
+        get => _tableMode == HouseholdPaymentsTableMode.Annual;
         set
         {
             if (value)
-                SetTableMode(HouseholdBillsTableMode.Annual);
+                SetTableMode(HouseholdPaymentsTableMode.Annual);
         }
     }
 
-    public HouseholdBillsViewModel(KeeperDataModel dataModel)
+    public HouseholdPaymentsViewModel(KeeperDataModel dataModel)
     {
         _dataModel = dataModel;
         DisplayName = "Счета за коммунальные услуги. T - таблица/график, C - BYN/USD";
@@ -152,28 +153,28 @@ public class HouseholdBillsViewModel : Screen
 
     public void Initialize()
     {
-        var householdBillsCategory = _dataModel.AcMoDict[HouseholdBillsCategoryId];
-        var chartAccounts = householdBillsCategory.Children
+        var householdPaymentsCategory = _dataModel.AcMoDict[HouseholdPaymentsCategoryId];
+        var chartAccounts = householdPaymentsCategory.Children
             .OfType<AccountItemModel>()
             .OrderBy(account => account.ChildNumber)
             .ToList();
 
         ChartAccountOptions.Clear();
-        ChartAccountOptions.Add(new HouseholdBillChartAccountOption(
+        ChartAccountOptions.Add(new HouseholdPaymentChartAccountOption(
             null,
             "Все",
             SelectChartAccount));
-        ChartAccountOptions.AddRange(chartAccounts.Select(account => new HouseholdBillChartAccountOption(
+        ChartAccountOptions.AddRange(chartAccounts.Select(account => new HouseholdPaymentChartAccountOption(
             account.Id,
             account.Name,
             SelectChartAccount)));
         ChartAccountOptions[0].IsSelected = true;
 
         _allRows = _dataModel.Transactions.Values
-            .Where(transaction => transaction.Category?.Is(HouseholdBillsCategoryId) == true)
+            .Where(transaction => transaction.Category?.Is(HouseholdPaymentsCategoryId) == true)
             .OrderBy(transaction => transaction.Timestamp)
             .ThenBy(transaction => transaction.Id)
-            .Select(transaction => new HouseholdBillRow
+            .Select(transaction => new HouseholdPaymentRow
             {
                 Date = transaction.Timestamp,
                 AccountName = transaction.Category!.Name,
@@ -195,7 +196,7 @@ public class HouseholdBillsViewModel : Screen
         return chartAccounts.FirstOrDefault(category.Is)?.Id;
     }
 
-    private void SelectChartAccount(HouseholdBillChartAccountOption selectedOption)
+    private void SelectChartAccount(HouseholdPaymentChartAccountOption selectedOption)
     {
         foreach (var option in ChartAccountOptions.Where(option => option != selectedOption))
             option.IsSelected = false;
@@ -210,7 +211,7 @@ public class HouseholdBillsViewModel : Screen
         return decimal.Round(amountInByn, 2, MidpointRounding.AwayFromZero);
     }
 
-    private void SetTableMode(HouseholdBillsTableMode mode)
+    private void SetTableMode(HouseholdPaymentsTableMode mode)
     {
         if (_tableMode == mode)
             return;
@@ -224,10 +225,10 @@ public class HouseholdBillsViewModel : Screen
 
     private void RebuildTableRows()
     {
-        IEnumerable<HouseholdBillRow> rows = _tableMode switch
+        IEnumerable<HouseholdPaymentRow> rows = _tableMode switch
         {
-            HouseholdBillsTableMode.Monthly => AggregateRows(row => new DateTime(row.Date.Year, row.Date.Month, 1)),
-            HouseholdBillsTableMode.Annual => AggregateRows(row => new DateTime(row.Date.Year, 1, 1)),
+            HouseholdPaymentsTableMode.Monthly => AggregateRows(row => new DateTime(row.Date.Year, row.Date.Month, 1)),
+            HouseholdPaymentsTableMode.Annual => AggregateRows(row => new DateTime(row.Date.Year, 1, 1)),
             _ => _allRows
         };
 
@@ -235,12 +236,12 @@ public class HouseholdBillsViewModel : Screen
         Rows.AddRange(rows);
     }
 
-    private IEnumerable<HouseholdBillRow> AggregateRows(Func<HouseholdBillRow, DateTime> periodSelector)
+    private IEnumerable<HouseholdPaymentRow> AggregateRows(Func<HouseholdPaymentRow, DateTime> periodSelector)
     {
         return _allRows
             .GroupBy(periodSelector)
             .OrderBy(group => group.Key)
-            .Select(group => new HouseholdBillRow
+            .Select(group => new HouseholdPaymentRow
             {
                 Date = group.Key,
                 Amount = group.Sum(row => row.Amount),
@@ -248,7 +249,7 @@ public class HouseholdBillsViewModel : Screen
             });
     }
 
-    private void SetChartInterval(HouseholdBillsChartInterval interval)
+    private void SetChartInterval(HouseholdPaymentsChartInterval interval)
     {
         if (_chartInterval == interval)
             return;
@@ -260,10 +261,10 @@ public class HouseholdBillsViewModel : Screen
     }
 
     private static List<(DateTime Date, decimal Amount)> BuildChartPoints(
-        IEnumerable<HouseholdBillRow> rows,
-        Func<HouseholdBillRow, DateTime> periodSelector,
+        IEnumerable<HouseholdPaymentRow> rows,
+        Func<HouseholdPaymentRow, DateTime> periodSelector,
         Func<DateTime, DateTime> nextPeriodSelector,
-        Func<HouseholdBillRow, decimal> amountSelector)
+        Func<HouseholdPaymentRow, decimal> amountSelector)
     {
         var amountsByPeriod = rows
             .GroupBy(periodSelector)
@@ -285,10 +286,10 @@ public class HouseholdBillsViewModel : Screen
 
     private void RebuildChart()
     {
-        Func<HouseholdBillRow, DateTime> periodSelector = _chartInterval == HouseholdBillsChartInterval.Monthly
+        Func<HouseholdPaymentRow, DateTime> periodSelector = _chartInterval == HouseholdPaymentsChartInterval.Monthly
             ? row => new DateTime(row.Date.Year, row.Date.Month, 1)
             : row => new DateTime(row.Date.Year, 1, 1);
-        Func<DateTime, DateTime> nextPeriodSelector = _chartInterval == HouseholdBillsChartInterval.Monthly
+        Func<DateTime, DateTime> nextPeriodSelector = _chartInterval == HouseholdPaymentsChartInterval.Monthly
             ? period => period.AddMonths(1)
             : period => period.AddYears(1);
 
@@ -316,7 +317,7 @@ public class HouseholdBillsViewModel : Screen
         for (var index = 0; index < points.Count; index++)
         {
             var point = points[index];
-            var label = _chartInterval == HouseholdBillsChartInterval.Monthly
+            var label = _chartInterval == HouseholdPaymentsChartInterval.Monthly
                 ? index % 4 == 0 ? point.Date.ToString("MM/yyyy") : string.Empty
                 : point.Date.ToString("yyyy");
             categoryAxis.Labels.Add(label);

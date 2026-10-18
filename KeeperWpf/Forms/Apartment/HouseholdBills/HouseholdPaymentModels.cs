@@ -4,20 +4,20 @@ using Caliburn.Micro;
 
 namespace KeeperWpf;
 
-public enum HouseholdBillsTableMode
+public enum HouseholdPaymentsTableMode
 {
     Separate,
     Monthly,
     Annual
 }
 
-public enum HouseholdBillsChartInterval
+public enum HouseholdPaymentsChartInterval
 {
     Monthly,
     Annual
 }
 
-public sealed class HouseholdBillRow
+public sealed class HouseholdPaymentRow
 {
     private static readonly Brush AlternateMonthBackground = CreateAlternateMonthBackground();
 
@@ -40,9 +40,9 @@ public sealed class HouseholdBillRow
     }
 }
 
-public sealed class HouseholdBillChartAccountOption : PropertyChangedBase
+public sealed class HouseholdPaymentChartAccountOption : PropertyChangedBase
 {
-    private readonly Action<HouseholdBillChartAccountOption> _onSelected;
+    private readonly Action<HouseholdPaymentChartAccountOption> _onSelected;
     private bool _isSelected;
 
     public int? AccountId { get; }
@@ -64,10 +64,10 @@ public sealed class HouseholdBillChartAccountOption : PropertyChangedBase
         }
     }
 
-    public HouseholdBillChartAccountOption(
+    public HouseholdPaymentChartAccountOption(
         int? accountId,
         string name,
-        Action<HouseholdBillChartAccountOption> onSelected)
+        Action<HouseholdPaymentChartAccountOption> onSelected)
     {
         AccountId = accountId;
         Name = name;

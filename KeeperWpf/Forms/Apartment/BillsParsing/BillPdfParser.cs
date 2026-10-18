@@ -26,6 +26,7 @@ public sealed class BillPdfParser
         {
             var rows = new List<ParsedBillRow>();
             var diagnostics = new List<BillParsingDiagnostic>();
+            var footers = new List<BillFooter>();
             var files = Directory.EnumerateFiles(directoryPath)
                 .Where(path => string.Equals(Path.GetExtension(path), ".pdf", StringComparison.OrdinalIgnoreCase))
                 .OrderBy(Path.GetFileName, StringComparer.OrdinalIgnoreCase)
@@ -45,11 +46,14 @@ public sealed class BillPdfParser
                         continue;
                     }
 
-                    var fileRows = ParseFile(file, period);
+                    var (fileRows, footer) = ParseFile(file, period);
                     if (fileRows.Count == 0)
                         diagnostics.Add(new(fileName, "Не удалось найти строки таблицы начислений."));
                     else
+                    {
                         rows.AddRange(fileRows);
+                        footers.Add(footer);
+                    }
                 }
                 catch (Exception exception)
                 {
@@ -61,94 +65,71 @@ public sealed class BillPdfParser
                 }
             }
 
-            return new BillParsingResult(rows, diagnostics);
+            var numberedRows = rows.GroupBy(row => row.Period)
+                .SelectMany(group => group.Select((row, index) => row with { Number = index + 1 })).ToArray();
+            return new BillParsingResult(numberedRows, diagnostics, footers);
         }, cancellationToken);
     }
 
-    private static List<ParsedBillRow> ParseFile(string filePath, DateTime period)
+    private static (List<ParsedBillRow> Rows, BillFooter Footer) ParseFile(string filePath, DateTime period)
     {
         using var document = PdfDocument.Open(filePath);
         var rows = new List<ParsedBillRow>();
+        var footer = new BillFooter(period);
 
         foreach (var page in document.GetPages())
         {
             var words = page.GetWords().Select(PositionedWord.From).ToList();
-            var additionalPaymentsHeader = words
-                .Where(word => string.Equals(word.Text, "Итого", StringComparison.OrdinalIgnoreCase))
-                .Where(word => words.Any(next =>
-                    string.Equals(next.Text, "начислено", StringComparison.OrdinalIgnoreCase) &&
-                    next.Left >= word.Right && next.Left - word.Right <= 10 &&
-                    Math.Abs(next.CenterY - word.CenterY) <= 2))
+            if (!TryDetectColumns(words, out var columns)) continue;
+            var footerStart = words
+                .Where(word => word.CenterY < columns.HeaderY - 5 && IsFooterLabel(words, word))
                 .OrderByDescending(word => word.CenterY)
                 .FirstOrDefault();
 
-            if (TryDetectColumns(words, out var columns))
-            {
-                var mainTableWords = additionalPaymentsHeader is null
-                    ? words
-                    : words.Where(word => word.CenterY > additionalPaymentsHeader.CenterY + RowTolerance)
-                        .ToList();
-                rows.AddRange(ParseRows(mainTableWords, columns, period, Path.GetFileName(filePath)));
-            }
+            var mainTableWords = footerStart is null
+                ? words
+                : words.Where(word => word.CenterY > footerStart.CenterY + 3).ToList();
+            rows.AddRange(ParseRows(mainTableWords, columns, period, Path.GetFileName(filePath)));
 
-            if (additionalPaymentsHeader is not null)
-                rows.AddRange(ParseAdditionalPayments(words, additionalPaymentsHeader, period,
-                    Path.GetFileName(filePath)));
+            var pageFooter = ParseFooter(words.Where(word => word.CenterY < columns.HeaderY - 5).ToList(),
+                period, columns.TotalEnd);
+            footer = new(period, pageFooter.TotalAccrued ?? footer.TotalAccrued,
+                pageFooter.Carryover ?? footer.Carryover, pageFooter.Penalty ?? footer.Penalty,
+                pageFooter.LandTax ?? footer.LandTax, pageFooter.TotalDue ?? footer.TotalDue);
         }
 
-        return rows;
+        return (rows, footer);
     }
 
-    private static IEnumerable<ParsedBillRow> ParseAdditionalPayments(
-        IReadOnlyList<PositionedWord> words,
-        PositionedWord header,
-        DateTime period,
-        string sourceFile)
+    private static string LineText(IReadOnlyList<PositionedWord> words, PositionedWord label) =>
+        string.Join(" ", words.Where(word => word.Left >= label.Left && Math.Abs(word.CenterY - label.CenterY) <= 3)
+            .OrderBy(word => word.Left).Select(word => word.Text));
+
+    private static bool IsFooterLabel(IReadOnlyList<PositionedWord> words, PositionedWord word) =>
+        Regex.IsMatch(LineText(words, word),
+            @"^(?:Итого\s+начислено|Итого\s*:|Всего\s+начислено|Переходящий\s+остаток|Пеня\b|Возмещ\S*.*земельн|Земельный\s+налог|Всего\s+к\s+оплате|К\s+ОПЛАТЕ\b|ОПЛАТИТЬ\b)",
+            RegexOptions.IgnoreCase);
+
+    private static BillFooter ParseFooter(IReadOnlyList<PositionedWord> words, DateTime period, double amountEnd)
     {
-        var headerAmount = words
-            .Where(word => word.Left > header.Right &&
-                           Math.Abs(word.CenterY - header.CenterY) <= 2 &&
-                           NumberPattern.IsMatch(word.Text))
-            .OrderByDescending(word => word.Right)
-            .FirstOrDefault();
-        var footer = words
-            .Where(word => word.CenterY < header.CenterY &&
-                           word.Left >= header.Left - 2 && word.Left <= header.Left + 30 &&
-                           string.Equals(word.Text, "ОПЛАТЕ", StringComparison.OrdinalIgnoreCase))
-            .OrderByDescending(word => word.CenterY)
-            .FirstOrDefault();
-        if (headerAmount is null || footer is null)
-            yield break;
-
-        var amountStart = headerAmount.Right - 65;
-        var amountEnd = headerAmount.Right + 2;
-        var tableWords = words
-            .Where(word => word.Left >= header.Left - 2 && word.Left < amountEnd &&
-                           word.CenterY < header.CenterY - 2 && word.CenterY > footer.CenterY + 2)
-            .ToList();
-        var rowAnchors = tableWords
-            .Where(word => Math.Abs(word.Right - headerAmount.Right) <= 2 &&
-                           NumberPattern.IsMatch(word.Text))
-            .OrderByDescending(word => word.CenterY)
-            .ToList();
-
-        foreach (var anchor in rowAnchors)
+        decimal? Read(string pattern)
         {
-            var rowWords = tableWords
-                .Where(word => Math.Abs(word.CenterY - anchor.CenterY) <= RowTolerance)
-                .Where(word => ReferenceEquals(word, anchor) || IsNearestAnchor(word, anchor, rowAnchors))
+            var label = words.Where(word => Regex.IsMatch(LineText(words, word), pattern, RegexOptions.IgnoreCase))
+                .OrderByDescending(word => word.CenterY).FirstOrDefault();
+            if (label is null) return null;
+            var line = words.Where(word => word.Left >= label.Left && Math.Abs(word.CenterY - label.CenterY) <= 3)
                 .ToList();
-            var total = ParseRightmostNumber(rowWords, amountStart, amountEnd);
-            if (total is null or 0)
-                continue;
-
-            var service = JoinText(rowWords, header.Left - 2, amountStart);
-            if (string.IsNullOrWhiteSpace(service) || IsSummary(service))
-                continue;
-
-            yield return new ParsedBillRow(period, service, string.Empty, null, null, null, sourceFile,
-                Total: total);
+            return ParseRightmostNumber(line, label.Right, amountEnd);
         }
+        var accrued = Read(@"^Всего\s+начислено\b");
+        if (accrued is null) accrued = Read(@"^Итого\s+начислено\b");
+        if (accrued is null) accrued = Read(@"^Итого\s*:");
+        var carryover = Read(@"^Переходящий\s+остаток\b");
+        var penalty = Read(@"^Пеня\b");
+        var tax = Read(@"^(?:Возмещ\S*.*земельн|Земельный\s+налог)");
+        var due = Read(@"^(?:Всего\s+к\s+оплате\b|Итого\s+начислено\s*\(на\b)");
+        if (due is null) due = Read(@"^К\s+ОПЛАТЕ\b");
+        return new(period, accrued, carryover, penalty, tax, due);
     }
 
     private static bool TryDetectColumns(IReadOnlyList<PositionedWord> words, out TableColumns columns)
@@ -237,23 +218,30 @@ public sealed class BillPdfParser
             .Where(word => word.CenterY < columns.HeaderY - 5)
             .ToList();
         var rowAnchors = tableWords
-            .Where(word => word.Left < 30 && int.TryParse(word.Text, out var number) && number is > 0 and < 100)
+            .Where(word => word.Left < columns.UnitStart &&
+                (word.Left < 30 && int.TryParse(word.Text, out var number) && number is > 0 and < 100 ||
+                 Regex.IsMatch(LineText(tableWords, word), @"^Плата\s+за\s+услугу\b", RegexOptions.IgnoreCase)))
             .OrderByDescending(word => word.CenterY)
             .ToList();
+        var separators = tableWords.Where(word => word.Left < columns.UnitStart &&
+                Regex.IsMatch(word.Text, @"^(?:Итого|Всего|Основные|Дополнительные|Возмещаемые)\b", RegexOptions.IgnoreCase))
+            .Select(word => word.CenterY).ToArray();
 
         foreach (var anchor in rowAnchors)
         {
+            var tolerance = Math.Max(RowTolerance, rowAnchors.Where(other => !ReferenceEquals(other, anchor))
+                .Select(other => Math.Abs(other.CenterY - anchor.CenterY) / 2).DefaultIfEmpty(RowTolerance).Min());
             var rowWords = tableWords
-                .Where(word => Math.Abs(word.CenterY - anchor.CenterY) <= RowTolerance)
+                .Where(word => Math.Abs(word.CenterY - anchor.CenterY) <= tolerance)
+                .Where(word => !separators.Any(y => y >= Math.Min(word.CenterY, anchor.CenterY) &&
+                                                   y <= Math.Max(word.CenterY, anchor.CenterY)))
                 .Where(word => ReferenceEquals(word, anchor) || IsNearestAnchor(word, anchor, rowAnchors))
                 .OrderBy(word => word.Left)
                 .ToList();
 
             var charged = ParseRightmostNumber(rowWords, columns.ChargedStart, columns.ChargedEnd);
-            if (charged is null)
-                continue;
-
-            var service = JoinText(rowWords, 30, columns.UnitStart);
+            var serviceStart = int.TryParse(anchor.Text, out _) ? Math.Max(30, anchor.Right) : anchor.Left;
+            var service = JoinText(rowWords, serviceStart, columns.UnitStart);
             if (string.IsNullOrWhiteSpace(service) || IsSummary(service))
                 continue;
 
@@ -301,7 +289,8 @@ public sealed class BillPdfParser
     {
         var numericWords = words
             .Where(word => word.Left >= from && word.Left < to)
-            .Where(word => NumberPattern.IsMatch(word.Text))
+            .Where(word => NumberPattern.IsMatch(word.Text.Replace('−', '-').Replace('–', '-')) ||
+                           word.Text is "-" or "−" or "–" or "+")
             .OrderBy(word => word.Left)
             .ToList();
 
@@ -313,14 +302,14 @@ public sealed class BillPdfParser
         {
             var current = numericWords[index];
             var right = selected[0];
-            if (right.Left - current.Right > 5)
+            if (right.Left - current.Right > (current.Text is "-" or "−" or "–" or "+" ? 12 : 5))
                 break;
             selected.Insert(0, current);
         }
 
         var text = string.Concat(selected.Select(word => word.Text))
             .Replace(" ", string.Empty, StringComparison.Ordinal)
-            .Replace(',', '.');
+            .Replace(',', '.').Replace('−', '-').Replace('–', '-');
         return decimal.TryParse(text, NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint,
             CultureInfo.InvariantCulture, out var value)
             ? value
