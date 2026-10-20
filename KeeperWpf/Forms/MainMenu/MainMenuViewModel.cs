@@ -247,6 +247,13 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         await windowManager.ShowDialogAsync(vm);
     }
 
+    public async Task ShowHouseholdBillsForm()
+    {
+        var vm = IoC.Get<HouseholdBillsViewModel>();
+        //vm.Initialize();
+        await windowManager.ShowDialogAsync(vm);
+    }
+
     public async Task ShowBillsParsingForm()
     {
         await windowManager.ShowDialogAsync(billsParsingViewModel);
