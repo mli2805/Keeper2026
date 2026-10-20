@@ -50,23 +50,80 @@
     <DataGridTextColumn Header="Итого" Binding="{Binding Total, UpdateSourceTrigger=PropertyChanged}" Width="110" />
    </DataGrid.Columns>
   </DataGrid>
-  <StackPanel Grid.Row="2" Margin="0,8,0,6">
-   <StackPanel Orientation="Horizontal" Margin="0,0,0,6"><TextBlock Text="Сумма колонки «Итого»:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,8,0" /><TextBox x:Name="ColumnTotalValue" Text="{Binding ColumnTotal, Mode=OneWay}" IsReadOnly="True" FontWeight="Bold" Width="160" /></StackPanel>
-   <WrapPanel>
-   <Grid>
+   <Grid Grid.Row="2" Margin="0,8,0,6">
+    <Grid.ColumnDefinitions>
+     <ColumnDefinition Width="*" />
+     <ColumnDefinition Width="Auto" />
+    </Grid.ColumnDefinitions>
+    <Grid>
     <Grid.Resources>
      <Style TargetType="TextBlock">
       <Setter Property="VerticalAlignment" Value="Center" />
-      <Setter Property="Margin" Value="0,2,12,2" />
+       <Setter Property="Margin" Value="4,2" />
      </Style>
      <Style TargetType="TextBox">
-      <Setter Property="Margin" Value="0,2" />
-      <Setter Property="IsReadOnly" Value="{Binding IsReadOnly}" />
+       <Setter Property="Margin" Value="4,2" />
+       <Setter Property="IsReadOnly" Value="True" />
      </Style>
     </Grid.Resources>
     <Grid.ColumnDefinitions>
-     <ColumnDefinition Width="270" />
-     <ColumnDefinition Width="160" />
+      <ColumnDefinition Width="150" />
+      <ColumnDefinition Width="100" />
+      <ColumnDefinition Width="100" />
+      <ColumnDefinition Width="100" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+     <RowDefinition Height="Auto" />
+     <RowDefinition Height="Auto" />
+     <RowDefinition Height="Auto" />
+     <RowDefinition Height="Auto" />
+     <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+     <StackPanel Grid.ColumnSpan="4" Orientation="Horizontal" Margin="0,0,0,4">
+      <TextBlock Text="Показания счетчиков введены:" />
+      <TextBlock Text="{Binding UtilityMeters.ReadingsDate, StringFormat='{}{0:dd/MM/yyyy}'}" FontWeight="Bold" />
+     </StackPanel>
+     <TextBlock Grid.Row="1" Text="Счетчики" FontWeight="Bold" />
+     <TextBlock Grid.Row="1" Grid.Column="1" Text="От" />
+     <TextBlock Grid.Row="1" Grid.Column="2" Text="До" />
+     <TextBlock Grid.Row="1" Grid.Column="3" Text="Объем" />
+     <TextBlock Grid.Row="2" Text="Холодная вода, м³" />
+     <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding UtilityMeters.ColdWater.From, Mode=OneWay}" />
+     <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding UtilityMeters.ColdWater.To, Mode=OneWay}" />
+     <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding UtilityMeters.ColdWater.Volume, Mode=OneWay}" />
+     <TextBlock Grid.Row="3" Text="Горячая вода, м³" />
+     <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding UtilityMeters.HotWater.From, Mode=OneWay}" />
+     <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding UtilityMeters.HotWater.To, Mode=OneWay}" />
+     <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding UtilityMeters.HotWater.Volume, Mode=OneWay}" />
+     <TextBlock Grid.Row="4" Text="Электричество, кВт·ч" />
+     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding UtilityMeters.Electricity.From, Mode=OneWay}" />
+     <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding UtilityMeters.Electricity.To, Mode=OneWay}" />
+     <TextBox Grid.Row="4" Grid.Column="3" Text="{Binding UtilityMeters.Electricity.Volume, Mode=OneWay}" />
+     <TextBlock Grid.Row="5" Text="Газ, м³" />
+     <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding UtilityMeters.Gas.From, Mode=OneWay}" />
+     <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding UtilityMeters.Gas.To, Mode=OneWay}" />
+     <TextBox Grid.Row="5" Grid.Column="3" Text="{Binding UtilityMeters.Gas.Volume, Mode=OneWay}" />
+   </Grid>
+    <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="24,0,0,0">
+     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,6">
+      <TextBlock Text="Сумма колонки «Итого»:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,8,0" />
+      <TextBox x:Name="ColumnTotalValue" Text="{Binding ColumnTotal, Mode=OneWay}" IsReadOnly="True" FontWeight="Bold" Width="110" />
+     </StackPanel>
+     <Grid HorizontalAlignment="Right">
+    <Grid.Resources>
+     <Style TargetType="TextBlock">
+      <Setter Property="VerticalAlignment" Value="Center" />
+       <Setter Property="Margin" Value="0,2,12,2" />
+     </Style>
+     <Style TargetType="TextBox">
+       <Setter Property="Margin" Value="0,2" />
+       <Setter Property="IsReadOnly" Value="{Binding IsReadOnly}" />
+     </Style>
+    </Grid.Resources>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="270" />
+      <ColumnDefinition Width="110" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
      <RowDefinition Height="Auto" />
@@ -75,66 +132,20 @@
      <RowDefinition Height="Auto" />
      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
-    <TextBlock Text="Итого начислено" />
-    <TextBox Grid.Column="1" Text="{Binding Footer.TotalAccrued, UpdateSourceTrigger=PropertyChanged}" />
-    <TextBlock Grid.Row="1" Text="Переходящий остаток" />
-    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Footer.Carryover, UpdateSourceTrigger=PropertyChanged}" />
-    <TextBlock Grid.Row="2" Text="Пеня" />
-    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Footer.Penalty, UpdateSourceTrigger=PropertyChanged}" />
-    <TextBlock Grid.Row="3" Text="Возмещение земельного налога" />
-    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Footer.LandTax, UpdateSourceTrigger=PropertyChanged}" />
-    <TextBlock Grid.Row="4" Text="Всего к оплате" />
-    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Footer.TotalDue, UpdateSourceTrigger=PropertyChanged}" />
+     <TextBlock Text="Итого начислено" />
+     <TextBox Grid.Column="1" Text="{Binding Footer.TotalAccrued, UpdateSourceTrigger=PropertyChanged}" />
+     <TextBlock Grid.Row="1" Text="Переходящий остаток" />
+     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Footer.Carryover, UpdateSourceTrigger=PropertyChanged}" />
+     <TextBlock Grid.Row="2" Text="Пеня" />
+     <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Footer.Penalty, UpdateSourceTrigger=PropertyChanged}" />
+     <TextBlock Grid.Row="3" Text="Возмещение земельного налога" />
+     <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Footer.LandTax, UpdateSourceTrigger=PropertyChanged}" />
+     <TextBlock Grid.Row="4" Text="Всего к оплате" />
+     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Footer.TotalDue, UpdateSourceTrigger=PropertyChanged}" />
+     </Grid>
+    </StackPanel>
    </Grid>
-   <Grid Margin="24,0,0,0">
-    <Grid.Resources>
-     <Style TargetType="TextBlock">
-      <Setter Property="VerticalAlignment" Value="Center" />
-      <Setter Property="Margin" Value="4,2" />
-     </Style>
-     <Style TargetType="TextBox">
-      <Setter Property="Margin" Value="4,2" />
-      <Setter Property="IsReadOnly" Value="True" />
-     </Style>
-    </Grid.Resources>
-    <Grid.ColumnDefinitions>
-     <ColumnDefinition Width="150" />
-     <ColumnDefinition Width="100" />
-     <ColumnDefinition Width="100" />
-     <ColumnDefinition Width="100" />
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-     <RowDefinition Height="Auto" />
-     <RowDefinition Height="Auto" />
-     <RowDefinition Height="Auto" />
-     <RowDefinition Height="Auto" />
-     <RowDefinition Height="Auto" />
-    </Grid.RowDefinitions>
-    <TextBlock Text="Счетчики" FontWeight="Bold" />
-    <TextBlock Grid.Column="1" Text="От" />
-    <TextBlock Grid.Column="2" Text="До" />
-    <TextBlock Grid.Column="3" Text="Объем" />
-    <TextBlock Grid.Row="1" Text="Холодная вода, м³" />
-    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding UtilityMeters.ColdWater.From, Mode=OneWay}" />
-    <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding UtilityMeters.ColdWater.To, Mode=OneWay}" />
-    <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding UtilityMeters.ColdWater.Volume, Mode=OneWay}" />
-    <TextBlock Grid.Row="2" Text="Горячая вода, м³" />
-    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding UtilityMeters.HotWater.From, Mode=OneWay}" />
-    <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding UtilityMeters.HotWater.To, Mode=OneWay}" />
-    <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding UtilityMeters.HotWater.Volume, Mode=OneWay}" />
-    <TextBlock Grid.Row="3" Text="Электричество, кВт·ч" />
-    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding UtilityMeters.Electricity.From, Mode=OneWay}" />
-    <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding UtilityMeters.Electricity.To, Mode=OneWay}" />
-    <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding UtilityMeters.Electricity.Volume, Mode=OneWay}" />
-    <TextBlock Grid.Row="4" Text="Газ, м³" />
-    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding UtilityMeters.Gas.From, Mode=OneWay}" />
-    <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding UtilityMeters.Gas.To, Mode=OneWay}" />
-    <TextBox Grid.Row="4" Grid.Column="3" Text="{Binding UtilityMeters.Gas.Volume, Mode=OneWay}" />
-   </Grid>
-   </WrapPanel>
-  </StackPanel>
   <StackPanel Grid.Row="3">
-   <TextBlock Text="{Binding Reconciliation}" TextWrapping="Wrap" />
    <TextBlock Text="{Binding PaymentReference}" TextWrapping="Wrap" Margin="0,4" />
    <TextBlock Text="{Binding ValidationMessage}" Foreground="DarkRed" TextWrapping="Wrap" />
   </StackPanel>

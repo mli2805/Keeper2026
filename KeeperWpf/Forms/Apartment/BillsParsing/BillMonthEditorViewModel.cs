@@ -142,25 +142,7 @@ public sealed class BillMonthEditorViewModel : PropertyChangedBase
         BillEditableFields.TryNumber(row.Total, out _)).Sum(row => BillEditableFields.Number(row.Total) ?? 0):N2}";
     public string ValidationMessage => SelectedPeriod is null || IsReadOnly ? "" : CanPersistMonth ? "" :
         "Проверьте номера (целые числа от 1), суммы и названия услуг. Неверный ввод блокирует сохранение.";
-    public string Reconciliation
-    {
-        get
-        {
-            if (Rows is null || Footer is null) return "";
-            var validTotals = Rows.Where(row => BillEditableFields.TryNumber(row.Total, out _) && !string.IsNullOrWhiteSpace(row.Total)).ToList();
-            var sum = validTotals.Sum(row => BillEditableFields.Number(row.Total) ?? 0);
-            var missing = Rows.Count - validTotals.Count;
-            var message = $"Сумма колонки «Итого»: {sum:N2}. Строк без итога: {missing}.";
-            if (BillEditableFields.TryNumber(Footer.TotalAccrued, out var accrued) && accrued is { } expected)
-                message += $" Разница с «Итого начислено»: {sum - expected:N2}.";
-            if (BillEditableFields.TryNumber(Footer.Carryover, out var balance) && balance is not null &&
-                BillEditableFields.TryNumber(Footer.Penalty, out var penalty) && penalty is not null &&
-                BillEditableFields.TryNumber(Footer.LandTax, out var tax) && tax is not null &&
-                BillEditableFields.TryNumber(Footer.TotalDue, out var due) && due is not null)
-                message += $" Строки + остаток + пеня + налог − к оплате: {sum + balance + penalty + tax - due:N2}.";
-            return message;
-        }
-    }
+
     public string PaymentReference
     {
         get
@@ -313,8 +295,12 @@ public sealed class BillMonthEditorViewModel : PropertyChangedBase
         var source = SelectedRow!;
         InsertRow(new BillEditableRow
         {
-            ServiceName = source.ServiceName, Unit = source.Unit, Volume = source.Volume,
-            Tariff = source.Tariff, Charged = source.Charged, Recalculation = source.Recalculation,
+            ServiceName = source.ServiceName,
+            Unit = source.Unit,
+            Volume = source.Volume,
+            Tariff = source.Tariff,
+            Charged = source.Charged,
+            Recalculation = source.Recalculation,
             Total = source.Total
         });
     }
@@ -397,8 +383,10 @@ public sealed class BillMonthEditorViewModel : PropertyChangedBase
                 .Select((row, index) => new BillEditableRow
                 {
                     Number = (index + 1).ToString(System.Globalization.CultureInfo.InvariantCulture),
-                    ServiceName = row.ServiceName, Unit = row.Unit,
-                    Volume = BillEditableFields.Format(row.Volume), Tariff = BillEditableFields.Format(row.Tariff)
+                    ServiceName = row.ServiceName,
+                    Unit = row.Unit,
+                    Volume = BillEditableFields.Format(row.Volume),
+                    Tariff = BillEditableFields.Format(row.Tariff)
                 }).ToArray();
             if (MessageBox.Show($"Заменить все услуги текущего месяца услугами из {previousPeriod:yyyy-MM}?\n" +
                     "Начислено, перерасчет и итого в строках будут очищены. Итоги внизу останутся без изменений.",
@@ -540,9 +528,13 @@ public sealed class BillMonthEditorViewModel : PropertyChangedBase
             NotifyOfPropertyChange(nameof(Footer));
             NotifyOfPropertyChange(nameof(UtilityMeters));
         }
-        foreach (var name in new[] { nameof(CanEdit), nameof(CanSelectMonth), nameof(CanPreviousMonth), nameof(CanNextMonth), nameof(CanPersistMonth),
-                     nameof(CanLoadMonth), nameof(CanAddRow), nameof(CanCopyRow), nameof(CanFillFromPrevious), nameof(CanRepeatMonth), nameof(CanRecalculate), nameof(CanDeleteRow), nameof(Reconciliation),
-                     nameof(PaymentReference), nameof(ValidationMessage),
+        foreach (var name in new[]
+            { nameof(CanEdit), nameof(CanSelectMonth), nameof(CanPreviousMonth),
+            nameof(CanNextMonth), nameof(CanPersistMonth),
+                     nameof(CanLoadMonth), nameof(CanAddRow), nameof(CanCopyRow),
+            nameof(CanFillFromPrevious), nameof(CanRepeatMonth), nameof(CanRecalculate),
+            nameof(CanDeleteRow),
+                     nameof(PaymentReference),
                      nameof(IsReadOnly), nameof(ColumnTotal) })
             NotifyOfPropertyChange(name);
     }
@@ -555,7 +547,7 @@ public sealed class BillMonthEditorViewModel : PropertyChangedBase
         public BindableCollection<BillEditableRow> Rows { get; } = new();
         public ListCollectionView View { get; }
         public BillEditableFooter Footer { get; set; } = new();
-        public UtilityMeters UtilityMeters { get; set; } = new(null, null, null, null);
+        public UtilityMeters UtilityMeters { get; set; } = new();
         public bool Dirty { get; set; }
         public string SourceFile { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;

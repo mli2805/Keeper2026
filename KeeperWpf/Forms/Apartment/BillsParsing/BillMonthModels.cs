@@ -6,10 +6,6 @@ using Caliburn.Micro;
 
 namespace KeeperWpf;
 
-public sealed record UtilityMeter(double? From, double? To, double? Volume);
-public sealed record UtilityMeters(UtilityMeter? ColdWater, UtilityMeter? HotWater, 
-    UtilityMeter? Electricity, UtilityMeter? Gas);
-
 public sealed record BillFooter(DateTime Period, decimal? TotalAccrued = null,
     decimal? Carryover = null, decimal? Penalty = null,
     decimal? LandTax = null, decimal? TotalDue = null);

@@ -30,14 +30,14 @@ public sealed class BillMonthJsonStore
     public static UtilityMeters GetUtilityMeters(BillMonthDocument document)
     {
         if (document.UtilityMeters is { } existing) return existing;
-        return TryCalculateWaterMeters(document, out var meters) ? meters : new(null, null, null, null);
+        return TryCalculateWaterMeters(document, out var meters) ? meters : CreateUtilityMeters(document.Period);
     }
 
     public static bool TryCalculateWaterMeters(BillMonthDocument document, out UtilityMeters meters)
     {
-        meters = document.UtilityMeters ?? new(null, null, null, null);
+        meters = document.UtilityMeters ?? CreateUtilityMeters(document.Period);
         var heating = document.Rows.Select(row => Regex.Match(row.ServiceName,
-            @"(?:Подогрев\s+воды|Гор\.\s*водоснаб\.\s*\(\s*подогрев\s*\))\s*\(\s*(?<volume>\d+(?:[.,]\d+)?)\s*м\s*[3³]\s*\)",
+            @"(?:Подогрев\s+воды|Гор\.\s*водоснаб\.\s*\(\s*подогрев\s*\))\s*\(\s*(?<volume>\d+(?:[.,]\d+)?)\s*[мm]\s*[3³]\s*\)",
             RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Where(match => match.Success).ToArray();
         var water = document.Rows.Where(row => Regex.IsMatch(row.ServiceName,
             @"^\s*Вода\s*[-–—]\s*канализация\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
@@ -46,17 +46,17 @@ public sealed class BillMonthJsonStore
             !decimal.TryParse(heating[0].Groups["volume"].Value.Replace(',', '.'),
                 NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var hot))
             return false;
-        meters = meters with
-        {
-            HotWater = meters.HotWater is { } hotWater ? hotWater with { Volume = (double)hot } : new(null, null, (double)hot)
-        };
-        if (water.Length == 1 && water[0].Volume is { } total && total >= hot)
-            meters = meters with
-            {
-                ColdWater = meters.ColdWater is { } coldWater ? coldWater with { Volume = (double)(total - hot) } : new(null, null, (double)(total - hot))
-            };
+        meters.HotWater.Volume = (double)hot;
+        var total = water.Sum(row => row.Volume ?? 0);
+        if (water.Length > 0 && total >= hot)
+            meters.ColdWater.Volume = (double)(total - hot);
         return true;
     }
+
+    private static UtilityMeters CreateUtilityMeters(DateTime period) => new()
+    {
+        ReadingsDate = DateOnly.FromDateTime(period.AddMonths(-1)).AddDays(20)
+    };
 
     public async Task SaveAsync(BillMonthDocument document)
     {
