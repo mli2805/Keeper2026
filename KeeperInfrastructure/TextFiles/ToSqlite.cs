@@ -28,6 +28,7 @@ public class ToSqlite(IDbContextFactory<KeeperDbContext> factory)
         keeperDbContext.MetalRates.AddRange(keeperDomainModel.MetalRates.Select(item => item.ToEf()));
         keeperDbContext.Cars.AddRange(keeperDomainModel.Cars.Select(item => item.ToEf()));
         keeperDbContext.CarYearMileages.AddRange(keeperDomainModel.CarYearMileages.Select(item => item.ToEf()));
+        keeperDbContext.UtilityMeters.AddRange(keeperDomainModel.UtilityMeters.Select(item => item.ToEf()));
         keeperDbContext.TodoTasks.AddRange((keeperDomainModel.TodoTasks).Select(item => item.ToEf()));
         keeperDbContext.TodoSubtasks.AddRange((keeperDomainModel.TodoSubtasks).Select(item => item.ToEf()));
         keeperDbContext.DepositOffers.AddRange(keeperDomainModel.DepositOffers.Select(item => item.ToEf()));

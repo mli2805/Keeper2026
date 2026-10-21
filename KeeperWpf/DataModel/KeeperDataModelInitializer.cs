@@ -29,7 +29,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     LargeExpenseThresholdsRepository largeExpenseThresholdsRepository,
     ButtonCollectionsRepository buttonCollectionsRepository, SalaryChangesRepository salaryChangesRepository,
     SalaryPaymentsRepository salaryPaymentsRepository,
-    TodoTaskRepository todoTaskRepository,
+    TodoTaskRepository todoTaskRepository, HouseholdRepository householdRepository,
     OfficialRatesViewModel officialRatesViewModel)
 {
     public async Task<bool> GetFullModelFromDb()
@@ -110,5 +110,6 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
         keeperDataModel.CustomReminderModels = await customRemindersRepository.GetAllCustomReminders();
         keeperDataModel.LargeExpenseThresholds = largeExpenseThresholdsRepository.GetAllLargeExpenseThresholds();
         keeperDataModel.ButtonCollections = await buttonCollectionsRepository.GetAllButtonCollections(keeperDataModel.AcMoDict);
+        keeperDataModel.UtilityMeters = await householdRepository.GetAllUtilityMeters();
     }
 }

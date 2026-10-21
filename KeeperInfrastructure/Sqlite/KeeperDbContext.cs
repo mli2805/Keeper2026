@@ -23,6 +23,8 @@ public class KeeperDbContext : DbContext
     public DbSet<CarEf> Cars { get; set; }
     public DbSet<CarYearMileageEf> CarYearMileages { get; set; }
 
+    public DbSet<UtilityMetersEf> UtilityMeters { get; set; }
+
     public DbSet<TodoTaskEf> TodoTasks { get; set; }
     public DbSet<TodoSubtaskEf> TodoSubtasks { get; set; }
 

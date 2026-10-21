@@ -70,6 +70,7 @@ public static class ToKeeperDomain
             CarYearMileages = keeperDataModel.Cars
                         .SelectMany(c => c.YearsMileage)
                         .Select(y => y.FromModel()).ToList(),
+            UtilityMeters = keeperDataModel.UtilityMeters,
             TodoTasks = keeperDataModel.TodoTasks.Select(t => t.FromModel()).ToList(),
             TodoSubtasks = keeperDataModel.TodoTasks
                         .SelectMany(t => t.Subtasks)

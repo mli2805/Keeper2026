@@ -22,7 +22,7 @@ public class UtilityMeters : IDumpable, IParsable<UtilityMeters>
     {
         var substrings = s.Split(';');
         Id = int.Parse(substrings[0]);
-        ReadingsDate = DateOnly.ParseExact(substrings[1].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        ReadingsDate = DateOnly.ParseExact(substrings[1].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
         ColdWater = new UtilityMeter().FromString(substrings[2].Trim(), substrings[3].Trim(), substrings[4].Trim());
         HotWater = new UtilityMeter().FromString(substrings[5].Trim(), substrings[6].Trim(), substrings[7].Trim());
         Electricity = new UtilityMeter().FromString(substrings[8].Trim(), substrings[9].Trim(), substrings[10].Trim());

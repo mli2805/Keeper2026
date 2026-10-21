@@ -60,6 +60,7 @@ public class ToTxtSaver
 
             WriteFileLines(keeperModel.Cars);
             WriteFileLines(keeperModel.CarYearMileages);
+            WriteFileLines(keeperModel.UtilityMeters);
             WriteFileLines(keeperModel.TodoTasks);
             WriteFileLines(keeperModel.TodoSubtasks);
 

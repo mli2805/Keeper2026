@@ -35,6 +35,8 @@ public class KeeperDomainModel
     public List<CarYearMileage> CarYearMileages { get; set; } = null!;
     public List<Fuelling> Fuellings { get; set; } = null!;
 
+    public List<UtilityMeters> UtilityMeters { get; set; } = null!;
+
     public List<TodoTask> TodoTasks { get; set; } = null!;
     public List<TodoSubtask> TodoSubtasks { get; set; } = null!;
 

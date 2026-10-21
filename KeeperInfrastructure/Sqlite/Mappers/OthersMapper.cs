@@ -126,4 +126,50 @@ public static class OthersMapper
                 : new List<int>()
         };
     }
+
+    public static UtilityMetersEf ToEf(this UtilityMeters domain)
+    {
+        return new UtilityMetersEf
+        {
+            Id = domain.Id,
+            ReadingsDate = domain.ReadingsDate,
+            ColdWaterFrom = domain.ColdWater.From,
+            ColdWaterTo = domain.ColdWater.To,
+            ColdWaterVolume = domain.ColdWater.Volume,
+            HotWaterFrom = domain.HotWater.From,
+            HotWaterTo = domain.HotWater.To,
+            HotWaterVolume = domain.HotWater.Volume,
+            ElectricityFrom = domain.Electricity.From,
+            ElectricityTo = domain.Electricity.To,
+            ElectricityVolume = domain.Electricity.Volume,
+            GasFrom = domain.Gas.From,
+            GasTo = domain.Gas.To,
+            GasVolume = domain.Gas.Volume
+        };
+    }
+
+    public static UtilityMeters FromEf(this UtilityMetersEf ef)
+    {
+        return new UtilityMeters
+        {
+            Id = ef.Id,
+            ReadingsDate = ef.ReadingsDate,
+            ColdWater = new UtilityMeter 
+            { 
+                From = ef.ColdWaterFrom, To = ef.ColdWaterTo, Volume = ef.ColdWaterVolume 
+            },
+            HotWater = new UtilityMeter 
+            { 
+                From = ef.HotWaterFrom, To = ef.HotWaterTo, Volume = ef.HotWaterVolume 
+            },
+            Electricity = new UtilityMeter 
+            { 
+                From = ef.ElectricityFrom, To = ef.ElectricityTo, Volume = ef.ElectricityVolume 
+            },
+            Gas = new UtilityMeter 
+            { 
+                From = ef.GasFrom, To = ef.GasTo, Volume = ef.GasVolume 
+            }
+        };
+    }
 }

@@ -36,6 +36,7 @@ public static class TxtLoader
             Fuellings = await ReadFileLines<Fuelling>(),
             Cars = await ReadFileLines<Car>(),
             CarYearMileages = await ReadFileLines<CarYearMileage>(),
+            UtilityMeters = await ReadFileLines<UtilityMeters>(),
             TodoTasks = await ReadFileLines<TodoTask>(),
             TodoSubtasks = await ReadFileLines<TodoSubtask>(),
 
