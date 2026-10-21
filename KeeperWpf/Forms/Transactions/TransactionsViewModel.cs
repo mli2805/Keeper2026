@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -106,6 +107,15 @@ public class TransactionsViewModel : Screen
     public void Calculator()
     {
         System.Diagnostics.Process.Start("calc");
+    }
+
+    public async Task HouseholdTransactions()
+    {
+        var timestamp = Model.SelectedTranWrappedForDataGrid.Tran.Timestamp.AddMinutes(1);
+        var wm = new WindowManager();
+        var householdTransactionsViewModel = IoC.Get<HouseholdTransactionsViewModel>();
+        householdTransactionsViewModel.Initialize(timestamp);
+        await wm.ShowWindowAsync(householdTransactionsViewModel);
     }
 
     public async Task OnPreviewKeyDown(KeyEventArgs e)

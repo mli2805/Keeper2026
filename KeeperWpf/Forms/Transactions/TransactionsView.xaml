@@ -46,6 +46,10 @@
                     Style="{StaticResource MyButtonStyle}">
                 <Image Source="../../Resources/mainmenu/calculator.png" Width="24" Height="24" Margin="2,0" />
             </Button>
+            <Button Name="HouseholdTransactions" Margin="15,0,15,0" ToolTip="Household Transactions"
+                    Style="{StaticResource MyButtonStyle}">
+                <Image Source="../../Resources/mainmenu/apartment.png" Width="24" Height="24" Margin="2,0" />
+            </Button>
 
             <Button Height="25" Width="100" HorizontalAlignment="Right" Margin="0,0,5,0"
                     Style="{StaticResource MyButtonStyle}"
