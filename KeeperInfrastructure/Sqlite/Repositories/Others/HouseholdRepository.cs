@@ -21,4 +21,11 @@ public class HouseholdRepository(IDbContextFactory<KeeperDbContext> factory)
         await context.SaveChangesAsync();
         return entity.ToModel();
     }
+
+    public async Task UpdateUtilityMeters(UtilityMetersModel model)
+    {
+        await using var context = await factory.CreateDbContextAsync();
+        context.UtilityMeters.Update(model.ToEf());
+        await context.SaveChangesAsync();
+    }
 }

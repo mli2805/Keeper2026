@@ -20,21 +20,41 @@ public class UtilityMetersViewModel(KeeperDataModel dataModel, IWindowManager wi
 
     public async Task AddCurrentMonth()
     {
-        var monthReadings = new UtilityMetersModel
+        UtilityMetersModel lastReadings = dataModel.UtilityMeters.Last();
+        var now = DateTime.Now;
+        var isCurrentMonth = lastReadings.ReadingsDate.Year == now.Year
+            && lastReadings.ReadingsDate.Month == now.Month;
+
+        UtilityMetersModel monthReadings;
+        if (isCurrentMonth)
         {
-            ReadingsDate = DateTime.Now,
-        };
-        UtilityMetersModel previousMonth = dataModel.UtilityMeters.Last();
-        monthReadings.ColdWater.From = previousMonth.ColdWater.To;
-        monthReadings.HotWater.From = previousMonth.HotWater.To;
-        monthReadings.Electricity.From = previousMonth.Electricity.To;
-        monthReadings.Gas.From = previousMonth.Gas.To;
+            monthReadings = lastReadings;
+        }
+        else
+        {
+            monthReadings = new UtilityMetersModel
+            {
+                ReadingsDate = now,
+            };
+            monthReadings.ColdWater.From = lastReadings.ColdWater.To;
+            monthReadings.HotWater.From = lastReadings.HotWater.To;
+            monthReadings.Electricity.From = lastReadings.Electricity.To;
+            monthReadings.Gas.From = lastReadings.Gas.To;
+        }
 
         oneMonthReadingsViewModel.Initialize(monthReadings);
         if (await windowManager.ShowDialogAsync(oneMonthReadingsViewModel) != true) return;
 
-        var savedReadings = await householdRepository.AddUtilityMeters(oneMonthReadingsViewModel.UtilityMetersInWork);
-        dataModel.UtilityMeters.Add(savedReadings);
+        if (isCurrentMonth)
+        {
+            await householdRepository.UpdateUtilityMeters(oneMonthReadingsViewModel.UtilityMetersInWork);
+        }
+        else
+        {
+            var savedReadings = await householdRepository.AddUtilityMeters(oneMonthReadingsViewModel.UtilityMetersInWork);
+            dataModel.UtilityMeters.Add(savedReadings);
+        }
+
         NotifyOfPropertyChange(nameof(Rows));
     }
 }

@@ -78,7 +78,6 @@ public class HouseholdTransactionsViewModel : Screen
         _balanceDuringTransactionHinter = balanceDuringTransactionHinter;
 
         PaymentWays = Enum.GetValues(typeof(PaymentWay)).OfType<PaymentWay>().ToList();
-        PaymentTemplates = new HouseholdPaymentsFactory(_dataModel).Create();
     }
 
     protected override void OnViewLoaded(object view)
@@ -86,8 +85,12 @@ public class HouseholdTransactionsViewModel : Screen
         DisplayName = "Оплата коммунальных";
     }
 
+  
+
     public void Initialize(DateTime timestamp)
     {
+        PaymentTemplates = new HouseholdPaymentsFactory(_dataModel).Create();
+
         TranInWork.Operation = OperationType.Расход;
         TranInWork.MyAccount = _dataModel.AcMoDict[1137]; // БНБ 1-2-3 виртуальная
         TranInWork.Currency = TranInWork.MyAccount.BankAccount!.MainCurrency;
@@ -133,6 +136,7 @@ public class HouseholdTransactionsViewModel : Screen
         {
             var tran = new TransactionModel(); 
             tran.Operation = OperationType.Расход;
+            tran.PaymentWay = PaymentWay.ОплатаПоЕрип;
             tran.MyAccount = TranInWork.MyAccount;
             tran.Timestamp = timestamp;
             tran.Counterparty = template.Counterparty;
