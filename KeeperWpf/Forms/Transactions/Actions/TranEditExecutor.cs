@@ -32,6 +32,25 @@ public class TranEditExecutor(TranModel model, IWindowManager windowManager,
         model.IsCollectionChanged = true;
     }
 
+    public async Task AddHouseholdTransactions()
+    {
+        var timestamp = model.SelectedTranWrappedForDataGrid.Tran.Timestamp.AddMinutes(1);
+      
+        var householdTransactionsViewModel = IoC.Get<HouseholdTransactionsViewModel>();
+        householdTransactionsViewModel.Initialize(timestamp);
+        bool? result = await windowManager.ShowDialogAsync(householdTransactionsViewModel);
+
+        if (!result.HasValue || !result.Value) return;
+
+        var transactionsToAdd = householdTransactionsViewModel.GetTransactions();
+        foreach (var tran in transactionsToAdd)
+        {
+            await AddOneTran(tran);
+        }
+
+        model.IsCollectionChanged = true;
+    }
+
     public async Task AddAfterSelected()
     {
         var tranForAdding = PrepareTranForAdding();

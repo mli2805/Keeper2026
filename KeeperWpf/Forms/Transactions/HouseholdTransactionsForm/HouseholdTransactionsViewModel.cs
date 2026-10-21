@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
-
-
 [ExportViewModel]
 public class HouseholdTransactionsViewModel : Screen
 {
@@ -127,13 +125,14 @@ public class HouseholdTransactionsViewModel : Screen
         TranInWork.Timestamp = selectedDate.Date.AddMinutes(minute);
     }
 
-    public List<TransactionModel> PrepareResult()
+    public List<TransactionModel> GetTransactions()
     {
         var result = new List<TransactionModel>();
         var timestamp = TranInWork.Timestamp;
         foreach (var template in PaymentTemplates.Where(t => t.IsOn))
         {
-            var tran = new TransactionModel();  
+            var tran = new TransactionModel(); 
+            tran.Operation = OperationType.Расход;
             tran.MyAccount = TranInWork.MyAccount;
             tran.Timestamp = timestamp;
             tran.Counterparty = template.Counterparty;
@@ -151,12 +150,12 @@ public class HouseholdTransactionsViewModel : Screen
 
     public async Task Save()
     {
-        await TryCloseAsync();
+        await TryCloseAsync(true);
     }
 
     public async Task Cancel()
     {
-        await TryCloseAsync();
+        await TryCloseAsync(false);
     }
 
     public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)

@@ -109,15 +109,6 @@ public class TransactionsViewModel : Screen
         System.Diagnostics.Process.Start("calc");
     }
 
-    public async Task HouseholdTransactions()
-    {
-        var timestamp = Model.SelectedTranWrappedForDataGrid.Tran.Timestamp.AddMinutes(1);
-        var wm = new WindowManager();
-        var householdTransactionsViewModel = IoC.Get<HouseholdTransactionsViewModel>();
-        householdTransactionsViewModel.Initialize(timestamp);
-        await wm.ShowWindowAsync(householdTransactionsViewModel);
-    }
-
     public async Task OnPreviewKeyDown(KeyEventArgs e)
     {
         switch (e.Key)
@@ -163,6 +154,11 @@ public class TransactionsViewModel : Screen
     public async Task MoveDown()
     {
         await _tranMoveExecutor.MoveSelected(TranMoveExecutor.Destination.Down);
+    }
+
+    public async Task HouseholdTransactions()
+    {
+        await _tranEditExecutor.AddHouseholdTransactions();
     }
 
     public async Task AddAfterSelected()
