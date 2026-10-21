@@ -69,25 +69,25 @@ public static class NickNames
     {
         if (accountItemModel.IsFolder)
             return "/KeeperWpf;component/Resources/tree16/yellow_folder.png";
-        if (accountItemModel.Is(NickNames.Closed))
+        if (accountItemModel.Is(Closed))
             return "/KeeperWpf;component/Resources/tree16/cross.png";
         if (accountItemModel.IsCard)
             return "/KeeperWpf;component/Resources/tree16/paycard4.png";
         if (accountItemModel.IsDeposit)
             return "/KeeperWpf;component/Resources/tree16/deposit7.png";
-        if (accountItemModel.Is(NickNames.Debts))
+        if (accountItemModel.Is(Debts))
             return "/KeeperWpf;component/Resources/tree16/hand_point_left.png";
-        if (accountItemModel.Is(NickNames.Trusts))
+        if (accountItemModel.Is(Trusts))
             return "/KeeperWpf;component/Resources/tree16/trust.png";
-        if (accountItemModel.Is(NickNames.BankAccounts))
+        if (accountItemModel.Is(BankAccounts))
             return "/KeeperWpf;component/Resources/tree16/account4.png";
-        if (accountItemModel.Is(NickNames.MyAccounts))
+        if (accountItemModel.Is(MyAccounts))
             return "/KeeperWpf;component/Resources/tree16/wallet2.png";
-        if (accountItemModel.Is(NickNames.IncomeCategoriesRoot))
+        if (accountItemModel.Is(IncomeCategoriesRoot))
             return "/KeeperWpf;component/Resources/tree16/plus3.png";
-        if (accountItemModel.Is(NickNames.ExpenseCategoriesRoot))
+        if (accountItemModel.Is(ExpenseCategoriesRoot))
             return "/KeeperWpf;component/Resources/tree16/minus3.png";
-        if (accountItemModel.Is(NickNames.TagsRoot))
+        if (accountItemModel.Is(TagsRoot))
             return "/KeeperWpf;component/Resources/tree16/tag.png";
 
         return "/KeeperWpf;component/Resources/tree16/counterparty.png";

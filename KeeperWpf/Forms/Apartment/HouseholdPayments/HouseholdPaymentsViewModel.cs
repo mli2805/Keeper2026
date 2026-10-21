@@ -147,6 +147,10 @@ public class HouseholdPaymentsViewModel : Screen
     public HouseholdPaymentsViewModel(KeeperDataModel dataModel)
     {
         _dataModel = dataModel;
+    }
+
+    protected override void OnViewLoaded(object view)
+    {
         DisplayName = "Счета за коммунальные услуги. T - таблица/график, C - BYN/USD";
     }
 

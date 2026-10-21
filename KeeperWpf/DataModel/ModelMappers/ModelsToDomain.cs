@@ -236,7 +236,7 @@ public static class ModelsToDomain
 
     public static TodoTask FromModel(this TodoTaskModel model)
     {
-        model.NormalizeCompletion(System.DateOnly.FromDateTime(System.DateTime.Now));
+        model.NormalizeCompletion(DateOnly.FromDateTime(DateTime.Now));
 
         return new TodoTask()
         {

@@ -11,7 +11,7 @@ public class HouseholdPaymentTemplate
     public string Kor => BuildLine();
     public decimal Amount { get; set; }
     public CurrencyCode Currency { get; set; } = CurrencyCode.BYN;
-    public List<AccountItemModel> Tags { get; set; } = new List<AccountItemModel>();
+    public List<AccountItemModel> Tags { get; set; }
     public string Comment { get; set; }
 
     public HouseholdPaymentTemplate(AccountItemModel counterparty, AccountItemModel category,
