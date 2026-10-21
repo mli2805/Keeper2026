@@ -5,7 +5,6 @@ using Caliburn.Micro;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using KeeperDomain;
 
 namespace KeeperWpf;
 

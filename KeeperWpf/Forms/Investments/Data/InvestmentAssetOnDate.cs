@@ -1,7 +1,4 @@
-﻿using KeeperDomain;
-using KeeperModels;
-
-namespace KeeperWpf;
+﻿namespace KeeperWpf;
 
 public class InvestmentAssetOnDate
 {

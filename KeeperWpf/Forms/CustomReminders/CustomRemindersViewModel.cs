@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using KeeperInfrastructure;
-using KeeperModels;
 using System.Linq;
 using System.Threading.Tasks;
 

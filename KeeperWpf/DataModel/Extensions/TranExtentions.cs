@@ -1,6 +1,4 @@
-﻿using KeeperModels;
-
-namespace KeeperWpf;
+﻿namespace KeeperWpf;
 
 public static class TranExtentions
 {

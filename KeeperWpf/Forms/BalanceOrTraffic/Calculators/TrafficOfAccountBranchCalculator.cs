@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using KeeperDomain;
-using KeeperModels;
 
 namespace KeeperWpf;
 

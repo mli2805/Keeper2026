@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using KeeperDomain;
-using KeeperModels;
 
 namespace KeeperWpf;
 

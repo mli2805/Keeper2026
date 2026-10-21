@@ -5,8 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
-using KeeperDomain;
-using KeeperModels;
 
 namespace KeeperWpf;
 

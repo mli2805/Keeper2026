@@ -5,8 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Windows.Media;
 using Caliburn.Micro;
-using KeeperDomain;
-using KeeperModels;
 using Microsoft.Win32;
 
 namespace KeeperWpf;

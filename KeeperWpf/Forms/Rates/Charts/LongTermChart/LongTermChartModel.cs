@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using KeeperDomain;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Legends;

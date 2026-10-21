@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Xml;
-using KeeperDomain;
 using Newtonsoft.Json;
 
 namespace KeeperWpf;

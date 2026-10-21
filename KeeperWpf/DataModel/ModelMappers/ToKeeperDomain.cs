@@ -1,5 +1,4 @@
-﻿using KeeperDomain;
-using KeeperInfrastructure;
+﻿using KeeperInfrastructure;
 using System.Collections.Generic;
 using System.Linq;
 

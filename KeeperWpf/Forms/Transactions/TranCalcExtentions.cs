@@ -1,6 +1,4 @@
 ﻿using System;
-using KeeperDomain;
-using KeeperModels;
 
 namespace KeeperWpf;
 

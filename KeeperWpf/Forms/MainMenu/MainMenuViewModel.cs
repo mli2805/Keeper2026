@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Caliburn.Micro;
-using KeeperDomain;
 
 namespace KeeperWpf;
 

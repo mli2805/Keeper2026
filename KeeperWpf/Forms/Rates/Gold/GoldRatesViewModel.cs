@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
-using KeeperDomain;
 using KeeperInfrastructure;
 
 namespace KeeperWpf;

@@ -1,6 +1,4 @@
 ﻿using Caliburn.Micro;
-using KeeperDomain;
-using KeeperModels;
 using System.Linq;
 using System.Threading.Tasks;
 

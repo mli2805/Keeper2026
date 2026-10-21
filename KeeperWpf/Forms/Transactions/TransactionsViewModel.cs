@@ -1,5 +1,4 @@
-﻿using System;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;

@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using KeeperDomain;
 
 namespace KeeperWpf;
 

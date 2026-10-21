@@ -4,8 +4,6 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
 using Caliburn.Micro;
-using KeeperDomain;
-using KeeperModels;
 
 namespace KeeperWpf;
 

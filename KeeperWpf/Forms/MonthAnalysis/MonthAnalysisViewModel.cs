@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
 using Caliburn.Micro;
-using KeeperDomain;
 
 namespace KeeperWpf;
 

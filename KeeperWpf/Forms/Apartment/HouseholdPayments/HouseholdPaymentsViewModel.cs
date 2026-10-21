@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using KeeperModels;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;

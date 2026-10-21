@@ -1,7 +1,5 @@
 ﻿using Caliburn.Micro;
-using KeeperDomain;
 using KeeperInfrastructure;
-using KeeperModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using KeeperDomain;
-using KeeperModels;
 
 namespace KeeperWpf;
 

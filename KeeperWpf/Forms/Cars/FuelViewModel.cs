@@ -4,8 +4,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Caliburn.Micro;
-using KeeperDomain;
-using KeeperModels;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;

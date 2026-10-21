@@ -1,7 +1,5 @@
 ﻿using Caliburn.Micro;
-using KeeperDomain;
 using KeeperInfrastructure;
-using KeeperModels;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;

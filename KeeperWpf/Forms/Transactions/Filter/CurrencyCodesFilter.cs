@@ -1,6 +1,4 @@
-﻿using KeeperDomain;
-
-namespace KeeperWpf;
+﻿namespace KeeperWpf;
 
 public class CurrencyCodesFilter
 {

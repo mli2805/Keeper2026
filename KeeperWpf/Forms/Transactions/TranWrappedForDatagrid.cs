@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Windows.Media;
 using Caliburn.Micro;
-using KeeperDomain;
-using KeeperModels;
 
 namespace KeeperWpf;
 

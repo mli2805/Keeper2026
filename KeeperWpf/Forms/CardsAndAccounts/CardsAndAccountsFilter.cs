@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using Caliburn.Micro;
-using KeeperDomain;
 
 namespace KeeperWpf;
 

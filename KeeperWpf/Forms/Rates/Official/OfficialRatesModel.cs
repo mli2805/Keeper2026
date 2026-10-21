@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Windows.Media;
 using Caliburn.Micro;
-using KeeperDomain;
 
 namespace KeeperWpf;
 

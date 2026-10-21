@@ -1,6 +1,4 @@
-﻿using KeeperDomain;
-using KeeperModels;
-using OxyPlot;
+﻿using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;

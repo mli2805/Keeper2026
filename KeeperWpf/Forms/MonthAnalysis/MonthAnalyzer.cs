@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using KeeperDomain;
 
 namespace KeeperWpf;
 
