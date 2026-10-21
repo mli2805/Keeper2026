@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Width="520"
         SizeToContent="Height"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -18,7 +18,7 @@
         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
             <TextBlock Text="Дата показаний:" VerticalAlignment="Center" Margin="0,0,10,0" />
             <DatePicker Width="120"
-                        SelectedDate="{Binding ReadingsDate, Mode=TwoWay, StringFormat='{}{0:d/MM/yyyy}'}" />
+                        SelectedDate="{Binding UtilityMetersInWork.ReadingsDate, Mode=TwoWay, StringFormat='{}{0:d/MM/yyyy}'}" />
         </StackPanel>
 
         <Grid Grid.Row="1">
@@ -42,24 +42,24 @@
             <TextBlock Grid.Column="3" Text="Объем" FontWeight="Bold" Margin="5" />
 
             <TextBlock Grid.Row="1" Text="Холодная вода, м³" VerticalAlignment="Center" Margin="5" />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding UtilityMetersInWork.ColdWater.From, Mode=TwoWay}" Margin="5" />
-            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding UtilityMetersInWork.ColdWater.To, Mode=TwoWay}" Margin="5" />
-            <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding UtilityMetersInWork.ColdWater.Volume, Mode=TwoWay}" Margin="5" />
+            <TextBox Grid.Row="1" Grid.Column="1" IsEnabled="False" Text="{Binding UtilityMetersInWork.ColdWater.From, Mode=TwoWay}" Margin="5" />
+            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding UtilityMetersInWork.ColdWater.To, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" />
+            <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding UtilityMetersInWork.ColdWater.Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" />
 
             <TextBlock Grid.Row="2" Text="Горячая вода, м³" VerticalAlignment="Center" Margin="5" />
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding UtilityMetersInWork.HotWater.From, Mode=TwoWay}" Margin="5" />
-            <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding UtilityMetersInWork.HotWater.To, Mode=TwoWay}" Margin="5" />
-            <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding UtilityMetersInWork.HotWater.Volume, Mode=TwoWay}" Margin="5" />
+            <TextBox Grid.Row="2" Grid.Column="1" IsEnabled="False" Text="{Binding UtilityMetersInWork.HotWater.From, Mode=TwoWay}" Margin="5" />
+            <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding UtilityMetersInWork.HotWater.To, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" />
+            <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding UtilityMetersInWork.HotWater.Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" />
 
             <TextBlock Grid.Row="3" Text="Электричество, кВт·ч" VerticalAlignment="Center" Margin="5" />
-            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding UtilityMetersInWork.Electricity.From, Mode=TwoWay}" Margin="5" />
-            <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding UtilityMetersInWork.Electricity.To, Mode=TwoWay}" Margin="5" />
-            <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding UtilityMetersInWork.Electricity.Volume, Mode=TwoWay}" Margin="5" />
+            <TextBox Grid.Row="3" Grid.Column="1" IsEnabled="False" Text="{Binding UtilityMetersInWork.Electricity.From, Mode=TwoWay}" Margin="5" />
+            <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding UtilityMetersInWork.Electricity.To, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" />
+            <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding UtilityMetersInWork.Electricity.Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" />
 
             <TextBlock Grid.Row="4" Text="Газ, м³" VerticalAlignment="Center" Margin="5" />
-            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding UtilityMetersInWork.Gas.From, Mode=TwoWay}" Margin="5" />
-            <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding UtilityMetersInWork.Gas.To, Mode=TwoWay}" Margin="5" />
-            <TextBox Grid.Row="4" Grid.Column="3" Text="{Binding UtilityMetersInWork.Gas.Volume, Mode=TwoWay}" Margin="5" />
+            <TextBox Grid.Row="4" Grid.Column="1" IsEnabled="False" Text="{Binding UtilityMetersInWork.Gas.From, Mode=TwoWay}" Margin="5" />
+            <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding UtilityMetersInWork.Gas.To, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" />
+            <TextBox Grid.Row="4" Grid.Column="3" Text="{Binding UtilityMetersInWork.Gas.Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" />
         </Grid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">

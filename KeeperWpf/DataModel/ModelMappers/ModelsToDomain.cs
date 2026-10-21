@@ -1,5 +1,6 @@
 ﻿using KeeperDomain;
 using KeeperModels;
+using System;
 using System.Linq;
 
 namespace KeeperWpf;
@@ -120,6 +121,29 @@ public static class ModelsToDomain
             CarAccountId = fuellingModel.CarAccountId,
             Volume = fuellingModel.Volume,
             FuelType = fuellingModel.FuelType,
+        };
+    }
+
+    public static UtilityMeters FromModel(this UtilityMetersModel model)
+    {
+        return new UtilityMeters
+        {
+            Id = model.Id,
+            ReadingsDate = DateOnly.FromDateTime(model.ReadingsDate),
+            ColdWater = model.ColdWater.FromModel(),
+            HotWater = model.HotWater.FromModel(),
+            Electricity = model.Electricity.FromModel(),
+            Gas = model.Gas.FromModel(),
+        };
+    }
+
+    private static UtilityMeter FromModel(this UtilityMeterModel model)
+    {
+        return new UtilityMeter
+        {
+            From = model.From,
+            To = model.To,
+            Volume = model.Volume,
         };
     }
 

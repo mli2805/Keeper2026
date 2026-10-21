@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Caliburn.Micro;
-using KeeperDomain;
-using KeeperModels;
 
 namespace KeeperWpf;
 
@@ -40,7 +38,7 @@ public class KeeperDataModel : PropertyChangedBase
     public List<DepositOfferModel> DepositOffers { get; set; } = null!;
     public List<CarModel> Cars { get; set; } = null!;
     public List<FuellingModel> FuellingVms { get; set; } = null!;
-    public List<UtilityMeters> UtilityMeters { get; set; } = null!;
+    public List<UtilityMetersModel> UtilityMeters { get; set; } = null!;
     public List<TodoTaskModel> TodoTasks { get; set; } = null!;
 
     // старая, больше не используется формами

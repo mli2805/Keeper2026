@@ -10,7 +10,7 @@
     <DockPanel Margin="8">
         <Button x:Name="AddCurrentMonth"
                 DockPanel.Dock="Bottom"
-                Content="Добавь текущий месяц"
+                Content="Добавить текущий месяц"
                 Width="180"
                 Height="28"
                 Margin="0,8,0,0"

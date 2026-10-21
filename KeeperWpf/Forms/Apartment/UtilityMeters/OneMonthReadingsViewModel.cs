@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,28 +8,32 @@ namespace KeeperWpf;
 [ExportViewModel]
 public class OneMonthReadingsViewModel : Screen
 {
-    public UtilityMeters UtilityMetersInWork { get; private set; } = null!;
-
-    public DateTime? ReadingsDate
-    {
-        get => UtilityMetersInWork.ReadingsDate.ToDateTime(TimeOnly.MinValue);
-        set
-        {
-            if (value.HasValue)
-            {
-                UtilityMetersInWork.ReadingsDate = DateOnly.FromDateTime(value.Value);
-            }
-        }
-    }
+    public UtilityMetersModel UtilityMetersInWork { get; private set; } = null!;
 
     protected override void OnViewLoaded(object view)
     {
         DisplayName = $"Показания за {UtilityMetersInWork.ReadingsDate : MMMM yyyy}";
     }
 
-    public void Initialize(UtilityMeters utilityMeters)
+    public void Initialize(UtilityMetersModel utilityMeters)
     {
         UtilityMetersInWork = utilityMeters;
+
+        UtilityMetersInWork.ColdWater.PropertyChanged += UtilityMeter_PropertyChanged;
+        UtilityMetersInWork.HotWater.PropertyChanged += UtilityMeter_PropertyChanged;
+        UtilityMetersInWork.Electricity.PropertyChanged += UtilityMeter_PropertyChanged;
+        UtilityMetersInWork.Gas.PropertyChanged += UtilityMeter_PropertyChanged;
+    }
+
+    private void UtilityMeter_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (sender is not UtilityMeterModel utilityMeter)
+            return;
+
+        if (e.PropertyName == nameof(UtilityMeterModel.Volume))
+            utilityMeter.To = utilityMeter.From + utilityMeter.Volume;
+        else if (e.PropertyName == nameof(UtilityMeterModel.To))
+            utilityMeter.Volume = utilityMeter.To - utilityMeter.From;
     }
 
     public async Task Save()

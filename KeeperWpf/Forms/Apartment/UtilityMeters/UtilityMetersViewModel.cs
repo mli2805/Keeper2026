@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
-using KeeperDomain;
+using KeeperInfrastructure;
+using KeeperModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace KeeperWpf;
 
 [ExportViewModel]
 public class UtilityMetersViewModel(KeeperDataModel dataModel, IWindowManager windowManager,
-    OneMonthReadingsViewModel oneMonthReadingsViewModel) : Screen
+    OneMonthReadingsViewModel oneMonthReadingsViewModel, HouseholdRepository householdRepository) : Screen
 {
-    public IReadOnlyList<UtilityMeters> Rows => dataModel.UtilityMeters;
+    public IReadOnlyList<UtilityMetersModel> Rows => dataModel.UtilityMeters;
 
     protected override void OnViewLoaded(object view)
     {
@@ -20,17 +21,21 @@ public class UtilityMetersViewModel(KeeperDataModel dataModel, IWindowManager wi
 
     public async Task AddCurrentMonth()
     {
-        var monthReadings = new UtilityMeters
+        var monthReadings = new UtilityMetersModel
         {
-            ReadingsDate = DateOnly.FromDateTime(DateTime.Now),
+            ReadingsDate = DateTime.Now,
         };
-        UtilityMeters previousMonth = dataModel.UtilityMeters.Last();
+        UtilityMetersModel previousMonth = dataModel.UtilityMeters.Last();
         monthReadings.ColdWater.From = previousMonth.ColdWater.To;
         monthReadings.HotWater.From = previousMonth.HotWater.To;
         monthReadings.Electricity.From = previousMonth.Electricity.To;
         monthReadings.Gas.From = previousMonth.Gas.To;
 
         oneMonthReadingsViewModel.Initialize(monthReadings);
-        await windowManager.ShowWindowAsync(oneMonthReadingsViewModel);
+        if (await windowManager.ShowDialogAsync(oneMonthReadingsViewModel) != true) return;
+
+        var savedReadings = await householdRepository.AddUtilityMeters(oneMonthReadingsViewModel.UtilityMetersInWork);
+        dataModel.UtilityMeters.Add(savedReadings);
+        NotifyOfPropertyChange(nameof(Rows));
     }
 }

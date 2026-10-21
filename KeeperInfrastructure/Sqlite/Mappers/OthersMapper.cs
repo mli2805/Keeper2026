@@ -148,6 +148,27 @@ public static class OthersMapper
         };
     }
 
+    public static UtilityMetersEf ToEf(this UtilityMetersModel model)
+    {
+        return new UtilityMetersEf
+        {
+            Id = model.Id,
+            ReadingsDate = DateOnly.FromDateTime(model.ReadingsDate),
+            ColdWaterFrom = model.ColdWater.From,
+            ColdWaterTo = model.ColdWater.To,
+            ColdWaterVolume = model.ColdWater.Volume,
+            HotWaterFrom = model.HotWater.From,
+            HotWaterTo = model.HotWater.To,
+            HotWaterVolume = model.HotWater.Volume,
+            ElectricityFrom = model.Electricity.From,
+            ElectricityTo = model.Electricity.To,
+            ElectricityVolume = model.Electricity.Volume,
+            GasFrom = model.Gas.From,
+            GasTo = model.Gas.To,
+            GasVolume = model.Gas.Volume
+        };
+    }
+
     public static UtilityMeters FromEf(this UtilityMetersEf ef)
     {
         return new UtilityMeters
@@ -169,6 +190,31 @@ public static class OthersMapper
             Gas = new UtilityMeter 
             { 
                 From = ef.GasFrom, To = ef.GasTo, Volume = ef.GasVolume 
+            }
+        };
+    }
+
+    public static UtilityMetersModel ToModel(this UtilityMetersEf ef)
+    {
+        return new UtilityMetersModel
+        {
+            Id = ef.Id,
+            ReadingsDate = ef.ReadingsDate.ToDateTime(TimeOnly.MinValue),
+            ColdWater = new UtilityMeterModel
+            {
+                From = ef.ColdWaterFrom, To = ef.ColdWaterTo, Volume = ef.ColdWaterVolume
+            },
+            HotWater = new UtilityMeterModel
+            {
+                From = ef.HotWaterFrom, To = ef.HotWaterTo, Volume = ef.HotWaterVolume
+            },
+            Electricity = new UtilityMeterModel
+            {
+                From = ef.ElectricityFrom, To = ef.ElectricityTo, Volume = ef.ElectricityVolume
+            },
+            Gas = new UtilityMeterModel
+            {
+                From = ef.GasFrom, To = ef.GasTo, Volume = ef.GasVolume
             }
         };
     }
