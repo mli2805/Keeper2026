@@ -18,6 +18,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     DepoCurrResultViewModel depoCurrResultViewModel,
     //
     MortgagePaymentsViewModel mortgagePaymentsViewModel, BillsParsingViewModel billsParsingViewModel,
+    UtilityMetersViewModel utilityMetersViewModel,
     CarsViewModel carsViewModel,
     OpenDepositsViewModel openDepositsViewModel, CardsAndAccountsViewModel cardsAndAccountsViewModel,
     // trust:
@@ -252,6 +253,11 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         var vm = IoC.Get<HouseholdBillsViewModel>();
         //vm.Initialize();
         await windowManager.ShowDialogAsync(vm);
+    }
+
+    public async Task ShowUtilityMetersForm()
+    {
+        await windowManager.ShowDialogAsync(utilityMetersViewModel);
     }
 
     public async Task ShowBillsParsingForm()

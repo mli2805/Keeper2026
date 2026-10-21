@@ -1,0 +1,39 @@
+<Window x:Class="KeeperWpf.UtilityMetersView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        Title="{Binding DisplayName}"
+        Width="1200"
+        Height="600"
+        WindowStartupLocation="CenterOwner">
+    <DockPanel Margin="8">
+        <Button x:Name="AddCurrentMonth"
+                DockPanel.Dock="Bottom"
+                Content="Добавь текущий месяц"
+                Width="180"
+                Height="28"
+                Margin="0,8,0,0"
+                HorizontalAlignment="Right" />
+        <DataGrid ItemsSource="{Binding Rows}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False">
+            <i:Interaction.Behaviors>
+                <keeperWpf:ScrollToBottomOnLoadBehavior />
+            </i:Interaction.Behaviors>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Дата" Width="100" Binding="{Binding ReadingsDate, StringFormat='{}{0:d/MM/yyyy}'}" />
+                <DataGridTextColumn Header="Холодная вода: расход" Width="*" Binding="{Binding ColdWater.Volume}" />
+                <DataGridTextColumn Header="Холодная вода: кон." Width="*" Binding="{Binding ColdWater.To}" />
+                <DataGridTextColumn Header="Горячая вода: расход" Width="*" Binding="{Binding HotWater.Volume}" />
+                <DataGridTextColumn Header="Горячая вода: кон." Width="*" Binding="{Binding HotWater.To}" />
+                <DataGridTextColumn Header="Электричество: расход" Width="*" Binding="{Binding Electricity.Volume}" />
+                <DataGridTextColumn Header="Электричество: кон." Width="*" Binding="{Binding Electricity.To}" />
+                <DataGridTextColumn Header="Газ: расход" Width="*" Binding="{Binding Gas.Volume}" />
+                <DataGridTextColumn Header="Газ: кон." Width="*" Binding="{Binding Gas.To}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>
