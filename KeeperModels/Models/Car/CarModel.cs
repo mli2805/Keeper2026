@@ -19,7 +19,9 @@ public class CarModel
     
 
     public int MileageDifference => SaleMileage - PurchaseMileage;
-    public int MileageAday => MileageDifference / (SaleDate - PurchaseDate).Days;
+    public int MileageAday => (SaleDate - PurchaseDate).Days > 0
+        ? MileageDifference / (SaleDate - PurchaseDate).Days
+        : 0;
     public List<YearMileageModel> YearsMileage { get; set; } = new List<YearMileageModel>();
 
 }

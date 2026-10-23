@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using KeeperInfrastructure;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -11,7 +12,7 @@ namespace KeeperWpf;
 
 [ExportViewModel]
 public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWindowManager windowManager,
-    CarRepository carRepository, FuelViewModel fuelViewModel, OwnershipCostViewModel ownershipCostViewModel,
+    CarRepository carRepository, OneCarViewModel oneCarViewModel, FuelViewModel fuelViewModel, OwnershipCostViewModel ownershipCostViewModel,
     YearExpensesViewModel yearExpensesViewModel) : Screen
 {
     public BindableCollection<CarModel> Cars { get; set; } = null!;
@@ -104,7 +105,8 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
             Period = fullPeriod,
             YearAmount = YearMileagesToShow.Sum(y => y.YearAmount),
         };
-        Total.DayAmount = Total.YearAmount / fullPeriod.ToDays();
+        var totalDays = fullPeriod.ToDays();
+        Total.DayAmount = totalDays > 0 ? Total.YearAmount / totalDays : 0;
         TotalPlus = new YearMileageModel()
         {
             CarId = SelectedCar.CarAccountId,
@@ -130,7 +132,8 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
             yearMileageModel.YearAmount -= SelectedCar.SupposedSalePrice;
         }
 
-        yearMileageModel.DayAmount = yearMileageModel.YearAmount / yearMileageModel.Period.ToDays();
+        var periodDays = yearMileageModel.Period.ToDays();
+        yearMileageModel.DayAmount = periodDays > 0 ? yearMileageModel.YearAmount / periodDays : 0;
     }
 
     public bool CanStartNewYearMileage => SelectedCar.Id == Cars.Last().Id &&
@@ -165,9 +168,63 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
         await windowManager.ShowWindowAsync(yearExpensesViewModel);
     }
 
-    public void AddNewCar()
+    public async Task AddNewCar()
     {
+        var newCar = new CarModel()
+        {
+            Title = "Новый автомобиль",
+            PurchaseDate = DateTime.Today,
+            PurchaseMileage = 0,
+            SaleDate = DateTime.Today.AddYears(5),
+            SaleMileage = 0,
+            SupposedSalePrice = 0,
+            YearsMileage = new List<YearMileageModel>()
+            {
+                new YearMileageModel()
+                {
+                    Period = new Period(DateTime.Today, DateTime.Today.AddYears(1).AddMilliseconds(-1)),
+                    YearNumber = 1,
+                    Odometer = 0,
+                    Mileage = 0
+                }
+            }
 
+        };
+        oneCarViewModel.Initialize(newCar);
+        var result = await windowManager.ShowDialogAsync(oneCarViewModel);
+        if (result != true) return;
+
+        await carRepository.SaveCarWithMileages(oneCarViewModel.CarInWork);
+        await RefreshCars();
+    }
+
+    public async Task EditCar()
+    {
+        oneCarViewModel.Initialize(SelectedCar);
+        var result = await windowManager.ShowDialogAsync(oneCarViewModel);
+        if (result != true) return;
+
+        await carRepository.SaveCarWithMileages(oneCarViewModel.CarInWork);
+        await RefreshCars(oneCarViewModel.CarInWork.Id);
+    }
+
+    private async Task RefreshCars(int selectedCarId = 0)
+    {
+        dataModel.Cars = [.. (await carRepository.GetAllCarsWithMileages()).OrderBy(car => car.Id)];
+        Cars = [.. dataModel.Cars];
+        _selectedCar = selectedCarId == 0
+            ? Cars.Last()
+            : Cars.First(car => car.Id == selectedCarId);
+        YearMileagesToShow = [.. _selectedCar.YearsMileage];
+        EvaluateYearMileageToShow();
+
+        NotifyOfPropertyChange(nameof(Cars));
+        NotifyOfPropertyChange(nameof(SelectedCar));
+        NotifyOfPropertyChange(nameof(YearMileagesToShow));
+        NotifyOfPropertyChange(nameof(IsLastCarVisibility));
+        NotifyOfPropertyChange(nameof(Total));
+        NotifyOfPropertyChange(nameof(TotalPlus));
+        NotifyOfPropertyChange(nameof(CanStartNewYearMileage));
     }
 
     public async Task Fuelling()

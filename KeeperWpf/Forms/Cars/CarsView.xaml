@@ -209,6 +209,8 @@
             <Button Content="Авто отчет" Width="120" Margin="0,5" Name="ShowCarReport" />
         </StackPanel>
         <StackPanel Margin="5,20" HorizontalAlignment="Right">
+            <Button Content="Новое авто" Width="120" Margin="5" Name="AddNewCar"/>
+            <Button Content="Редактировать авто" Width="120" Margin="5" Name="EditCar"/>
             <Button Content="Заправка" Width="120" Margin="5" Name="Fuelling"/>
         </StackPanel>
     </DockPanel>

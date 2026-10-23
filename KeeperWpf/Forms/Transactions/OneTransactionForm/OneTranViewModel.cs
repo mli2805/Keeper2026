@@ -245,7 +245,7 @@ public class OneTranViewModel : Screen
             CarAccountId = _dataModel.Cars.Last().CarAccountId,
             Timestamp = TranInWork.Timestamp,
             Volume = 30,
-            FuelType = FuelType.ДтЕвро5,
+            FuelType = FuelType.Аи95,
             Amount = TranInWork.Amount,
             Currency = TranInWork.Currency,
             Comment = TranInWork.Comment,
