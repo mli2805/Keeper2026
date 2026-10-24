@@ -45,4 +45,18 @@ public class UtilityMeterModel : PropertyChangedBase
             }
         }
     }
+
+    private double _tariff;
+    public double Tariff
+    {
+        get => _tariff;
+        set
+        {
+            if (_tariff != value)
+            {
+                _tariff = value;
+                NotifyOfPropertyChange(() => Tariff);
+            }
+        }
+    }
 }

@@ -142,6 +142,7 @@ public static class ModelsToDomain
             From = model.From,
             To = model.To,
             Volume = model.Volume,
+            Tariff = model.Tariff,
         };
     }
 

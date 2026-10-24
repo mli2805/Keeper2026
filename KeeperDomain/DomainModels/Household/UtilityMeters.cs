@@ -23,10 +23,17 @@ public class UtilityMeters : IDumpable, IParsable<UtilityMeters>
         var substrings = s.Split(';');
         Id = int.Parse(substrings[0]);
         ReadingsDate = DateOnly.ParseExact(substrings[1].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
-        ColdWater = new UtilityMeter().FromString(substrings[2].Trim(), substrings[3].Trim(), substrings[4].Trim());
-        HotWater = new UtilityMeter().FromString(substrings[5].Trim(), substrings[6].Trim(), substrings[7].Trim());
-        Electricity = new UtilityMeter().FromString(substrings[8].Trim(), substrings[9].Trim(), substrings[10].Trim());
-        Gas = new UtilityMeter().FromString(substrings[11].Trim(), substrings[12].Trim(), substrings[13].Trim());
+        var valuesPerMeter = substrings.Length >= 18 ? 4 : 3;
+        ColdWater = ParseMeter(2);
+        HotWater = ParseMeter(2 + valuesPerMeter);
+        Electricity = ParseMeter(2 + 2 * valuesPerMeter);
+        Gas = ParseMeter(2 + 3 * valuesPerMeter);
         return this;
+
+        UtilityMeter ParseMeter(int index) => new UtilityMeter().FromString(
+            substrings[index].Trim(),
+            substrings[index + 1].Trim(),
+            substrings[index + 2].Trim(),
+            valuesPerMeter == 4 ? substrings[index + 3].Trim() : "0");
     }
 }

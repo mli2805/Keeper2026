@@ -63,6 +63,30 @@ public class UtilityMetersModel : PropertyChangedBase
         }
     }
 
+    private decimal? _electricityPaymentAmount;
+    public decimal? ElectricityPaymentAmount
+    {
+        get => _electricityPaymentAmount;
+        set
+        {
+            if (_electricityPaymentAmount == value) return;
+            _electricityPaymentAmount = value;
+            NotifyOfPropertyChange(() => ElectricityPaymentAmount);
+        }
+    }
+
+    private string _electricityComment = string.Empty;
+    public string ElectricityComment
+    {
+        get => _electricityComment;
+        set
+        {
+            if (_electricityComment == value) return;
+            _electricityComment = value;
+            NotifyOfPropertyChange(() => ElectricityComment);
+        }
+    }
+
     private UtilityMeterModel _gas = new();
     public UtilityMeterModel Gas
     {
@@ -74,6 +98,30 @@ public class UtilityMetersModel : PropertyChangedBase
                 _gas = value;
                 NotifyOfPropertyChange(() => Gas);
             }
+        }
+    }
+
+    private decimal? _gasPaymentAmount;
+    public decimal? GasPaymentAmount
+    {
+        get => _gasPaymentAmount;
+        set
+        {
+            if (_gasPaymentAmount == value) return;
+            _gasPaymentAmount = value;
+            NotifyOfPropertyChange(() => GasPaymentAmount);
+        }
+    }
+
+    private string _gasComment = string.Empty;
+    public string GasComment
+    {
+        get => _gasComment;
+        set
+        {
+            if (_gasComment == value) return;
+            _gasComment = value;
+            NotifyOfPropertyChange(() => GasComment);
         }
     }
 }

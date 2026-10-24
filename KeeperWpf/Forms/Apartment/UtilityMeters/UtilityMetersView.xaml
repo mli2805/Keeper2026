@@ -4,20 +4,53 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:keeperWpf="clr-namespace:KeeperWpf"
         Title="{Binding DisplayName}"
-        Width="1200"
+        Width="1500"
         Height="600"
         WindowStartupLocation="CenterOwner">
     <DockPanel Margin="8">
-        <Button x:Name="AddCurrentMonth"
-                DockPanel.Dock="Bottom"
-                Content="Добавить текущий месяц"
-                Width="180"
-                Height="28"
-                Margin="0,8,0,0"
-                HorizontalAlignment="Right" />
+        <Grid DockPanel.Dock="Bottom"
+              Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name="ImportGasReadings"
+                    Grid.Column="0"
+                    Content="Импорт газа"
+                    Width="180"
+                    Height="28"
+                    HorizontalAlignment="Left" />
+            <Button x:Name="CalculateGasReadings"
+                    Grid.Column="1"
+                     Content="Рассчитать газ"
+                     Width="180"
+                     Height="28"
+                     HorizontalAlignment="Center" />
+            <Button x:Name="SaveManualCorrections"
+                     Grid.Column="2"
+                    Content="Сохранить исправления"
+                    Width="180"
+                    Height="28"
+                    HorizontalAlignment="Center" />
+            <Button x:Name="CalculateElectricityRate"
+                     Grid.Column="3"
+                     Content="Рассчитать тариф"
+                     Width="180"
+                     Height="28"
+                     HorizontalAlignment="Center" />
+            <Button x:Name="AddCurrentMonth"
+                     Grid.Column="4"
+                    Content="Добавить текущий месяц"
+                    Width="180"
+                    Height="28"
+                    HorizontalAlignment="Right" />
+        </Grid>
         <DataGrid ItemsSource="{Binding Rows}"
                   AutoGenerateColumns="False"
-                  IsReadOnly="True"
+                  IsReadOnly="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False">
             <i:Interaction.Behaviors>
@@ -25,14 +58,19 @@
             </i:Interaction.Behaviors>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Дата" Width="100" Binding="{Binding ReadingsDate, StringFormat='{}{0:d/MM/yyyy}'}" />
-                <DataGridTextColumn Header="Холодная вода: расход" Width="*" Binding="{Binding ColdWater.Volume}" />
-                <DataGridTextColumn Header="Холодная вода: кон." Width="*" Binding="{Binding ColdWater.To}" />
-                <DataGridTextColumn Header="Горячая вода: расход" Width="*" Binding="{Binding HotWater.Volume}" />
-                <DataGridTextColumn Header="Горячая вода: кон." Width="*" Binding="{Binding HotWater.To}" />
-                <DataGridTextColumn Header="Электричество: расход" Width="*" Binding="{Binding Electricity.Volume}" />
-                <DataGridTextColumn Header="Электричество: кон." Width="*" Binding="{Binding Electricity.To}" />
+             
+                <DataGridTextColumn Header="Эл-во: начало" Width="*" Binding="{Binding Electricity.From}" />
+                <DataGridTextColumn Header="Эл-во: расход" Width="*" Binding="{Binding Electricity.Volume}" />
+                <DataGridTextColumn Header="Эл-во: конец" Width="*" Binding="{Binding Electricity.To}" />
+                <DataGridTextColumn Header="Эл-во: за кВт" Width="*" Binding="{Binding Electricity.Tariff}" />
+                <DataGridTextColumn Header="Эл-во: сумма" Width="*" IsReadOnly="True" Binding="{Binding ElectricityPaymentAmount, StringFormat={}{0:N2}}" />
+                <DataGridTextColumn Header="Эл-во: комментарий" Width="2*" Binding="{Binding ElectricityComment}" />
+                <DataGridTextColumn Header="Газ: начало" Width="*" Binding="{Binding Gas.From}" />
                 <DataGridTextColumn Header="Газ: расход" Width="*" Binding="{Binding Gas.Volume}" />
-                <DataGridTextColumn Header="Газ: кон." Width="*" Binding="{Binding Gas.To}" />
+                <DataGridTextColumn Header="Газ: конец" Width="*" Binding="{Binding Gas.To}" />
+                <DataGridTextColumn Header="Газ: за куб" Width="*" Binding="{Binding Gas.Tariff}" />
+                <DataGridTextColumn Header="Газ: сумма" Width="*" IsReadOnly="True" Binding="{Binding GasPaymentAmount, StringFormat={}{0:N2}}" />
+                <DataGridTextColumn Header="Газ: комментарий" Width="2*" Binding="{Binding GasComment}" />
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

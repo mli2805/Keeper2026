@@ -136,15 +136,19 @@ public static class OthersMapper
             ColdWaterFrom = domain.ColdWater.From,
             ColdWaterTo = domain.ColdWater.To,
             ColdWaterVolume = domain.ColdWater.Volume,
+            ColdWaterTariff = domain.ColdWater.Tariff,
             HotWaterFrom = domain.HotWater.From,
             HotWaterTo = domain.HotWater.To,
             HotWaterVolume = domain.HotWater.Volume,
+            HotWaterTariff = domain.HotWater.Tariff,
             ElectricityFrom = domain.Electricity.From,
             ElectricityTo = domain.Electricity.To,
             ElectricityVolume = domain.Electricity.Volume,
+            ElectricityTariff = domain.Electricity.Tariff,
             GasFrom = domain.Gas.From,
             GasTo = domain.Gas.To,
-            GasVolume = domain.Gas.Volume
+            GasVolume = domain.Gas.Volume,
+            GasTariff = domain.Gas.Tariff
         };
     }
 
@@ -157,15 +161,19 @@ public static class OthersMapper
             ColdWaterFrom = model.ColdWater.From,
             ColdWaterTo = model.ColdWater.To,
             ColdWaterVolume = model.ColdWater.Volume,
+            ColdWaterTariff = model.ColdWater.Tariff,
             HotWaterFrom = model.HotWater.From,
             HotWaterTo = model.HotWater.To,
             HotWaterVolume = model.HotWater.Volume,
+            HotWaterTariff = model.HotWater.Tariff,
             ElectricityFrom = model.Electricity.From,
             ElectricityTo = model.Electricity.To,
             ElectricityVolume = model.Electricity.Volume,
+            ElectricityTariff = model.Electricity.Tariff,
             GasFrom = model.Gas.From,
             GasTo = model.Gas.To,
-            GasVolume = model.Gas.Volume
+            GasVolume = model.Gas.Volume,
+            GasTariff = model.Gas.Tariff
         };
     }
 
@@ -177,19 +185,19 @@ public static class OthersMapper
             ReadingsDate = ef.ReadingsDate,
             ColdWater = new UtilityMeter 
             { 
-                From = ef.ColdWaterFrom, To = ef.ColdWaterTo, Volume = ef.ColdWaterVolume 
+                From = ef.ColdWaterFrom, To = ef.ColdWaterTo, Volume = ef.ColdWaterVolume, Tariff = ef.ColdWaterTariff
             },
             HotWater = new UtilityMeter 
             { 
-                From = ef.HotWaterFrom, To = ef.HotWaterTo, Volume = ef.HotWaterVolume 
+                From = ef.HotWaterFrom, To = ef.HotWaterTo, Volume = ef.HotWaterVolume, Tariff = ef.HotWaterTariff
             },
             Electricity = new UtilityMeter 
             { 
-                From = ef.ElectricityFrom, To = ef.ElectricityTo, Volume = ef.ElectricityVolume 
+                From = ef.ElectricityFrom, To = ef.ElectricityTo, Volume = ef.ElectricityVolume, Tariff = ef.ElectricityTariff
             },
             Gas = new UtilityMeter 
             { 
-                From = ef.GasFrom, To = ef.GasTo, Volume = ef.GasVolume 
+                From = ef.GasFrom, To = ef.GasTo, Volume = ef.GasVolume, Tariff = ef.GasTariff
             }
         };
     }
@@ -202,19 +210,19 @@ public static class OthersMapper
             ReadingsDate = ef.ReadingsDate.ToDateTime(TimeOnly.MinValue),
             ColdWater = new UtilityMeterModel
             {
-                From = ef.ColdWaterFrom, To = ef.ColdWaterTo, Volume = ef.ColdWaterVolume
+                From = ef.ColdWaterFrom, To = ef.ColdWaterTo, Volume = ef.ColdWaterVolume, Tariff = ef.ColdWaterTariff
             },
             HotWater = new UtilityMeterModel
             {
-                From = ef.HotWaterFrom, To = ef.HotWaterTo, Volume = ef.HotWaterVolume
+                From = ef.HotWaterFrom, To = ef.HotWaterTo, Volume = ef.HotWaterVolume, Tariff = ef.HotWaterTariff
             },
             Electricity = new UtilityMeterModel
             {
-                From = ef.ElectricityFrom, To = ef.ElectricityTo, Volume = ef.ElectricityVolume
+                From = ef.ElectricityFrom, To = ef.ElectricityTo, Volume = ef.ElectricityVolume, Tariff = ef.ElectricityTariff
             },
             Gas = new UtilityMeterModel
             {
-                From = ef.GasFrom, To = ef.GasTo, Volume = ef.GasVolume
+                From = ef.GasFrom, To = ef.GasTo, Volume = ef.GasVolume, Tariff = ef.GasTariff
             }
         };
     }
