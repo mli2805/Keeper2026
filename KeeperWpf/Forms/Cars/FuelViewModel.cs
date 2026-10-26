@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -61,11 +62,17 @@ public class FuelViewModel : Screen
         InitializeChartModel();
     }
 
+    // оси
     private LinearAxis _linearAxisRb = null!;
     private LinearAxis _linearAxisUsd = null!;
+
+    // графики
     private LineSeries _dieselSeries = null!;
     private LineSeries _dieselSeriesUsd = null!;
     private ScatterSeries _arcticSeries = null!;
+    private LineSeries _a95Series = null!;
+    private LineSeries _a95SeriesUsd = null!;
+
     private void InitializeChartModel()
     {
         FuelPricePlotModel = new PlotModel();
@@ -107,8 +114,12 @@ public class FuelViewModel : Screen
 
         _dieselSeries = new LineSeries { Title = "Дт Евро5", Color = OxyColors.BlueViolet, IsVisible = false };
         _dieselSeriesUsd = new LineSeries { Title = "Дт Евро5 (usd)", Color = OxyColors.Green };
+        _a95Series = new LineSeries { Title = "Аи-95", Color = OxyColor.FromRgb(129, 66, 245), IsVisible = false };
+        _a95SeriesUsd = new LineSeries { Title = "Аи-95 (usd)", Color = OxyColor.FromRgb(122, 158, 43) };
         _dieselSeries.YAxisKey = "RB";
         _dieselSeriesUsd.YAxisKey = "USD";
+        _a95Series.YAxisKey = "RB";
+        _a95SeriesUsd.YAxisKey = "USD";
 
         foreach (var fuelling in Rows.Where(f => f.FuelType == FuelType.ДтЕвро5))
         {
@@ -118,18 +129,31 @@ public class FuelViewModel : Screen
                     fuelling.Timestamp.Date < new DateTime(2016, 7, 1) 
                         ? (double)fuelling.OneLitrePrice / 10000 
                         : (double)fuelling.OneLitrePrice));
-            _dieselSeriesUsd.Points.Add(new DataPoint(DateTimeAxis.ToDouble(fuelling.Timestamp.Date), (double)fuelling.OneLitreInUsd));
+            _dieselSeriesUsd.Points.Add(
+                new DataPoint(DateTimeAxis.ToDouble(fuelling.Timestamp.Date), (double)fuelling.OneLitreInUsd));
+        }
+
+        foreach (var fuelling in Rows.Where(f => f.FuelType == FuelType.Аи95))
+        {
+            _a95Series.Points.Add(
+                new DataPoint(DateTimeAxis.ToDouble(fuelling.Timestamp.Date), (double)fuelling.OneLitrePrice));
+            _a95SeriesUsd.Points.Add(
+                new DataPoint(DateTimeAxis.ToDouble(fuelling.Timestamp.Date), (double)fuelling.OneLitreInUsd));
         }
 
         FuelPricePlotModel.Series.Add(_dieselSeries);
         FuelPricePlotModel.Series.Add(_dieselSeriesUsd);
+        FuelPricePlotModel.Series.Add(_a95Series);
+        FuelPricePlotModel.Series.Add(_a95SeriesUsd);
       
 
-        _arcticSeries = new ScatterSeries() {Title = "Дт Арктика (usd)", MarkerType  = MarkerType.Circle, MarkerFill = OxyColors.Red };
+        _arcticSeries = new ScatterSeries() 
+            {Title = "Дт Арктика (usd)", MarkerType  = MarkerType.Circle, MarkerFill = OxyColors.Red };
         _arcticSeries.YAxisKey = "USD";
         foreach (var fuelling in Rows.Where(f => f.FuelType == FuelType.ДтЕвро5Арктика))
         {
-            _arcticSeries.Points.Add(new ScatterPoint(DateTimeAxis.ToDouble(fuelling.Timestamp.Date), (double)fuelling.OneLitreInUsd));
+            _arcticSeries.Points.Add(
+                new ScatterPoint(DateTimeAxis.ToDouble(fuelling.Timestamp.Date), (double)fuelling.OneLitreInUsd));
         }
         FuelPricePlotModel.Series.Add(_arcticSeries);
     }
@@ -173,6 +197,8 @@ public class FuelViewModel : Screen
                 _linearAxisUsd.IsAxisVisible = false;
                 _dieselSeries.IsVisible = true;
                 _dieselSeriesUsd.IsVisible = false;
+                _a95Series.IsVisible = true;
+                _a95SeriesUsd.IsVisible = false;
                 _arcticSeries.IsVisible = false;
                 break;
              case 1: 
@@ -181,6 +207,8 @@ public class FuelViewModel : Screen
                 _linearAxisUsd.IsAxisVisible = true;
                 _dieselSeries.IsVisible = true;
                 _dieselSeriesUsd.IsVisible = true;
+                _a95Series.IsVisible = true;
+                _a95SeriesUsd.IsVisible = true;
                 _arcticSeries.IsVisible = true;
                 break;
              case 2: 
@@ -189,6 +217,8 @@ public class FuelViewModel : Screen
                 _linearAxisUsd.IsAxisVisible = true;
                 _dieselSeries.IsVisible = false;
                 _dieselSeriesUsd.IsVisible = true;
+                _a95Series.IsVisible = false;
+                _a95SeriesUsd.IsVisible = true;
                 _arcticSeries.IsVisible = true;
                 break;
         }

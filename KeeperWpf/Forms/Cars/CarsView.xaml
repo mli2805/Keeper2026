@@ -200,13 +200,16 @@
             <TextBlock TextWrapping="Wrap" Text="График стоимости владения" TextAlignment="Center"/>
         </Button>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical" Margin="5,5,5,50" HorizontalAlignment="Right">
-            <CheckBox IsChecked="{Binding IsByTags}" Margin="5" Width="120">
-                <TextBlock Text="Ремонты по категориям" TextWrapping="Wrap"/>
+            <CheckBox IsChecked="{Binding IsAggregateCategories}" Margin="5" Width="120">
+                <TextBlock Text="Объединять категории" TextWrapping="Wrap"/>
+            </CheckBox>
+            <CheckBox IsChecked="{Binding DrawFuelTable}" Margin="5" Width="120">
+                <TextBlock Text="Выводить таблицу топлива" TextWrapping="Wrap"/>
             </CheckBox>
             <CheckBox IsChecked="{Binding IsBynInReport}" Margin="5" Width="120">
                 <TextBlock Text="Показывать суммы в рублях" TextWrapping="Wrap"/>
             </CheckBox>
-            <Button Content="Авто отчет" Width="120" Margin="0,5" Name="ShowCarReport" />
+            <Button Content="Авто отчет" Width="120" Margin="0,5" Name="ShowCarReport" ToolTip="Разделы отчета ищутся по русским словам в имени категории." />
         </StackPanel>
         <StackPanel Margin="5,20" HorizontalAlignment="Right">
             <Button Content="Новое авто" Width="120" Margin="5" Name="AddNewCar"/>

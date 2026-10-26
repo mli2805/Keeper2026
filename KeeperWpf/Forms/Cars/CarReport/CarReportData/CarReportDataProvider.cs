@@ -7,30 +7,25 @@ namespace KeeperWpf;
 
 public static class CarReportDataProvider
 {
+    // полный раздельный список категорий для отчета по автомобилю
     private static readonly string[] CategoryRussianNames =
-        { "покупка-продажа", "государство", "авто ремонт", "ремонт ДТП", "регулярн обслуживание", "авто топливо", "авто прочее" };
+        { "покупка-продажа", "погашение кредита",  "государство", "авто топливо",
+        "авто ремонт", "ремонт ДТП", "регулярн обслуживание",  "авто прочее" };
 
-    private static readonly string[] CategoryRussianNamesOther =
-          { "покупка-продажа", "государство", "авто топливо", "авто прочее" };
-
+    // агрегированные категории для отчета по автомобилю
+    private static readonly string[] CategoryRussianNamesBuySell =
+         { "покупка-продажа", "погашение кредита" };
     private static readonly string[] CategoryRussianNamesRepair =
          { "авто ремонт", "ремонт ДТП", "регулярн обслуживание" };
+    private static readonly string[] CategoryRussianNamesOther =
+         { "государство", "авто топливо", "авто прочее" };
 
-    private static readonly string[] CategoryEnglishNames =
-        { "buy-sell", "state", "car repair", "accident repair", "expendables", "car fuel", "other stuff" };
-
-    private static readonly string[] CategoryEnglishNamesOther =
-             { "buy-sell", "state", "car fuel", "other stuff" };
-
-    // private static readonly string[] CategoryEnglishNamesRepair =
-    //          { "car repair", "accident repair", "expendables" };
-
-
-    public static CarReportData ExtractCarReportData(this KeeperDataModel dataModel, CarModel car, bool isByCategories)
+    public static CarReportData ExtractCarReportData(this KeeperDataModel dataModel, 
+        CarModel car, bool isAggregateCategories)
     {
         var isCurrentCar = dataModel.Cars.Last().Id == car.Id;
 
-        var carReportData = dataModel.ExtractCarData(car.CarAccountId, isByCategories);
+        var carReportData = dataModel.ExtractCarData(car.CarAccountId, isAggregateCategories);
         if (isCurrentCar)
         {
             carReportData.Categories[0].Table.Add(new CarReportTableRow()
@@ -45,41 +40,74 @@ public static class CarReportDataProvider
         return carReportData;
     }
 
-    private static CarReportData ExtractCarData(this KeeperDataModel dataModel, int carAccountId, bool isByCategories)
+    private static CarReportData ExtractCarData(this KeeperDataModel dataModel,
+        int carAccountId, bool isAggregateCategories)
     {
         var result = new CarReportData();
         var carAccount = dataModel.AcMoDict[carAccountId];
 
-        if (isByCategories)
+        // раздельно по таблице на каждую категорию
+        if (!isAggregateCategories)
             for (int i = 0; i < CategoryRussianNames.Length; i++)
             {
                 // get Category by name
-                var category = (AccountItemModel)carAccount.Children.First(c => c.Name.Contains(CategoryRussianNames[i]));
+                var category = (AccountItemModel?)carAccount.Children
+                    .FirstOrDefault(c => c.Name.Contains(CategoryRussianNames[i]));
+                if (category == null) continue;
                 // get rows for Category
                 var rows = dataModel.GetTableForOneCategory(category);
-                result.Categories.Add(new CarReportTable(CategoryRussianNames[i], CategoryEnglishNames[i], rows));
+                if (rows.Count > 0)
+                    result.Categories.Add(new CarReportTable(ToTableName(CategoryRussianNames[i]),  rows));
             }
         else
         {
+            // покупка-продажа и погашение кредита в одной таблице
+            var dataBuySell = new List<CarReportTableRow>();
+            foreach (var categoryName in CategoryRussianNamesBuySell)
+            {
+                // get Category by name
+                var category = (AccountItemModel?)carAccount.Children.FirstOrDefault(c => c.Name.Contains(categoryName));
+                if (category == null) continue;
+                // get rows for Category
+                var rows = dataModel.GetTableForOneCategory(category);
+                if (rows.Count > 0)
+                    dataBuySell.AddRange(rows);
+            }
+            var tag = carAccount.Children.Any(c => c.Name.Contains("погашение кредита")) 
+                ? "покупка-продажа (включая погашение кредита)" : "покупка-продажа";
+            result.Categories.Add(new CarReportTable(tag, dataBuySell.OrderBy(r => r.Date).ToList()));
+
+            // все категории кроме ремонта в отдельных таблицах
             for (int i = 0; i < CategoryRussianNamesOther.Length; i++)
             {
                 // get Category by name
-                var category = (AccountItemModel)carAccount.Children.First(c => c.Name.Contains(CategoryRussianNamesOther[i]));
+                var category = (AccountItemModel?)carAccount.Children
+                    .FirstOrDefault(c => c.Name.Contains(CategoryRussianNamesOther[i]));
+                if (category == null) continue;
                 // get rows for Category
                 var rowsOther = dataModel.GetTableForOneCategory(category);
-                result.Categories.Add(new CarReportTable(CategoryRussianNamesOther[i], CategoryEnglishNamesOther[i], rowsOther));
+                if (rowsOther.Count > 0)
+                    result.Categories.Add(new CarReportTable
+                    (ToTableName(CategoryRussianNamesOther[i]), rowsOther));
             }
 
-            var tagR0 = (AccountItemModel)carAccount.Children.First(c => c.Name.Contains(CategoryRussianNamesRepair[0]));
-            var rowsRepair = dataModel.GetTableForOneCategory(tagR0);
-            var tagR1 = (AccountItemModel)carAccount.Children.First(c => c.Name.Contains(CategoryRussianNamesRepair[1]));
-            rowsRepair.AddRange(dataModel.GetTableForOneCategory(tagR1));
-            var tagR2 = (AccountItemModel)carAccount.Children.First(c => c.Name.Contains(CategoryRussianNamesRepair[2]));
-            rowsRepair.AddRange(dataModel.GetTableForOneCategory(tagR2));
+            // все виды ремонта в одной таблице
+            var dataRepair = new List<CarReportTableRow>();
+            foreach (var categoryName in CategoryRussianNamesRepair)
+            {
+                // get Category by name
+                var category = (AccountItemModel?)carAccount.Children
+                    .FirstOrDefault(c => c.Name.Contains(categoryName));
+                if (category == null) continue;
+                // get rows for Category
+                var rows = dataModel.GetTableForOneCategory(category);
+                if (rows.Count > 0)
+                    dataRepair.AddRange(rows);
+            }
+            result.Categories.Add(new CarReportTable("обслуживание и ремонт", 
+                dataRepair.OrderBy(r => r.Date).ToList()));
 
-            result.Categories.Add(
-                new CarReportTable("обслуживание и ремонт", "expendables and repair",
-                rowsRepair.OrderBy(r => r.Date).ToList()));
+          
         }
 
         result.StartDate = result.Categories[0].Table[0].Date;
@@ -121,5 +149,12 @@ public static class CarReportDataProvider
             rows.Add(row);
         }
         return rows;
+    }
+
+    private static string ToTableName(string categoryName)
+    {
+        if (categoryName.StartsWith("авто"))
+            categoryName = categoryName.Substring(5);
+        return categoryName;
     }
 }

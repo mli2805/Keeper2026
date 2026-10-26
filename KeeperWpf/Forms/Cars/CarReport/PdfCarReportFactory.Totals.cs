@@ -11,7 +11,7 @@ public static partial class PdfCarReportFactory
         gap.Format.SpaceBefore = Unit.FromCentimeter(0.7);
 
         var total = carReportData.Categories.Sum(t => t.Table.Sum(r => r.AmountInUsd));
-        var totalFuelling = carReportData.Categories.FirstOrDefault(t => t.English == "car fuel")!
+        var totalFuelling = carReportData.Categories.FirstOrDefault(t => t.Russian == "топливо")!
             .Table.Sum(r => r.AmountInUsd);
         var table = section.AddTable();
         table.Style = "Table";

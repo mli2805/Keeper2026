@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Shapes.Charts;
@@ -7,6 +8,14 @@ namespace KeeperWpf;
 
 public static partial class PdfCarReportFactory
 {
+    private static readonly Color[] CarChartColors =
+    [
+        new(0xFF9999FF), new(0xFF993366), new(0xFFFFFFCC), new(0xFFCCFFFF),
+        new(0xFF660066), new(0xFFFF8080), new(0xFF0066CC), new(0xFFCCCCFF),
+        new(0xFF000080), new(0xFFFF00FF), new(0xFFFFFF00), new(0xFF00FFFF),
+        new(0xFF800080), new(0xFF800000), new(0xFF008080), new(0xFF0000FF)
+    ];
+
     private static void DrawChart(this Section section, CarReportData carReportData)
     {
         var chart3 = section.AddChart(ChartType.PieExploded2D);
@@ -18,13 +27,16 @@ public static partial class PdfCarReportFactory
         chart3.Height = Unit.FromCentimeter(16);
         XSeries pieXSeries = chart3.XValues.AddXSeries();
 
-        foreach (var tag in carReportData.Categories)
+        var categories = carReportData.Categories.ToList();
+        for (var index = 0; index < categories.Count; index++)
         {
-            pieSeries.Add(Math.Round((double)-tag.Table.Sum(r => r.AmountInUsd)));
-            pieXSeries.Add(tag.English);
+            var tag = categories[index];
+            var color = CarChartColors[index % CarChartColors.Length];
+            var point = pieSeries.Add(Math.Round((double)-tag.Table.Sum(r => r.AmountInUsd)));
+            point.FillFormat.Color = color;
+            pieXSeries.Add(tag.Russian);
         }
 
-        chart3.BottomArea.AddLegend();
         chart3.XAxis.MajorTickMark = TickMarkType.Outside;
         chart3.XAxis.Title.Caption = "X-Axis";
         chart3.YAxis.MajorTickMark = TickMarkType.Outside;
@@ -33,6 +45,33 @@ public static partial class PdfCarReportFactory
         chart3.YAxis.TickLabels.Font.Color = Colors.Black;
         chart3.PivotChart = true;
         chart3.HasDataLabel = true;
+
+        section.AddTwoRowChartLegend(categories.Select(category => category.Russian).ToList());
+    }
+
+    private static void AddTwoRowChartLegend(this Section section, IReadOnlyList<string> categories)
+    {
+        if (categories.Count == 0)
+            return;
+
+        var legend = section.AddTable();
+        legend.AddColumn(Unit.FromCentimeter(16));
+        legend.Format.Font.Size = 9;
+
+        var categoriesPerRow = (categories.Count + 1) / 2;
+        for (var rowStart = 0; rowStart < categories.Count; rowStart += categoriesPerRow)
+        {
+            var paragraph = legend.AddRow().Cells[0].AddParagraph();
+            paragraph.Format.Alignment = ParagraphAlignment.Center;
+
+            var rowEnd = Math.Min(rowStart + categoriesPerRow, categories.Count);
+            for (var index = rowStart; index < rowEnd; index++)
+            {
+                var marker = paragraph.AddFormattedText("■");
+                marker.Font.Color = CarChartColors[index % CarChartColors.Length];
+                paragraph.AddText($" {categories[index]}   ");
+            }
+        }
     }
 
     private static void DrawAggregateTable(this Section section, CarReportData carReportData)

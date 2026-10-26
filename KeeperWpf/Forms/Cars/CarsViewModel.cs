@@ -233,15 +233,17 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
         await windowManager.ShowWindowAsync(fuelViewModel);
     }
 
-    public bool IsByTags { get; set; }
+    public bool IsAggregateCategories { get; set; } = true;
+    public bool DrawFuelTable { get; set; } = false;
     public bool IsBynInReport { get; set; }
     public async Task ShowCarReport()
     {
         if (SelectedCar.Id < 3) return;
-        var document = dataModel.CreateCarReport(SelectedCar.Id, IsByTags, IsBynInReport);
 
         try
         {
+            var document = dataModel.CreateCarReport(SelectedCar.Id, 
+                IsAggregateCategories, DrawFuelTable, IsBynInReport);
             var dataFolder = pathFinder.GetDataFolder();
             string filename = $@"reports\{SelectedCar.Title}.pdf";
             var path = System.IO.Path.Combine(dataFolder, filename);
