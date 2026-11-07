@@ -17,6 +17,7 @@ public static class AccountMapperTxtModels
             AssociatedExpenseId = account.AssociatedExpenseId,
             AssociatedExternalId = account.AssociatedExternalId,
             AssociatedTagId = account.AssociatedTagId,
+            MCC = account.MCC,
             ShortName = account.ShortName,
             ButtonName = account.ButtonName,
             Comment = account.Comment,
@@ -40,6 +41,7 @@ public static class AccountMapperEfModels
             AssociatedExpenseId = accountModel.AssociatedExpenseId,
             AssociatedExternalId = accountModel.AssociatedExternalId,
             AssociatedTagId = accountModel.AssociatedTagId,
+            MCC = accountModel.MCC != 0 ? accountModel.MCC : null,
             ShortName = accountModel.ShortName,
             ButtonName = accountModel.ButtonName,
             Comment = accountModel.Comment,
@@ -57,6 +59,7 @@ public static class AccountMapperEfModels
         accountEf.AssociatedExpenseId = accountModel.AssociatedExpenseId;
         accountEf.AssociatedExternalId = accountModel.AssociatedExternalId;
         accountEf.AssociatedTagId = accountModel.AssociatedTagId;
+        accountEf.MCC = accountModel.MCC != 0 ? accountModel.MCC : null;
         accountEf.ShortName = accountModel.ShortName;
         accountEf.ButtonName = accountModel.ButtonName;
         accountEf.Comment = accountModel.Comment;

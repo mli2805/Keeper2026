@@ -18,6 +18,7 @@ public class AccountItemModel : TreeViewItemModel
     public int AssociatedExpenseId { get; set; } // for counterparty
     public int AssociatedExternalId { get; set; } // for category
     public int AssociatedTagId { get; set; } // for counterparty or category
+    public int MCC { get; set; } // for counterparty
 
     public string ShortName { get; set; } = string.Empty;
     public string ButtonName { get; set; } = string.Empty; // face of shortcut button (if exists)

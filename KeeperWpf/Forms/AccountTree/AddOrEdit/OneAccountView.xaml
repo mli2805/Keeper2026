@@ -18,6 +18,11 @@
                      Text="{Binding AccountItemInWork.Name, Mode= TwoWay}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="5, 0, 5,0">
+            <TextBlock Margin="5" Width="70" Text="MCC" HorizontalAlignment="Left"/>
+            <TextBox Margin="5" Width="50" Height="25" BorderBrush="#555555"
+                     Text="{Binding AccountItemInWork.MCC, Mode= TwoWay}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5, 0, 5,0">
             <TextBlock Margin="5" Width="70" Text="Кнопка" HorizontalAlignment="Left"/>
             <TextBox Margin="5" Width="50" Height="25" BorderBrush="#555555"
                      Text="{Binding AccountItemInWork.ButtonName, Mode= TwoWay}"/>

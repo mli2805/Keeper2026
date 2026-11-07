@@ -17,6 +17,7 @@ public class Account : IDumpable, IParsable<Account>
     public int AssociatedExpenseId { get; set; } // for counterparty
     public int AssociatedExternalId { get; set; } // for category
     public int AssociatedTagId { get; set; } // for counterparty or category
+    public int MCC { get; set; } // for counterparty
 
     [MaxLength(20)] public string ShortName { get; set; } = string.Empty; // short name for reports
     [MaxLength(5)] public string ButtonName { get; set; } = string.Empty; // face of shortcut button (if exists)
@@ -28,7 +29,7 @@ public class Account : IDumpable, IParsable<Account>
         return Id.ToString().PadLeft(4) + " ; " + Name + " ; " + ParentId + " ; " + 
                ChildNumber + " ; " + IsFolder + " ; " + IsExpanded + " ; " + 
                AssociatedIncomeId + " ; " + AssociatedExpenseId + " ; " + AssociatedExternalId + " ; " + AssociatedTagId + " ; " + 
-               ShortName + " ; " + ButtonName + " ; " + 
+               MCC + " ; " + ShortName + " ; " + ButtonName + " ; " + 
                Comment.Replace("\r\n", "|");
     }
 
@@ -45,9 +46,10 @@ public class Account : IDumpable, IParsable<Account>
         AssociatedExpenseId = int.Parse(substrings[7]);
         AssociatedExternalId = int.Parse(substrings[8]);
         AssociatedTagId = int.Parse(substrings[9]);
-        ShortName = substrings[10].Trim();
-        ButtonName = substrings[11].Trim();
-        Comment = substrings[12].Trim().Replace("|", "\r\n");
+        MCC = int.Parse(substrings[10]);
+        ShortName = substrings[11].Trim();
+        ButtonName = substrings[12].Trim();
+        Comment = substrings[13].Trim().Replace("|", "\r\n");
         return this;
     }
 }

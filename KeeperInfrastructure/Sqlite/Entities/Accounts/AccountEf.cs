@@ -16,6 +16,7 @@ public class AccountEf
     public int AssociatedExpenseId { get; set; } // for counterparty
     public int AssociatedExternalId { get; set; } // for category
     public int AssociatedTagId { get; set; } // for counterparty or category
+    public int? MCC { get; set; } // for counterparty
 
     [MaxLength(20)] public string ShortName { get; set; } = "";
     [MaxLength(5)] public string ButtonName { get; set; } = ""; // face of shortcut button (if exists)

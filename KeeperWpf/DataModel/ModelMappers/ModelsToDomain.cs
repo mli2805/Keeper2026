@@ -42,6 +42,7 @@ public static class ModelsToDomain
             AssociatedExpenseId = model.AssociatedExpenseId,
             AssociatedExternalId = model.AssociatedExternalId,
             AssociatedTagId = model.AssociatedTagId,
+            MCC = model.MCC,
             ShortName = model.ShortName,
             ButtonName = model.ButtonName,
             Comment = model.Comment,

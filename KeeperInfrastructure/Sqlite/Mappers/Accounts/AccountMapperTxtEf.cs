@@ -18,6 +18,7 @@ public static class AccountMapperTxtEf
             AssociatedExpenseId = account.AssociatedExpenseId,
             AssociatedExternalId = account.AssociatedExternalId,
             AssociatedTagId = account.AssociatedTagId,
+            MCC =  account.MCC != 0 ? account.MCC : null,
             ShortName = account.ShortName,
             ButtonName = account.ButtonName,
             Comment = account.Comment
@@ -38,6 +39,7 @@ public static class AccountMapperTxtEf
             AssociatedExpenseId = accountEf.AssociatedExpenseId,
             AssociatedExternalId = accountEf.AssociatedExternalId,
             AssociatedTagId = accountEf.AssociatedTagId,
+            MCC = accountEf.MCC ?? 0,
             ShortName = accountEf.ShortName,
             ButtonName = accountEf.ButtonName,
             Comment = accountEf.Comment
