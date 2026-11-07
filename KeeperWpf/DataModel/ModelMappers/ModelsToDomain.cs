@@ -17,6 +17,7 @@ public static class ModelsToDomain
             MyAccount = transactionModel.MyAccount.Id,
             MySecondAccount = transactionModel.MySecondAccount?.Id ?? -1,
             Counterparty = transactionModel.Counterparty?.Id ?? -1,
+            MCC = transactionModel.MCC,
             Category = transactionModel.Category?.Id ?? -1,
             Amount = transactionModel.Amount,
             AmountInReturn = transactionModel.AmountInReturn,

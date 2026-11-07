@@ -59,6 +59,8 @@ public class TransactionModel : PropertyChangedBase
         }
     }
 
+    public int MCC { get; set; }
+
     private AccountItemModel? _category;
     public AccountItemModel? Category
     {

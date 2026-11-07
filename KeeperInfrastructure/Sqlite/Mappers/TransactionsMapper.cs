@@ -14,6 +14,7 @@ public static class TransactionsMapper
         transactionEf.MyAccount = transactionModel.MyAccount.Id;
         transactionEf.MySecondAccount = transactionModel.MySecondAccount?.Id;
         transactionEf.Counterparty = transactionModel.Counterparty?.Id;
+        transactionEf.MCC = transactionModel.MCC;
         transactionEf.Category = transactionModel.Category?.Id;
         transactionEf.Amount = transactionModel.Amount;
         transactionEf.Currency = transactionModel.Currency;
@@ -35,6 +36,7 @@ public static class TransactionsMapper
             MyAccount = transactionModel.MyAccount.Id,
             MySecondAccount = transactionModel.MySecondAccount?.Id,
             Counterparty = transactionModel.Counterparty?.Id,
+            MCC = transactionModel.MCC,
             Category = transactionModel.Category?.Id,
             Amount = transactionModel.Amount,
             Currency = transactionModel.Currency,
@@ -61,6 +63,7 @@ public static class TransactionsMapper
             MyAccount = acMoDict[transactionEf.MyAccount],
             MySecondAccount = transactionEf.MySecondAccount == null ? null : acMoDict[transactionEf.MySecondAccount!.Value],
             Counterparty = transactionEf.Counterparty == null ? null : acMoDict[transactionEf.Counterparty!.Value],
+            MCC = transactionEf.MCC ?? 0,
             Category = transactionEf.Category == null ? null : acMoDict[transactionEf.Category!.Value],
             Amount = transactionEf.Amount,
             AmountInReturn = transactionEf.AmountInReturn ?? 0,
@@ -83,6 +86,7 @@ public static class TransactionsMapper
             MyAccount = transaction.MyAccount,
             MySecondAccount = transaction.MySecondAccount != -1 ? transaction.MySecondAccount : null,
             Counterparty = transaction.Counterparty != -1 ? transaction.Counterparty : null,
+            MCC = transaction.MCC,
             Category = transaction.Category != -1 ? transaction.Category : null,
             Amount = transaction.Amount,
             Currency = transaction.Currency,
@@ -105,6 +109,7 @@ public static class TransactionsMapper
             MyAccount = transactionEf.MyAccount,
             MySecondAccount = transactionEf.MySecondAccount ?? -1,
             Counterparty = transactionEf.Counterparty ?? -1,
+            MCC = transactionEf.MCC ?? 0,
             Category = transactionEf.Category ?? -1,
             Amount = transactionEf.Amount,
             AmountInReturn = transactionEf.AmountInReturn ?? 0,

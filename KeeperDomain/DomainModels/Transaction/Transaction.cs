@@ -18,6 +18,7 @@ public class Transaction : IDumpable, IParsable<Transaction>
     public int MyAccount { get; set; }
     public int MySecondAccount { get; set; }
     public int Counterparty { get; set; }
+    public int MCC { get; set; }
     public int Category { get; set; }
     public decimal Amount { get; set; }
     public CurrencyCode Currency { get; set; }
@@ -32,7 +33,7 @@ public class Transaction : IDumpable, IParsable<Transaction>
                Timestamp.ToString("dd/MM/yyyy HH:mm") + " ; " +
                Operation + " ; " + PaymentWay + " ; " + Receipt + " ; " +
                MyAccount + " ; " + MySecondAccount + " ; " +
-               Counterparty + " ; " + Category + " ; " +
+               Counterparty + " ; " + MCC + " ; " + Category + " ; " +
                Amount.ToString(_enUsCulture) + " ; " + Currency + " ; " +
                AmountInReturn.ToString(_enUsCulture) + " ; " + CurrencyInReturn + " ; " +
                Tags + " ; " + Comment.Replace("\r\n", "|");
@@ -49,15 +50,16 @@ public class Transaction : IDumpable, IParsable<Transaction>
         MyAccount = int.Parse(substrings[5].Trim());
         MySecondAccount = int.Parse(substrings[6].Trim());
         Counterparty = int.Parse(substrings[7].Trim());
-        Category = int.Parse(substrings[8].Trim());
-        Amount = Convert.ToDecimal(substrings[9], _enUsCulture);
-        Currency = (CurrencyCode)Enum.Parse(typeof(CurrencyCode), substrings[10]);
-        AmountInReturn = Convert.ToDecimal(substrings[11], _enUsCulture);
-        CurrencyInReturn = substrings[12].Trim() != ""
-            ? (CurrencyCode?)Enum.Parse(typeof(CurrencyCode), substrings[12])
+        MCC = int.Parse(substrings[8].Trim());
+        Category = int.Parse(substrings[9].Trim());
+        Amount = Convert.ToDecimal(substrings[10], _enUsCulture);
+        Currency = (CurrencyCode)Enum.Parse(typeof(CurrencyCode), substrings[11]);
+        AmountInReturn = Convert.ToDecimal(substrings[12], _enUsCulture);
+        CurrencyInReturn = substrings[13].Trim() != ""
+            ? (CurrencyCode?)Enum.Parse(typeof(CurrencyCode), substrings[13])
             : null;
-        Tags = substrings[13].Trim();
-        Comment = substrings[14].Trim().Replace("|", "\r\n");
+        Tags = substrings[14].Trim();
+        Comment = substrings[15].Trim().Replace("|", "\r\n");
         return this;
     }
 }

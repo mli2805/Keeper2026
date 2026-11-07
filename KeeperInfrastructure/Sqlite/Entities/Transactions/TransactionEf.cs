@@ -13,6 +13,7 @@ public class TransactionEf
     public int MyAccount { get; set; }
     public int? MySecondAccount { get; set; }
     public int? Counterparty { get; set; }
+    public int? MCC { get; set; }
     public int? Category { get; set; }
     public decimal Amount { get; set; }
     public CurrencyCode Currency { get; set; }
