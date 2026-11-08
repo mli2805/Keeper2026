@@ -46,7 +46,33 @@ public static class DepositOfferMapper
         depositRateLineEf.AmountFrom = depositRateLineModel.AmountFrom;
         depositRateLineEf.AmountTo = depositRateLineModel.AmountTo;
         depositRateLineEf.Rate = depositRateLineModel.Rate;
-    }   
+    }
+
+    public static void UpdateEf(this MoneyBackRulesEf moneyBackRulesEf, MoneyBackRulesModel moneyBackRulesModel)
+    {
+        moneyBackRulesEf.StartDate = moneyBackRulesModel.StartDate;
+        moneyBackRulesEf.MoneyBackType = moneyBackRulesModel.MoneyBackType;
+        moneyBackRulesEf.Percent = moneyBackRulesModel.Percent;
+        moneyBackRulesEf.MinPurchaseAmount = moneyBackRulesModel.MinPurchaseAmount;
+        moneyBackRulesEf.MaxPurchaseAmount = moneyBackRulesModel.MaxPurchaseAmount;
+        moneyBackRulesEf.MaxMoneyBackAmount = moneyBackRulesModel.MaxMoneyBackAmount;
+        moneyBackRulesEf.MaxMoneyBackOnCategoryAmount = moneyBackRulesModel.MaxMoneyBackOnCategoryAmount;
+        moneyBackRulesEf.MinMonthPurchasesAmount = moneyBackRulesModel.MinMonthPurchasesAmount;
+    }
+
+    public static void UpdateEf(this MoneyBackCategoryEf moneyBackCategoryEf, MoneyBackSpecificRuleModel moneyBackSpecificRuleModel)
+    {
+        moneyBackCategoryEf.MCC = moneyBackSpecificRuleModel.MCC;
+        moneyBackCategoryEf.Name = moneyBackSpecificRuleModel.Name;
+        moneyBackCategoryEf.Description = moneyBackSpecificRuleModel.Description;
+        moneyBackCategoryEf.Percent = moneyBackSpecificRuleModel.Percent;
+    }
+
+    public static void UpdateEf(this MoneyBackPartnerEf moneyBackPartnerEf, MoneyBackPartnerModel moneyBackPartnerModel)
+    {
+        moneyBackPartnerEf.Name = moneyBackPartnerModel.Name;
+        moneyBackPartnerEf.Percent = moneyBackPartnerModel.Percent;
+    }
 
     public static DepositOfferModel ToModel(this DepositOfferEf depositOfferEf, Dictionary<int, AccountItemModel> acMoDict)
     {
@@ -66,6 +92,7 @@ public static class DepositOfferMapper
             MonthPaymentsMinimum = depositOfferEf.MonthPaymentsMinimum,
             MonthPaymentsMaximum = depositOfferEf.MonthPaymentsMaximum,
             CondsList = depositOfferEf.Conditions.Select(c => c.ToModel()).OrderBy(c => c.DateFrom).ToList(),
+            MoneyBackRules = depositOfferEf.MoneyBackRules?.Select(m => m.ToModel()).OrderBy(m => m.StartDate).ToList() ?? new List<MoneyBackRulesModel>(),
             Comment = depositOfferEf.Comment
         };
     }
@@ -92,6 +119,49 @@ public static class DepositOfferMapper
         };
     }
 
+    public static MoneyBackRulesModel ToModel(this MoneyBackRulesEf moneyBackRulesEf)
+    {
+        return new MoneyBackRulesModel
+        {
+            Id = moneyBackRulesEf.Id,
+            DepositOfferId = moneyBackRulesEf.DepositOfferId,
+            StartDate = moneyBackRulesEf.StartDate,
+            MoneyBackType = moneyBackRulesEf.MoneyBackType,
+            Percent = moneyBackRulesEf.Percent,
+            SpecificCategories = moneyBackRulesEf.SpecificCategories?.Select(sc => sc.ToModel()).ToList() ?? new List<MoneyBackSpecificRuleModel>(),
+            Partners = moneyBackRulesEf.Partners?.Select(p => p.ToModel()).ToList() ?? new List<MoneyBackPartnerModel>(),
+            MinPurchaseAmount = moneyBackRulesEf.MinPurchaseAmount,
+            MaxPurchaseAmount = moneyBackRulesEf.MaxPurchaseAmount,
+            MaxMoneyBackAmount = moneyBackRulesEf.MaxMoneyBackAmount,
+            MaxMoneyBackOnCategoryAmount = moneyBackRulesEf.MaxMoneyBackOnCategoryAmount,
+            MinMonthPurchasesAmount = moneyBackRulesEf.MinMonthPurchasesAmount
+        };
+    }
+
+    public static MoneyBackSpecificRuleModel ToModel(this MoneyBackCategoryEf moneyBackCategoryEf)
+    {
+        return new MoneyBackSpecificRuleModel
+        {
+            Id = moneyBackCategoryEf.Id,
+            MoneyBackRulesId = moneyBackCategoryEf.MoneyBackRulesId,
+            MCC = moneyBackCategoryEf.MCC,
+            Name = moneyBackCategoryEf.Name,
+            Description = moneyBackCategoryEf.Description,
+            Percent = moneyBackCategoryEf.Percent
+        };
+    }
+
+    public static MoneyBackPartnerModel ToModel(this MoneyBackPartnerEf moneyBackPartnerEf)
+    {
+        return new MoneyBackPartnerModel
+        {
+            Id = moneyBackPartnerEf.Id,
+            MoneyBackRulesId = moneyBackPartnerEf.MoneyBackRulesId,
+            Name = moneyBackPartnerEf.Name,
+            Percent = moneyBackPartnerEf.Percent
+        };
+    }
+
     public static DepositOfferEf FromModel(this DepositOfferModel depositOfferModel)
     {
         return new DepositOfferEf
@@ -110,6 +180,7 @@ public static class DepositOfferMapper
             MonthPaymentsMinimum = depositOfferModel.MonthPaymentsMinimum,
             MonthPaymentsMaximum = depositOfferModel.MonthPaymentsMaximum,
             Conditions = depositOfferModel.CondsList.Select(c => c.FromModel()).ToList(),
+            MoneyBackRules = depositOfferModel.MoneyBackRules.Select(m => m.FromModel()).ToList(),
             Comment = depositOfferModel.Comment
         };
     }
@@ -133,6 +204,49 @@ public static class DepositOfferMapper
             AdditionalPercent = depoCondsModel.AdditionalPercent,
             RateLines = depoCondsModel.RateLines.Select(rl => rl.ToEf()).ToList(),
             Comment = depoCondsModel.Comment
+        };
+    }
+
+    public static MoneyBackRulesEf FromModel(this MoneyBackRulesModel moneyBackRulesModel)
+    {
+        return new MoneyBackRulesEf
+        {
+            Id = moneyBackRulesModel.Id,
+            DepositOfferId = moneyBackRulesModel.DepositOfferId,
+            StartDate = moneyBackRulesModel.StartDate,
+            MoneyBackType = moneyBackRulesModel.MoneyBackType,
+            Percent = moneyBackRulesModel.Percent,
+            SpecificCategories = moneyBackRulesModel.SpecificCategories.Select(sc => sc.FromModel()).ToList(),
+            Partners = moneyBackRulesModel.Partners.Select(p => p.FromModel()).ToList(),
+            MinPurchaseAmount = moneyBackRulesModel.MinPurchaseAmount,
+            MaxPurchaseAmount = moneyBackRulesModel.MaxPurchaseAmount,
+            MaxMoneyBackAmount = moneyBackRulesModel.MaxMoneyBackAmount,
+            MaxMoneyBackOnCategoryAmount = moneyBackRulesModel.MaxMoneyBackOnCategoryAmount,
+            MinMonthPurchasesAmount = moneyBackRulesModel.MinMonthPurchasesAmount
+        };
+    }
+
+    public static MoneyBackCategoryEf FromModel(this MoneyBackSpecificRuleModel moneyBackSpecificRuleModel)
+    {
+        return new MoneyBackCategoryEf
+        {
+            Id = moneyBackSpecificRuleModel.Id,
+            MoneyBackRulesId = moneyBackSpecificRuleModel.MoneyBackRulesId,
+            MCC = moneyBackSpecificRuleModel.MCC,
+            Name = moneyBackSpecificRuleModel.Name,
+            Description = moneyBackSpecificRuleModel.Description,
+            Percent = moneyBackSpecificRuleModel.Percent
+        };
+    }
+
+    public static MoneyBackPartnerEf FromModel(this MoneyBackPartnerModel moneyBackPartnerModel)
+    {
+        return new MoneyBackPartnerEf
+        {
+            Id = moneyBackPartnerModel.Id,
+            MoneyBackRulesId = moneyBackPartnerModel.MoneyBackRulesId,
+            Name = moneyBackPartnerModel.Name,
+            Percent = moneyBackPartnerModel.Percent
         };
     }
 
@@ -243,6 +357,88 @@ public static class DepositOfferMapper
             AmountFrom = depositRateLineEf.AmountFrom,
             AmountTo = depositRateLineEf.AmountTo,
             Rate = depositRateLineEf.Rate
+        };
+    }
+
+    public static MoneyBackRulesEf ToEf(this MoneyBackRules moneyBackRules)
+    {
+        return new MoneyBackRulesEf
+        {
+            Id = moneyBackRules.Id,
+            DepositOfferId = moneyBackRules.DepositOfferId,
+            StartDate = moneyBackRules.StartDate,
+            MoneyBackType = moneyBackRules.MoneyBackType,
+            Percent = moneyBackRules.Percent,
+            MinPurchaseAmount = moneyBackRules.MinPurchaseAmount,
+            MaxPurchaseAmount = moneyBackRules.MaxPurchaseAmount,
+            MaxMoneyBackAmount = moneyBackRules.MaxMoneyBackAmount,
+            MaxMoneyBackOnCategoryAmount = moneyBackRules.MaxMoneyBackOnCategoryAmount,
+            MinMonthPurchasesAmount = moneyBackRules.MinMonthPurchasesAmount
+        };
+    }
+
+    public static MoneyBackRules FromEf(this MoneyBackRulesEf moneyBackRulesEf)
+    {
+        return new MoneyBackRules
+        {
+            Id = moneyBackRulesEf.Id,
+            DepositOfferId = moneyBackRulesEf.DepositOfferId,
+            StartDate = moneyBackRulesEf.StartDate,
+            MoneyBackType = moneyBackRulesEf.MoneyBackType,
+            Percent = moneyBackRulesEf.Percent,
+            MinPurchaseAmount = moneyBackRulesEf.MinPurchaseAmount,
+            MaxPurchaseAmount = moneyBackRulesEf.MaxPurchaseAmount,
+            MaxMoneyBackAmount = moneyBackRulesEf.MaxMoneyBackAmount,
+            MaxMoneyBackOnCategoryAmount = moneyBackRulesEf.MaxMoneyBackOnCategoryAmount,
+            MinMonthPurchasesAmount = moneyBackRulesEf.MinMonthPurchasesAmount
+        };
+    }
+
+    public static MoneyBackCategoryEf ToEf(this MoneyBackCategory moneyBackCategory)
+    {
+        return new MoneyBackCategoryEf
+        {
+            Id = moneyBackCategory.Id,
+            MoneyBackRulesId = moneyBackCategory.MoneyBackRulesId,
+            MCC = moneyBackCategory.MCC,
+            Name = moneyBackCategory.Name,
+            Description = moneyBackCategory.Description,
+            Percent = moneyBackCategory.Percent
+        };
+    }
+
+    public static MoneyBackCategory FromEf(this MoneyBackCategoryEf moneyBackCategoryEf)
+    {
+        return new MoneyBackCategory
+        {
+            Id = moneyBackCategoryEf.Id,
+            MoneyBackRulesId = moneyBackCategoryEf.MoneyBackRulesId,
+            MCC = moneyBackCategoryEf.MCC,
+            Name = moneyBackCategoryEf.Name,
+            Description = moneyBackCategoryEf.Description,
+            Percent = moneyBackCategoryEf.Percent
+        };
+    }
+
+    public static MoneyBackPartnerEf ToEf(this MoneyBackPartner moneyBackPartner)
+    {
+        return new MoneyBackPartnerEf
+        {
+            Id = moneyBackPartner.Id,
+            MoneyBackRulesId = moneyBackPartner.MoneyBackRulesId,
+            Name = moneyBackPartner.Name,
+            Percent = moneyBackPartner.Percent
+        };
+    }
+
+    public static MoneyBackPartner FromEf(this MoneyBackPartnerEf moneyBackPartnerEf)
+    {
+        return new MoneyBackPartner
+        {
+            Id = moneyBackPartnerEf.Id,
+            MoneyBackRulesId = moneyBackPartnerEf.MoneyBackRulesId,
+            Name = moneyBackPartnerEf.Name,
+            Percent = moneyBackPartnerEf.Percent
         };
     }
 }

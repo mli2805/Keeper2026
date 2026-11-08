@@ -5,7 +5,7 @@ namespace KeeperInfrastructure;
 
 public class ToSqlite(IDbContextFactory<KeeperDbContext> factory)
 {
-    // данные в формате старого Keeper2018, вычитанные из текстовых файлов, сохраняем в БД SQLite
+    // данные, вычитанные из текстовых файлов, сохраняем в БД SQLite
     public async Task SaveModelToDb(KeeperDomainModel keeperDomainModel)
     {
         await using var keeperDbContext = await factory.CreateDbContextAsync();
@@ -34,6 +34,9 @@ public class ToSqlite(IDbContextFactory<KeeperDbContext> factory)
         keeperDbContext.DepositOffers.AddRange(keeperDomainModel.DepositOffers.Select(item => item.ToEf()));
         keeperDbContext.DepositConditions.AddRange(keeperDomainModel.DepositConditions.Select(item => item.ToEf()));
         keeperDbContext.DepositRateLines.AddRange(keeperDomainModel.DepositRateLines.Select(item => item.ToEf()));
+        keeperDbContext.MoneyBackRules.AddRange(keeperDomainModel.MoneyBackRules.Select(item => item.ToEf()));
+        keeperDbContext.MoneyBackCategories.AddRange(keeperDomainModel.MoneyBackCategories.Select(item => item.ToEf()));
+        keeperDbContext.MoneyBackPartners.AddRange(keeperDomainModel.MoneyBackPartners.Select(item => item.ToEf()));
         keeperDbContext.Transactions.AddRange(keeperDomainModel.Transactions.Select(item => item.ToEf()));
         keeperDbContext.Fuellings.AddRange(keeperDomainModel.Fuellings.Select(item => item.ToEf()));
         keeperDbContext.SalaryChanges.AddRange(keeperDomainModel.SalaryChanges.Select(item => item.ToEf()));

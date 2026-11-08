@@ -11,9 +11,8 @@ public class MoneyBackRulesModel
     public MoneyBackType MoneyBackType { get; set; }
     public double Percent { get; set; } // например 0.5% от суммы платежа
 
-    public List<MoneyBackSpecificRuleModel> ExemptionsFromAll { get; set; } = new List<MoneyBackSpecificRuleModel>();
     public List<MoneyBackSpecificRuleModel> SpecificCategories { get; set; } = new List<MoneyBackSpecificRuleModel>();
-    public List<MoneyBackSpecificRuleModel> PartnerCounterparties { get; set; } = new List<MoneyBackSpecificRuleModel>();
+    public List<MoneyBackPartnerModel> Partners { get; set; } = new List<MoneyBackPartnerModel>();
 
     #region Restrictions
     public decimal? MinPurchaseAmount { get; set; } // минимальная сумма покупки на которую начисляют

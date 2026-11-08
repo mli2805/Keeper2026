@@ -1,9 +1,9 @@
 ﻿namespace KeeperDomain;
 
-// может быть как SpecificCategory, так и PartnerCounterparty
+// может быть как для начисления манибэка, так и для исключения из более широкой категории
 using System.Globalization;
 
-public class MoneyBackSpecificRule : IDumpable, IParsable<MoneyBackSpecificRule>
+public class MoneyBackCategory : IDumpable, IParsable<MoneyBackCategory>
 {
     public int Id { get; set; } //PK
     public int MoneyBackRulesId { get; set; }
@@ -20,7 +20,7 @@ public class MoneyBackSpecificRule : IDumpable, IParsable<MoneyBackSpecificRule>
             Percent.ToString(new CultureInfo("en-US"));
     }
 
-    public MoneyBackSpecificRule FromString(string s)
+    public MoneyBackCategory FromString(string s)
     {
         var substrings = s.Split(';');
         Id = int.Parse(substrings[0]);

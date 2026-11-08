@@ -42,6 +42,9 @@ public class KeeperDomainModel
     public List<DepositOffer> DepositOffers { get; set; } = null!;
     public List<DepositRateLine> DepositRateLines { get; set; } = null!;
     public List<DepositConditions> DepositConditions { get; set; } = null!;
+    public List<MoneyBackRules> MoneyBackRules { get; set; } = null!;
+    public List<MoneyBackCategory> MoneyBackCategories { get; set; } = null!;
+    public List<MoneyBackPartner> MoneyBackPartners { get; set; } = null!;
 
     public List<CardBalanceMemo> CardBalanceMemos { get; set; } = null!;
     public List<BankAccountMemo> BankAccountMemos { get; set; } = null!;

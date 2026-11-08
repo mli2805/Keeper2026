@@ -1,4 +1,5 @@
 ﻿using KeeperDomain;
+using KeeperModels;
 using System.IO;
 
 namespace KeeperInfrastructure;
@@ -31,6 +32,9 @@ public static class TxtLoader
             DepositRateLines = await ReadFileLines<DepositRateLine>(),
             DepositConditions = await ReadFileLines<DepositConditions>(),
             DepositOffers = await ReadFileLines<DepositOffer>(),
+            MoneyBackRules = await ReadFileLines<MoneyBackRules>(),
+            MoneyBackCategories = await ReadFileLines<MoneyBackCategory>(),
+            MoneyBackPartners = await ReadFileLines<MoneyBackPartner>(),
 
             Transactions = await ReadFileLines<Transaction>(),
             Fuellings = await ReadFileLines<Fuelling>(),

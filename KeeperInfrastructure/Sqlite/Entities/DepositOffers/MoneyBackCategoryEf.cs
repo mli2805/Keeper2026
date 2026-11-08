@@ -2,7 +2,7 @@
 
 namespace KeeperInfrastructure;
 
-public class MoneyBackSpecificRuleEf
+public class MoneyBackCategoryEf
 {
     public int Id { get; set; }
     public int MoneyBackRulesId { get; set; }

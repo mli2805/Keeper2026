@@ -31,6 +31,9 @@ public class KeeperDbContext : DbContext
     public DbSet<DepositOfferEf> DepositOffers { get; set; }
     public DbSet<DepositConditionsEf> DepositConditions { get; set; }
     public DbSet<DepositRateLineEf> DepositRateLines { get; set; }
+    public DbSet<MoneyBackRulesEf> MoneyBackRules { get; set; }
+    public DbSet<MoneyBackCategoryEf> MoneyBackCategories { get; set; }
+    public DbSet<MoneyBackPartnerEf> MoneyBackPartners { get; set; }
 
     public DbSet<TransactionEf> Transactions { get; set; }
     public DbSet<FuellingEf> Fuellings { get; set; }
@@ -66,10 +69,25 @@ public class KeeperDbContext : DbContext
             .WithOne(c => c.DepositOffer)
             .HasForeignKey(c => c.DepositOfferId);
 
+        modelBuilder.Entity<DepositOfferEf>()
+            .HasMany(o => o.MoneyBackRules)
+            .WithOne(m => m.DepositOffer)
+            .HasForeignKey(m => m.DepositOfferId);
+
         modelBuilder.Entity<DepositConditionsEf>()
             .HasMany(c => c.RateLines)
             .WithOne(rl => rl.DepositConditions)
             .HasForeignKey(rl => rl.DepositOfferConditionsId);
+
+        modelBuilder.Entity<MoneyBackRulesEf>()
+            .HasMany(c => c.SpecificCategories)
+            .WithOne(sc => sc.MoneyBackRules)
+            .HasForeignKey(sc => sc.MoneyBackRulesId);
+
+        modelBuilder.Entity<MoneyBackRulesEf>()
+           .HasMany(c => c.Partners)
+           .WithOne(p => p.MoneyBackRules)
+           .HasForeignKey(p => p.MoneyBackRulesId);
 
         modelBuilder.Entity<TrustAssetEf>()
             .HasMany(a => a.Rates)

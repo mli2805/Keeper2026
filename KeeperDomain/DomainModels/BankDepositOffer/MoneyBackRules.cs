@@ -2,6 +2,7 @@
 
 namespace KeeperDomain;
 
+[StoreEnumAsString]
 public enum MoneyBackType
 {
     AnyWithExemptions,
@@ -17,14 +18,7 @@ public class MoneyBackRules : IDumpable, IParsable<MoneyBackRules>
     public DateTime StartDate { get; set; } // некотрые банки постоянно меняют правила начисления манибэка
 
     public MoneyBackType MoneyBackType { get; set; }
-
-
     public double Percent { get; set; } // например 0.5% от суммы платежа
-
-    // хранятся в отдельной таблице (отдельном файле). будут реализованы в MoneyBackRulesModel
-    //public List<MoneyBackSpecificRule>? ExemptionsFromAll { get; set; }
-    //public List<MoneyBackSpecificRule>? SpecificCategories { get; set; }
-    //public List<MoneyBackSpecificRule>? PartnerCounterparties { get; set; }
 
     #region Restrictions
     public decimal? MinPurchaseAmount { get; set; } // минимальная сумма покупки на которую начисляют

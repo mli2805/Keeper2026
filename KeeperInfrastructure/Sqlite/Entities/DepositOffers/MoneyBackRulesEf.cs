@@ -21,7 +21,6 @@ public class MoneyBackRulesEf
 
     // Навигационные свойства
     public DepositOfferEf DepositOffer { get; set; } = null!;
-    public List<MoneyBackSpecificRuleEf>? ExemptionsFromAll { get; set; }
-    public List<MoneyBackSpecificRuleEf>? SpecificCategories { get; set; }
-    public List<MoneyBackSpecificRuleEf>? PartnerCounterparties { get; set; }
+    public List<MoneyBackCategoryEf> SpecificCategories { get; set; } = null!;
+    public List<MoneyBackPartnerEf> Partners { get; set; } = null!;
 }

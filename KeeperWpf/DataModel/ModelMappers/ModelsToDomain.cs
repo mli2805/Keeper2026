@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace KeeperWpf;
@@ -111,7 +112,53 @@ public static class ModelsToDomain
         return durationModel.IsPerpetual ? new Duration() : new Duration(durationModel.Value, durationModel.Scale);
     }
 
-   
+    public static List<MoneyBackRules> FromModel(this List<MoneyBackRulesModel> moneyBackRulesModels)
+    {
+        return moneyBackRulesModels.Select(m => m.FromModel()).ToList();
+    }
+
+    private static MoneyBackRules FromModel(this MoneyBackRulesModel moneyBackRulesModel)
+    {
+        return new MoneyBackRules()
+        {
+            Id = moneyBackRulesModel.Id,
+            DepositOfferId = moneyBackRulesModel.DepositOfferId,
+            StartDate = moneyBackRulesModel.StartDate,
+            MoneyBackType = moneyBackRulesModel.MoneyBackType,
+            Percent = moneyBackRulesModel.Percent,
+            MinPurchaseAmount = moneyBackRulesModel.MinPurchaseAmount,
+            MaxPurchaseAmount = moneyBackRulesModel.MaxPurchaseAmount,
+            MaxMoneyBackAmount = moneyBackRulesModel.MaxMoneyBackAmount,
+            MaxMoneyBackOnCategoryAmount = moneyBackRulesModel.MaxMoneyBackOnCategoryAmount,
+            MinMonthPurchasesAmount = moneyBackRulesModel.MinMonthPurchasesAmount,
+        };
+    }
+
+    public static MoneyBackCategory FromModel(this MoneyBackSpecificRuleModel moneyBackSpecificRuleModel)
+    {
+        return new MoneyBackCategory()
+        {
+            Id = moneyBackSpecificRuleModel.Id,
+            MoneyBackRulesId = moneyBackSpecificRuleModel.MoneyBackRulesId,
+            MCC = moneyBackSpecificRuleModel.MCC,
+            Name = moneyBackSpecificRuleModel.Name,
+            Description = moneyBackSpecificRuleModel.Description,
+            Percent = moneyBackSpecificRuleModel.Percent,
+        };
+    }
+
+    public static MoneyBackPartner FromModel(this MoneyBackPartnerModel moneyBackPartnerModel)
+    {
+        return new MoneyBackPartner()
+        {
+            Id = moneyBackPartnerModel.Id,
+            MoneyBackRulesId = moneyBackPartnerModel.MoneyBackRulesId,
+            Name = moneyBackPartnerModel.Name,
+            Percent = moneyBackPartnerModel.Percent,
+        };
+    }
+
+
     public static Fuelling FromModel(this FuellingModel fuellingModel)
     {
         return new Fuelling()

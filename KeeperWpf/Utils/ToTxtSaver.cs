@@ -56,6 +56,9 @@ public class ToTxtSaver
             WriteFileLines(keeperModel.DepositOffers);
             WriteFileLines(keeperModel.DepositRateLines);
             WriteFileLines(keeperModel.DepositConditions);
+            WriteFileLines(keeperModel.MoneyBackRules);
+            WriteFileLines(keeperModel.MoneyBackCategories);
+            WriteFileLines(keeperModel.MoneyBackPartners);
 
             WriteFileLines(keeperModel.Cars);
             WriteFileLines(keeperModel.CarYearMileages);

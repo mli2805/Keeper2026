@@ -9,7 +9,7 @@ namespace KeeperWpf;
 
 [ExportViewModel]
 public class OneBankOfferViewModel(KeeperDataModel keeperDataModel, IWindowManager windowManager,
-    RulesAndRatesViewModel rulesAndRatesViewModel) : Screen
+    RulesAndRatesViewModel rulesAndRatesViewModel, MoneyBackViewModel moneyBackViewModel) : Screen
 {
     private readonly string _dateTemplate = "dd-MM-yyyy";
 
@@ -101,6 +101,11 @@ public class OneBankOfferViewModel(KeeperDataModel keeperDataModel, IWindowManag
         SelectedDate = ConditionDates.LastOrDefault()!;
         NotifyOfPropertyChange(nameof(ConditionDates));
         NotifyOfPropertyChange(nameof(SelectedDate));
+    }
+
+    public async Task MoneyBackRules()
+    {
+        await windowManager.ShowDialogAsync(moneyBackViewModel);
     }
 
     public async Task Save()

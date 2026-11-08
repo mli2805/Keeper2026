@@ -25,20 +25,25 @@ public static class ToKeeperDomain
         var depositOffers = new List<DepositOffer>();
         var depositRateLines = new List<DepositRateLine>();
         var depositConditions = new List<DepositConditions>();
+        var moneyBackRules = new List<MoneyBackRules>();
+        var moneyBackCategories = new List<MoneyBackCategory>();
+        var moneyBackPartners = new List<MoneyBackPartner>();
         foreach (var depositOffer in keeperDataModel.DepositOffers)
         {
-            //foreach (var pair in depositOffer.CondsMap)
-            //{
-            //    depositRateLines.AddRange(pair.Value.RateLines);
-            //    depositConditions.Add(pair.Value.FromModel());
-            //}
-
             foreach (var conds in depositOffer.CondsList)
             {
                 depositRateLines.AddRange(conds.RateLines);
                 depositConditions.Add(conds.FromModel());
             }
             depositOffers.Add(depositOffer.FromModel());
+
+            foreach (var moneyBackRulesModel in depositOffer.MoneyBackRules)
+            {
+                moneyBackCategories.AddRange(moneyBackRulesModel.SpecificCategories.Select(c => c.FromModel()));
+                moneyBackPartners.AddRange(moneyBackRulesModel.Partners.Select(p => p.FromModel()));
+            }
+            moneyBackRules.AddRange(depositOffer.MoneyBackRules.FromModel());
+
         }
 
         var result = new KeeperDomainModel()
@@ -61,6 +66,9 @@ public static class ToKeeperDomain
             DepositOffers = depositOffers,
             DepositRateLines = depositRateLines,
             DepositConditions = depositConditions,
+            MoneyBackRules = moneyBackRules,
+            MoneyBackCategories = moneyBackCategories,
+            MoneyBackPartners = moneyBackPartners,
 
             Transactions = keeperDataModel.Transactions.Values.Select(t => t.FromModel()).ToList(),
             Fuellings = keeperDataModel.FuellingVms.Select(f => f.FromModel()).ToList(),
