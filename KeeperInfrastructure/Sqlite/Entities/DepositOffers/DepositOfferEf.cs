@@ -26,4 +26,5 @@ public class DepositOfferEf
 
     // Навигационное свойство
     public ICollection<DepositConditionsEf> Conditions { get; set; } = new List<DepositConditionsEf>();
+    public ICollection<MoneyBackRulesEf> MoneyBackRules { get; set; } = new List<MoneyBackRulesEf>();
 }
