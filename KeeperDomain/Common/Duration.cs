@@ -5,7 +5,6 @@ public enum Durations
     Years, Months, Days, Hours, Minutes, Seconds,
 }
 
-[Serializable]
 public class Duration
 {
     public bool IsPerpetual { get; set; } // term-less

@@ -1,6 +1,5 @@
 ﻿namespace KeeperDomain;
 
-[Serializable]
 public class CarYearMileage : IDumpable, IParsable<CarYearMileage>
 {
     public int Id { get; set; } //PK

@@ -2,7 +2,6 @@
 
 namespace KeeperDomain;
 
-[Serializable]
 public class CardBalanceMemo : IDumpable, IParsable<CardBalanceMemo>
 {
     public int Id { get; set; }

@@ -2,7 +2,6 @@
 
 namespace KeeperDomain;
 
-[Serializable]
 public class PayCard : IDumpable, IParsable<PayCard>
 {
     public int Id { get; set; } // совпадает с ID Account'a и BankAccount'a

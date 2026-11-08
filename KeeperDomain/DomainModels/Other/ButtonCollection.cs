@@ -1,6 +1,5 @@
 ﻿namespace KeeperDomain;
 
-[Serializable]
 public class ButtonCollection : IDumpable, IParsable<ButtonCollection>
 {
     public int Id { get; set; }

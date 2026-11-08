@@ -10,7 +10,6 @@ public enum RateType
     Fixed,
 }
 
-[Serializable]
 public class DepositConditions : IDumpable, IParsable<DepositConditions>
 {
     public int Id { get; set; } //PK

@@ -1,6 +1,5 @@
 ﻿namespace KeeperDomain;
 
-[Serializable]
 public class CbrRate
 {
     public int Id { get; set; } //PK

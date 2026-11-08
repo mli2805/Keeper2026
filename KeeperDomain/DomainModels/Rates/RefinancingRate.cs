@@ -2,7 +2,6 @@
 
 namespace KeeperDomain;
 
-[Serializable]
 public class RefinancingRate : IDumpable, IParsable<RefinancingRate>
 {
     public int Id { get; set; }

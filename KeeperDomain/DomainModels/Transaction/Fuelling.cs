@@ -2,7 +2,6 @@
 
 namespace KeeperDomain;
 
-[Serializable]
 public class Fuelling : IDumpable, IParsable<Fuelling>
 {
     public int Id { get; set; } //PK

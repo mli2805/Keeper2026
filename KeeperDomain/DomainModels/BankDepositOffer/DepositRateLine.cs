@@ -2,7 +2,6 @@
 
 namespace KeeperDomain;
 
-[Serializable]
 public class DepositRateLine : IDumpable, IParsable<DepositRateLine>
 {
     public int Id { get; set; } //PK

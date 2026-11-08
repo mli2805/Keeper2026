@@ -2,7 +2,6 @@
 
 namespace KeeperDomain;
 
-[Serializable]
 public class SalaryChange : IDumpable, IParsable<SalaryChange>
 {
     public int Id { get; set; }

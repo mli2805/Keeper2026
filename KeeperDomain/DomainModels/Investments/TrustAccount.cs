@@ -1,6 +1,5 @@
 ﻿namespace KeeperDomain;
 
-[Serializable]
 public class TrustAccount : IDumpable, IParsable<TrustAccount>
 {
     public int Id { get; set; }

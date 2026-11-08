@@ -2,7 +2,6 @@
 
 namespace KeeperDomain;
 
-[Serializable]
 public class LargeExpenseThreshold : IDumpable, IParsable<LargeExpenseThreshold>
 {
     public int Id { get; set; }

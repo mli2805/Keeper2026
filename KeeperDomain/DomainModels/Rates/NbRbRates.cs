@@ -1,7 +1,6 @@
 ﻿namespace KeeperDomain;
 
 
-[Serializable]
 public class NbRbRates : IDumpable, IParsable<NbRbRates>
 {
     public int Id { get; set; } //PK

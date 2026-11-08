@@ -10,7 +10,6 @@ public interface IParsable<T>
     T FromString(string s);
 }
 
-[Serializable]
 public class KeeperDomainModel
 {
     public List<OfficialRates> OfficialRates { get; set; } = null!;

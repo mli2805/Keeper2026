@@ -1,6 +1,5 @@
 ﻿namespace KeeperDomain;
 
-[Serializable]
 public class Deposit : IDumpable, IParsable<Deposit>
 {
     public int Id { get; set; } // совпадает с ID Account'a и BankAccount'a

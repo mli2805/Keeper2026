@@ -3,7 +3,6 @@
 namespace KeeperDomain;
 
 
-[Serializable]
 public class OneRate : IDumpable, IParsable<OneRate>
 {
     public int Id { get; set; }

@@ -3,7 +3,6 @@ using System.Globalization;
 
 namespace KeeperDomain;
 
-[Serializable]
 public class Car : IDumpable, IParsable<Car>
 {
     public int Id { get; set; } //PK

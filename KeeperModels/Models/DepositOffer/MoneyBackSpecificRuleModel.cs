@@ -1,6 +1,5 @@
 ﻿namespace KeeperModels;
 
-[Serializable]
 public class MoneyBackSpecificRuleModel
 {
     public int Id { get; set; }

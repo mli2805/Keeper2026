@@ -7,7 +7,6 @@ public enum Metal
     Gold, Platinum, Silver
 }
 
-[Serializable]
 public class MetalRate : IDumpable, IParsable<MetalRate>
 {
     public int Id { get; set; } //PK

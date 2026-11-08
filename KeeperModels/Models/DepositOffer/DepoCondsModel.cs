@@ -2,7 +2,6 @@
 
 namespace KeeperModels;
 
-[Serializable]
 public class DepoCondsModel
 {
     public int Id { get; set; }

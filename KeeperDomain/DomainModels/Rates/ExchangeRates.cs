@@ -12,7 +12,6 @@ namespace KeeperDomain;
 /// I have 800 usd, I can buy 800*56 = 44800 rub
 /// 
 ///  /// </summary>
-[Serializable]
 public class ExchangeRates : IDumpable, IParsable<ExchangeRates>
 {
     // Кешируем CultureInfo на уровне класса

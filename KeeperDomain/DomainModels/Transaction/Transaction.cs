@@ -3,7 +3,6 @@ using System.Globalization;
 
 namespace KeeperDomain;
 
-[Serializable]
 public class Transaction : IDumpable, IParsable<Transaction>
 {
     // Кешируем CultureInfo на уровне класса
