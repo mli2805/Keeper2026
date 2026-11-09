@@ -105,6 +105,7 @@ public class OneBankOfferViewModel(KeeperDataModel keeperDataModel, IWindowManag
 
     public async Task MoneyBackRules()
     {
+        moneyBackViewModel.Initialize(ModelInWork);
         await windowManager.ShowDialogAsync(moneyBackViewModel);
     }
 

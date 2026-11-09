@@ -18,6 +18,7 @@
 	  <None Remove="assets\Fonts\ArialBoldItalic.ttf" />
 	  <None Remove="assets\Fonts\ArialItalic.ttf" />
 	  <None Remove="assets\Fonts\ArialRegular.ttf" />
+	  <None Remove="assets\mcc_codes.csv" />
 	  <None Remove="Resources\accountmenu16\add_folder.png" />
 	  <None Remove="Resources\accountmenu16\edit16.ico" />
 	  <None Remove="Resources\accountmenu16\minus16.ico" />
@@ -72,6 +73,7 @@
 	  <EmbeddedResource Include="assets\Fonts\ArialBoldItalic.ttf" />
 	  <EmbeddedResource Include="assets\Fonts\ArialItalic.ttf" />
 	  <EmbeddedResource Include="assets\Fonts\ArialRegular.ttf" />
+	  <EmbeddedResource Include="assets\mcc_codes.csv" />
 	</ItemGroup>
 
 	<ItemGroup>

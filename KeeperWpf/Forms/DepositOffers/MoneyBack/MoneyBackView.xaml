@@ -4,9 +4,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeeperWpf"
+        xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
          Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DockPanel>
+
+            <Button DockPanel.Dock="Right" Name="ShowMccReferenceBook" Margin="15" Width="60">
+                <ContentControl>
+                    <StackPanel>
+                        <TextBlock Text="MCC"/>
+                        <TextBlock Text="коды"/>
+                    </StackPanel>
+                </ContentControl>
+            </Button>
+            <StackPanel>
+                <ListView ItemsSource="{Binding ListOfMoneyBackPrograms}" 
+                          SelectedItem="{Binding MoneyBackRulesInWork}" Margin="5" Height="70">
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Добавить" cal:Message.Attach="AddNewSetOfRules"/>
+                            <MenuItem Header="Удалить" cal:Message.Attach="RemoveSetOfRules"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                </ListView>
+            </StackPanel>
+        </DockPanel>
     </Grid>
 </Window>

@@ -10,7 +10,8 @@ using KeeperInfrastructure;
 namespace KeeperWpf;
 
 [ExportViewModel(ViewModelLifetime.SingleInstance)]
-public class OneBankAccountViewModel(KeeperDataModel dataModel, AccountRepository accountRepository) : Screen
+public class OneBankAccountViewModel(KeeperDataModel dataModel, AccountRepository accountRepository,
+    IWindowManager windowManager, MoneyBackViewModel moneyBackViewModel) : Screen
 {
     private bool _isInAddMode;
     private bool _isCard;
@@ -151,23 +152,16 @@ public class OneBankAccountViewModel(KeeperDataModel dataModel, AccountRepositor
         DisplayName = $"{cap} (id = {AccountItemInWork.Id})";
     }
 
-    //public string RateToString()
-    //{
-    //    var startDate = BankAccountInWork.StartDate;
-    //    DepoCondsModel? depoConds = SelectedDepositOffer.CondsMap
-
-    //    return SelectedDepositOffer.RateType switch
-    //    {
-    //        RateType.Fixed => $"{SelectedDepositOffer.RateValue}%",
-    //        RateType.Variable => $"от {SelectedDepositOffer.MinRateValue}% до {SelectedDepositOffer.MaxRateValue}%",
-    //        _ => throw new ArgumentOutOfRangeException()
-    //    };
-    //}
-
     public void BuildDepoName()
     {
         AccountName = SelectedBankName + " " + SelectedDepositOffer.Title 
                       + " " + BankAccountInWork.FinishDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+    }
+
+    public async Task MoneyBackRules()
+    {
+        moneyBackViewModel.Initialize(SelectedDepositOffer);
+        await windowManager.ShowDialogAsync(moneyBackViewModel);
     }
 
     public async Task Save()

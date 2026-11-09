@@ -127,6 +127,9 @@
                           IsChecked="{Binding BankAccountInWork.PayCard.IsVirtual}" />
                 <CheckBox Margin="90,5, 10,5" Content="Бесконтактная" 
                           IsChecked="{Binding BankAccountInWork.PayCard.IsPayPass}" />
+                <Button Name="MoneyBackRules" Height="25" Width="300" HorizontalAlignment="Left"
+                        Content="Правила начисления манибэка" Margin="10"/>
+
             </StackPanel>
 
         </StackPanel>

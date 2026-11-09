@@ -120,6 +120,10 @@
                               Background="White" Visibility="{Binding ShellPartsBinder.CardMenuVisibility}"
                               ToolTip="Способы оплаты по банковской карте">
                     </MenuItem>
+                    <MenuItem Header="Правила начисления манибэк" cal:Message.Attach="ShowMoneyBackForm" BorderBrush="{x:Null}" 
+                              Background="White" Visibility="{Binding ShellPartsBinder.CardMenuVisibility}"
+                              ToolTip="Способы оплаты по банковской карте">
+                    </MenuItem>
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>

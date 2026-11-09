@@ -9,7 +9,7 @@ namespace KeeperWpf;
 public class AccountTreeViewModel(KeeperDataModel keeperDataModel, IWindowManager windowManager, ShellPartsBinder shellPartsBinder,
     AskDragAccountActionViewModel askDragAccountActionViewModel, AccountRepository accountRepository,
     OneFolderViewModel oneFolderViewModel, OneAccountViewModel oneAccountViewModel, OneBankAccountViewModel oneBankAccountViewModel,
-    ExpensesOnAccountViewModel expensesOnAccountViewModel,
+    ExpensesOnAccountViewModel expensesOnAccountViewModel, MoneyBackViewModel moneyBackViewModel,
     DepositInterestViewModel depositInterestViewModel, CardFeeViewModel cardFeeViewModel,
     DepositReportViewModel depositReportViewModel, BalanceVerificationViewModel balanceVerificationViewModel,
     PaymentWaysViewModel paymentWaysViewModel) : PropertyChangedBase
@@ -149,5 +149,13 @@ public class AccountTreeViewModel(KeeperDataModel keeperDataModel, IWindowManage
     {
         expensesOnAccountViewModel.Initialize(ShellPartsBinder.SelectedAccountItemModel, ShellPartsBinder.SelectedPeriod);
         await WindowManager.ShowDialogAsync(expensesOnAccountViewModel);
+    }
+
+    public async Task ShowMoneyBackForm()
+    {
+        var depositOfferId = ShellPartsBinder.SelectedAccountItemModel.BankAccount!.DepositOfferId;
+        var depositOffer = KeeperDataModel.DepositOffers.First(o => o.Id == depositOfferId);
+        moneyBackViewModel.Initialize(depositOffer);
+        await WindowManager.ShowDialogAsync(moneyBackViewModel);
     }
 }
