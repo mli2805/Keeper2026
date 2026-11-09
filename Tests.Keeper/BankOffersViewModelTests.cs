@@ -31,8 +31,10 @@ public sealed class BankOffersViewModelTests
 
         var rulesAndRatesViewModel = new RulesAndRatesViewModel(dataModel, windowManagerMock.Object);
         var mccReferenceBookViewModel = new MccReferenceBookViewModel();
-        var moneyBackViewModel = new MoneyBackViewModel(dataModel, windowManagerMock.Object, mccReferenceBookViewModel);
-        var oneBankOfferViewModel = new OneBankOfferViewModel(dataModel, windowManagerMock.Object, 
+        var oneMoneyBackRulesViewModel = new OneMoneyBackRulesViewModel();
+        var moneyBackViewModel = new MoneyBackViewModel(
+            dataModel, windowManagerMock.Object, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
+        var oneBankOfferViewModel = new OneBankOfferViewModel(dataModel, windowManagerMock.Object,
             rulesAndRatesViewModel, moneyBackViewModel);
 
         // Create viewModel
@@ -95,19 +97,15 @@ public sealed class BankOffersViewModelTests
 
         var rulesAndRatesViewModel = new RulesAndRatesViewModel(dataModel, windowManagerMock.Object);
         var mccReferenceBookViewModel = new MccReferenceBookViewModel();
-        var moneyBackViewModel = new MoneyBackViewModel(dataModel, windowManagerMock.Object, mccReferenceBookViewModel);
+        var oneMoneyBackRulesViewModel = new OneMoneyBackRulesViewModel();
+        var moneyBackViewModel = new MoneyBackViewModel(
+            dataModel, windowManagerMock.Object, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
         var oneBankOfferViewModel = new OneBankOfferViewModel(
-            dataModel,
-            windowManagerMock.Object,
-            rulesAndRatesViewModel,
-            moneyBackViewModel);
+            dataModel, windowManagerMock.Object, rulesAndRatesViewModel, moneyBackViewModel);
 
         // Create viewModel
         var viewModel = new BankOffersViewModel(
-            windowManagerMock.Object,
-            dataModel,
-            repository,
-            oneBankOfferViewModel);
+            windowManagerMock.Object, dataModel, repository, oneBankOfferViewModel);
 
         viewModel.Initialize();
         viewModel.SelectedDepositOffer = viewModel.Rows.First(r => r.Id == offerWithDeposit.Id);
@@ -155,7 +153,9 @@ public sealed class BankOffersViewModelTests
 
         var rulesAndRatesViewModel = new RulesAndRatesViewModel(dataModel, windowManagerMock.Object);
         var mccReferenceBookViewModel = new MccReferenceBookViewModel();
-        var moneyBackViewModel = new MoneyBackViewModel(dataModel, windowManagerMock.Object, mccReferenceBookViewModel);
+        var oneMoneyBackRulesViewModel = new OneMoneyBackRulesViewModel();
+        var moneyBackViewModel = new MoneyBackViewModel(
+            dataModel, windowManagerMock.Object, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
         var oneBankOfferViewModel = new OneBankOfferViewModel(dataModel, windowManagerMock.Object, rulesAndRatesViewModel, moneyBackViewModel);
 
         // Mock dialog to return without cancellation and set the model
@@ -166,7 +166,7 @@ public sealed class BankOffersViewModelTests
             .Callback(() =>
             {
                 // Simulate user filling in the form
-                
+
                 oneBankOfferViewModel.Initialize(newOfferModel);
                 oneBankOfferViewModel.IsCancelled = false;
             })
@@ -217,7 +217,9 @@ public sealed class BankOffersViewModelTests
 
         var rulesAndRatesViewModel = new RulesAndRatesViewModel(dataModel, windowManagerMock.Object);
         var mccReferenceBookViewModel = new MccReferenceBookViewModel();
-        var moneyBackViewModel = new MoneyBackViewModel(dataModel, windowManagerMock.Object, mccReferenceBookViewModel);
+        var oneMoneyBackRulesViewModel = new OneMoneyBackRulesViewModel();
+        var moneyBackViewModel = new MoneyBackViewModel(
+            dataModel, windowManagerMock.Object, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
         var oneBankOfferViewModel = new OneBankOfferViewModel(dataModel, windowManagerMock.Object, rulesAndRatesViewModel, moneyBackViewModel);
 
         // Mock dialog to modify the model and return without cancellation
@@ -290,8 +292,11 @@ public sealed class BankOffersViewModelTests
 
         var rulesAndRatesViewModel = new RulesAndRatesViewModel(dataModel, windowManagerMock.Object);
         var mccReferenceBookViewModel = new MccReferenceBookViewModel();
-        var moneyBackViewModel = new MoneyBackViewModel(dataModel, windowManagerMock.Object, mccReferenceBookViewModel);
-        var oneBankOfferViewModel = new OneBankOfferViewModel(dataModel, windowManagerMock.Object, rulesAndRatesViewModel, moneyBackViewModel);
+        var oneMoneyBackRulesViewModel = new OneMoneyBackRulesViewModel();
+        var moneyBackViewModel = new MoneyBackViewModel(
+            dataModel, windowManagerMock.Object, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
+        var oneBankOfferViewModel = new OneBankOfferViewModel(
+            dataModel, windowManagerMock.Object, rulesAndRatesViewModel, moneyBackViewModel);
 
         // Mock OneBankOfferViewModel dialog
         windowManagerMock
@@ -305,20 +310,20 @@ public sealed class BankOffersViewModelTests
 
                 // 2. Simulate editing conditions via RulesAndRatesViewModel
                 var conds1 = oneBankOfferViewModel.ModelInWork.CondsList.First(c => c.DateFrom == DateTime.Today.AddDays(-30));
-                
+
                 // Simulate opening RulesAndRatesViewModel for first conditions
                 rulesAndRatesViewModel.Initialize(oneBankOfferViewModel.ModelInWork.Title, conds1, oneBankOfferViewModel.ModelInWork.RateType);
-                
+
                 // Make changes through the ViewModel as user would do
                 conds1.IsFactDays = !conds1.IsFactDays;
                 rulesAndRatesViewModel.Rows[1].Rate = 4.5m; // Change rate in second line
-                
+
                 // Add new line
                 rulesAndRatesViewModel.AddLine();
                 rulesAndRatesViewModel.Rows[2].AmountFrom = 5000;
                 rulesAndRatesViewModel.Rows[2].AmountTo = 10000;
                 rulesAndRatesViewModel.Rows[2].Rate = 5;
-                
+
                 // Simulate closing RulesAndRatesViewModel (this should save changes back to conds1)
                 conds1.RateLines = [.. rulesAndRatesViewModel.Rows];
 
@@ -349,7 +354,7 @@ public sealed class BankOffersViewModelTests
         // Assert - Verify database changes
         var offersFromDb = await depositOffersRepository.GetDepositOffersWithConditionsAndRates(DbTestHelper.AcMoDict);
         var updatedInDb = offersFromDb.First(o => o.Id == addedOffer.Id);
-        
+
         Assert.AreEqual("Обновленный тестовый вклад", updatedInDb.Title, "Title should be updated in database");
         Assert.AreEqual(200, updatedInDb.MonthPaymentsMinimum, "MonthPaymentsMinimum should be updated in database");
 
@@ -364,16 +369,16 @@ public sealed class BankOffersViewModelTests
         Assert.IsNotNull(conds1, "First conditions should exist");
         Assert.IsFalse(conds1.IsFactDays, "IsFactDays should be toggled");
         Assert.HasCount(3, conds1.RateLines, "Should have 3 rate lines after adding one");
-        
+
         // Verify rate lines in first conditions
         Assert.AreEqual(0, conds1.RateLines[0].AmountFrom, "First line AmountFrom");
         Assert.AreEqual(1000, conds1.RateLines[0].AmountTo, "First line AmountTo");
         Assert.AreEqual(3m, conds1.RateLines[0].Rate, "First line Rate should be unchanged");
-        
+
         Assert.AreEqual(1000, conds1.RateLines[1].AmountFrom, "Second line AmountFrom");
         Assert.AreEqual(5000, conds1.RateLines[1].AmountTo, "Second line AmountTo");
         Assert.AreEqual(4.5m, conds1.RateLines[1].Rate, "Second line Rate should be updated");
-        
+
         Assert.AreEqual(5000, conds1.RateLines[2].AmountFrom, "Third line AmountFrom");
         Assert.AreEqual(10000, conds1.RateLines[2].AmountTo, "Third line AmountTo");
         Assert.AreEqual(5m, conds1.RateLines[2].Rate, "Third line Rate");

@@ -1,6 +1,6 @@
 ﻿namespace KeeperModels;
 
-public class MoneyBackSpecificRuleModel
+public class MoneyBackSpecificCategoryModel
 {
     public int Id { get; set; }
     public int MoneyBackRulesId { get; set; }

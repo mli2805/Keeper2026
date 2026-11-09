@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="KeeperWpf.NullableNumericControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KeeperWpf"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d"
+             cal:Bind.ModelWithoutContext="{Binding .}"
+             d:DataContext="{d:DesignInstance local:NullableNumericControlViewModel}">
+    <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="3" Margin="2" Padding="6,3">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <RadioButton IsChecked="{Binding IsNotSet, Mode=TwoWay}" VerticalAlignment="Center"
+                             GroupName="NnvcState" Content="не задано" Margin="0,0,20,0"/>
+                <RadioButton IsChecked="{Binding IsSet, Mode=TwoWay}" VerticalAlignment="Center"
+                             GroupName="NnvcState" Content="задано:" Margin="0,0,8,0"/>
+                <TextBox Width="120" Height="24" TextAlignment="Right" VerticalContentAlignment="Center"
+                         IsEnabled="{Binding IsSet}"
+                         Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="{Binding Explanation}" TextWrapping="Wrap" Margin="0,0,16,0"/>
+            </StackPanel>
+    </Border>
+</UserControl>

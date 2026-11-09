@@ -2,15 +2,6 @@
 
 namespace KeeperDomain;
 
-[StoreEnumAsString]
-public enum MoneyBackType
-{
-    AnyWithExemptions,
-    SpecificCategories,
-    PartnerCounterparties,
-}
-
-
 public class MoneyBackRules : IDumpable, IParsable<MoneyBackRules>
 {
     public int Id { get; set; } //PK
