@@ -33,7 +33,7 @@ public sealed class BankOffersViewModelTests
         var mccReferenceBookViewModel = new MccReferenceBookViewModel();
         var oneMoneyBackRulesViewModel = new OneMoneyBackRulesViewModel();
         var moneyBackViewModel = new MoneyBackViewModel(
-            dataModel, windowManagerMock.Object, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
+            dataModel, windowManagerMock.Object, depositOffersRepository, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
         var oneBankOfferViewModel = new OneBankOfferViewModel(dataModel, windowManagerMock.Object,
             rulesAndRatesViewModel, moneyBackViewModel);
 
@@ -99,7 +99,7 @@ public sealed class BankOffersViewModelTests
         var mccReferenceBookViewModel = new MccReferenceBookViewModel();
         var oneMoneyBackRulesViewModel = new OneMoneyBackRulesViewModel();
         var moneyBackViewModel = new MoneyBackViewModel(
-            dataModel, windowManagerMock.Object, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
+            dataModel, windowManagerMock.Object, repository, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
         var oneBankOfferViewModel = new OneBankOfferViewModel(
             dataModel, windowManagerMock.Object, rulesAndRatesViewModel, moneyBackViewModel);
 
@@ -155,7 +155,7 @@ public sealed class BankOffersViewModelTests
         var mccReferenceBookViewModel = new MccReferenceBookViewModel();
         var oneMoneyBackRulesViewModel = new OneMoneyBackRulesViewModel();
         var moneyBackViewModel = new MoneyBackViewModel(
-            dataModel, windowManagerMock.Object, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
+            dataModel, windowManagerMock.Object, depositOffersRepository, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
         var oneBankOfferViewModel = new OneBankOfferViewModel(dataModel, windowManagerMock.Object, rulesAndRatesViewModel, moneyBackViewModel);
 
         // Mock dialog to return without cancellation and set the model
@@ -219,7 +219,7 @@ public sealed class BankOffersViewModelTests
         var mccReferenceBookViewModel = new MccReferenceBookViewModel();
         var oneMoneyBackRulesViewModel = new OneMoneyBackRulesViewModel();
         var moneyBackViewModel = new MoneyBackViewModel(
-            dataModel, windowManagerMock.Object, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
+            dataModel, windowManagerMock.Object, depositOffersRepository, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
         var oneBankOfferViewModel = new OneBankOfferViewModel(dataModel, windowManagerMock.Object, rulesAndRatesViewModel, moneyBackViewModel);
 
         // Mock dialog to modify the model and return without cancellation
@@ -294,7 +294,7 @@ public sealed class BankOffersViewModelTests
         var mccReferenceBookViewModel = new MccReferenceBookViewModel();
         var oneMoneyBackRulesViewModel = new OneMoneyBackRulesViewModel();
         var moneyBackViewModel = new MoneyBackViewModel(
-            dataModel, windowManagerMock.Object, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
+            dataModel, windowManagerMock.Object, depositOffersRepository, mccReferenceBookViewModel, oneMoneyBackRulesViewModel);
         var oneBankOfferViewModel = new OneBankOfferViewModel(
             dataModel, windowManagerMock.Object, rulesAndRatesViewModel, moneyBackViewModel);
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Caliburn.Micro;
 
 namespace KeeperWpf;
@@ -54,6 +56,17 @@ public class OneMoneyBackRulesViewModel : Screen
         }
     }
 
+    public string Comment
+    {
+        get => _currentModel?.Comment ?? string.Empty;
+        set
+        {
+            if (_currentModel == null || _currentModel.Comment == value) return;
+            _currentModel.Comment = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
     public OneMoneyBackRulesViewModel()
     {
         MinPurchaseAmountControl = Create(nameof(MoneyBackRulesModel.MinPurchaseAmount),
@@ -72,6 +85,7 @@ public class OneMoneyBackRulesViewModel : Screen
     public void ApplyModel(MoneyBackRulesModel? model)
     {
         if (ReferenceEquals(model, _currentModel)) return;
+        ApplyControlChangesToModel(); // переносим изменения из контролов в предыдущую модель
         _currentModel = model;
         if (model == null) return;
 
@@ -85,5 +99,21 @@ public class OneMoneyBackRulesViewModel : Screen
         NotifyOfPropertyChange(nameof(StartDate));
         NotifyOfPropertyChange(nameof(MoneyBackType));
         NotifyOfPropertyChange(nameof(Percent));
+        NotifyOfPropertyChange(nameof(Comment));
+    }
+
+    // контролы категорий и партнёров работают с копиями списков модели,
+    // поэтому добавленные/удалённые строки переносим обратно в модель
+    public void ApplyControlChangesToModel()
+    {
+        if (_currentModel == null) return;
+        _currentModel.SpecificCategories = CategoriesControl.Categories.ToList();
+        _currentModel.Partners = PartnersControl.Partners.ToList();
+    }
+
+    public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
+    {
+        ApplyControlChangesToModel();
+        return base.CanCloseAsync(cancellationToken);
     }
 }

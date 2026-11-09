@@ -27,6 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Sqlite\Migrations\" />
 	  <Folder Include="Sqlite\Scripts\" />
 	</ItemGroup>
 

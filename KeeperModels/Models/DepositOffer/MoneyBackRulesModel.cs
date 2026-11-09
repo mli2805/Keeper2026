@@ -11,7 +11,7 @@ public class MoneyBackRulesModel
     public MoneyBackType MoneyBackType { get; set; }
     public double Percent { get; set; } // например 0.5% от суммы платежа
 
-    public List<MoneyBackSpecificCategoryModel> SpecificCategories { get; set; } = new List<MoneyBackSpecificCategoryModel>();
+    public List<MoneyBackCategoryModel> SpecificCategories { get; set; } = new List<MoneyBackCategoryModel>();
     public List<MoneyBackPartnerModel> Partners { get; set; } = new List<MoneyBackPartnerModel>();
 
     #region Restrictions

@@ -132,7 +132,7 @@ public static class ModelsToDomain
         };
     }
 
-    public static MoneyBackCategory FromModel(this MoneyBackSpecificCategoryModel moneyBackSpecificRuleModel)
+    public static MoneyBackCategory FromModel(this MoneyBackCategoryModel moneyBackSpecificRuleModel)
     {
         return new MoneyBackCategory()
         {

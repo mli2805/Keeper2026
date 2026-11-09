@@ -219,4 +219,129 @@ public class DepositOffersRepository(IDbContextFactory<KeeperDbContext> factory)
             await keeperDbContext.SaveChangesAsync();
         }
     }
+
+    // сохраняет только правила манибэка указанной офферы, не трогая условия и ставки
+    public async Task SaveMoneyBackRules(int offerId, List<MoneyBackRulesModel> rules)
+    {
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
+        var existingOfferEf = await keeperDbContext.DepositOffers
+            .Include(o => o.MoneyBackRules)
+            .ThenInclude(m => m.SpecificCategories)
+            .Include(o => o.MoneyBackRules)
+            .ThenInclude(m => m.Partners)
+            .FirstAsync(o => o.Id == offerId);
+
+        var modelRulesIds = rules.Where(r => r.Id > 0).Select(r => r.Id).ToList();
+
+        // Удаляем правила, которых нет в модели
+        var rulesToRemove = existingOfferEf.MoneyBackRules
+            .Where(r => !modelRulesIds.Contains(r.Id))
+            .ToList();
+        foreach (var rule in rulesToRemove)
+        {
+            keeperDbContext.MoneyBackRules.Remove(rule);
+        }
+
+        // для новых сущностей запоминаем связь модели с ef-сущностью,
+        // чтобы после сохранения перенести назначенные базой Id обратно в модели
+        var newRulesMap = new Dictionary<MoneyBackRulesModel, MoneyBackRulesEf>();
+        var newCategoriesMap = new Dictionary<MoneyBackCategoryModel, MoneyBackCategoryEf>();
+        var newPartnersMap = new Dictionary<MoneyBackPartnerModel, MoneyBackPartnerEf>();
+
+        // Обновляем или добавляем правила
+        foreach (var modelRule in rules)
+        {
+            var existingRuleEf = existingOfferEf.MoneyBackRules
+                .FirstOrDefault(r => r.Id == modelRule.Id && r.Id > 0);
+
+            if (existingRuleEf != null)
+            {
+                // Обновляем существующее правило
+                existingRuleEf.UpdateEf(modelRule);
+
+                // Обновляем специфичные категории
+                var modelCategoriesIds = modelRule.SpecificCategories.Where(c => c.Id > 0).Select(c => c.Id).ToList();
+                var categoriesToRemove = existingRuleEf.SpecificCategories
+                    .Where(c => !modelCategoriesIds.Contains(c.Id))
+                    .ToList();
+                foreach (var category in categoriesToRemove)
+                {
+                    keeperDbContext.MoneyBackCategories.Remove(category);
+                }
+
+                foreach (var modelCategory in modelRule.SpecificCategories)
+                {
+                    var existingCategoryEf = existingRuleEf.SpecificCategories
+                        .FirstOrDefault(c => c.Id == modelCategory.Id && c.Id > 0);
+                    if (existingCategoryEf != null)
+                    {
+                        existingCategoryEf.UpdateEf(modelCategory);
+                    }
+                    else
+                    {
+                        var newCategory = modelCategory.FromModel();
+                        newCategory.MoneyBackRulesId = existingRuleEf.Id;
+                        existingRuleEf.SpecificCategories.Add(newCategory);
+                        newCategoriesMap[modelCategory] = newCategory;
+                    }
+                }
+
+                // Обновляем партнёров
+                var modelPartnersIds = modelRule.Partners.Where(p => p.Id > 0).Select(p => p.Id).ToList();
+                var partnersToRemove = existingRuleEf.Partners
+                    .Where(p => !modelPartnersIds.Contains(p.Id))
+                    .ToList();
+                foreach (var partner in partnersToRemove)
+                {
+                    keeperDbContext.MoneyBackPartners.Remove(partner);
+                }
+
+                foreach (var modelPartner in modelRule.Partners)
+                {
+                    var existingPartnerEf = existingRuleEf.Partners
+                        .FirstOrDefault(p => p.Id == modelPartner.Id && p.Id > 0);
+                    if (existingPartnerEf != null)
+                    {
+                        existingPartnerEf.UpdateEf(modelPartner);
+                    }
+                    else
+                    {
+                        var newPartner = modelPartner.FromModel();
+                        newPartner.MoneyBackRulesId = existingRuleEf.Id;
+                        existingRuleEf.Partners.Add(newPartner);
+                        newPartnersMap[modelPartner] = newPartner;
+                    }
+                }
+            }
+            else
+            {
+                // Добавляем новое правило используя маппер
+                var newRuleEf = modelRule.FromModel();
+                newRuleEf.DepositOfferId = existingOfferEf.Id;
+                existingOfferEf.MoneyBackRules.Add(newRuleEf);
+                newRulesMap[modelRule] = newRuleEf;
+            }
+        }
+
+        await keeperDbContext.SaveChangesAsync();
+
+        // Переносим назначенные базой Id обратно в модели
+        foreach (var (modelRule, ruleEf) in newRulesMap)
+        {
+            modelRule.Id = ruleEf.Id;
+            modelRule.DepositOfferId = ruleEf.DepositOfferId;
+        }
+
+        foreach (var (modelCategory, categoryEf) in newCategoriesMap)
+        {
+            modelCategory.Id = categoryEf.Id;
+            modelCategory.MoneyBackRulesId = categoryEf.MoneyBackRulesId;
+        }
+
+        foreach (var (modelPartner, partnerEf) in newPartnersMap)
+        {
+            modelPartner.Id = partnerEf.Id;
+            modelPartner.MoneyBackRulesId = partnerEf.MoneyBackRulesId;
+        }
+    }
 }

@@ -58,7 +58,7 @@ public static class DepositOfferMapper
         moneyBackRulesEf.Comment = moneyBackRulesModel.Comment;
     }
 
-    public static void UpdateEf(this MoneyBackCategoryEf moneyBackCategoryEf, MoneyBackSpecificCategoryModel moneyBackSpecificRuleModel)
+    public static void UpdateEf(this MoneyBackCategoryEf moneyBackCategoryEf, MoneyBackCategoryModel moneyBackSpecificRuleModel)
     {
         moneyBackCategoryEf.MCC = moneyBackSpecificRuleModel.MCC;
         moneyBackCategoryEf.Name = moneyBackSpecificRuleModel.Name;
@@ -124,7 +124,7 @@ public static class DepositOfferMapper
             StartDate = moneyBackRulesEf.StartDate,
             MoneyBackType = moneyBackRulesEf.MoneyBackType,
             Percent = moneyBackRulesEf.Percent,
-            SpecificCategories = moneyBackRulesEf.SpecificCategories?.Select(sc => sc.ToModel()).ToList() ?? new List<MoneyBackSpecificCategoryModel>(),
+            SpecificCategories = moneyBackRulesEf.SpecificCategories?.Select(sc => sc.ToModel()).ToList() ?? new List<MoneyBackCategoryModel>(),
             Partners = moneyBackRulesEf.Partners?.Select(p => p.ToModel()).ToList() ?? new List<MoneyBackPartnerModel>(),
             MinPurchaseAmount = moneyBackRulesEf.MinPurchaseAmount,
             MaxPurchaseAmount = moneyBackRulesEf.MaxPurchaseAmount,
@@ -134,9 +134,9 @@ public static class DepositOfferMapper
         };
     }
 
-    public static MoneyBackSpecificCategoryModel ToModel(this MoneyBackCategoryEf moneyBackCategoryEf)
+    public static MoneyBackCategoryModel ToModel(this MoneyBackCategoryEf moneyBackCategoryEf)
     {
-        return new MoneyBackSpecificCategoryModel
+        return new MoneyBackCategoryModel
         {
             Id = moneyBackCategoryEf.Id,
             MoneyBackRulesId = moneyBackCategoryEf.MoneyBackRulesId,
@@ -220,7 +220,7 @@ public static class DepositOfferMapper
         };
     }
 
-    public static MoneyBackCategoryEf FromModel(this MoneyBackSpecificCategoryModel moneyBackSpecificRuleModel)
+    public static MoneyBackCategoryEf FromModel(this MoneyBackCategoryModel moneyBackSpecificRuleModel)
     {
         return new MoneyBackCategoryEf
         {

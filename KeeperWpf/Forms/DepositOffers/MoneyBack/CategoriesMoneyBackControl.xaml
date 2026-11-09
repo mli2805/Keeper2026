@@ -15,7 +15,7 @@
                   HeadersVisibility="Column">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Процент" Width="60" Binding="{Binding Percent}"/>
-                <DataGridTextColumn Header="MCC" Width="50" Binding="{Binding MCC}"/>
+                <DataGridTextColumn Header="MCC" Width="50" Binding="{Binding MCC, TargetNullValue=''}"/>
                 <DataGridTextColumn Header="Название" Width="200" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Описание" Width="*" Binding="{Binding Description}"/>
             </DataGrid.Columns>

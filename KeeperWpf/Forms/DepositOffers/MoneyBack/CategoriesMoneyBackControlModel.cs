@@ -5,13 +5,13 @@ namespace KeeperWpf;
 
 public class CategoriesMoneyBackControlModel : PropertyChangedBase
 {
-    public BindableCollection<MoneyBackSpecificCategoryModel> Categories { get; set; }
-        = new BindableCollection<MoneyBackSpecificCategoryModel>();
+    public BindableCollection<MoneyBackCategoryModel> Categories { get; set; }
+        = new BindableCollection<MoneyBackCategoryModel>();
 
-    public void SwitchModel(List<MoneyBackSpecificCategoryModel>? categories)
+    public void SwitchModel(List<MoneyBackCategoryModel>? categories)
     {
-        Categories = new BindableCollection<MoneyBackSpecificCategoryModel>(
-            categories ?? new List<MoneyBackSpecificCategoryModel>());
+        Categories = new BindableCollection<MoneyBackCategoryModel>(
+            categories ?? new List<MoneyBackCategoryModel>());
         NotifyOfPropertyChange(nameof(Categories));
     }
 }

@@ -18,8 +18,8 @@
                 </ContentControl>
             </Button>
             <StackPanel>
-                <ListView ItemsSource="{Binding ListOfMoneyBackPrograms}" 
-                          SelectedItem="{Binding MoneyBackRulesInWork}" Margin="5" Height="70">
+                <ListView ItemsSource="{Binding Rows}" 
+                          SelectedItem="{Binding SelectedSetOfRules}" Margin="5" Height="70">
                     <ListView.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Добавить" cal:Message.Attach="AddNewSetOfRules"/>
@@ -30,8 +30,8 @@
             </StackPanel>
         </DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,5">
-            <Button Name="SaveChanges" Width="100" Margin="5,10" Height="22">Сохранить</Button>
-            <Button Name="CancelChanges" Width="100" Margin="5,10">Отменить</Button>
+            <Button Name="Save" Width="100" Margin="5,10" Height="22">Сохранить</Button>
+            <Button Name="Cancel" Width="100" Margin="5,10">Отменить</Button>
         </StackPanel>
         <local:OneMoneyBackRulesView DataContext="{Binding RulesViewModel}"/>
     </DockPanel>
