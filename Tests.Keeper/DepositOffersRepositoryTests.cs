@@ -31,7 +31,7 @@ public sealed class DepositOffersRepositoryTests
         var addedOffer = offers2.FirstOrDefault(o => o.Id == savedOfferModel.Id);
 
         Assert.IsNotNull(addedOffer);
-        Assert.AreEqual(offerModel.MonthPaymentsMinimum, addedOffer.MonthPaymentsMinimum);
+        Assert.AreEqual(offerModel.Comment, addedOffer.Comment);
         Assert.HasCount(expected: offerModel.CondsList.Count, addedOffer.CondsList);
     }
 
@@ -53,7 +53,7 @@ public sealed class DepositOffersRepositoryTests
         var updatedOffer = offers.FirstOrDefault(o => o.Id == addedOfferModel.Id);
         Assert.IsNotNull(updatedOffer);
         Assert.AreEqual("Обновленный тестовый вклад", updatedOffer.Title);
-        Assert.AreEqual(offerModel.MonthPaymentsMinimum + 100, updatedOffer.MonthPaymentsMinimum);
+        Assert.AreEqual("Обновленный комментарий к тестовому вкладу", updatedOffer.Comment);
         var conds1 = updatedOffer.CondsList.First(c => c.DateFrom == DateTime.Today.AddDays(-30));
         Assert.IsNotNull(conds1);
         Assert.IsFalse(conds1.IsFactDays);

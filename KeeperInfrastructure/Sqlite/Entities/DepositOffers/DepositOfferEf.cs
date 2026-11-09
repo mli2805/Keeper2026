@@ -19,9 +19,6 @@ public class DepositOfferEf
     public int DepositTermValue { get; set; }
     public Durations DepositTermDuration { get; set; }
 
-    public int MonthPaymentsMinimum { get; set; }
-    public int MonthPaymentsMaximum { get; set; }
-
     [MaxLength(250)] public string Comment { get; set; } = string.Empty;
 
     // Навигационное свойство

@@ -13,7 +13,6 @@ public static class DepositOfferTestHelper
             Title = "Тестовый вклад",
             DepositTerm = new DurationModel { IsPerpetual = true },
             MainCurrency = CurrencyCode.BYN,
-            MonthPaymentsMinimum = 100,
             Comment = "Комментарий к тестовому вкладу",
             CondsList = []
         };
@@ -26,7 +25,7 @@ public static class DepositOfferTestHelper
     public static DepositOfferModel ChangeDepositOfferModel(DepositOfferModel model)
     {
         model.Title = "Обновленный тестовый вклад";
-        model.MonthPaymentsMinimum += 100;
+        model.Comment = "Обновленный комментарий к тестовому вкладу";
 
         var conds1 = model.CondsList.First(c => c.DateFrom == DateTime.Today.AddDays(-30));
         conds1.IsFactDays = !conds1.IsFactDays;

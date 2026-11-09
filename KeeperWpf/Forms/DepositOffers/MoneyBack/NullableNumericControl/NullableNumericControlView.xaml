@@ -9,15 +9,13 @@
              cal:Bind.ModelWithoutContext="{Binding .}"
              d:DataContext="{d:DesignInstance local:NullableNumericControlViewModel}">
     <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="3" Margin="2" Padding="6,3">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <RadioButton IsChecked="{Binding IsNotSet, Mode=TwoWay}" VerticalAlignment="Center"
-                             GroupName="NnvcState" Content="не задано" Margin="0,0,20,0"/>
-                <RadioButton IsChecked="{Binding IsSet, Mode=TwoWay}" VerticalAlignment="Center"
-                             GroupName="NnvcState" Content="задано:" Margin="0,0,8,0"/>
-                <TextBox Width="120" Height="24" TextAlignment="Right" VerticalContentAlignment="Center"
-                         IsEnabled="{Binding IsSet}"
-                         Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Text="{Binding Explanation}" TextWrapping="Wrap" Margin="0,0,16,0"/>
-            </StackPanel>
+        <DockPanel VerticalAlignment="Center">
+            <TextBlock DockPanel.Dock="Left" Text="{Binding Explanation}" Margin="5,3,0,0"/>
+            <TextBox DockPanel.Dock="Right" Width="60" Height="24" TextAlignment="Right" 
+                     IsEnabled="{Binding IsSet}" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox DockPanel.Dock="Right" IsChecked="{Binding IsSet, Mode=TwoWay}" 
+                      VerticalAlignment="Center" Margin="8,0,8,0"/>
+            <StackPanel/>
+        </DockPanel>
     </Border>
 </UserControl>

@@ -1,4 +1,5 @@
-﻿using KeeperDomain;
+﻿using System.ComponentModel.DataAnnotations;
+using KeeperDomain;
 
 namespace KeeperInfrastructure;
 
@@ -12,12 +13,13 @@ public class MoneyBackRulesEf
     public double Percent { get; set; }
 
     #region Restrictions
-    public decimal? MinPurchaseAmount { get; set; }
-    public decimal? MaxPurchaseAmount { get; set; }
-    public decimal? MaxMoneyBackAmount { get; set; }
-    public decimal? MaxMoneyBackOnCategoryAmount { get; set; }
-    public decimal? MinMonthPurchasesAmount { get; set; }
+    public double? MinPurchaseAmount { get; set; }
+    public double? MaxPurchaseAmount { get; set; }
+    public double? MaxMoneyBackAmount { get; set; }
+    public double? MinMonthPurchasesAmount { get; set; }
     #endregion
+
+    [MaxLength(1024)] public string Comment { get; set; } = string.Empty;
 
     // Навигационные свойства
     public DepositOfferEf DepositOffer { get; set; } = null!;

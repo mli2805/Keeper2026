@@ -55,22 +55,7 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <Button Name="MoneyBackRules" Height="25" Width="100" Content="Money Back Rules" Margin="5"/>
-        <GroupBox Margin="5,0">
-            <StackPanel Margin="0,5,0,0">
-                <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="Минимум платежей в месяц" Width="170" Margin="5, 0"/>
-                    <TextBox Width="70" Margin="5,2, 5,0" 
-                             Text="{Binding ModelInWork.MonthPaymentsMinimum}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="Максимум платежей в месяц" Width="170" Margin="5, 0"/>
-                    <TextBox Width="70"  Margin="5,2, 5,0"
-                             Text="{Binding ModelInWork.MonthPaymentsMaximum}"/>
-                </StackPanel>
-            </StackPanel>
-            
-        </GroupBox>
+        <Button Name="MoneyBackRules" Height="25" Width="370" Content="Правила начисления манибэка" Margin="5,10,5,5"/>
         <StackPanel Margin="5,0,5,5">
             <TextBlock Text="Комментарий" Margin="5" Width="100" HorizontalAlignment="Left"/>
             <TextBox Margin="5" Text="{Binding ModelInWork.Comment}" AcceptsReturn="True" 

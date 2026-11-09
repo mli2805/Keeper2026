@@ -94,7 +94,7 @@ public class NullableNumericControlViewModel : PropertyChangedBase
     private string _text = "";
     public string Text
     {
-        get => _isSet ? _text : "—";
+        get => _isSet ? _text : "";
         set
         {
             if (!_isSet) return;

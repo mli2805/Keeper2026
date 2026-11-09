@@ -19,8 +19,6 @@ public static class DepositOfferMapper
         depositOfferEf.DepositTermValue = depositOfferModel.DepositTerm.Value;
         depositOfferEf.DepositTermDuration = depositOfferModel.DepositTerm.Scale;
 
-        depositOfferEf.MonthPaymentsMinimum = depositOfferModel.MonthPaymentsMinimum;
-        depositOfferEf.MonthPaymentsMaximum = depositOfferModel.MonthPaymentsMaximum;
         depositOfferEf.Comment = depositOfferModel.Comment;
     }
 
@@ -56,8 +54,8 @@ public static class DepositOfferMapper
         moneyBackRulesEf.MinPurchaseAmount = moneyBackRulesModel.MinPurchaseAmount;
         moneyBackRulesEf.MaxPurchaseAmount = moneyBackRulesModel.MaxPurchaseAmount;
         moneyBackRulesEf.MaxMoneyBackAmount = moneyBackRulesModel.MaxMoneyBackAmount;
-        moneyBackRulesEf.MaxMoneyBackOnCategoryAmount = moneyBackRulesModel.MaxMoneyBackOnCategoryAmount;
         moneyBackRulesEf.MinMonthPurchasesAmount = moneyBackRulesModel.MinMonthPurchasesAmount;
+        moneyBackRulesEf.Comment = moneyBackRulesModel.Comment;
     }
 
     public static void UpdateEf(this MoneyBackCategoryEf moneyBackCategoryEf, MoneyBackSpecificCategoryModel moneyBackSpecificRuleModel)
@@ -89,8 +87,6 @@ public static class DepositOfferMapper
             DepositTerm = depositOfferEf.IsPerpetual 
                 ? new DurationModel() 
                 : new DurationModel(depositOfferEf.DepositTermValue, depositOfferEf.DepositTermDuration),
-            MonthPaymentsMinimum = depositOfferEf.MonthPaymentsMinimum,
-            MonthPaymentsMaximum = depositOfferEf.MonthPaymentsMaximum,
             CondsList = depositOfferEf.Conditions.Select(c => c.ToModel()).OrderBy(c => c.DateFrom).ToList(),
             MoneyBackRules = depositOfferEf.MoneyBackRules?.Select(m => m.ToModel()).OrderBy(m => m.StartDate).ToList() ?? new List<MoneyBackRulesModel>(),
             Comment = depositOfferEf.Comment
@@ -133,8 +129,8 @@ public static class DepositOfferMapper
             MinPurchaseAmount = moneyBackRulesEf.MinPurchaseAmount,
             MaxPurchaseAmount = moneyBackRulesEf.MaxPurchaseAmount,
             MaxMoneyBackAmount = moneyBackRulesEf.MaxMoneyBackAmount,
-            MaxMoneyBackOnCategoryAmount = moneyBackRulesEf.MaxMoneyBackOnCategoryAmount,
-            MinMonthPurchasesAmount = moneyBackRulesEf.MinMonthPurchasesAmount
+            MinMonthPurchasesAmount = moneyBackRulesEf.MinMonthPurchasesAmount,
+            Comment = moneyBackRulesEf.Comment
         };
     }
 
@@ -177,8 +173,6 @@ public static class DepositOfferMapper
             IsPerpetual = depositOfferModel.DepositTerm.IsPerpetual,
             DepositTermValue = depositOfferModel.DepositTerm.Value,
             DepositTermDuration = depositOfferModel.DepositTerm.Scale,
-            MonthPaymentsMinimum = depositOfferModel.MonthPaymentsMinimum,
-            MonthPaymentsMaximum = depositOfferModel.MonthPaymentsMaximum,
             Conditions = depositOfferModel.CondsList.Select(c => c.FromModel()).ToList(),
             MoneyBackRules = depositOfferModel.MoneyBackRules.Select(m => m.FromModel()).ToList(),
             Comment = depositOfferModel.Comment
@@ -221,8 +215,8 @@ public static class DepositOfferMapper
             MinPurchaseAmount = moneyBackRulesModel.MinPurchaseAmount,
             MaxPurchaseAmount = moneyBackRulesModel.MaxPurchaseAmount,
             MaxMoneyBackAmount = moneyBackRulesModel.MaxMoneyBackAmount,
-            MaxMoneyBackOnCategoryAmount = moneyBackRulesModel.MaxMoneyBackOnCategoryAmount,
-            MinMonthPurchasesAmount = moneyBackRulesModel.MinMonthPurchasesAmount
+            MinMonthPurchasesAmount = moneyBackRulesModel.MinMonthPurchasesAmount,
+            Comment = moneyBackRulesModel.Comment
         };
     }
 
@@ -265,8 +259,6 @@ public static class DepositOfferMapper
             IsPerpetual = depositOffer.DepositTerm.IsPerpetual,
             DepositTermValue = depositOffer.DepositTerm.Value,
             DepositTermDuration = depositOffer.DepositTerm.Scale,
-            MonthPaymentsMinimum = depositOffer.MonthPaymentsMinimum,
-            MonthPaymentsMaximum = depositOffer.MonthPaymentsMaximum,
             Comment = depositOffer.Comment
         };
     }
@@ -286,8 +278,6 @@ public static class DepositOfferMapper
             DepositTerm = depositOfferEf.IsPerpetual 
                 ? new Duration() 
                 : new Duration(depositOfferEf.DepositTermValue, depositOfferEf.DepositTermDuration),
-            MonthPaymentsMinimum = depositOfferEf.MonthPaymentsMinimum,
-            MonthPaymentsMaximum = depositOfferEf.MonthPaymentsMaximum,
             Comment = depositOfferEf.Comment
         };
     }
@@ -372,8 +362,8 @@ public static class DepositOfferMapper
             MinPurchaseAmount = moneyBackRules.MinPurchaseAmount,
             MaxPurchaseAmount = moneyBackRules.MaxPurchaseAmount,
             MaxMoneyBackAmount = moneyBackRules.MaxMoneyBackAmount,
-            MaxMoneyBackOnCategoryAmount = moneyBackRules.MaxMoneyBackOnCategoryAmount,
-            MinMonthPurchasesAmount = moneyBackRules.MinMonthPurchasesAmount
+            MinMonthPurchasesAmount = moneyBackRules.MinMonthPurchasesAmount,
+            Comment = moneyBackRules.Comment
         };
     }
 
@@ -389,8 +379,8 @@ public static class DepositOfferMapper
             MinPurchaseAmount = moneyBackRulesEf.MinPurchaseAmount,
             MaxPurchaseAmount = moneyBackRulesEf.MaxPurchaseAmount,
             MaxMoneyBackAmount = moneyBackRulesEf.MaxMoneyBackAmount,
-            MaxMoneyBackOnCategoryAmount = moneyBackRulesEf.MaxMoneyBackOnCategoryAmount,
-            MinMonthPurchasesAmount = moneyBackRulesEf.MinMonthPurchasesAmount
+            MinMonthPurchasesAmount = moneyBackRulesEf.MinMonthPurchasesAmount,
+            Comment = moneyBackRulesEf.Comment
         };
     }
 

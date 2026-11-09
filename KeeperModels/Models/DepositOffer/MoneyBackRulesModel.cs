@@ -15,14 +15,15 @@ public class MoneyBackRulesModel
     public List<MoneyBackPartnerModel> Partners { get; set; } = new List<MoneyBackPartnerModel>();
 
     #region Restrictions
-    public decimal? MinPurchaseAmount { get; set; } // минимальная сумма покупки, на которую начисляют манибэк
-    public decimal? MaxPurchaseAmount { get; set; } // максимальная сумма покупки, на которую начисляют манибэк
+    public double? MinPurchaseAmount { get; set; } // минимальная сумма покупки, на которую начисляют манибэк
+    public double? MaxPurchaseAmount { get; set; } // максимальная сумма покупки, на которую начисляют манибэк
 
-    public decimal? MaxMoneyBackAmount { get; set; } // максимальная сумма манибэка за месяц
-    public decimal? MaxMoneyBackOnCategoryAmount { get; set; } // максимальная сумма манибэка по категории за месяц
+    public double? MaxMoneyBackAmount { get; set; } // максимальная сумма манибэка за месяц
 
-    public decimal? MinMonthPurchasesAmount { get; set; } // минимальная сумма покупок за месяц, чтобы начислили манибэк
+    public double? MinMonthPurchasesAmount { get; set; } // минимальная сумма покупок за месяц, чтобы начислили манибэк
     #endregion
+
+    public string Comment { get; set; } = string.Empty;
 
     public override string ToString()
     {

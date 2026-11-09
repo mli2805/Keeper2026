@@ -6,7 +6,6 @@ public enum MoneyBackType
 {
     AnyWithExemptions,
     SpecificCategories,
-    PartnerCounterparties,
 }
 
 public static class MoneyBackTypeExtensions
@@ -16,8 +15,7 @@ public static class MoneyBackTypeExtensions
         return moneyBackType switch
         {
             MoneyBackType.AnyWithExemptions => "На любые покупки кроме",
-            MoneyBackType.SpecificCategories => "Только по категориям",
-            MoneyBackType.PartnerCounterparties => "Только по партнерам",
+            MoneyBackType.SpecificCategories => "По избранным категориям",
             _ => throw new ArgumentOutOfRangeException(nameof(moneyBackType), moneyBackType, null)
         };
     }

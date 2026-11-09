@@ -245,13 +245,13 @@ public sealed class BankOffersViewModelTests
         // Assert
         var updatedInCollection = viewModel.Rows.First(r => r.Id == addedOffer.Id);
         Assert.AreEqual("Обновленный тестовый вклад", updatedInCollection.Title, "Title should be updated in collection");
-        Assert.AreEqual(200, updatedInCollection.MonthPaymentsMinimum, "MonthPaymentsMinimum should be updated");
+        Assert.AreEqual("Обновленный комментарий к тестовому вкладу", updatedInCollection.Comment, "Comment should be updated");
 
         // Verify it's updated in database
         var offersFromDb = await depositOffersRepository.GetDepositOffersWithConditionsAndRates(DbTestHelper.AcMoDict);
         var updatedInDb = offersFromDb.First(o => o.Id == addedOffer.Id);
         Assert.AreEqual("Обновленный тестовый вклад", updatedInDb.Title, "Title should be updated in database");
-        Assert.AreEqual(200, updatedInDb.MonthPaymentsMinimum, "MonthPaymentsMinimum should be updated in database");
+        Assert.AreEqual("Обновленный комментарий к тестовому вкладу", updatedInDb.Comment, "Comment should be updated in database");
 
         var conds1 = updatedInDb.CondsList.First(c => c.DateFrom == DateTime.Today.AddDays(-30));
         Assert.IsNotNull(conds1);
@@ -306,7 +306,7 @@ public sealed class BankOffersViewModelTests
                 // Simulate editing through the form
                 // 1. Change basic properties
                 oneBankOfferViewModel.ModelInWork.Title = "Обновленный тестовый вклад";
-                oneBankOfferViewModel.ModelInWork.MonthPaymentsMinimum = 200;
+                oneBankOfferViewModel.ModelInWork.Comment = "Обновленный комментарий к тестовому вкладу";
 
                 // 2. Simulate editing conditions via RulesAndRatesViewModel
                 var conds1 = oneBankOfferViewModel.ModelInWork.CondsList.First(c => c.DateFrom == DateTime.Today.AddDays(-30));
@@ -349,14 +349,14 @@ public sealed class BankOffersViewModelTests
         // Assert - Check collection
         var updatedInCollection = viewModel.Rows.First(r => r.Id == addedOffer.Id);
         Assert.AreEqual("Обновленный тестовый вклад", updatedInCollection.Title, "Title should be updated in collection");
-        Assert.AreEqual(200, updatedInCollection.MonthPaymentsMinimum, "MonthPaymentsMinimum should be updated");
+        Assert.AreEqual("Обновленный комментарий к тестовому вкладу", updatedInCollection.Comment, "Comment should be updated");
 
         // Assert - Verify database changes
         var offersFromDb = await depositOffersRepository.GetDepositOffersWithConditionsAndRates(DbTestHelper.AcMoDict);
         var updatedInDb = offersFromDb.First(o => o.Id == addedOffer.Id);
 
         Assert.AreEqual("Обновленный тестовый вклад", updatedInDb.Title, "Title should be updated in database");
-        Assert.AreEqual(200, updatedInDb.MonthPaymentsMinimum, "MonthPaymentsMinimum should be updated in database");
+        Assert.AreEqual("Обновленный комментарий к тестовому вкладу", updatedInDb.Comment, "Comment should be updated in database");
 
         // Assert - Verify CondsList structure
         Assert.HasCount(2, updatedInDb.CondsList, "Should have 2 conditions after edit");

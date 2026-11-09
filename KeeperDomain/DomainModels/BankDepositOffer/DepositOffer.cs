@@ -20,20 +20,13 @@ public class DepositOffer : IDumpable, IParsable<DepositOffer>
 
     public Duration DepositTerm { get; set; } = null!;
 
-    // Для карточек 
-    // иногда задан минимум при котором не берется плата за обслуживание или начисляется манибэк
-    // иногда задат максимум после которого манибэк не начисляется
-    public int MonthPaymentsMinimum { get; set; }
-    public int MonthPaymentsMaximum { get; set; }
-
     [MaxLength(250)] public string Comment { get; set; } = string.Empty;
 
     public string Dump()
     {
         return Id + " ; " + BankId + " ; " + Title + " ; " + IsNotRevocable + " ; " +
                RateType + " ; " + IsAddLimited + " ; " + AddLimitInDays + " ; " +
-               MainCurrency + " ; " + DepositTerm.Dump() + " ; " + 
-               MonthPaymentsMinimum + " ; " + MonthPaymentsMaximum + " ; " + Comment.Replace("\r\n", "|");
+               MainCurrency + " ; " + DepositTerm.Dump() + " ; " + Comment.Replace("\r\n", "|");
     }
 
     public DepositOffer FromString(string s)
@@ -48,9 +41,7 @@ public class DepositOffer : IDumpable, IParsable<DepositOffer>
         AddLimitInDays = int.Parse(substrings[6]);
         MainCurrency = (CurrencyCode)Enum.Parse(typeof(CurrencyCode), substrings[7]);
         DepositTerm = new Duration().FromString(substrings[8].Trim());
-        MonthPaymentsMinimum = int.Parse(substrings[9]);
-        MonthPaymentsMaximum = int.Parse(substrings[10]);
-        Comment = substrings[11].Trim().Replace("|", "\r\n");
+        Comment = substrings[9].Trim().Replace("|", "\r\n");
         return this;
     }
 }

@@ -11,14 +11,14 @@
         <local:MoneyBackTypeToDisplayConverter x:Key="MoneyBackTypeToDisplayConverter"/>
     </UserControl.Resources>
     <ContentControl>
-        <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="1" Margin="5">
+        <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="3" Margin="5">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10">
                     <TextBlock Text="Действует с" VerticalAlignment="Center" Width="100"/>
                     <DatePicker SelectedDate="{Binding StartDate}" Width="120" VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
                     <TextBlock Text="Тип манибэка" VerticalAlignment="Center" Width="100"/>
                     <ComboBox ItemsSource="{Binding MoneyBackTypes}"
                               SelectedItem="{Binding MoneyBackType}"
@@ -29,23 +29,38 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
+                    <TextBlock Text="Процент" VerticalAlignment="Center" Margin="30,0,10,0"/>
+                    <TextBox Text="{Binding Percent, UpdateSourceTrigger=PropertyChanged}"
+                            Width="40" Height="22" TextAlignment="Right" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <local:CategoriesMoneyBackControl DataContext="{Binding CategoriesControl}"
-                                                  Margin="10,0,10,0" Height="200"/>
+                                                  Margin="10,10,10,0" Height="200"/>
+
+                <TextBlock Text="Магазины партнеры" Margin="10,10,10,0"/>
                 <local:PartnersMoneyBackControl DataContext="{Binding PartnersControl}" 
                                                 Margin="10,10,10,0" Height="100"/>
+                <Grid Margin = "10,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <local:NullableNumericControlView Grid.Row="0" Grid.Column="0" 
+                                    DataContext="{Binding MinPurchaseAmountControl}"/>
+                    <local:NullableNumericControlView Grid.Row="1" Grid.Column="0"  
+                                    DataContext="{Binding MaxPurchaseAmountControl}"/>
+                    <local:NullableNumericControlView Grid.Row="0" Grid.Column="1" 
+                                    DataContext="{Binding MaxMoneyBackAmountControl}"/>
+                    <local:NullableNumericControlView Grid.Row="1" Grid.Column="1" 
+                                    DataContext="{Binding MinMonthPurchasesAmountControl}"/>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10">
-                    <TextBlock Text="Процент" VerticalAlignment="Center" Width="100"/>
-                    <TextBox Text="{Binding Percent, UpdateSourceTrigger=PropertyChanged}"
-                             Width="70" TextAlignment="Right" VerticalAlignment="Center"/>
-                </StackPanel>
-
-                <local:NullableNumericControlView DataContext="{Binding MinPurchaseAmountControl}"/>
-                <local:NullableNumericControlView DataContext="{Binding MaxPurchaseAmountControl}"/>
-                <local:NullableNumericControlView DataContext="{Binding MaxMoneyBackAmountControl}"/>
-                <local:NullableNumericControlView DataContext="{Binding MinMonthPurchasesAmountControl}"/>
+                </Grid>
+                <TextBox Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" 
+                         Height="70" Margin="10,0,10,10"/>
             </StackPanel>
         </Border>
 

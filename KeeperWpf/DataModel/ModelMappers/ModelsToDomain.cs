@@ -79,8 +79,6 @@ public static class ModelsToDomain
             AddLimitInDays = depositOfferModel.AddLimitInDays,
             MainCurrency = depositOfferModel.MainCurrency,
             DepositTerm = depositOfferModel.DepositTerm.FromModel(),
-            MonthPaymentsMinimum = depositOfferModel.MonthPaymentsMinimum,
-            MonthPaymentsMaximum = depositOfferModel.MonthPaymentsMaximum,
             Comment = depositOfferModel.Comment,
         };
     }
@@ -129,8 +127,8 @@ public static class ModelsToDomain
             MinPurchaseAmount = moneyBackRulesModel.MinPurchaseAmount,
             MaxPurchaseAmount = moneyBackRulesModel.MaxPurchaseAmount,
             MaxMoneyBackAmount = moneyBackRulesModel.MaxMoneyBackAmount,
-            MaxMoneyBackOnCategoryAmount = moneyBackRulesModel.MaxMoneyBackOnCategoryAmount,
             MinMonthPurchasesAmount = moneyBackRulesModel.MinMonthPurchasesAmount,
+            Comment = moneyBackRulesModel.Comment,
         };
     }
 

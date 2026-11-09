@@ -66,8 +66,6 @@ public class DepositOfferModel : PropertyChangedBase
 
     public List<DepoCondsModel> CondsList { get; set; } = new List<DepoCondsModel>();
     public List<MoneyBackRulesModel> MoneyBackRules { get; set; } = new List<MoneyBackRulesModel>();
-    public int MonthPaymentsMinimum { get; set; }
-    public int MonthPaymentsMaximum { get; set; }
     public string Comment { get; set; } = string.Empty;
 
     public override string ToString()
@@ -90,8 +88,6 @@ public class DepositOfferModel : PropertyChangedBase
             DepositTerm = DepositTerm.Clone(),
             CondsList = new List<DepoCondsModel>(),
             MoneyBackRules = new List<MoneyBackRulesModel>(),
-            MonthPaymentsMinimum = MonthPaymentsMinimum,
-            MonthPaymentsMaximum = MonthPaymentsMaximum,
             Comment = Comment,
             BackgroundColor = BackgroundColor,
         };

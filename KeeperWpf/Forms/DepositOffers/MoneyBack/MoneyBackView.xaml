@@ -29,9 +29,9 @@
                 </ListView>
             </StackPanel>
         </DockPanel>
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Name="SaveChanges" Width="100" Margin="5">Сохранить</Button>
-            <Button Name="CancelChanges" Width="100" Margin="5">Отменить</Button>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,5">
+            <Button Name="SaveChanges" Width="100" Margin="5,10" Height="22">Сохранить</Button>
+            <Button Name="CancelChanges" Width="100" Margin="5,10">Отменить</Button>
         </StackPanel>
         <local:OneMoneyBackRulesView DataContext="{Binding RulesViewModel}"/>
     </DockPanel>
