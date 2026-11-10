@@ -50,6 +50,7 @@ public static class DepositOfferMapper
     {
         moneyBackRulesEf.StartDate = moneyBackRulesModel.StartDate;
         moneyBackRulesEf.MoneyBackType = moneyBackRulesModel.MoneyBackType;
+        moneyBackRulesEf.MoneyBackWhen = moneyBackRulesModel.MoneyBackWhen;
         moneyBackRulesEf.Percent = moneyBackRulesModel.Percent;
         moneyBackRulesEf.MinPurchaseAmount = moneyBackRulesModel.MinPurchaseAmount;
         moneyBackRulesEf.MaxPurchaseAmount = moneyBackRulesModel.MaxPurchaseAmount;
@@ -123,6 +124,7 @@ public static class DepositOfferMapper
             DepositOfferId = moneyBackRulesEf.DepositOfferId,
             StartDate = moneyBackRulesEf.StartDate,
             MoneyBackType = moneyBackRulesEf.MoneyBackType,
+            MoneyBackWhen = moneyBackRulesEf.MoneyBackWhen,
             Percent = moneyBackRulesEf.Percent,
             SpecificCategories = moneyBackRulesEf.SpecificCategories?.Select(sc => sc.ToModel()).ToList() ?? new List<MoneyBackCategoryModel>(),
             Partners = moneyBackRulesEf.Partners?.Select(p => p.ToModel()).ToList() ?? new List<MoneyBackPartnerModel>(),
@@ -209,6 +211,7 @@ public static class DepositOfferMapper
             DepositOfferId = moneyBackRulesModel.DepositOfferId,
             StartDate = moneyBackRulesModel.StartDate,
             MoneyBackType = moneyBackRulesModel.MoneyBackType,
+            MoneyBackWhen = moneyBackRulesModel.MoneyBackWhen,
             Percent = moneyBackRulesModel.Percent,
             SpecificCategories = moneyBackRulesModel.SpecificCategories.Select(sc => sc.FromModel()).ToList(),
             Partners = moneyBackRulesModel.Partners.Select(p => p.FromModel()).ToList(),
@@ -358,6 +361,7 @@ public static class DepositOfferMapper
             DepositOfferId = moneyBackRules.DepositOfferId,
             StartDate = moneyBackRules.StartDate,
             MoneyBackType = moneyBackRules.MoneyBackType,
+            MoneyBackWhen = moneyBackRules.MoneyBackWhen,
             Percent = moneyBackRules.Percent,
             MinPurchaseAmount = moneyBackRules.MinPurchaseAmount,
             MaxPurchaseAmount = moneyBackRules.MaxPurchaseAmount,
@@ -375,6 +379,7 @@ public static class DepositOfferMapper
             DepositOfferId = moneyBackRulesEf.DepositOfferId,
             StartDate = moneyBackRulesEf.StartDate,
             MoneyBackType = moneyBackRulesEf.MoneyBackType,
+            MoneyBackWhen = moneyBackRulesEf.MoneyBackWhen,
             Percent = moneyBackRulesEf.Percent,
             MinPurchaseAmount = moneyBackRulesEf.MinPurchaseAmount,
             MaxPurchaseAmount = moneyBackRulesEf.MaxPurchaseAmount,

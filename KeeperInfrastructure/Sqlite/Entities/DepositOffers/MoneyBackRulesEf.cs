@@ -10,6 +10,7 @@ public class MoneyBackRulesEf
     public DateTime StartDate { get; set; }
 
     public MoneyBackType MoneyBackType { get; set; }
+    public MoneyBackWhen MoneyBackWhen { get; set; }
     public double Percent { get; set; }
 
     #region Restrictions

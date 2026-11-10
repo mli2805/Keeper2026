@@ -9,6 +9,7 @@ public class MoneyBackRulesModel
     public DateTime StartDate { get; set; }
 
     public MoneyBackType MoneyBackType { get; set; }
+    public MoneyBackWhen MoneyBackWhen { get; set; }
     public double Percent { get; set; } // например 0.5% от суммы платежа
 
     public List<MoneyBackCategoryModel> SpecificCategories { get; set; } = new List<MoneyBackCategoryModel>();

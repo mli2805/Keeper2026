@@ -9,6 +9,7 @@
              Width="1000">
     <UserControl.Resources>
         <local:MoneyBackTypeToDisplayConverter x:Key="MoneyBackTypeToDisplayConverter"/>
+        <local:MoneyBackWhenToDisplayConverter x:Key="MoneyBackWhenToDisplayConverter"/>
     </UserControl.Resources>
     <ContentControl>
         <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="3" Margin="5">
@@ -30,8 +31,9 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <TextBlock Text="Процент" VerticalAlignment="Center" Margin="30,0,10,0"/>
-                    <TextBox Text="{Binding Percent, UpdateSourceTrigger=PropertyChanged}"
-                            Width="40" Height="22" TextAlignment="Right" VerticalAlignment="Center"/>
+                    <local:FlexibleNumericTextBox Value="{Binding Percent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  Width="40" Height="22" TextAlignment="Right"
+                                                  VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <local:CategoriesMoneyBackControl DataContext="{Binding CategoriesControl}"
@@ -42,6 +44,7 @@
                                                 Margin="10,10,10,0" Height="100"/>
                 <Grid Margin = "10,10">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
@@ -57,9 +60,26 @@
                                     DataContext="{Binding MaxMoneyBackAmountControl}"/>
                     <local:NullableNumericControlView Grid.Row="1" Grid.Column="1" 
                                     DataContext="{Binding MinMonthPurchasesAmountControl}"/>
+                    <Border Grid.Row="2" Grid.Column="0" 
+                            BorderBrush="DarkGray" BorderThickness="1" CornerRadius="3" Margin="2" Padding="6,3">
+                        <DockPanel>
+                            <TextBlock Text="начисление манибэка" Margin="5,0,5,0" VerticalAlignment="Center"/>
+                            <ComboBox DockPanel.Dock="Right" ItemsSource="{Binding MoneyBackWhenOptions}"
+                                  SelectedItem="{Binding MoneyBackWhen}"
+                                  Width="210" VerticalAlignment="Center" >
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource MoneyBackWhenToDisplayConverter}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <StackPanel></StackPanel>
+                    </DockPanel>
+                    </Border>
 
                 </Grid>
-                <TextBox Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" 
+                <TextBox Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" 
+                         AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
                          Height="70" Margin="10,0,10,10"/>
             </StackPanel>
         </Border>

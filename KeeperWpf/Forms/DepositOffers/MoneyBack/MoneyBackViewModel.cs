@@ -32,7 +32,7 @@ public class MoneyBackViewModel(KeeperDataModel dataModel, IWindowManager window
             RulesViewModel.ApplyModel(value);
         }
     }
-    
+
 
     protected override void OnViewLoaded(object view)
     {
@@ -42,6 +42,7 @@ public class MoneyBackViewModel(KeeperDataModel dataModel, IWindowManager window
     public void Initialize(DepositOfferModel card)
     {
         RulesViewModel.Parent = this; // чтобы сработал CanCloseAsync вложенной формы
+        Rows.Clear(); // редактировал эту или другую карточку - надо почистить таблицу
         _depositOfferInWork = card;
         CardName = card.ToString();
         if (card.MoneyBackRules.Count == 0)
@@ -52,7 +53,6 @@ public class MoneyBackViewModel(KeeperDataModel dataModel, IWindowManager window
         {
             foreach (var setOfRules in card.MoneyBackRules)
             {
-                Rows.Clear();
                 Rows.Add(setOfRules);
             }
         }

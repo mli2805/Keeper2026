@@ -7,6 +7,9 @@
 - Create new tests only when the task explicitly requests them; otherwise validate changes using existing tests and builds without adding tests.
 - Prefer removing obsolete view-model properties and simplifying related state after UI controls that used them are deleted.
 
+## Input Handling
+- For all user input of decimal numbers in Keeper2026, both in individual TextBoxes and editable DataGrid columns, apply the BankOffers approach: use FlexibleNumericTextBox with TwoWay binding for Value and UpdateSourceTrigger=PropertyChanged; support input with both comma and dot by normalizing to dot and parsing with InvariantCulture; filter input and paste, rejecting NaN/Infinity, and format the value on losing focus. For DataGrid, use a templated column with FlexibleNumericTextBox, avoiding reliance on a single StringFormat or standard conversion of a regular TextBox.
+
 ## Project-Specific Rules
 - In Keeper2026 WPF forms, display all dates using `StringFormat='{}{0:d/MM/yyyy}'`.
 - Forms in Keeper2026 without OxyPlot, integrated into the singleton MainMenuViewModel via the constructor, can be reopened normally; however, some forms with OxyPlot experience issues with reopening.

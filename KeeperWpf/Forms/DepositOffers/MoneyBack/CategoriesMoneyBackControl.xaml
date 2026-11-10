@@ -14,9 +14,22 @@
                   CanUserAddRows="True" CanUserDeleteRows="True"
                   HeadersVisibility="Column">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Процент" Width="60" Binding="{Binding Percent}"/>
+                <DataGridTemplateColumn Header="Процент" Width="60">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Percent, StringFormat={}{0:0.################}, ConverterCulture=en-US}"
+                                       TextAlignment="Right" VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <local:FlexibleNumericTextBox Value="{Binding Percent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                          TextAlignment="Right"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="MCC" Width="50" Binding="{Binding MCC, TargetNullValue=''}"/>
-                <DataGridTextColumn Header="Название" Width="200" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Название" Width="320" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Описание" Width="*" Binding="{Binding Description}"/>
             </DataGrid.Columns>
         </DataGrid>

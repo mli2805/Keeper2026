@@ -8,7 +8,15 @@ public enum MoneyBackType
     SpecificCategories,
 }
 
-public static class MoneyBackTypeExtensions
+
+[StoreEnumAsString]
+public enum MoneyBackWhen
+{
+    NextMonth,
+    NextWorkingDay,
+}
+
+public static class MoneyBackExtensions
 {
     public static string ToDisplayString(this MoneyBackType moneyBackType)
     {
@@ -19,4 +27,15 @@ public static class MoneyBackTypeExtensions
             _ => throw new ArgumentOutOfRangeException(nameof(moneyBackType), moneyBackType, null)
         };
     }
+
+    public static string ToDisplayString(this MoneyBackWhen moneyBackWhen)
+    {
+        return moneyBackWhen switch
+        {
+            MoneyBackWhen.NextMonth => "В следующем месяце",
+            MoneyBackWhen.NextWorkingDay => "На следующий рабочий день",
+            _ => throw new ArgumentOutOfRangeException(nameof(moneyBackWhen), moneyBackWhen, null)
+        };
+    }
 }
+

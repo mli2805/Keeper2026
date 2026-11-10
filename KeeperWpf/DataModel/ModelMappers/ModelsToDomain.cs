@@ -123,6 +123,7 @@ public static class ModelsToDomain
             DepositOfferId = moneyBackRulesModel.DepositOfferId,
             StartDate = moneyBackRulesModel.StartDate,
             MoneyBackType = moneyBackRulesModel.MoneyBackType,
+            MoneyBackWhen = moneyBackRulesModel.MoneyBackWhen,
             Percent = moneyBackRulesModel.Percent,
             MinPurchaseAmount = moneyBackRulesModel.MinPurchaseAmount,
             MaxPurchaseAmount = moneyBackRulesModel.MaxPurchaseAmount,

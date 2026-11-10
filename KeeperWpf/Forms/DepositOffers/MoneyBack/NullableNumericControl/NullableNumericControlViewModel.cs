@@ -49,11 +49,9 @@ public class NullableNumericControlViewModel : PropertyChangedBase
     {
         var v = GetValue();
         _isSet = v.HasValue;
-        _text = v.HasValue ? FormatValue(v.Value) : "";
         NotifyOfPropertyChange(nameof(IsSet));
         NotifyOfPropertyChange(nameof(IsNotSet));
-        NotifyOfPropertyChange(nameof(Text));
-        NotifyOfPropertyChange(nameof(DisplayText));
+        NotifyOfPropertyChange(nameof(Value));
     }
 
     private bool _isSet;
@@ -73,15 +71,9 @@ public class NullableNumericControlViewModel : PropertyChangedBase
             }
             else
             {
-                if (!TryParse(_text, out var parsed))
-                {
-                    parsed = GetValue() ?? 0m;
-                    _text = FormatValue(parsed);
-                }
-                SetValue(parsed);
+                SetValue(GetValue() ?? 0.0);
             }
-            NotifyOfPropertyChange(nameof(Text));
-            NotifyOfPropertyChange(nameof(DisplayText));
+            NotifyOfPropertyChange(nameof(Value));
         }
     }
 
@@ -91,34 +83,25 @@ public class NullableNumericControlViewModel : PropertyChangedBase
         set => IsSet = !value;
     }
 
-    private string _text = "";
-    public string Text
+    public double? Value
     {
-        get => _isSet ? _text : "";
+        get => _isSet ? GetValue() : null;
         set
         {
-            if (!_isSet) return;
-            var cleaned = (value ?? "").Replace('.', ',');
-            if (cleaned == _text) return;
-            _text = cleaned;
+            if (!_isSet || !value.HasValue) return;
+            SetValue(value.Value);
             NotifyOfPropertyChange();
-            NotifyOfPropertyChange(nameof(DisplayText));
-
-            if (TryParse(cleaned, out var parsed))
-                SetValue(parsed);
         }
     }
 
-    public string DisplayText => Text;
-
-    private decimal? GetValue()
+    private double? GetValue()
     {
         var raw = _property.GetValue(_owner);
         if (raw == null) return null;
-        return System.Convert.ToDecimal(raw, CultureInfo.InvariantCulture);
+        return System.Convert.ToDouble(raw, CultureInfo.InvariantCulture);
     }
 
-    private void SetValue(decimal? value)
+    private void SetValue(double? value)
     {
         object? converted = value.HasValue ? ConvertToTarget(value.Value) : null;
         var current = _property.GetValue(_owner);
@@ -126,26 +109,16 @@ public class NullableNumericControlViewModel : PropertyChangedBase
         _property.SetValue(_owner, converted);
     }
 
-    private object ConvertToTarget(decimal value)
+    private object ConvertToTarget(double value)
     {
         var underlying = Nullable.GetUnderlyingType(_property.PropertyType) ?? _property.PropertyType;
-        if (underlying == typeof(decimal)) return value;
-        if (underlying == typeof(double)) return (double)value;
+        if (underlying == typeof(decimal)) return (decimal)value;
+        if (underlying == typeof(double)) return value;
         if (underlying == typeof(float)) return (float)value;
         if (underlying == typeof(int)) return (int)Math.Round(value, MidpointRounding.AwayFromZero);
         if (underlying == typeof(long)) return (long)Math.Round(value, MidpointRounding.AwayFromZero);
         return System.Convert.ChangeType(value, underlying, CultureInfo.InvariantCulture);
     }
-
-    private static bool TryParse(string text, out decimal result)
-    {
-        result = 0;
-        if (string.IsNullOrWhiteSpace(text)) return false;
-        return decimal.TryParse(text, NumberStyles.Number, CultureInfo.CurrentUICulture, out result);
-    }
-
-    private static string FormatValue(decimal value)
-        => value.ToString("0.##", CultureInfo.CurrentUICulture);
 
     private void OwnerPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {

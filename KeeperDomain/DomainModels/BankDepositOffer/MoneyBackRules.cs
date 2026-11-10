@@ -10,7 +10,10 @@ public class MoneyBackRules : IDumpable, IParsable<MoneyBackRules>
     public DateTime StartDate { get; set; } // некотрые банки постоянно меняют правила начисления манибэка
 
     public MoneyBackType MoneyBackType { get; set; }
+    public MoneyBackWhen MoneyBackWhen { get; set; }
     public double Percent { get; set; } // например 0.5% от суммы платежа
+
+
 
     #region Restrictions
     public double? MinPurchaseAmount { get; set; } // минимальная сумма покупки на которую начисляют
@@ -31,6 +34,7 @@ public class MoneyBackRules : IDumpable, IParsable<MoneyBackRules>
                MinPurchaseAmount.DumpNullableDouble() + " ; " + MaxPurchaseAmount.DumpNullableDouble() + " ; " +
                MaxMoneyBackAmount.DumpNullableDouble() + " ; " +
                MinMonthPurchasesAmount.DumpNullableDouble() + " ; " +
+               MoneyBackWhen + " ; " +
                Comment;
     }
 
@@ -46,7 +50,12 @@ public class MoneyBackRules : IDumpable, IParsable<MoneyBackRules>
         MaxPurchaseAmount = substrings[6].ParseNullableDouble();
         MaxMoneyBackAmount = substrings[7].ParseNullableDouble();
         MinMonthPurchasesAmount = substrings[8].ParseNullableDouble();
-        Comment = substrings.Length > 9 ? substrings[9].Trim() : string.Empty;
+        MoneyBackWhen = substrings.Length > 10
+            ? Enum.Parse<MoneyBackWhen>(substrings[9].Trim())
+            : MoneyBackWhen.NextMonth;
+        Comment = substrings.Length > 10
+            ? substrings[10].Trim()
+            : substrings.Length > 9 ? substrings[9].Trim() : string.Empty;
         return this;
     }
 

@@ -21,6 +21,9 @@ public class OneMoneyBackRulesViewModel : Screen
     public List<MoneyBackType> MoneyBackTypes { get; } =
         Enum.GetValues(typeof(MoneyBackType)).OfType<MoneyBackType>().ToList();
 
+    public List<MoneyBackWhen> MoneyBackWhenOptions { get; } =
+        Enum.GetValues(typeof(MoneyBackWhen)).OfType<MoneyBackWhen>().ToList();
+
     private MoneyBackRulesModel? _currentModel;
 
     public DateTime StartDate
@@ -30,6 +33,17 @@ public class OneMoneyBackRulesViewModel : Screen
         {
             if (_currentModel == null || _currentModel.StartDate == value) return;
             _currentModel.StartDate = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
+    public MoneyBackWhen MoneyBackWhen
+    {
+        get => _currentModel?.MoneyBackWhen ?? MoneyBackWhen.NextMonth;
+        set
+        {
+            if (_currentModel == null || _currentModel.MoneyBackWhen == value) return;
+            _currentModel.MoneyBackWhen = value;
             NotifyOfPropertyChange();
         }
     }
@@ -98,6 +112,7 @@ public class OneMoneyBackRulesViewModel : Screen
 
         NotifyOfPropertyChange(nameof(StartDate));
         NotifyOfPropertyChange(nameof(MoneyBackType));
+        NotifyOfPropertyChange(nameof(MoneyBackWhen));
         NotifyOfPropertyChange(nameof(Percent));
         NotifyOfPropertyChange(nameof(Comment));
     }
