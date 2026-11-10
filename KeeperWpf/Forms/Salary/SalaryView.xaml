@@ -85,7 +85,18 @@
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
 
-                    <DataGridTextColumn Header="Оклад" Width="80" Binding="{Binding Amount}" />
+                    <DataGridTemplateColumn Header="Оклад" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Amount, StringFormat={}{0:0.############################}, ConverterCulture=en-US}" TextAlignment="Right" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <keeperWpf:FlexibleNumericTextBox Value="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
 
                     <DataGridTemplateColumn Header="Впервые получено" Width="120" >
                         <DataGridTemplateColumn.CellEditingTemplate>
@@ -162,7 +173,18 @@
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
-                    <DataGridTextColumn Header="Сумма" Width="100" Binding="{Binding Amount}" />
+                    <DataGridTemplateColumn Header="Сумма" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Amount, StringFormat={}{0:0.############################}, ConverterCulture=en-US}" TextAlignment="Right" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <keeperWpf:FlexibleNumericTextBox Value="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

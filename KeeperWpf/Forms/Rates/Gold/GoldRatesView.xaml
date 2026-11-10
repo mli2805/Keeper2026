@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
+             xmlns:local="clr-namespace:KeeperWpf"
              xmlns:cal="http://www.caliburnproject.org"
              cal:Bind.ModelWithoutContext="{Binding .}"
              mc:Ignorable="d" 
@@ -46,22 +47,30 @@
                     </Style>
                 </DataGridTextColumn.ElementStyle>
             </DataGridTextColumn>
-            <DataGridTextColumn Header="Minfin (byn)" Binding="{Binding MinfinGold900Rate}" Width="80">
-                <DataGridTextColumn.ElementStyle>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="HorizontalAlignment" Value="Right" />
-                        <Setter Property="Margin" Value="0,0,5,0" />
-                    </Style>
-                </DataGridTextColumn.ElementStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn Header="НБ byn / usd" Binding="{Binding BynUsd, StringFormat='{}{0:0.0000}'}" Width="80">
-                <DataGridTextColumn.ElementStyle>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="HorizontalAlignment" Value="Right" />
-                        <Setter Property="Margin" Value="0,0,5,0" />
-                    </Style>
-                </DataGridTextColumn.ElementStyle>
-            </DataGridTextColumn>
+            <DataGridTemplateColumn Header="Minfin (byn)" Width="80">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding MinfinGold900Rate, StringFormat={}{0:0.################}, ConverterCulture=en-US}" TextAlignment="Right" Margin="0,0,5,0" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.CellEditingTemplate>
+                    <DataTemplate>
+                        <local:FlexibleNumericTextBox Value="{Binding MinfinGold900Rate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="НБ byn / usd" Width="80">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding BynUsd, StringFormat='{}{0:0.0000}'}" TextAlignment="Right" Margin="0,0,5,0" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.CellEditingTemplate>
+                    <DataTemplate>
+                        <local:FlexibleNumericTextBox Value="{Binding BynUsd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
             <DataGridTextColumn Header="Minfin (usd)" Binding="{Binding MinfinUsd, StringFormat='{}{0:0.00}'}" Width="80">
                 <DataGridTextColumn.ElementStyle>
                     <Style TargetType="{x:Type TextBlock}">

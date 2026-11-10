@@ -7,11 +7,6 @@
         Height="{Binding Height, Mode=TwoWay}" Top="{Binding Top, Mode=TwoWay}" 
         Left="{Binding Left, Mode=TwoWay}"
         SizeToContent="Width" d:DataContext="{d:DesignData ReceiptViewModel}">
-    <Window.Resources>
-        <ResourceDictionary>
-            <keeperWpf:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
-        </ResourceDictionary>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -25,19 +20,20 @@
 
         <!--    сумма чека-->
         <TextBlock Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="160,0,0,0">Сумма по чеку</TextBlock>
-        <TextBox Grid.Row="1" Margin="250,0,0,0" Width="70" Height="22" HorizontalAlignment="Left" VerticalContentAlignment="Center" 
-                 BorderBrush="#555555" VerticalAlignment="Top" TextAlignment="Right"
-             Text="{Binding TotalAmount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleToStringConverter}}" />
+        <keeperWpf:FlexibleNumericTextBox Grid.Row="1" Margin="250,0,0,0" Width="70" Height="22"
+                                          HorizontalAlignment="Left" VerticalContentAlignment="Center"
+                                          BorderBrush="#555555" VerticalAlignment="Top" TextAlignment="Right"
+                                          Value="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <ComboBox Grid.Row="1" Name="ExpenseCurrency" HorizontalAlignment="Left" Margin="325,0,10,0" 
               Background="White" VerticalAlignment="top" Width="50"
               ItemsSource="{Binding CurrencyList}"
               SelectedItem="{Binding Currency}" Height="22" />
         <!--    поля ввода-->
         <TextBlock Grid.Row="2" HorizontalAlignment="Left" Margin="20,5,0,0" Text="Осталось"/>
-        <TextBox Grid.Row="2" Name="Amount" HorizontalAlignment="Left" Margin="10,-11,0,0" 
-                 Width="70" BorderBrush="#555555" TextAlignment="Right" VerticalContentAlignment="Center" Height="22"
-                 Text="{Binding PartialAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
-                 Converter={StaticResource DoubleToStringConverter}}"  />
+        <keeperWpf:FlexibleNumericTextBox Grid.Row="2" x:Name="Amount" HorizontalAlignment="Left" Margin="10,-11,0,0"
+                                          Width="70" BorderBrush="#555555" TextAlignment="Right"
+                                          VerticalContentAlignment="Center" Height="22"
+                                          Value="{Binding PartialAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock Grid.Row="2" HorizontalAlignment="Left" Margin="82,29,0,0" Width="30" 
                    Text="{Binding Currency}" VerticalAlignment="Top"/>
         <keeperWpf:AccNameSelectorView Grid.Row="2" DataContext="{Binding MyAccNameSelectorVm}" Width="260" 

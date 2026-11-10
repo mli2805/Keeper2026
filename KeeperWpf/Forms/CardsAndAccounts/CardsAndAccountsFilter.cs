@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Caliburn.Micro;
 
 namespace KeeperWpf;
 
-public class CardsAndAccountsFilter : PropertyChangedBase, IDataErrorInfo
+public class CardsAndAccountsFilter : PropertyChangedBase
 {
     #region Account or Card
 
@@ -95,20 +94,18 @@ public class CardsAndAccountsFilter : PropertyChangedBase, IDataErrorInfo
         }
     }
 
-    private string _balanceStr = "0";
-  
-    public string BalanceStr
+    private double _balance;
+
+    public double Balance
     {
-        get => _balanceStr;
+        get => _balance;
         set
         {
-            if (value == _balanceStr) return;
-            _balanceStr = value;
+            if (value.Equals(_balance)) return;
+            _balance = value;
             NotifyOfPropertyChange();
         }
     }
-
-    public double Balance { get; set; }
 
     public CardsAndAccountsFilter()
     {
@@ -130,30 +127,9 @@ public class CardsAndAccountsFilter : PropertyChangedBase, IDataErrorInfo
         return true;
     }
 
-    public string this[string columnName]
-    {
-        get
-        {
-            switch (columnName)
-            {
-                case "BalanceStr":
-                    var tryParse = double.TryParse(_balanceStr, out double bal);
-                    if (tryParse)
-                    {
-                        Balance = bal;
-                        NotifyOfPropertyChange(nameof(Balance));
-                    }
-                    return tryParse ? string.Empty : "Failed";
-                default: return string.Empty;
-            }
-        }
-    }
-
-    public string Error { get; set; } = string.Empty;
-
     public void ClearAll()
     {
-        BalanceStr = "0";
+        Balance = 0;
         SelectedCurrency = "все";
         OwnerAll = true;
         AccountsAndCards = true;
@@ -161,7 +137,7 @@ public class CardsAndAccountsFilter : PropertyChangedBase, IDataErrorInfo
 
     public void ShowAllByn5()
     {
-        BalanceStr = "5.01";
+        Balance = 5.01;
         SelectedCurrency = "byn";
         OwnerAll = true;
         AccountsAndCards = true;
@@ -169,7 +145,7 @@ public class CardsAndAccountsFilter : PropertyChangedBase, IDataErrorInfo
     
     public void ShowMineByn5()
     {
-        BalanceStr = "5.01";
+        Balance = 5.01;
         SelectedCurrency = "byn";
         OwnerMine = true;
         AccountsAndCards = true;

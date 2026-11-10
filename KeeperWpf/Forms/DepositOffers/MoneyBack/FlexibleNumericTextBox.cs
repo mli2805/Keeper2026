@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace KeeperWpf;
@@ -16,16 +18,16 @@ public class FlexibleNumericTextBox : TextBox
 
     public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
         nameof(Value),
-        typeof(double?),
+        typeof(object),
         typeof(FlexibleNumericTextBox),
         new FrameworkPropertyMetadata(
             null,
             FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
             ValueChanged));
 
-    public double? Value
+    public object? Value
     {
-        get => (double?)GetValue(ValueProperty);
+        get => GetValue(ValueProperty);
         set => SetValue(ValueProperty, value);
     }
 
@@ -54,7 +56,7 @@ public class FlexibleNumericTextBox : TextBox
             return;
 
         _updatingValueFromText = true;
-        SetCurrentValue(ValueProperty, (double?)value);
+        SetCurrentValue(ValueProperty, value);
         _updatingValueFromText = false;
     }
 
@@ -65,7 +67,7 @@ public class FlexibleNumericTextBox : TextBox
         if (TryParse(Text, out var value))
         {
             _updatingValueFromText = true;
-            SetCurrentValue(ValueProperty, (double?)value);
+            SetCurrentValue(ValueProperty, value);
             _updatingValueFromText = false;
             UpdateText(value);
         }
@@ -81,7 +83,7 @@ public class FlexibleNumericTextBox : TextBox
         if (textBox._updatingValueFromText || textBox.IsKeyboardFocusWithin)
             return;
 
-        textBox.UpdateText((double?)e.NewValue);
+        textBox.UpdateText(e.NewValue);
     }
 
     private void Pasting(object sender, DataObjectPastingEventArgs e)
@@ -100,9 +102,17 @@ public class FlexibleNumericTextBox : TextBox
         return Text.Remove(start, SelectionLength).Insert(start, input);
     }
 
-    private void UpdateText(double? value)
+    private void UpdateText(object? value)
     {
-        var formatted = value?.ToString("0.################", CultureInfo.InvariantCulture) ?? string.Empty;
+        var format = value switch
+        {
+            decimal => "0.############################",
+            float => "0.#######",
+            _ => "0.################"
+        };
+        var formatted = value is IFormattable formattable
+            ? formattable.ToString(format, CultureInfo.InvariantCulture)
+            : string.Empty;
         if (Text == formatted)
             return;
 
@@ -139,10 +149,69 @@ public class FlexibleNumericTextBox : TextBox
         return true;
     }
 
-    private static bool TryParse(string text, out double value)
+    private bool TryParse(string text, out object value)
     {
         var normalized = text.Replace(',', '.');
-        return double.TryParse(normalized, NumberStyle, CultureInfo.InvariantCulture, out value) &&
-               double.IsFinite(value);
+        var numericType = GetNumericType();
+
+        if (numericType == typeof(decimal) &&
+            decimal.TryParse(normalized, NumberStyle, CultureInfo.InvariantCulture, out var decimalValue))
+        {
+            value = decimalValue;
+            return true;
+        }
+
+        if (numericType == typeof(float) &&
+            float.TryParse(normalized, NumberStyle, CultureInfo.InvariantCulture, out var floatValue) &&
+            float.IsFinite(floatValue))
+        {
+            value = floatValue;
+            return true;
+        }
+
+        if (double.TryParse(normalized, NumberStyle, CultureInfo.InvariantCulture, out var doubleValue) &&
+            double.IsFinite(doubleValue))
+        {
+            value = doubleValue;
+            return true;
+        }
+
+        value = default(double);
+        return false;
+    }
+
+    private Type GetNumericType()
+    {
+        if (Value is not null)
+            return Value.GetType();
+
+        var bindingExpression = BindingOperations.GetBindingExpression(this, ValueProperty);
+        var sourcePropertyName = bindingExpression?.ResolvedSourcePropertyName;
+        if (bindingExpression?.DataItem is not null && !string.IsNullOrEmpty(sourcePropertyName))
+        {
+            var resolvedSourceProperty = bindingExpression.DataItem.GetType().GetProperty(
+                sourcePropertyName,
+                BindingFlags.Instance | BindingFlags.Public);
+            if (resolvedSourceProperty is not null)
+                return Nullable.GetUnderlyingType(resolvedSourceProperty.PropertyType) ?? resolvedSourceProperty.PropertyType;
+        }
+
+        var binding = BindingOperations.GetBinding(this, ValueProperty);
+        object? source = binding?.Source ?? DataContext;
+        Type? propertyType = null;
+        foreach (var pathPart in binding?.Path?.Path.Split('.') ?? [])
+        {
+            if (source is null)
+                break;
+
+            var sourceProperty = source.GetType().GetProperty(pathPart, BindingFlags.Instance | BindingFlags.Public);
+            if (sourceProperty is null)
+                break;
+
+            propertyType = sourceProperty.PropertyType;
+            source = sourceProperty.GetValue(source);
+        }
+
+        return Nullable.GetUnderlyingType(propertyType ?? typeof(double)) ?? propertyType ?? typeof(double);
     }
 }

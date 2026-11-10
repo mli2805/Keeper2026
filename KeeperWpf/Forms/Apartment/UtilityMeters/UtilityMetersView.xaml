@@ -59,16 +59,40 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Дата" Width="100" Binding="{Binding ReadingsDate, StringFormat='{}{0:d/MM/yyyy}'}" />
              
-                <DataGridTextColumn Header="Эл-во: начало" Width="*" Binding="{Binding Electricity.From}" />
-                <DataGridTextColumn Header="Эл-во: расход" Width="*" Binding="{Binding Electricity.Volume}" />
-                <DataGridTextColumn Header="Эл-во: конец" Width="*" Binding="{Binding Electricity.To}" />
-                <DataGridTextColumn Header="Эл-во: за кВт" Width="*" Binding="{Binding Electricity.Tariff}" />
+                <DataGridTemplateColumn Header="Эл-во: начало" Width="*">
+                    <DataGridTemplateColumn.CellTemplate><DataTemplate><TextBlock Text="{Binding Electricity.From, StringFormat={}{0:0.################}, ConverterCulture=en-US}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate><DataTemplate><keeperWpf:FlexibleNumericTextBox Value="{Binding Electricity.From, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Эл-во: расход" Width="*">
+                    <DataGridTemplateColumn.CellTemplate><DataTemplate><TextBlock Text="{Binding Electricity.Volume, StringFormat={}{0:0.################}, ConverterCulture=en-US}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate><DataTemplate><keeperWpf:FlexibleNumericTextBox Value="{Binding Electricity.Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Эл-во: конец" Width="*">
+                    <DataGridTemplateColumn.CellTemplate><DataTemplate><TextBlock Text="{Binding Electricity.To, StringFormat={}{0:0.################}, ConverterCulture=en-US}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate><DataTemplate><keeperWpf:FlexibleNumericTextBox Value="{Binding Electricity.To, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Эл-во: за кВт" Width="*">
+                    <DataGridTemplateColumn.CellTemplate><DataTemplate><TextBlock Text="{Binding Electricity.Tariff, StringFormat={}{0:0.################}, ConverterCulture=en-US}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate><DataTemplate><keeperWpf:FlexibleNumericTextBox Value="{Binding Electricity.Tariff, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Эл-во: сумма" Width="*" IsReadOnly="True" Binding="{Binding ElectricityPaymentAmount, StringFormat={}{0:N2}}" />
                 <DataGridTextColumn Header="Эл-во: комментарий" Width="2*" Binding="{Binding ElectricityComment}" />
-                <DataGridTextColumn Header="Газ: начало" Width="*" Binding="{Binding Gas.From}" />
-                <DataGridTextColumn Header="Газ: расход" Width="*" Binding="{Binding Gas.Volume}" />
-                <DataGridTextColumn Header="Газ: конец" Width="*" Binding="{Binding Gas.To}" />
-                <DataGridTextColumn Header="Газ: за куб" Width="*" Binding="{Binding Gas.Tariff}" />
+                <DataGridTemplateColumn Header="Газ: начало" Width="*">
+                    <DataGridTemplateColumn.CellTemplate><DataTemplate><TextBlock Text="{Binding Gas.From, StringFormat={}{0:0.################}, ConverterCulture=en-US}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate><DataTemplate><keeperWpf:FlexibleNumericTextBox Value="{Binding Gas.From, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Газ: расход" Width="*">
+                    <DataGridTemplateColumn.CellTemplate><DataTemplate><TextBlock Text="{Binding Gas.Volume, StringFormat={}{0:0.################}, ConverterCulture=en-US}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate><DataTemplate><keeperWpf:FlexibleNumericTextBox Value="{Binding Gas.Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Газ: конец" Width="*">
+                    <DataGridTemplateColumn.CellTemplate><DataTemplate><TextBlock Text="{Binding Gas.To, StringFormat={}{0:0.################}, ConverterCulture=en-US}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate><DataTemplate><keeperWpf:FlexibleNumericTextBox Value="{Binding Gas.To, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Газ: за куб" Width="*">
+                    <DataGridTemplateColumn.CellTemplate><DataTemplate><TextBlock Text="{Binding Gas.Tariff, StringFormat={}{0:0.################}, ConverterCulture=en-US}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate><DataTemplate><keeperWpf:FlexibleNumericTextBox Value="{Binding Gas.Tariff, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" /></DataTemplate></DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Газ: сумма" Width="*" IsReadOnly="True" Binding="{Binding GasPaymentAmount, StringFormat={}{0:N2}}" />
                 <DataGridTextColumn Header="Газ: комментарий" Width="2*" Binding="{Binding GasComment}" />
             </DataGrid.Columns>

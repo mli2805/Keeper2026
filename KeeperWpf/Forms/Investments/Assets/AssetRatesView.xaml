@@ -71,7 +71,18 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="Лот" Width="40" Binding="{Binding Unit}" />
-                <DataGridTextColumn Header="Цена" Width="70" Binding="{Binding Value}"/>
+                <DataGridTemplateColumn Header="Цена" Width="70">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Value, StringFormat={}{0:0.############################}, ConverterCulture=en-US}" TextAlignment="Right"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <keeperWpf:FlexibleNumericTextBox Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
 
                 <DataGridComboBoxColumn  Header="Валюта" Width="60" 
                                          ItemsSource="{Binding Source={StaticResource GetEnumValues}}"

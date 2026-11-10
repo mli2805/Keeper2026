@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KeeperWpf"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
         d:DataContext="{d:DesignData OneAssetViewModel}">
@@ -26,11 +27,13 @@
         <StackPanel Visibility="{Binding AssetInWork.BondPropertiesVisibility}">
             <StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock Width="120" Text="Номинал" Margin="0,5, 0,0"/>
-                <TextBox Width="101" Text="{Binding AssetInWork.Nominal}"/>
+                <local:FlexibleNumericTextBox Width="101"
+                                              Value="{Binding AssetInWork.Nominal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock Width="120" Text="Купон ставка, %" Margin="0,5, 0,0"/>
-                <TextBox Width="101" Text="{Binding AssetInWork.CouponRate}"/>
+                <local:FlexibleNumericTextBox Width="101"
+                                              Value="{Binding AssetInWork.CouponRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock Width="120" Text="Предыд выплата"/>

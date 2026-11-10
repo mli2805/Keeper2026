@@ -34,8 +34,8 @@
                 <GroupBox Header="Остаток" Margin="10, 0">
                     <StackPanel Margin="0,5" Orientation="Horizontal">
                         <TextBlock>Не менее</TextBlock>
-                        <TextBox Margin="5, 0" Width="60" Text="{Binding Filter.BalanceStr, 
-                            ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                        <keeperWpf:FlexibleNumericTextBox Margin="5, 0" Width="60"
+                                                          Value="{Binding Filter.Balance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </GroupBox>
 

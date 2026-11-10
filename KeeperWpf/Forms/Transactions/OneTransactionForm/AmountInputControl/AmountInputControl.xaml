@@ -9,17 +9,13 @@
              Height="25"
              cal:Bind.ModelWithoutContext="{Binding .}"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance keeperWpf:AmountInputControlVm}">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <keeperWpf:DoubleToStringConverter x:Key="DoubleToStringConverter" />
-        </ResourceDictionary>
-    </UserControl.Resources>
     <Grid>
         <StackPanel Orientation="Horizontal">
             <Label Content="{Binding LabelContent}" Height="26" Width="60" Foreground="{Binding AmountColor}" />
-            <TextBox Margin="5,5,0,0" Height="20" Width="100" BorderBrush="#555555" TextAlignment="Right"
-                     Foreground="{Binding AmountColor}"
-                     Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleToStringConverter}}" />
+            <keeperWpf:FlexibleNumericTextBox Margin="5,5,0,0" Height="20" Width="100"
+                                              BorderBrush="#555555" TextAlignment="Right"
+                                              Foreground="{Binding AmountColor}"
+                                              Value="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <ComboBox HorizontalAlignment="Left" Margin="5,5,0,0" Height="20" Width="60" Background="White"
                       ItemsSource="{Binding Currencies}" SelectedItem="{Binding Currency}" />
             <Button  Height="20" Margin="5,5,0,0" Width="20" Name="AllIn" Style="{StaticResource MyButtonStyle}" Visibility="{Binding ButtonAllInVisibility}">

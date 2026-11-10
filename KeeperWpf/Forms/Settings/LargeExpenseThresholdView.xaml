@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:KeeperWpf"
              mc:Ignorable="d" 
              Height="450" Width="600" WindowStartupLocation="CenterScreen"
              d:DataContext="{d:DesignData LargeExpenseThresholdViewModel}">
@@ -11,8 +12,30 @@
         <DataGrid.Columns>
             <DataGridTextColumn Header="#" Width="30" Binding="{Binding Id}"/>
             <DataGridTextColumn Header="С даты" Width="100" Binding="{Binding FromDate, StringFormat='dd/MM/yyyy'}"/>
-            <DataGridTextColumn Header="Сумма (для месячного анализа)" Width="200" Binding="{Binding Amount}"/>
-            <DataGridTextColumn Header="Сумма (для годового анализа)" Width="200" Binding="{Binding AmountForYearAnalysis}"/>
+            <DataGridTemplateColumn Header="Сумма (для месячного анализа)" Width="200">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Amount, StringFormat={}{0:0.############################}, ConverterCulture=en-US}" TextAlignment="Right"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.CellEditingTemplate>
+                    <DataTemplate>
+                        <local:FlexibleNumericTextBox Value="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="Сумма (для годового анализа)" Width="200">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding AmountForYearAnalysis, StringFormat={}{0:0.############################}, ConverterCulture=en-US}" TextAlignment="Right"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.CellEditingTemplate>
+                    <DataTemplate>
+                        <local:FlexibleNumericTextBox Value="{Binding AmountForYearAnalysis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
         </DataGrid.Columns>
     </DataGrid>
     </DockPanel>

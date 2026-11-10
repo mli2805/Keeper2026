@@ -163,8 +163,8 @@ public class FilterModel : PropertyChangedBase
     }
 
     #region Amount = < >
-    private string? _amount;
-    public string? Amount
+    private decimal? _amount;
+    public decimal? Amount
     {
         get => _amount;
         set

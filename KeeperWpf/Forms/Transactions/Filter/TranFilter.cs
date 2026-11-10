@@ -50,10 +50,10 @@ public class TranFilter
     private bool FilterAmount()
     {
         if (_filterModel.Amount == null) return true;
-        if (_filterModel.AmountEqualTo) return decimal.Parse(_filterModel.Amount) == _wrappedTran.Tran.Amount;
-        if (_filterModel.AmountLessThan) return decimal.Parse(_filterModel.Amount) > _wrappedTran.Tran.Amount;
+        if (_filterModel.AmountEqualTo) return _filterModel.Amount == _wrappedTran.Tran.Amount;
+        if (_filterModel.AmountLessThan) return _filterModel.Amount > _wrappedTran.Tran.Amount;
         // if (_filterModel.AmountGreaterThan) 
-        return decimal.Parse(_filterModel.Amount) < _wrappedTran.Tran.Amount;
+        return _filterModel.Amount < _wrappedTran.Tran.Amount;
     }
 
     private bool FilterCurrency()

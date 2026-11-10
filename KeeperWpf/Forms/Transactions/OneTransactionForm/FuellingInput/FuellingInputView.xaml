@@ -6,11 +6,6 @@
         xmlns:keeperWpf="clr-namespace:KeeperWpf"
         Height="{Binding Height, Mode=TwoWay}" Top="{Binding Top, Mode=TwoWay}" Left="{Binding Left, Mode=TwoWay}"
         mc:Ignorable="d" SizeToContent="WidthAndHeight" d:DataContext="{d:DesignData FuellingInputViewModel}">
-    <Window.Resources>
-        <ResourceDictionary>
-            <keeperWpf:DoubleToStringConverter x:Key="DoubleToStringConverter" />
-        </ResourceDictionary>
-    </Window.Resources>
     <StackPanel Margin="10">
         <ComboBox Margin="5" ItemsSource="{Binding Cars}" SelectedItem="{Binding SelectedCar}"/>
         <DatePicker Margin="5" DisplayDate="{Binding Vm.Timestamp}" SelectedDate="{Binding Vm.Timestamp}" ></DatePicker>
@@ -22,14 +17,14 @@
             </StackPanel>
             <StackPanel>
                 <TextBlock Margin="5">Объем, л:</TextBlock>
-                <TextBox Margin="5" Width="80" Height="22" TextAlignment="Right"
-                         Text="{Binding Vm.Volume, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleToStringConverter}}"/>
+                <keeperWpf:FlexibleNumericTextBox Margin="5" Width="80" Height="22" TextAlignment="Right"
+                                                  Value="{Binding Vm.Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
         </StackPanel>
         <TextBlock Margin="5">Стоимость:</TextBlock>
         <StackPanel Orientation="Horizontal">
-            <TextBox Margin="5" Width="120" TextAlignment="Right"
-                     Text="{Binding Vm.Amount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleToStringConverter}}"/>
+            <keeperWpf:FlexibleNumericTextBox Margin="5" Width="120" TextAlignment="Right"
+                                              Value="{Binding Vm.Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <ComboBox Margin="5" Width="80" ItemsSource="{Binding Currencies}" SelectedItem="{Binding Vm.Currency}"/>
         </StackPanel>
         <TextBlock Margin="5">Примечание:</TextBlock>

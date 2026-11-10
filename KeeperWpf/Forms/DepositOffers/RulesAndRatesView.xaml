@@ -31,7 +31,8 @@
                     <TextBlock Margin="5" Text="СР " />
                     <ComboBox Width="40" Height="20" ItemsSource="{Binding Operations}"
                               SelectedItem="{Binding SelectedOperation}"/>
-                    <TextBox Margin="5" Text="{Binding FormulaK, Mode=TwoWay}" Width="34" />
+                    <keeperWpf:FlexibleNumericTextBox Margin="5" Width="34"
+                                                      Value="{Binding FormulaK, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBlock Margin="5" Text="сохранено как " Foreground="Gray"/>
                     <TextBlock Margin="5" Text="{Binding SaveFormulaAs, Mode=OneWay}" 
                                Foreground="Gray" />
@@ -64,8 +65,8 @@
             <StackPanel Orientation="Horizontal">
                 <CheckBox Content="доп процент в конце срока" Margin="5"
                          IsChecked="{Binding Conditions.HasAdditionalPercent, Mode=TwoWay}"/>
-                <TextBox Margin="5" Width="100"
-                        Text="{Binding Conditions.AdditionalPercent, Mode=TwoWay}"/>
+                <keeperWpf:FlexibleNumericTextBox Margin="5" Width="100"
+                                                  Value="{Binding Conditions.AdditionalPercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
           
 
@@ -85,15 +86,42 @@
                 <DataGridTextColumn Header="с даты" Width="90" 
                             Binding="{Binding DateFrom, StringFormat='dd MMM yyyy'}">
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="с суммы" Width="110" ElementStyle="{StaticResource TextBlockToRightStyle}"
-                            Binding="{Binding AmountFrom, StringFormat='{}{0:#,0}'}">
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="по сумму" Width="110" ElementStyle="{StaticResource TextBlockToRightStyle}"
-                            Binding="{Binding AmountTo, StringFormat='{}{0:#,#}'}">
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="ставка" Width="50" ElementStyle="{StaticResource TextBlockToRightStyle}"
-                            Binding="{Binding Rate, StringFormat='{}{0:#,0.###}'}">
-                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="с суммы" Width="110">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding AmountFrom, StringFormat='{}{0:#,0}'}" Style="{StaticResource TextBlockToRightStyle}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <keeperWpf:FlexibleNumericTextBox Value="{Binding AmountFrom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="по сумму" Width="110">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding AmountTo, StringFormat='{}{0:#,#}'}" Style="{StaticResource TextBlockToRightStyle}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <keeperWpf:FlexibleNumericTextBox Value="{Binding AmountTo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="ставка" Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Rate, StringFormat='{}{0:#,0.###}'}" Style="{StaticResource TextBlockToRightStyle}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <keeperWpf:FlexibleNumericTextBox Value="{Binding Rate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 

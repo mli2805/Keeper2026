@@ -7,11 +7,6 @@
         mc:Ignorable="d" Width="520" Height="900" WindowStartupLocation="CenterScreen" 
         Background="#FFFFF8F8"
         >
-    <Window.Resources>
-        <ResourceDictionary>
-            <keeperWpf:DoubleToStringConverter x:Key="DoubleToStringConverter" />
-        </ResourceDictionary>
-    </Window.Resources>
     <StackPanel Margin="10" >
         <keeperWpf:AccNameSelectorView DataContext="{Binding MyAccNameSelectorVm}" 
                                         Margin="10,0" HorizontalAlignment="Stretch"/>
@@ -40,10 +35,9 @@
                           VerticalAlignment="Center"
                           Margin="0,0,10,0"/>
 
-                        <TextBox Grid.Column="1" Height="20" Width="70" BorderBrush="#555555" 
-                                 TextAlignment="Right" Foreground="Red"
-                                 Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged, 
-                                    Converter={StaticResource DoubleToStringConverter}}" />
+                        <keeperWpf:FlexibleNumericTextBox Grid.Column="1" Height="20" Width="70"
+                                                        BorderBrush="#555555" TextAlignment="Right" Foreground="Red"
+                                                        Value="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         
                         <TextBlock Grid.Column="2" Text="{Binding Currency}"/>
                         <TextBlock Grid.Column="3" Text="{Binding Kor}"/>

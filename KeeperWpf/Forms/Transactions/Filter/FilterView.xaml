@@ -8,12 +8,6 @@
         mc:Ignorable="d"
         Title="FilterView" SizeToContent="Height" Width="{Binding Width, Mode=TwoWay}" 
         Left="{Binding Left, Mode=TwoWay}" Top="{Binding Top, Mode=TwoWay}" d:DataContext="{d:DesignData FilterViewModel}">
-    <Window.Resources>
-        <ResourceDictionary>
-            <keeperWpf:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
-        </ResourceDictionary>
-    </Window.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -92,10 +86,9 @@
                         cal:Message.Attach="[Event Click] = [Action CleanProperty(3)]"/>
                 <TextBlock Padding="5">Сумма</TextBlock>
             </StackPanel>
-            <TextBox Width="200" HorizontalAlignment="Left" Margin="5,0,0,0" Height="25" 
-                     TextAlignment="Right" VerticalContentAlignment="Center" 
-                         Text="{Binding FilterModel.Amount, 
-                UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleToStringConverter}}" />
+            <keeperWpf:FlexibleNumericTextBox Width="200" HorizontalAlignment="Left" Margin="5,0,0,0" Height="25"
+                                              TextAlignment="Right" VerticalContentAlignment="Center"
+                                              Value="{Binding FilterModel.Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <StackPanel Orientation="Horizontal" Margin="10,10,0,10">
                 <RadioButton GroupName="AmountComparison" Content="&lt;" 
                              IsChecked="{Binding FilterModel.AmountLessThan}" Margin="15,0,0,0"/>
