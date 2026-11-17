@@ -13,7 +13,7 @@
                            ItemsSource="{Binding Children}" DataType="{x:Type keeperWpf:AccName}">
                         <TextBlock Text="{Binding Name}" FontSize="12" />
                     </HierarchicalDataTemplate>
-                    
+
                     <!--    пустой стиль для переопределения того, что делается по умолчанию, нужен для стиля кнопок -->
                     <Style x:Key="ButtonFocusVisual" />
 

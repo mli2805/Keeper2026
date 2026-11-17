@@ -7,14 +7,6 @@
         d:DataContext="{d:DesignInstance Type=local:CarLoanViewModel}"
         mc:Ignorable="d" FontSize="14"
         SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <!-- Стиль для выравнивания текста по правому краю -->
-        <Style x:Key="RightAlignedTextStyle" TargetType="TextBlock">
-            <Setter Property="TextAlignment" Value="Right" />
-            <Setter Property="Padding" Value="0,0,5,0" />
-            <!-- отступ от правого края -->
-        </Style>
-    </Window.Resources>
     <DockPanel >
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10" >
             <TextBlock Text="Кредитный договор:" Margin="0,0,10,0"/>
@@ -34,11 +26,11 @@
         <DataGrid DockPanel.Dock="Top" ItemsSource="{Binding Rows}" Margin="10,5" Height="180"
                   AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="All">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="№" Binding="{Binding N}" Width="35" ElementStyle="{StaticResource RightAlignedTextStyle}"/>
-                <DataGridTextColumn Header="Дата" Binding="{Binding Date}" Width="100" ElementStyle="{StaticResource RightAlignedTextStyle}"/>
-                <DataGridTextColumn Header="Тело кредита" Binding="{Binding Body}" Width="100" ElementStyle="{StaticResource RightAlignedTextStyle}"/>
-                <DataGridTextColumn Header="Проценты" Binding="{Binding Interest}" Width="100" ElementStyle="{StaticResource RightAlignedTextStyle}"/>
-                <DataGridTextColumn Header="Платеж" Binding="{Binding Payment}" Width="100" ElementStyle="{StaticResource RightAlignedTextStyle}"/>
+                <local:DgRightAlignedColumn Header="№" Binding="{Binding N}" Width="35"/>
+                <local:DgRightAlignedColumn Header="Дата" Binding="{Binding Date}" Width="100"/>
+                <local:DgRightAlignedColumn Header="Тело кредита" Binding="{Binding Body}" Width="100"/>
+                <local:DgRightAlignedColumn Header="Проценты" Binding="{Binding Interest}" Width="100"/>
+                <local:DgRightAlignedColumn Header="Платеж" Binding="{Binding Payment}" Width="100"/>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10,0" >

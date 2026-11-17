@@ -3,21 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:keeperWpf="clr-namespace:KeeperWpf"
+        xmlns:local="clr-namespace:KeeperWpf"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" 
-        d:DataContext="{d:DesignInstance keeperWpf:OpenDepositsViewModel}">
-
+        d:DataContext="{d:DesignInstance local:OpenDepositsViewModel}">
     <DockPanel>
-
         <DataGrid DockPanel.Dock="Bottom" Margin="5" ItemsSource="{Binding Totals}"
                   IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single">
-            <DataGrid.Resources>
-                <Style TargetType="{x:Type TextBlock}" x:Key="CellRightAlign">
-                    <Setter Property="HorizontalAlignment" Value="Right" />
-                    <Setter Property="Margin" Value="0,0,5,0" />
-                </Style>
-            </DataGrid.Resources>
             <DataGrid.ItemContainerStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Setter Property="Background" Value="{Binding Fs}" />
@@ -25,32 +17,22 @@
             </DataGrid.ItemContainerStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="" Width="70" />
-                <DataGridTextColumn Header="" Width="60" Binding="{Binding Depo.PiecesStr}" 
-                                    ElementStyle="{StaticResource CellRightAlign}" />
+                <local:DgRightAlignedColumn Header="" Width="60" Binding="{Binding Depo.PiecesStr}" />
 
-                <DataGridTextColumn Header="Депо" Width="100" Binding="{Binding Depo.SumStr}"  
-                                    ElementStyle="{StaticResource CellRightAlign}"/>
-                <DataGridTextColumn Header="" Width="100" Binding="{Binding Depo.SumUsdStr}"  
-                                    ElementStyle="{StaticResource CellRightAlign}"/>
-                <DataGridTextColumn Header="" Width="60" Binding="{Binding Depo.PercentStr}"  
-                                    ElementStyle="{StaticResource CellRightAlign}"/>
+                <local:DgRightAlignedColumn Header="Депо" Width="100" Binding="{Binding Depo.SumStr}" />
+                <local:DgRightAlignedColumn Header="" Width="100" Binding="{Binding Depo.SumUsdStr}" />
+                <local:DgRightAlignedColumn Header="" Width="60" Binding="{Binding Depo.PercentStr}" />
 
                 <DataGridTextColumn Header="" Width="104" />
-                <DataGridTextColumn Header="Депо и шкаф" Width="100" Binding="{Binding DepoAndMatras.SumStr}"  
-                                    ElementStyle="{StaticResource CellRightAlign}"/>
-                <DataGridTextColumn Header="" Width="100" Binding="{Binding DepoAndMatras.SumUsdStr}"  
-                                    ElementStyle="{StaticResource CellRightAlign}"/>
-                <DataGridTextColumn Header="" Width="60"  Binding="{Binding DepoAndMatras.PercentStr}"  
-                                    ElementStyle="{StaticResource CellRightAlign}"/>
+                <local:DgRightAlignedColumn Header="Депо и шкаф" Width="100" Binding="{Binding DepoAndMatras.SumStr}" />
+                <local:DgRightAlignedColumn Header="" Width="100" Binding="{Binding DepoAndMatras.SumUsdStr}" />
+                <local:DgRightAlignedColumn Header="" Width="60"  Binding="{Binding DepoAndMatras.PercentStr}" />
 
 
                 <DataGridTextColumn Header="" Width="130" />
-                <DataGridTextColumn Header="Все (депо + шкаф + карточки)" Width="100" Binding="{Binding AllMine.SumStr}"   
-                                    ElementStyle="{StaticResource CellRightAlign}"/>
-                <DataGridTextColumn Header="" Width="100" Binding="{Binding AllMine.SumUsdStr}"  
-                                    ElementStyle="{StaticResource CellRightAlign}"/>
-                <DataGridTextColumn Header="" Width="60"  Binding="{Binding AllMine.PercentStr}"  
-                                    ElementStyle="{StaticResource CellRightAlign}"/>
+                <local:DgRightAlignedColumn Header="Все (депо + шкаф + карточки)" Width="100" Binding="{Binding AllMine.SumStr}" />
+                <local:DgRightAlignedColumn Header="" Width="100" Binding="{Binding AllMine.SumUsdStr}" />
+                <local:DgRightAlignedColumn Header="" Width="60"  Binding="{Binding AllMine.PercentStr}" />
             </DataGrid.Columns>
 
         </DataGrid>
@@ -81,14 +63,14 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Банк" Width="60" Binding="{Binding BankName}" />
                 <DataGridTextColumn Header="  Депозит" Width="450" Binding="{Binding DepoName}" />
-                <DataGridTextColumn Header="Валюта" Width="50" Binding="{Binding MainCurrency}" />
-                <DataGridTextColumn Header="  Тип ставки" Width="100" Binding="{Binding RateTypeStr}" />
-                <DataGridTextColumn Header="Ставка" Width="50" Binding="{Binding Rate}" />
+                <local:DgCenterAlignedColumn Header="Валюта" Width="50" Binding="{Binding MainCurrency}" />
+                <local:DgCenterAlignedColumn Header="  Тип ставки" Width="100" Binding="{Binding RateTypeStr}" />
+                <local:DgRightAlignedColumn Header="Ставка" Width="50" Binding="{Binding Rate}" />
                 <DataGridTextColumn Header="  Допы" Width="140" Binding="{Binding AdditionsStr}" />
                 <DataGridTextColumn Header=" c" Width="80" Binding="{Binding StartDate, StringFormat='dd\/MM\/yyyy'}" />
                 <DataGridTextColumn Header=" по" Width="100"
                                     Binding="{Binding FinishDate, StringFormat='dd\/MM\/yyyy ddd', ConverterCulture=ru-RU}" />
-                <DataGridTextColumn Header="  Остаток" Width="120" Binding="{Binding Balance}" />
+                <local:DgRightAlignedColumn Header="  Остаток" Width="120" Binding="{Binding Balance}" />
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
