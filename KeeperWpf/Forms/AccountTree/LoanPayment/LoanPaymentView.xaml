@@ -46,10 +46,7 @@
             <TextBlock Width="100" Text="Комментарий" Margin="0,0,10,0"/>
             <TextBox Width="290" Height="42" Text="{Binding Comment2}" HorizontalAlignment="Left"/>
         </StackPanel>
-
-
-
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0, 20, 10 ,10" Height="32">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0, 20, 10 ,10">
             <Button Name="Save" Margin="5" Width="100" Content="Сохранить" IsDefault="True"/>
             <Button Name="Cancel" Margin="5" Width="100" Content="Отмена" IsCancel="True"/>
         </StackPanel>

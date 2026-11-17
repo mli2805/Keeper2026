@@ -7,6 +7,14 @@
         d:DataContext="{d:DesignInstance Type=local:CarLoanViewModel}"
         mc:Ignorable="d" FontSize="14"
         SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <!-- Стиль для выравнивания текста по правому краю -->
+        <Style x:Key="RightAlignedTextStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="Padding" Value="0,0,5,0" />
+            <!-- отступ от правого края -->
+        </Style>
+    </Window.Resources>
     <DockPanel >
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10" >
             <TextBlock Text="Кредитный договор:" Margin="0,0,10,0"/>
@@ -23,28 +31,27 @@
             <TextBlock Text="Сумма кредита 61400 руб" Margin="0,0,10,0"/>
             <TextBlock Text=" ежемесячное погашение тела кредита 61400 / 120 = 511,67 руб" Margin="0,0,10,0"/>
         </StackPanel>
-        <ListView DockPanel.Dock="Top" ItemsSource="{Binding Rows}" Margin="10,5" Height="180">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="№" DisplayMemberBinding="{Binding N}" Width="35"/>
-                    <GridViewColumn Header="Дата" DisplayMemberBinding="{Binding Date}" Width="100"/>
-                    <GridViewColumn Header="Тело кредита" DisplayMemberBinding="{Binding Body}" Width="100"/>
-                    <GridViewColumn Header="Проценты" DisplayMemberBinding="{Binding Interest}" Width="100"/>
-                    <GridViewColumn Header="Платеж" DisplayMemberBinding="{Binding Payment}" Width="100"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <DataGrid DockPanel.Dock="Top" ItemsSource="{Binding Rows}" Margin="10,5" Height="180"
+                  AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="All">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="№" Binding="{Binding N}" Width="35" ElementStyle="{StaticResource RightAlignedTextStyle}"/>
+                <DataGridTextColumn Header="Дата" Binding="{Binding Date}" Width="100" ElementStyle="{StaticResource RightAlignedTextStyle}"/>
+                <DataGridTextColumn Header="Тело кредита" Binding="{Binding Body}" Width="100" ElementStyle="{StaticResource RightAlignedTextStyle}"/>
+                <DataGridTextColumn Header="Проценты" Binding="{Binding Interest}" Width="100" ElementStyle="{StaticResource RightAlignedTextStyle}"/>
+                <DataGridTextColumn Header="Платеж" Binding="{Binding Payment}" Width="100" ElementStyle="{StaticResource RightAlignedTextStyle}"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10,0" >
-            <TextBlock Text="Итого платежи:" Margin="10,0,0,0" Width="135"/>
-            <TextBlock Text="{Binding TotalBody}" Width="100"/>
-            <TextBlock Text="{Binding TotalInterest}" Width="100"/>
-            <TextBlock Text="{Binding TotalPayment}" Width="100"/>
+            <TextBlock Text="Итого платежи:" Margin="10,0,0,0" Width="125"/>
+            <TextBlock Text="{Binding TotalBody}" TextAlignment="Right" Width="100"/>
+            <TextBlock Text="{Binding TotalInterest}" TextAlignment="Right" Width="100"/>
+            <TextBlock Text="{Binding TotalPayment}" TextAlignment="Right" Width="100"/>
         </StackPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10,10" >
-            <TextBlock Text="Остаток:" Margin="10,0,0,0" Width="135"/>
-            <TextBlock Text="{Binding BodyRemaining}" Width="100"/>
+            <TextBlock Text="Остаток:" Margin="10,0,0,0" Width="125"/>
+            <TextBlock Text="{Binding BodyRemaining}" TextAlignment="Right" Width="100"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 20, 10 ,10" Height="32">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 20, 10 ,10" >
             <Button Name="InputPayment" Margin="5" Width="150" Content="Ввести платеж"/>
             <Button Name="Close" Margin="5" Width="100" Content="Закрыть" IsCancel="True"/>
         </StackPanel>
