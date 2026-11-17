@@ -37,6 +37,8 @@ public class ShellPartsBinder : PropertyChangedBase
             NotifyOfPropertyChange(nameof(AddAccountInBankVisibility));
             NotifyOfPropertyChange(nameof(AddDepositVisibility));
             NotifyOfPropertyChange(nameof(AddCardVisibility));
+
+            NotifyOfPropertyChange(nameof(CarLoanVisibility));
         }
     }
 
@@ -58,6 +60,9 @@ public class ShellPartsBinder : PropertyChangedBase
     public Visibility AddDepositVisibility => SelectedAccountItemModel.Is(NickNames.Deposits)
               ? Visibility.Visible : Visibility.Collapsed;
     public Visibility AddCardVisibility => SelectedAccountItemModel.IsInside(NickNames.PayCards)
+              ? Visibility.Visible : Visibility.Collapsed;
+
+    public Visibility CarLoanVisibility => SelectedAccountItemModel.OneOf([1145, 1159])
               ? Visibility.Visible : Visibility.Collapsed;
 
     public bool IsEnabledToAddFolder => SelectedAccountItemModel.IsFolder;

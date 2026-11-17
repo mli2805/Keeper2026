@@ -95,6 +95,11 @@ public class TreeViewItemModel : PropertyChangedBase
         return Parent != null && Parent.Is(accountId);
     }
 
+    public bool OneOf(int[] accountIds)
+    {
+        return accountIds.Contains(Id);
+    }
+
     public TreeViewItemModel? IsC(TreeViewItemModel treeViewItemModel)
     {
         if (Equals(treeViewItemModel)) return this;

@@ -100,7 +100,10 @@
                               Background="White" Visibility="{Binding ShellPartsBinder.BankAccountVisibility}"/>
                     <MenuItem Header="Списать комиссию" cal:Message.Attach="TakeCardFee" BorderBrush="{x:Null}" 
                               Background="White" Visibility="{Binding ShellPartsBinder.BankAccountVisibility}"/>
+                    <MenuItem Header="Погашение кредита" cal:Message.Attach="LoanPayment" BorderBrush="{x:Null}" 
+                              Background="White" Visibility="{Binding ShellPartsBinder.CarLoanVisibility}"/>
                     <Separator/>
+
                     <MenuItem Header="Отчет по депозиту" cal:Message.Attach="ShowDepositReport" BorderBrush="{x:Null}" 
                               Background="White" Visibility="{Binding ShellPartsBinder.DepositMenuVisibility}">
                     </MenuItem>
