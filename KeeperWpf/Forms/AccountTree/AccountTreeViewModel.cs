@@ -11,7 +11,7 @@ public class AccountTreeViewModel(KeeperDataModel keeperDataModel, IWindowManage
     OneFolderViewModel oneFolderViewModel, OneAccountViewModel oneAccountViewModel, OneBankAccountViewModel oneBankAccountViewModel,
     ExpensesOnAccountViewModel expensesOnAccountViewModel, MoneyBackViewModel moneyBackViewModel,
     DepositInterestViewModel depositInterestViewModel, CardFeeViewModel cardFeeViewModel,
-    LoanPaymentViewModel loanPaymentViewModel,
+    LoanPaymentViewModel loanPaymentViewModel, CarLoanViewModel carLoanViewModel,
     DepositReportViewModel depositReportViewModel, BalanceVerificationViewModel balanceVerificationViewModel,
     PaymentWaysViewModel paymentWaysViewModel) : PropertyChangedBase
 {
@@ -125,6 +125,12 @@ public class AccountTreeViewModel(KeeperDataModel keeperDataModel, IWindowManage
     {
         loanPaymentViewModel.Initialize();
         await WindowManager.ShowDialogAsync(loanPaymentViewModel);
+    }
+
+    public async Task LoanReport()
+    {
+        carLoanViewModel.Initialize();
+        await WindowManager.ShowDialogAsync(carLoanViewModel);
     }
 
     public async Task ShowDepositReport()

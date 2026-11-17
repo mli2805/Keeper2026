@@ -10,7 +10,6 @@ namespace KeeperWpf;
 
 [ExportViewModel]
 public class LoanPaymentViewModel(KeeperDataModel dataModel, ComboTreesProvider comboTreesProvider,
-    BalanceDuringTransactionHinter balanceDuringTransactionHinter,
         AccNameSelector accNameSelectionControlInitializer,
         TransactionsRepository transactionsRepository, ShellPartsBinder shellPartsBinder) : Screen
 {
@@ -171,7 +170,7 @@ public class LoanPaymentViewModel(KeeperDataModel dataModel, ComboTreesProvider 
 
         shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now; // обновление балансов в дереве счетов
 
-        await TryCloseAsync();
+        await TryCloseAsync(true);
     }
 
     private TransactionModel CreatePayment(int id, DateTime timestamp, decimal amount, int categoryId, string comment)
@@ -181,6 +180,7 @@ public class LoanPaymentViewModel(KeeperDataModel dataModel, ComboTreesProvider 
             Id = id,
             Timestamp = timestamp,
             Operation = OperationType.Расход,
+            PaymentWay = PaymentWay.ОплатаПоЕрип,
             MyAccount = TranInWork.MyAccount,
             Counterparty = dataModel.AcMoDict[401], // БГПБ
             Category = dataModel.AcMoDict[categoryId], 
@@ -193,7 +193,7 @@ public class LoanPaymentViewModel(KeeperDataModel dataModel, ComboTreesProvider 
 
     public async Task Cancel()
     {
-        await TryCloseAsync();
+        await TryCloseAsync(false);
     }
 
 }

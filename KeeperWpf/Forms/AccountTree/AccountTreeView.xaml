@@ -102,6 +102,8 @@
                               Background="White" Visibility="{Binding ShellPartsBinder.BankAccountVisibility}"/>
                     <MenuItem Header="Погашение кредита" cal:Message.Attach="LoanPayment" BorderBrush="{x:Null}" 
                               Background="White" Visibility="{Binding ShellPartsBinder.CarLoanVisibility}"/>
+                    <MenuItem Header="Отчет по кредиту" cal:Message.Attach="LoanReport" BorderBrush="{x:Null}" 
+                              Background="White" Visibility="{Binding ShellPartsBinder.CarLoanVisibility}"/>
                     <Separator/>
 
                     <MenuItem Header="Отчет по депозиту" cal:Message.Attach="ShowDepositReport" BorderBrush="{x:Null}" 

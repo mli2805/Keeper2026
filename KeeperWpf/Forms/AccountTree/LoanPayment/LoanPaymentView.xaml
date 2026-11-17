@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeeperWpf" 
         d:DataContext="{d:DesignInstance Type=local:LoanPaymentViewModel}"
-        mc:Ignorable="d" 
-        Title="LoanPaymentView" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+        mc:Ignorable="d" FontSize="14"
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
     <StackPanel Margin="10,5">
+        <StackPanel Orientation="Horizontal" Margin="10" > 
+            <TextBlock Text="Реквизиты ЕРИП:" Margin="0,0,10,0"/>
+            <TextBox Text="SW/70999" IsReadOnly="True" BorderThickness="0" FontWeight="Medium"/>
+        </StackPanel>
         <local:AccNameSelectorView DataContext="{Binding MyAccNameSelectorVm}" 
                                             Width="400" Margin="10,10" HorizontalAlignment="Left"/>
         <Label Content="{Binding MyAccountBalanceStr}" Height="30" HorizontalAlignment="Left" 
