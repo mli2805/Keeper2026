@@ -14,10 +14,11 @@ public class CarEf
 
     public DateTime PurchaseDate { get; set; }
     public int PurchaseMileage { get; set; }
+    public double PurchasePrice { get; set; }
     public DateTime SaleDate { get; set; }
     public int SaleMileage { get; set; }
+    public double SalePrice { get; set; }
 
-    public int SupposedSalePrice { get; set; }
     [MaxLength(100)] public string Comment { get; set; } = string.Empty;
 
     // Навигационное свойство

@@ -74,4 +74,9 @@ public class CarLoanViewModel(KeeperDataModel dataModel, LoanPaymentViewModel lo
             NotifyOfPropertyChange(nameof(BodyRemaining));
         }
     }
+
+    public async Task Close()
+    {
+      await TryCloseAsync();
+    }
 }

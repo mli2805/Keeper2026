@@ -266,9 +266,10 @@ public static class ModelsToDomain
             StateRegNumber = model.StateRegNumber,
             PurchaseDate = model.PurchaseDate,
             PurchaseMileage = model.PurchaseMileage,
+            PurchasePrice = model.PurchasePrice,
             SaleDate = model.SaleDate,
             SaleMileage = model.SaleMileage,
-            SupposedSalePrice = model.SupposedSalePrice,
+            SalePrice = model.SalePrice,
             Comment = model.Comment,
         };
     }

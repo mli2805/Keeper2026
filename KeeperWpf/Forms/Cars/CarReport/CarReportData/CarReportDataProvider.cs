@@ -31,8 +31,8 @@ public static class CarReportDataProvider
             carReportData.Categories[0].Table.Add(new CarReportTableRow()
             {
                 Date = DateTime.Today,
-                AmountInUsd = car.SupposedSalePrice,
-                AmountInCurrency = $"{car.SupposedSalePrice} usd",
+                AmountInUsd = (decimal)car.SalePrice,
+                AmountInCurrency = $"{car.SalePrice} usd",
                 Comment = "предполагаемая продажа",
             });
         }

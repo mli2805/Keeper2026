@@ -12,8 +12,9 @@ namespace KeeperWpf;
 
 [ExportViewModel]
 public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWindowManager windowManager,
-    CarRepository carRepository, OneCarViewModel oneCarViewModel, FuelViewModel fuelViewModel, OwnershipCostViewModel ownershipCostViewModel,
-    YearExpensesViewModel yearExpensesViewModel) : Screen
+    CarRepository carRepository, OneCarViewModel oneCarViewModel, 
+    FuelViewModel fuelViewModel, CarLoanViewModel carLoanViewModel,
+    OwnershipCostViewModel ownershipCostViewModel, YearExpensesViewModel yearExpensesViewModel) : Screen
 {
     public BindableCollection<CarModel> Cars { get; set; } = null!;
 
@@ -23,7 +24,7 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
         get => _selectedCar;
         set
         {
-            if (Equals(value, _selectedCar)) return;
+            if (value is null || Equals(value, _selectedCar)) return;
             carRepository.SaveCarWithMileages(_selectedCar);
             _selectedCar = value;
             YearMileagesToShow = [.. _selectedCar.YearsMileage];
@@ -129,7 +130,7 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
 
         if (yearMileageModel.CarId == Cars.Last().CarAccountId && includePurchase)
         {
-            yearMileageModel.YearAmount -= SelectedCar.SupposedSalePrice;
+            yearMileageModel.YearAmount -= (decimal)SelectedCar.SalePrice;
         }
 
         var periodDays = yearMileageModel.Period.ToDays();
@@ -175,9 +176,10 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
             Title = "Новый автомобиль",
             PurchaseDate = DateTime.Today,
             PurchaseMileage = 0,
+            PurchasePrice = 0,
             SaleDate = DateTime.Today.AddYears(5),
             SaleMileage = 0,
-            SupposedSalePrice = 0,
+            SalePrice = 0,
             YearsMileage = new List<YearMileageModel>()
             {
                 new YearMileageModel()
@@ -218,8 +220,8 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
         YearMileagesToShow = [.. _selectedCar.YearsMileage];
         EvaluateYearMileageToShow();
 
-        NotifyOfPropertyChange(nameof(Cars));
         NotifyOfPropertyChange(nameof(SelectedCar));
+        NotifyOfPropertyChange(nameof(Cars));
         NotifyOfPropertyChange(nameof(YearMileagesToShow));
         NotifyOfPropertyChange(nameof(IsLastCarVisibility));
         NotifyOfPropertyChange(nameof(Total));
@@ -231,6 +233,12 @@ public class CarsViewModel(PathFinder pathFinder, KeeperDataModel dataModel, IWi
     {
         fuelViewModel.Initialize();
         await windowManager.ShowWindowAsync(fuelViewModel);
+    }
+
+    public async Task CarLoanReport()
+    {
+        carLoanViewModel.Initialize();
+        await windowManager.ShowWindowAsync(carLoanViewModel);
     }
 
     public bool IsAggregateCategories { get; set; } = true;

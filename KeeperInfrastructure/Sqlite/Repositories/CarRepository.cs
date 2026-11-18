@@ -34,9 +34,10 @@ public class CarRepository(IDbContextFactory<KeeperDbContext> factory)
             carEf.StateRegNumber = carModel.StateRegNumber;
             carEf.PurchaseDate = carModel.PurchaseDate;
             carEf.PurchaseMileage = carModel.PurchaseMileage;
+            carEf.PurchasePrice = carModel.PurchasePrice;
             carEf.SaleDate = carModel.SaleDate;
             carEf.SaleMileage = carModel.SaleMileage;
-            carEf.SupposedSalePrice = carModel.SupposedSalePrice;
+            carEf.SalePrice = carModel.SalePrice;
             carEf.Comment = carModel.Comment;
             foreach (var yearMileage in carModel.YearsMileage)
             {

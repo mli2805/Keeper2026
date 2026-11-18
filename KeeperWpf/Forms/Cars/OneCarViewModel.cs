@@ -23,9 +23,10 @@ public class OneCarViewModel : Screen
             StateRegNumber = car.StateRegNumber,
             PurchaseDate = car.PurchaseDate,
             PurchaseMileage = car.PurchaseMileage,
+            PurchasePrice = car.PurchasePrice,
             SaleDate = car.SaleDate,
             SaleMileage = car.SaleMileage,
-            SupposedSalePrice = car.SupposedSalePrice,
+            SalePrice = car.SalePrice,
             Comment = car.Comment,
             YearsMileage = [.. car.YearsMileage]
         };

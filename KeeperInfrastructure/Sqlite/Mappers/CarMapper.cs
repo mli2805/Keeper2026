@@ -16,9 +16,10 @@ public static class CarMapper
             StateRegNumber = car.StateRegNumber,
             PurchaseDate = car.PurchaseDate,
             PurchaseMileage = car.PurchaseMileage,
+            PurchasePrice = car.PurchasePrice,
             SaleDate = car.SaleDate,
             SaleMileage = car.SaleMileage,
-            SupposedSalePrice = car.SupposedSalePrice,
+            SalePrice = car.SalePrice,
             Comment = car.Comment
         };
     }
@@ -45,9 +46,10 @@ public static class CarMapper
             StateRegNumber = carEf.StateRegNumber,
             PurchaseDate = carEf.PurchaseDate,
             PurchaseMileage = carEf.PurchaseMileage,
+            PurchasePrice = carEf.PurchasePrice,
             SaleDate = carEf.SaleDate,
             SaleMileage = carEf.SaleMileage,
-            SupposedSalePrice = carEf.SupposedSalePrice,
+            SalePrice = carEf.SalePrice,
             Comment = carEf.Comment,
             YearsMileage = carEf.YearMileages.Select(m => new YearMileageModel
             {
@@ -70,9 +72,10 @@ public static class CarMapper
             StateRegNumber = carModel.StateRegNumber,
             PurchaseDate = carModel.PurchaseDate,
             PurchaseMileage = carModel.PurchaseMileage,
+            PurchasePrice = carModel.PurchasePrice,
             SaleDate = carModel.SaleDate,
             SaleMileage = carModel.SaleMileage,
-            SupposedSalePrice = carModel.SupposedSalePrice,
+            SalePrice = carModel.SalePrice,
             Comment = carModel.Comment,
             YearMileages = carModel.YearsMileage.Select(m => m.ToEf()).ToList()
         };

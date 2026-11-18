@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:KeeperWpf"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:OneCarViewModel}"
-        SizeToContent="WidthAndHeight"
+        SizeToContent="WidthAndHeight" FontSize="14"
         WindowStartupLocation="CenterOwner">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -14,6 +14,7 @@
             <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -50,21 +51,24 @@
         <TextBlock Grid.Row="6" Text="Пробег при покупке" Margin="5" VerticalAlignment="Center"/>
         <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding CarInWork.PurchaseMileage}" Margin="5"/>
 
-        <TextBlock Grid.Row="7" Text="Дата продажи / текущая дата" Margin="5" VerticalAlignment="Center"/>
-        <DatePicker Grid.Row="7" Grid.Column="1"
+        <TextBlock Grid.Row="7" Text="Цена покупки" Margin="5" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding CarInWork.PurchasePrice}" Margin="5"/>
+
+        <TextBlock Grid.Row="8" Text="Дата продажи / текущая дата" Margin="5" VerticalAlignment="Center"/>
+        <DatePicker Grid.Row="8" Grid.Column="1"
                     Text="{Binding CarInWork.SaleDate, StringFormat='{}{0:d/MM/yyyy}'}" Margin="5"/>
 
-        <TextBlock Grid.Row="8" Text="Пробег при продаже / текущий" Margin="5" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding CarInWork.SaleMileage}" Margin="5"/>
+        <TextBlock Grid.Row="9" Text="Пробег при продаже / текущий" Margin="5" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding CarInWork.SaleMileage}" Margin="5"/>
 
-        <TextBlock Grid.Row="9" Text="Предполагаемая цена продажи" Margin="5" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding CarInWork.SupposedSalePrice}" Margin="5"/>
+        <TextBlock Grid.Row="10" Text="Цена продажи / предполагаемая" Margin="5" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding CarInWork.SalePrice}" Margin="5"/>
 
-        <TextBlock Grid.Row="10" Text="Комментарий" Margin="5" VerticalAlignment="Top"/>
-        <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding CarInWork.Comment}"
+        <TextBlock Grid.Row="11" Text="Комментарий" Margin="5" VerticalAlignment="Top"/>
+        <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding CarInWork.Comment}"
                  AcceptsReturn="True" TextWrapping="Wrap" MinHeight="70" Margin="5"/>
 
-        <StackPanel Grid.Row="11" Grid.ColumnSpan="2" Orientation="Horizontal"
+        <StackPanel Grid.Row="12" Grid.ColumnSpan="2" Orientation="Horizontal"
                     HorizontalAlignment="Right" Margin="5,15,5,5">
             <Button Name="Save" Content="Сохранить" Width="120" Margin="5" IsDefault="True"/>
             <Button Name="Cancel" Content="Отменить" Width="120" Margin="5" IsCancel="True"/>

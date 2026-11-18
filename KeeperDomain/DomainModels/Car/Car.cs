@@ -14,17 +14,18 @@ public class Car : IDumpable, IParsable<Car>
 
     public DateTime PurchaseDate { get; set; }
     public int PurchaseMileage { get; set; }
+    public double PurchasePrice { get; set; }
     public DateTime SaleDate { get; set; }
     public int SaleMileage { get; set; }
+    public double SalePrice { get; set; }
 
-    public int SupposedSalePrice { get; set; }
     [MaxLength(100)] public string Comment { get; set; } = string.Empty;
 
     public string Dump()
     {
         return Id + " ; " + CarAccountId + " ; " + Title + " ; " + IssueYear + " ; " + Vin + " ; " + StateRegNumber + " ; " 
-               + PurchaseDate.ToString("dd/MM/yyyy") + " ; " + PurchaseMileage + " ; "
-               + SaleDate.ToString("dd/MM/yyyy") + " ; " + SaleMileage + " ; " + SupposedSalePrice + " ; "
+               + PurchaseDate.ToString("dd/MM/yyyy") + " ; " + PurchaseMileage + " ; " + PurchasePrice + " ; "
+               + SaleDate.ToString("dd/MM/yyyy") + " ; " + SaleMileage + " ; " + SalePrice + " ; "
                + Comment.Replace("\r\n", "|");
     }
 
@@ -41,11 +42,13 @@ public class Car : IDumpable, IParsable<Car>
 
         PurchaseDate = DateTime.ParseExact(substrings[6].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
         PurchaseMileage = int.Parse(substrings[7].Trim());
-        SaleDate = DateTime.ParseExact(substrings[8].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
-        SaleMileage = int.Parse(substrings[9].Trim());
+        PurchasePrice = double.Parse(substrings[8].Trim(), CultureInfo.InvariantCulture);
 
-        SupposedSalePrice = int.Parse(substrings[10].Trim());
-        Comment = substrings[11].Trim().Replace("|", "\r\n");
+        SaleDate = DateTime.ParseExact(substrings[9].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
+        SaleMileage = int.Parse(substrings[10].Trim());
+        SalePrice = double.Parse(substrings[11].Trim(), CultureInfo.InvariantCulture);
+
+        Comment = substrings[12].Trim().Replace("|", "\r\n");
         return this;
     }
 }
