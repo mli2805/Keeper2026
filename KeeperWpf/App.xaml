@@ -7,6 +7,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <keeperWpf:AppBootstrapper x:Key="Bootstrapper" />
+                    <keeperWpf:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
                 </ResourceDictionary>
                 <ResourceDictionary>
                     <HierarchicalDataTemplate x:Key="ComboBoxTreeViewDataTemplate" 

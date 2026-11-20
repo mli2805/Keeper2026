@@ -108,16 +108,18 @@ public sealed class BillMonthJsonStore
             throw new InvalidDataException("Некорректный формат месячного счета.");
     }
 
-    private sealed class BillJsonContractResolver : Newtonsoft.Json.Serialization.DefaultContractResolver
+   
+}
+
+public sealed class BillJsonContractResolver : Newtonsoft.Json.Serialization.DefaultContractResolver
+{
+    protected override Newtonsoft.Json.Serialization.JsonProperty CreateProperty(
+        System.Reflection.MemberInfo member, MemberSerialization memberSerialization)
     {
-        protected override Newtonsoft.Json.Serialization.JsonProperty CreateProperty(
-            System.Reflection.MemberInfo member, MemberSerialization memberSerialization)
-        {
-            var property = base.CreateProperty(member, memberSerialization);
-            if (member.DeclaringType == typeof(ParsedBillRow) &&
-                member.Name is nameof(ParsedBillRow.MonthBackground) or nameof(ParsedBillRow.Period) or nameof(ParsedBillRow.SourceFile))
-                property.Ignored = true;
-            return property;
-        }
+        var property = base.CreateProperty(member, memberSerialization);
+        if (member.DeclaringType == typeof(ParsedBillRow) &&
+            member.Name is nameof(ParsedBillRow.MonthBackground) or nameof(ParsedBillRow.Period) or nameof(ParsedBillRow.SourceFile))
+            property.Ignored = true;
+        return property;
     }
 }

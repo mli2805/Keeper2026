@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using KeeperInfrastructure;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,7 +7,8 @@ using System.Threading.Tasks;
 namespace KeeperWpf;
 
 [ExportViewModel]
-public class OneMonthReadingsViewModel : Screen
+public class OneMonthReadingsViewModel(KeeperDataModel dataModel, 
+    HouseholdRepository householdRepository) : Screen
 {
     public UtilityMetersModel UtilityMetersInWork { get; private set; } = null!;
 
@@ -15,9 +17,11 @@ public class OneMonthReadingsViewModel : Screen
         DisplayName = $"Показания за {UtilityMetersInWork.ReadingsDate : MMMM yyyy}";
     }
 
-    public void Initialize(UtilityMetersModel utilityMeters)
+    private bool _isReadingsJustCreated;
+    public void Initialize()
     {
-        UtilityMetersInWork = utilityMeters;
+        UtilityMetersInWork = dataModel.GetLastOrNew();
+        _isReadingsJustCreated = UtilityMetersInWork.Id == 0;
 
         UtilityMetersInWork.ColdWater.PropertyChanged += UtilityMeter_PropertyChanged;
         UtilityMetersInWork.HotWater.PropertyChanged += UtilityMeter_PropertyChanged;
@@ -38,6 +42,16 @@ public class OneMonthReadingsViewModel : Screen
 
     public async Task Save()
     {
+        if (_isReadingsJustCreated)
+        {
+            await householdRepository.UpdateUtilityMeters(UtilityMetersInWork);
+        }
+        else
+        {
+            var savedReadings = await householdRepository.AddUtilityMeters(UtilityMetersInWork);
+            dataModel.UtilityMeters.Add(savedReadings);
+        }
+
         await TryCloseAsync(true);
     }
 

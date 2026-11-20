@@ -35,6 +35,8 @@ public class UtilityMetersModel : PropertyChangedBase
         }
     }
 
+    public string ColdWaterStr => $"Хол.вода: {ColdWater.To:#,0.#} - {ColdWater.From:#,0.#} = {ColdWater.Volume:#,0.##} м³";
+
     private UtilityMeterModel _hotWater = new();
     public UtilityMeterModel HotWater
     {
@@ -49,6 +51,8 @@ public class UtilityMetersModel : PropertyChangedBase
         }
     }
 
+    public string HotWaterStr => $"Гор.вода: {HotWater.To:#,0.#} - {HotWater.From:#,0.#} = {HotWater.Volume:#,0.##} м³";
+
     private UtilityMeterModel _electricity = new();
     public UtilityMeterModel Electricity
     {
@@ -62,6 +66,8 @@ public class UtilityMetersModel : PropertyChangedBase
             }
         }
     }
+
+    public string ElectricityStr => $"Эл-во: {Electricity.To:#,0.#} - {Electricity.From:#,0.#} = {Electricity.Volume:#,0.##} кВт*ч";
 
     private decimal? _electricityPaymentAmount;
     public decimal? ElectricityPaymentAmount
@@ -100,6 +106,8 @@ public class UtilityMetersModel : PropertyChangedBase
             }
         }
     }
+
+    public string GasStr => $"Газ: {Gas.To:#,0.#} - {Gas.From:#,0.#} = {Gas.Volume:#,0.##} м³";
 
     private decimal? _gasPaymentAmount;
     public decimal? GasPaymentAmount

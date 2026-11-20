@@ -90,42 +90,32 @@ public class UtilityMetersViewModel(KeeperDataModel dataModel, IWindowManager wi
             await householdRepository.UpdateUtilityMeters(row);
     }
 
+    //деноминация
+    public async Task Fix()
+    {
+        foreach (var row in dataModel.UtilityMeters)
+        {
+            if (row.ReadingsDate < new DateTime(2016, 7, 1))
+                continue;
+
+            var elTariff = row.Electricity.Tariff.ToString("0");
+            while (elTariff.Length < 4)
+                elTariff += "0";
+            row.Electricity.Tariff = double.Parse(elTariff) / 10_000;
+
+            var gasTariff = row.Gas.Tariff.ToString("0");
+            while (gasTariff.Length < 4)
+                gasTariff += "0";
+            row.Gas.Tariff = double.Parse(gasTariff) / 10_000;
+        }
+        NotifyOfPropertyChange(nameof(Rows));
+        await Task.CompletedTask;
+    }
+
     public async Task AddCurrentMonth()
     {
-        UtilityMetersModel lastReadings = dataModel.UtilityMeters.Last();
-        var now = DateTime.Now;
-        var isCurrentMonth = lastReadings.ReadingsDate.Year == now.Year
-            && lastReadings.ReadingsDate.Month == now.Month;
-
-        UtilityMetersModel monthReadings;
-        if (isCurrentMonth)
-        {
-            monthReadings = lastReadings;
-        }
-        else
-        {
-            monthReadings = new UtilityMetersModel
-            {
-                ReadingsDate = now,
-            };
-            monthReadings.ColdWater.From = lastReadings.ColdWater.To;
-            monthReadings.HotWater.From = lastReadings.HotWater.To;
-            monthReadings.Electricity.From = lastReadings.Electricity.To;
-            monthReadings.Gas.From = lastReadings.Gas.To;
-        }
-
-        oneMonthReadingsViewModel.Initialize(monthReadings);
+        oneMonthReadingsViewModel.Initialize();
         if (await windowManager.ShowDialogAsync(oneMonthReadingsViewModel) != true) return;
-
-        if (isCurrentMonth)
-        {
-            await householdRepository.UpdateUtilityMeters(oneMonthReadingsViewModel.UtilityMetersInWork);
-        }
-        else
-        {
-            var savedReadings = await householdRepository.AddUtilityMeters(oneMonthReadingsViewModel.UtilityMetersInWork);
-            dataModel.UtilityMeters.Add(savedReadings);
-        }
 
         ApplyTransactionComments();
         NotifyOfPropertyChange(nameof(Rows));

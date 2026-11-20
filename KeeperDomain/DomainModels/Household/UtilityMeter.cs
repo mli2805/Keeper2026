@@ -11,7 +11,7 @@ public class UtilityMeter : IDumpable
 
     public string Dump()
     {
-        return From + " ; " + To + " ; " + Volume + " ; " + Tariff;
+        return From + " ; " + To + " ; " + Volume + " ; " + Tariff.ToString(CultureInfo.InvariantCulture);
     }
 
     public UtilityMeter FromString(string from, string to, string volume, string tariff = "0")

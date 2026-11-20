@@ -8,18 +8,22 @@ public class HouseholdPaymentTemplate
     public AccountItemModel Counterparty { get; set; }
     public AccountItemModel Category { get; set; }
 
-    public string Kor => BuildLine();
+    public string Kor => BuildLine(); // Кому - За что (Тег)
     public decimal Amount { get; set; }
+    public decimal AmountForecast { get; set; }
     public CurrencyCode Currency { get; set; } = CurrencyCode.BYN;
     public List<AccountItemModel> Tags { get; set; }
     public string Comment { get; set; }
 
     public HouseholdPaymentTemplate(AccountItemModel counterparty, AccountItemModel category,
-        List<AccountItemModel> tags, string comment = "")
+        decimal amount = 0m, decimal? amountForecast = null, 
+        List<AccountItemModel>? tags = null, string comment = "")
     {
         Counterparty = counterparty;
         Category = category;
-        Tags = tags;
+        Amount = amount;
+        AmountForecast = amountForecast ?? amount; // чтобы не писать 2 раза, когда совпадает с Amount
+        Tags = tags ?? new List<AccountItemModel>();
         Comment = comment;
     }
 

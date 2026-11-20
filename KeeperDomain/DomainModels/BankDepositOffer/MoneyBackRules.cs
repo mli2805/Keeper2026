@@ -35,7 +35,7 @@ public class MoneyBackRules : IDumpable, IParsable<MoneyBackRules>
                MaxMoneyBackAmount.DumpNullableDouble() + " ; " +
                MinMonthPurchasesAmount.DumpNullableDouble() + " ; " +
                MoneyBackWhen + " ; " +
-               Comment;
+               Comment.Replace("\r\n", "|");
     }
 
     public MoneyBackRules FromString(string s)
@@ -50,12 +50,8 @@ public class MoneyBackRules : IDumpable, IParsable<MoneyBackRules>
         MaxPurchaseAmount = substrings[6].ParseNullableDouble();
         MaxMoneyBackAmount = substrings[7].ParseNullableDouble();
         MinMonthPurchasesAmount = substrings[8].ParseNullableDouble();
-        MoneyBackWhen = substrings.Length > 10
-            ? Enum.Parse<MoneyBackWhen>(substrings[9].Trim())
-            : MoneyBackWhen.NextMonth;
-        Comment = substrings.Length > 10
-            ? substrings[10].Trim()
-            : substrings.Length > 9 ? substrings[9].Trim() : string.Empty;
+        MoneyBackWhen = Enum.Parse<MoneyBackWhen>(substrings[9].Trim());
+        Comment = substrings[10].Trim().Replace("|", "\r\n");
         return this;
     }
 

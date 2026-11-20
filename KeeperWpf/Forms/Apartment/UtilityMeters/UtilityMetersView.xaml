@@ -41,6 +41,12 @@
                      Width="180"
                      Height="28"
                      HorizontalAlignment="Center" />
+            <Button x:Name="Fix"
+                     Grid.Column="3"
+                     Content="Деноминация"
+                     Width="180"
+                     Height="28"
+                     HorizontalAlignment="Center" />
             <Button x:Name="AddCurrentMonth"
                      Grid.Column="4"
                     Content="Добавить текущий месяц"

@@ -155,11 +155,6 @@ public class TransactionsViewModel : Screen
         await _tranMoveExecutor.MoveSelected(TranMoveExecutor.Destination.Down);
     }
 
-    public async Task HouseholdTransactions()
-    {
-        await _tranEditExecutor.AddHouseholdTransactions();
-    }
-
     public async Task AddAfterSelected()
     {
         await _tranEditExecutor.AddAfterSelected();

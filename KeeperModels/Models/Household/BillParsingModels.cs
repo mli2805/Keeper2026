@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public sealed record ParsedBillRow(
     DateTime Period,

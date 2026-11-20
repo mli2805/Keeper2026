@@ -62,6 +62,8 @@ public sealed class AutofacWpf : Module
             return logFile;
         }).AsSelf().InstancePerLifetimeScope();
 
+        builder.RegisterType<HouseholdPaymentsFactory>().InstancePerLifetimeScope();
+
         // Register DbContext Initializer
         builder.RegisterType<KeeperDbContextInitializer>().AsSelf();
 

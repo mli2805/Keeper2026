@@ -71,6 +71,24 @@ public sealed class BillPdfParser
         }, cancellationToken);
     }
 
+    public static (List<ParsedBillRow> Rows, BillFooter Footer)? ParseOneFile(string filePath) 
+    {
+        var fileName = Path.GetFileName(filePath);
+        if (!TryGetPeriod(fileName, out var period))
+        {
+            return null;
+
+        }
+        try
+        {
+            return ParseFile(filePath, period);
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
     private static (List<ParsedBillRow> Rows, BillFooter Footer) ParseFile(string filePath, DateTime period)
     {
         using var document = PdfDocument.Open(filePath);

@@ -132,6 +132,17 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </MenuItem>
+                <Separator />
+                <MenuItem Background="White" BorderBrush="White">
+                    <MenuItem.Header>
+                        <TextBlock Text="Оплатить коммунальные"/>
+                    </MenuItem.Header>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <cal:ActionMessage MethodName="ShowHouseholdTransactionsForm"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </MenuItem>
             </MenuItem>
         </Menu>
 

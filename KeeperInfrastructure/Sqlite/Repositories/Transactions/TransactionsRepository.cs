@@ -16,12 +16,25 @@ public class TransactionsRepository(IDbContextFactory<KeeperDbContext> factory)
         return result;
     }
 
-    public async Task AddTransactions(List<TransactionModel> transactionModels)
+    public async Task<TransactionModel> AddTransaction(
+        TransactionModel transactionModel, Dictionary<int, AccountItemModel> acMoDict)
+    {
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
+        var transactionEf = transactionModel.ToEf();
+        await keeperDbContext.Transactions.AddAsync(transactionEf);
+        await keeperDbContext.SaveChangesAsync();
+        return transactionEf.FromEf(acMoDict);
+    }
+
+    public async Task<List<TransactionModel>> AddTransactions(
+        List<TransactionModel> transactionModels, Dictionary<int, AccountItemModel> acMoDict)
     {
         await using var keeperDbContext = await factory.CreateDbContextAsync();
         var transactionsEf = transactionModels.Select(tm => tm.ToEf()).ToList();
         await keeperDbContext.Transactions.AddRangeAsync(transactionsEf);
         await keeperDbContext.SaveChangesAsync();
+        var result = transactionsEf.Select(ef => ef.FromEf(acMoDict)).ToList();
+        return result;
     }
 
     public async Task UpdateTransaction(TransactionModel transactionModel)

@@ -5,9 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeeperWpf"
         mc:Ignorable="d"
-        Width="520"
-        SizeToContent="Height"
-        WindowStartupLocation="CenterScreen">
+        FontSize="14" SizeToContent="WidthAndHeight"  WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

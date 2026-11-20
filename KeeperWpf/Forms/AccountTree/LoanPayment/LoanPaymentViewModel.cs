@@ -138,8 +138,6 @@ public class LoanPaymentViewModel(KeeperDataModel dataModel, ComboTreesProvider 
                 TranInWork.MyAccount, TranInWork.MyAccount.BankAccount!.MainCurrency, TranInWork.Timestamp));
             NotifyOfPropertyChange(nameof(MyAccountBalanceStr));
         }
-
-       
     }
 
     private void MyDatePickerVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -153,7 +151,6 @@ public class LoanPaymentViewModel(KeeperDataModel dataModel, ComboTreesProvider 
 
     public async void Save()
     {
-        var id = dataModel.Transactions.Keys.Max() + 1;
         var thisDateTrans = dataModel.Transactions.Values
             .Where(t => t.Timestamp.Date == MyDatePickerVm.SelectedDate)
             .OrderBy(l => l.Timestamp)
@@ -161,23 +158,22 @@ public class LoanPaymentViewModel(KeeperDataModel dataModel, ComboTreesProvider 
         var timestamp = thisDateTrans?.Timestamp ?? MyDatePickerVm.SelectedDate;
 
         var categoryBody = 1145; // Погашение тела кредита
-        var tranModel1 = CreatePayment(id, timestamp.AddMinutes(1), _amountBody, categoryBody, Comment1);
-        dataModel.Transactions.Add(tranModel1.Id, tranModel1);
+        var tranModel1 = CreatePayment(timestamp.AddMinutes(1), _amountBody, categoryBody, Comment1);
         var categoryInterest = 1159; // Погашение процентов по кредиту
-        var tranModel2 = CreatePayment(id + 1, timestamp.AddMinutes(2), _amountInterest, categoryInterest, Comment2); 
-        dataModel.Transactions.Add(tranModel2.Id, tranModel2);
-        await transactionsRepository.AddTransactions(new List<TransactionModel>() { tranModel1, tranModel2 });
+        var tranModel2 = CreatePayment(timestamp.AddMinutes(2), _amountInterest, categoryInterest, Comment2); 
+        
+        var addedTransactions = await transactionsRepository.AddTransactions(new List<TransactionModel>() { tranModel1, tranModel2 }, dataModel.AcMoDict);
+        addedTransactions.ForEach(tr => dataModel.Transactions[tr.Id] = tr);
 
         shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now; // обновление балансов в дереве счетов
 
         await TryCloseAsync(true);
     }
 
-    private TransactionModel CreatePayment(int id, DateTime timestamp, decimal amount, int categoryId, string comment)
+    private TransactionModel CreatePayment(DateTime timestamp, decimal amount, int categoryId, string comment)
     {
         return new TransactionModel()
         {
-            Id = id,
             Timestamp = timestamp,
             Operation = OperationType.Расход,
             PaymentWay = PaymentWay.ОплатаПоЕрип,

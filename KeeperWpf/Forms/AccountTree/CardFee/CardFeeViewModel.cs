@@ -39,7 +39,6 @@ public class CardFeeViewModel(KeeperDataModel dataModel, ShellPartsBinder shellP
 
     public async void Save()
     {
-        var id = dataModel.Transactions.Keys.Max() + 1;
         var thisDateTrans = dataModel.Transactions.Values
             .Where(t => t.Timestamp.Date == MyDatePickerVm.SelectedDate)
             .OrderBy(l => l.Timestamp)
@@ -47,7 +46,6 @@ public class CardFeeViewModel(KeeperDataModel dataModel, ShellPartsBinder shellP
         var timestamp = thisDateTrans?.Timestamp ?? MyDatePickerVm.SelectedDate;
         var tranModel1 = new TransactionModel()
         {
-            Id = id,
             Timestamp = timestamp.AddMinutes(1),
             Operation = OperationType.Расход,
             MyAccount = _card,
@@ -58,8 +56,8 @@ public class CardFeeViewModel(KeeperDataModel dataModel, ShellPartsBinder shellP
             Tags = new List<AccountItemModel>(),
             Comment = Comment,
         };
-        dataModel.Transactions.Add(tranModel1.Id, tranModel1);
-        await transactionsRepository.AddTransactions(new List<TransactionModel>() { tranModel1 });
+        var tr = await transactionsRepository.AddTransaction(tranModel1, dataModel.AcMoDict);
+        dataModel.Transactions.Add(tr.Id, tr);
 
         shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
 

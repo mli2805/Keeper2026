@@ -4,61 +4,119 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:keeperWpf="clr-namespace:KeeperWpf"
-        mc:Ignorable="d" Width="520" Height="900" WindowStartupLocation="CenterScreen" 
-        Background="#FFFFF8F8"
+        mc:Ignorable="d" 
+        FontSize="14"
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" 
         >
-    <StackPanel Margin="10" >
-        <keeperWpf:AccNameSelectorView DataContext="{Binding MyAccNameSelectorVm}" 
-                                        Margin="10,0" HorizontalAlignment="Stretch"/>
-        <StackPanel Orientation="Horizontal">
-            <ComboBox ItemsSource="{Binding PaymentWays}" SelectedItem="{Binding SelectedPaymentWay, Mode=TwoWay}" 
-                   Width="190" HorizontalAlignment="Left" Margin="10,0,0,0" Height="22" IsEnabled="False"/>
-            <Label Content="{Binding MyAccountBalance}" Height="30" HorizontalAlignment="Left" Margin="50,0,0,0"/>
-        </StackPanel>
+    <Grid Margin="10" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="440"/>
+            <ColumnDefinition Width="560"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="0,0,10,0">
+            <StackPanel Margin="10">
+                <DockPanel Margin="0,20,0,2">
+                    <keeperWpf:DatePickerWithTriangles DataContext="{Binding MyDatePickerVm}" />
+                    <TextBlock DockPanel.Dock="Right" Text="Оплата по ЕРИП" Margin="0,0,30,0"/>
+                    <StackPanel></StackPanel>
+                </DockPanel>
 
-        <ItemsControl ItemsSource="{Binding PaymentTemplates}" Margin="10,20,10,0">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="0,2,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="50"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                <keeperWpf:AccNameSelectorView DataContext="{Binding MyAccNameSelectorVm}" Width="400"
+                                        Margin="0,10" HorizontalAlignment="Left"/>
+                <Label Content="{Binding MyAccountBalanceStr}" Height="30" HorizontalAlignment="Left" 
+                    Margin="250,-15,15,0" Foreground="Gray" FontSize="12"/>
 
-                        <CheckBox Grid.Column="0" IsChecked="{Binding IsOn, Mode=TwoWay}"
-                          VerticalAlignment="Center"
-                          Margin="0,0,10,0"/>
+                <Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="0,10,0,0" CornerRadius="4">
+                    <StackPanel>
+                        <TextBlock Text="Показания счетчиков" Margin="10,0,0,5"/>
+                        <TextBlock Text="{Binding UtilityMetersModel1.ColdWaterStr}" Margin="15,0,0,5"/>
+                        <TextBlock Text="{Binding UtilityMetersModel1.HotWaterStr}" Margin="15,0,0,5"/>
+                        <TextBlock Text="{Binding UtilityMetersModel1.ElectricityStr}" Margin="15,0,0,5"/>
+                        <TextBlock Text="{Binding UtilityMetersModel1.GasStr}" Margin="15,0,0,5"/>
+                        <Button Name="InputUtilityMeters" HorizontalAlignment="Right" 
+                                Content="Изменить" Height="28" Width="100" Margin="10,5"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="0,10,0,0" CornerRadius="4">
+                    <StackPanel>
+                        <TextBlock Text="Жировка" Margin="10,0,0,10"/>
 
-                        <keeperWpf:FlexibleNumericTextBox Grid.Column="1" Height="20" Width="70"
-                                                        BorderBrush="#555555" TextAlignment="Right" Foreground="Red"
-                                                        Value="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Text="{Binding BillTotal}" Margin="15,0,0,5"
+                                           Visibility="{Binding Bill, 
+                                            Converter={StaticResource NullToVisibilityConverter}}"/>
                         
-                        <TextBlock Grid.Column="2" Text="{Binding Currency}"/>
-                        <TextBlock Grid.Column="3" Text="{Binding Kor}"/>
 
-                        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Height="37">
-                            <TextBox Margin="0,4,0,0" Height="20" BorderBrush="#555555" 
-                                Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                    />
+                        <StackPanel HorizontalAlignment="Center"
+                                    Visibility="{Binding Bill, 
+                                        Converter={StaticResource NullToVisibilityConverter}, 
+                                        ConverterParameter=Invert}">
+                            <TextBlock Text="Файл с распаршенной жировкой не найден" 
+                                       HorizontalAlignment="Center"  Margin="0,5"/>
+                            <TextBlock Text="{Binding JsonFilePath}" Margin="0,5"/>
+                            <Button Name="LoadHouseholdBillPdf" Content="Загрузить PDF" Height="28" Width="100" Margin="10"/>
                         </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="0,10,0,0" CornerRadius="4">
+                    <StackPanel>
+                        <TextBlock Text="Прогноз по прошлому месяцу" Margin="10,0,0,10"/>
+                        <ItemsControl ItemsSource="{Binding PaymentTemplates}" Margin="20,0,0,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Category.Name}" Width="180"/>
+                                        <TextBlock Text="{Binding AmountForecast}" Width="40" TextAlignment="Right"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Text="{Binding ForecastTotal}" Margin="10,10,0,10"/>
 
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+        <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1">
+            <StackPanel Margin="10,20,10,20">
+                <ItemsControl ItemsSource="{Binding PaymentTemplates}" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,2,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-        <DockPanel Margin="10,20,0,2">
-            <keeperWpf:DatePickerWithTriangles DataContext="{Binding MyDatePickerVm}" />
-        </DockPanel>
+                                <CheckBox Grid.Column="0" IsChecked="{Binding IsOn, Mode=TwoWay}"
+                                VerticalAlignment="Center" Margin="0,0,10,0"/>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Name="Save" Content="Сохранить " Width="100" Height="22" />
-            <Button Name="Cancel" Content="Отменить" Width="100" Height="22" Margin="10,0"/>
-        </StackPanel>
-    </StackPanel>
+                                <keeperWpf:FlexibleNumericTextBox Grid.Column="1" Height="22" Width="70"
+                                                        BorderBrush="#555555" TextAlignment="Right"
+                                                        Value="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <TextBlock Grid.Column="2" Text="{Binding Currency}"/>
+                                <TextBlock Grid.Column="3" Text="{Binding Kor}"/>
+
+                                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Height="37">
+                                    <TextBox Margin="0,4,0,0" Height="22" BorderBrush="#555555" 
+                                    Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                    />
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                    <Button Name="SaveTransactions" Content="Сохранить " Width="100" Height="28"/>
+                    <Button Name="Cancel" Content="Отменить" Width="100" Height="28" Margin="10,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
 </Window>

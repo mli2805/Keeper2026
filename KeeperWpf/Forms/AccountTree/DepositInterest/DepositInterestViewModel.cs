@@ -136,7 +136,6 @@ public class DepositInterestViewModel(KeeperDataModel keeperDataModel, IWindowMa
             }
         }
 
-        var id = keeperDataModel.Transactions.Keys.Max() + 1;
         var thisDateTrans = keeperDataModel.Transactions.Values
             .Where(t => t.Timestamp.Date == MyDatePickerVm.SelectedDate)
             .OrderBy(l => l.Timestamp)
@@ -144,7 +143,6 @@ public class DepositInterestViewModel(KeeperDataModel keeperDataModel, IWindowMa
         var timestamp = thisDateTrans?.Timestamp ?? MyDatePickerVm.SelectedDate;
         var tranModel1 = new TransactionModel
         {
-            Id = id,
             Timestamp = timestamp.AddMinutes(1),
             Operation = OperationType.Доход,
             MyAccount = _accountItemModel,
@@ -155,14 +153,12 @@ public class DepositInterestViewModel(KeeperDataModel keeperDataModel, IWindowMa
             Tags = new List<AccountItemModel>(),
             Comment = Comment,
         };
-        keeperDataModel.Transactions.Add(tranModel1.Id, tranModel1);
-        await transactionsRepository.AddTransactions([tranModel1]);
+        var list = new List<TransactionModel> { tranModel1 };
 
         if (IsTransferred)
         {
             var tranModel2 = new TransactionModel()
             {
-                Id = id + 1,
                 Timestamp = timestamp.AddMinutes(2),
                 Operation = OperationType.Перенос,
                 MyAccount = _accountItemModel,
@@ -172,9 +168,10 @@ public class DepositInterestViewModel(KeeperDataModel keeperDataModel, IWindowMa
                 Tags = new List<AccountItemModel>(),
                 Comment = "",
             };
-            keeperDataModel.Transactions.Add(tranModel2.Id, tranModel2);
-            await transactionsRepository.AddTransactions([tranModel2]);
+            list.Add(tranModel2);
         }
+        var addedTransactions = await transactionsRepository.AddTransactions(list, keeperDataModel.AcMoDict);
+        addedTransactions.ForEach(t => keeperDataModel.Transactions.Add(t.Id, t));
 
         shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
 

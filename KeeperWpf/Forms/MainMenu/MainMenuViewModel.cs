@@ -17,7 +17,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     DepoCurrResultViewModel depoCurrResultViewModel,
     //
     MortgagePaymentsViewModel mortgagePaymentsViewModel, BillsParsingViewModel billsParsingViewModel,
-    UtilityMetersViewModel utilityMetersViewModel,
+    UtilityMetersViewModel utilityMetersViewModel, HouseholdTransactionsViewModel householdTransactionsViewModel, 
     CarsViewModel carsViewModel,
     OpenDepositsViewModel openDepositsViewModel, CardsAndAccountsViewModel cardsAndAccountsViewModel,
     // trust:
@@ -262,6 +262,12 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     public async Task ShowBillsParsingForm()
     {
         await windowManager.ShowDialogAsync(billsParsingViewModel);
+    }
+
+    public async Task ShowHouseholdTransactionsForm()
+    {
+        householdTransactionsViewModel.Initialize();
+        await windowManager.ShowDialogAsync(householdTransactionsViewModel);
     }
 
     public async Task ShowCarForm()
