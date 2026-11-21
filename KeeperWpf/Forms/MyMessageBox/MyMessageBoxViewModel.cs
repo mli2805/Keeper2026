@@ -28,13 +28,20 @@ public class MyMessageBoxViewModel : Screen
         CancelVisibility = messageType.ShouldCancelBeVisible();
     }
 
-    public MyMessageBoxViewModel(MessageType messageType, List<string> strs, int focusedString = Int32.MaxValue)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="messageType"></param>
+    /// <param name="strs"></param>
+    /// <param name="focusedString">Номер жирной строки, считая с 0. Если 777, то все жирные</param>
+    public MyMessageBoxViewModel(MessageType messageType, List<string> strs, int focusedString = 0)
     {
         Lines = strs.Select(s => new ListLine() {Line = s}).ToList();
-        if (focusedString == -1)
-            Lines.ForEach(l=>l.FontWeight = FontWeights.Bold);
-        else if (focusedString < Lines.Count)
+        
+        if (focusedString >= 0 && focusedString < Lines.Count)
             Lines[focusedString].FontWeight = FontWeights.Bold;
+        else if (focusedString == 777)
+            Lines.ForEach(l => l.FontWeight = FontWeights.Bold);
 
         _caption = messageType.GetLocalizedString();
         OkVisibility = messageType.ShouldOkBeVisible();
