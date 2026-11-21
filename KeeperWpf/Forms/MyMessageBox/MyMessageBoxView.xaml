@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:keeperWpf="clr-namespace:KeeperWpf"
         mc:Ignorable="d"
-        SizeToContent="WidthAndHeight" MaxWidth="630" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        SizeToContent="WidthAndHeight" MaxWidth="630" FontSize="14"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         d:DataContext="{d:DesignData MyMessageBoxViewModel}" Loaded="Window_Loaded">
     <StackPanel>
         <ItemsControl ItemsSource="{Binding Lines}" Margin="100,25,100,50">

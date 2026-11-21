@@ -3,6 +3,7 @@ using KeeperInfrastructure;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -34,7 +35,8 @@ public class HouseholdTransactionsViewModel(KeeperDataModel dataModel, PathFinde
     }
 
     private decimal _myAccountBalance;
-    public string MyAccountBalanceStr => $"{_myAccountBalance:#,0.00} -> {_myAccountBalance - TranInWork.Amount:#,0.00} ";
+    private decimal _payed;
+    public string MyAccountBalanceStr => $"{_myAccountBalance:#,0.00} -> {_myAccountBalance - _payed:#,0.00} ";
 
 
     public List<HouseholdPaymentTemplate> PaymentTemplates { get; set; } = null!;
@@ -73,9 +75,13 @@ public class HouseholdTransactionsViewModel(KeeperDataModel dataModel, PathFinde
 
         UtilityMetersModel1 = dataModel.GetLastOrNew();
         Bill = GetHouseholdBill();
-        BillTotal = $"К оплате: {(Bill?.Footer.TotalAccrued ?? 0):#,0.00} руб.";
+        BillTotal = $"К оплате: {(Bill?.Footer.TotalDue ?? 0):#,0.00} руб.";
         PaymentTemplates = householdPaymentsFactory
-            .Create(UtilityMetersModel1, PreviousPayments, Bill?.Footer.TotalAccrued ?? 0);
+            .Create(UtilityMetersModel1, PreviousPayments, Bill?.Footer.TotalDue ?? 0);
+        foreach (var template in PaymentTemplates)
+        {
+            template.PropertyChanged += Template_PropertyChanged;
+        }
         ForecastTotal = $"Итого: {PaymentTemplates.Sum(t => t.AmountForecast):#,0.00} руб.";
 
         comboTreesProvider.Initialize();
@@ -93,6 +99,15 @@ public class HouseholdTransactionsViewModel(KeeperDataModel dataModel, PathFinde
 
         MyDatePickerVm = new DatePickerWithTrianglesVm() { SelectedDate = TranInWork.Timestamp };
         MyDatePickerVm.PropertyChanged += MyDatePickerVm_PropertyChanged;
+    }
+
+    private void Template_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == "IsOn" || e.PropertyName == "Amount")
+        {
+            _payed = PaymentTemplates.Where(t => t.IsOn).Sum(t => t.Amount);
+            NotifyOfPropertyChange(nameof(MyAccountBalanceStr));
+        }
     }
 
     private BillMonthDocument? GetHouseholdBill()
@@ -204,6 +219,8 @@ public class HouseholdTransactionsViewModel(KeeperDataModel dataModel, PathFinde
         var timestamp = TranInWork.Timestamp;
         foreach (var template in PaymentTemplates.Where(t => t.IsOn))
         {
+            timestamp = timestamp.AddMinutes(1);
+          
             var tran = new TransactionModel();
             tran.Operation = OperationType.Расход;
             tran.PaymentWay = PaymentWay.ОплатаПоЕрип;
@@ -216,15 +233,22 @@ public class HouseholdTransactionsViewModel(KeeperDataModel dataModel, PathFinde
             tran.Tags = template.Tags;
             tran.Comment = template.Comment;
             result.Add(tran);
-
-            timestamp = timestamp.AddMinutes(1);
         }
         return result;
     }
 
     public async Task SaveTransactions()
     {
-        var vm = new MyMessageBoxViewModel(MessageType.Confirmation, new List<string> { "Сохранить транзакции?", "" });
+        if (!PaymentTemplates.Any(t => t.IsOn))
+        {
+            var vm1 = new MyMessageBoxViewModel(
+                MessageType.Error, new List<string> { "Не выбраны платежи для сохранения", "" });
+            await windowManager.ShowDialogAsync(vm1);
+            return;
+        }
+
+        var vm = new MyMessageBoxViewModel(
+            MessageType.Confirmation, new List<string> { "Сохранить транзакции?", "" });
         var result = await windowManager.ShowDialogAsync(vm);
         if (result != true) return;
 

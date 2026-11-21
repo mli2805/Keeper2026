@@ -59,7 +59,7 @@ public class OneTranViewModel : Screen
 
     public OneTranViewModel(IWindowManager windowManager, KeeperDataModel dataModel,
         ReceiptViewModel receiptViewModel, FuellingInputViewModel fuellingInputViewModel,
-        UniversalControlVm myIncomeControlVm, NewExpenseControlVm myNewExpenseControlVm, 
+        UniversalControlVm myIncomeControlVm, NewExpenseControlVm myNewExpenseControlVm,
         UniversalControlVm myTransferControlVm, UniversalControlVm myExchangeControlVm)
     {
         _windowManager = windowManager;
@@ -79,11 +79,6 @@ public class OneTranViewModel : Screen
         DisplayName = _caption;
     }
 
-    public TransactionModel GetTran()
-    {
-        return TranInWork;
-    }
-
     public void Init(TransactionModel tran, bool isAddMode)
     {
         ReceiptList = null;
@@ -93,7 +88,7 @@ public class OneTranViewModel : Screen
         _caption = isAddMode ? "Добавить" : "Изменить";
         OperationTypeViewModel.SelectedOperationType = tran.Operation;
         TranInWork = tran.Clone();
-            
+
         InitControls();
         SetControlVisibilities(TranInWork.Operation);
 
@@ -119,7 +114,7 @@ public class OneTranViewModel : Screen
         MyExchangeControlVm.SetTran(TranInWork);
         MyExchangeControlVm.IsAddMode = IsAddMode;
     }
-    
+
     private void SetControlVisibilities(OperationType opType)
     {
         MyIncomeControlVm.Visibility = opType == OperationType.Доход ? Visibility.Visible : Visibility.Collapsed;
@@ -172,7 +167,7 @@ public class OneTranViewModel : Screen
     private bool IsValid()
     {
         //if (ReceiptList == null && TranInWork.HasntGotCategoryTagThoughItShould()) return false;
-      
+
         if (TranInWork.Operation == OperationType.Расход && TranInWork.PaymentWay == PaymentWay.НеЗадано)
         {
             MessageBox.Show("Не задан способ оплаты!", "Ошибка!");
@@ -266,7 +261,7 @@ public class OneTranViewModel : Screen
             Category = thisCarFuel,
             Amount = vm.Amount,
             Currency = vm.Currency,
-            Tags = new List<AccountItemModel>(){ _dataModel.AcMoDict[1066]},
+            Tags = new List<AccountItemModel>() { _dataModel.AcMoDict[1066] },
             Comment = $"{vm.Volume} л {vm.FuelType} ({vm.Comment})",
         };
     }

@@ -6,8 +6,9 @@ public static class TranExtentions
     {
         return new TransactionModel
         {
-            Id = tran.Id,
+            Id = 0,
             Timestamp = tran.Timestamp,
+            Receipt = 0,
             Operation = tran.Operation,
             PaymentWay = tran.PaymentWay,
             MyAccount = tran.MyAccount,
@@ -27,6 +28,7 @@ public static class TranExtentions
     {
         destinationTran.Id = tran.Id;
         destinationTran.Timestamp = tran.Timestamp;
+        destinationTran.Receipt = tran.Receipt; 
         destinationTran.Operation = tran.Operation;
         destinationTran.PaymentWay = tran.PaymentWay;
         destinationTran.MyAccount = tran.MyAccount;

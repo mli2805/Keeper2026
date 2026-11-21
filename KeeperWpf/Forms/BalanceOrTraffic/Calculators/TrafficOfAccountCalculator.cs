@@ -85,7 +85,6 @@ public class TrafficOfAccountCalculator : ITraffic
         }
     }
 
-
     private void RegisterIncome(TransactionModel tran)
     {
         if (tran.MyAccount.Id != _accountItemModel.Id) return;

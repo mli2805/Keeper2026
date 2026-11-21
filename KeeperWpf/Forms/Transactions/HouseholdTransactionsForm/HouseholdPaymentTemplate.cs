@@ -1,22 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using Caliburn.Micro;
+using System.Collections.Generic;
 
 namespace KeeperWpf;
 
-public class HouseholdPaymentTemplate
+public class HouseholdPaymentTemplate : PropertyChangedBase
 {
-    public bool IsOn { get; set; } = true;
+    private bool _isOn = false;
+    public bool IsOn { get => _isOn; set { _isOn = value; NotifyOfPropertyChange(() => IsOn); } }
     public AccountItemModel Counterparty { get; set; }
     public AccountItemModel Category { get; set; }
 
     public string Kor => BuildLine(); // Кому - За что (Тег)
-    public decimal Amount { get; set; }
+    
+    private decimal _amount;
+    public decimal Amount { get => _amount; set { _amount = value; NotifyOfPropertyChange(() => Amount); } }
     public decimal AmountForecast { get; set; }
     public CurrencyCode Currency { get; set; } = CurrencyCode.BYN;
     public List<AccountItemModel> Tags { get; set; }
     public string Comment { get; set; }
 
     public HouseholdPaymentTemplate(AccountItemModel counterparty, AccountItemModel category,
-        decimal amount = 0m, decimal? amountForecast = null, 
+        decimal amount = 0m, decimal? amountForecast = null,
         List<AccountItemModel>? tags = null, string comment = "")
     {
         Counterparty = counterparty;

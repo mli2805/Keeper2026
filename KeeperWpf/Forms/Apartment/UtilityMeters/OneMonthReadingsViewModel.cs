@@ -44,12 +44,12 @@ public class OneMonthReadingsViewModel(KeeperDataModel dataModel,
     {
         if (_isReadingsJustCreated)
         {
-            await householdRepository.UpdateUtilityMeters(UtilityMetersInWork);
+            var savedReadings = await householdRepository.AddUtilityMeters(UtilityMetersInWork);
+            dataModel.UtilityMeters.Add(savedReadings);
         }
         else
         {
-            var savedReadings = await householdRepository.AddUtilityMeters(UtilityMetersInWork);
-            dataModel.UtilityMeters.Add(savedReadings);
+            await householdRepository.UpdateUtilityMeters(UtilityMetersInWork);
         }
 
         await TryCloseAsync(true);
