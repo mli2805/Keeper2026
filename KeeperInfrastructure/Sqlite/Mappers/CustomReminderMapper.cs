@@ -12,7 +12,6 @@ public static class CustomReminderMapper
         CustomReminderEf entity = new()
         {
             Id = model.Id,
-            Enabled = model.Enabled,
             TriggerDate = model.TriggerDate,
             Every = model.Every.Dump(false),
             Memo = model.Memo
@@ -25,7 +24,6 @@ public static class CustomReminderMapper
         CustomReminderEf entity = new()
         {
             Id = item.Id,
-            Enabled = item.Enabled,
             TriggerDate = item.TriggerDate,
             Every = item.Every.Dump(false),
             Memo = item.Memo
@@ -40,7 +38,6 @@ public static class CustomReminderMapper
         return new CustomReminderModel
         {
             Id = ef.Id,
-            Enabled = ef.Enabled,
             TriggerDate = ef.TriggerDate,
             Every = new Duration().FromString(ef.Every),
             Memo = ef.Memo
@@ -52,7 +49,6 @@ public static class CustomReminderMapper
         return new CustomReminder
         {
             Id = model.Id,
-            Enabled = model.Enabled,
             TriggerDate = model.TriggerDate,
             Every = model.Every,
             Memo = model.Memo

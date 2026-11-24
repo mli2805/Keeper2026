@@ -5,7 +5,6 @@ namespace KeeperModels;
 public class CustomReminderModel
 {
     public int Id { get; set; }
-    public bool Enabled { get; set; } = true; // если выключено, то колокольчик не подсветится, но напоминание останется в списке
 
     public DateTime TriggerDate { get; set; } = DateTime.Now.Date; // когда сработает напоминание (подсветится колокольчик)
     public Duration Every { get; set; } = new Duration(1, Durations.Years); // сколько добавить к дате сработки, если не одноразовое напоминание
@@ -19,7 +18,7 @@ public class CustomReminderModel
     public bool IsOnce { get; set; }
     public bool IsRepeated { get; set; }
     
-    public bool IsTimeToTrigger => Enabled && TriggerDate.Date <= DateTime.Now.Date;
+    public bool IsTimeToTrigger => TriggerDate.Date <= DateTime.Now.Date;
 
     public CustomReminderModel ShallowCopy()
     {

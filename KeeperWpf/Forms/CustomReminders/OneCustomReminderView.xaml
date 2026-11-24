@@ -4,35 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeeperWpf" 
-        mc:Ignorable="d"
-        Width="350" SizeToContent="Height" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" FontSize="14"
+        Width="450" SizeToContent="Height" WindowStartupLocation="CenterOwner"
         d:DataContext="{d:DesignInstance Type=local:OneCustomReminderViewModel}">
     <StackPanel>
         <StackPanel>
-            <DockPanel Margin="5,5,5,0" Background="AliceBlue">
-                    <DockPanel Height="32">
-                        <TextBlock Text="Включено" FontSize="14" Margin="10,8,5,5" HorizontalAlignment="Left"/>
-                        <CheckBox IsChecked="{Binding CustomReminderInWork.Enabled}" Margin="0, 0, 20, 0"
-                                  HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <CheckBox.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleX="1.25" ScaleY="1.25"/>
-                                </TransformGroup>
-                            </CheckBox.RenderTransform>
-                        </CheckBox>
-                    </DockPanel>
-            </DockPanel>
-            <TextBox Text="{Binding CustomReminderInWork.Memo}" TextWrapping="Wrap" AcceptsReturn="True" Margin="5,5,5,0" Height="60"/>
-            <StackPanel Background="AliceBlue" Margin="5,5,5,2" Orientation="Horizontal">
+            <TextBox Text="{Binding CustomReminderInWork.Memo}" TextWrapping="Wrap" 
+                     AcceptsReturn="True" Margin="5,10,5,0" Height="100"/>
+            <StackPanel  Margin="5,5,5,2" Orientation="Horizontal">
                 <TextBlock Text="Напомнить " Margin="15,0, 0,0" VerticalAlignment="Center"></TextBlock>
                 <DatePicker SelectedDate="{Binding CustomReminderInWork.TriggerDate}" Margin="5, 5,5,5"  Width="120" HorizontalAlignment="Left"  />
             </StackPanel>
             <DockPanel>
-                    <DockPanel DockPanel.Dock="Top" Background="AliceBlue" Margin="5,0">
+                    <DockPanel DockPanel.Dock="Top"  Margin="5,0">
                         <RadioButton GroupName="RepeatType"  IsChecked="{Binding CustomReminderInWork.IsOnce}" Margin="10,8,5,5" HorizontalAlignment="Left"/>
                         <TextBlock Text="Разовое событие" Margin="5,8,5,5" HorizontalAlignment="Left"/>
                     </DockPanel>
-                    <StackPanel Margin="5,2,5,0" Background="AliceBlue">
+                    <StackPanel Margin="5,2,5,0" >
                         <DockPanel>
                             <RadioButton GroupName="RepeatType"  IsChecked="{Binding CustomReminderInWork.IsRepeated}" Margin="10,8,5,5" HorizontalAlignment="Left"/>
                             <TextBlock Text="Повторять каждые" Margin="5,8,5,5" HorizontalAlignment="Left"/>
