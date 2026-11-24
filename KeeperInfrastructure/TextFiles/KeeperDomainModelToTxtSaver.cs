@@ -5,11 +5,11 @@ using KeeperDomain;
 
 namespace KeeperInfrastructure;
 
-public class ToTxtSaver
+public class KeeperDomainModelToTxtSaver
 {
     private string _backupFolder;
 
-    public ToTxtSaver(PathFinder pathFinder)
+    public KeeperDomainModelToTxtSaver(PathFinder pathFinder)
     {
         var dataFolderPath = pathFinder.GetDataFolder();
         _backupFolder = Path.Combine(dataFolderPath, "backup");

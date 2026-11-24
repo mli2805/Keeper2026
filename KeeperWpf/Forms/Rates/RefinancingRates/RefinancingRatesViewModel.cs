@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using Caliburn.Micro;
-using KeeperInfrastructure;
 
 namespace KeeperWpf;
 

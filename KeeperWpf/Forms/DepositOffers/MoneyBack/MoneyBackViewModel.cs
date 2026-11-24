@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using KeeperInfrastructure;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;

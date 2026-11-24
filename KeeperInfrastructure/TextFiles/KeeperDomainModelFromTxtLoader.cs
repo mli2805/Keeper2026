@@ -3,7 +3,7 @@ using System.IO;
 
 namespace KeeperInfrastructure;
 
-public static class TxtLoader
+public static class KeeperDomainModelFromTxtLoader
 {
     private static string _backupFolder = null!;
 

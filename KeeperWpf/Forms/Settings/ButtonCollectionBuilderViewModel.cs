@@ -1,7 +1,6 @@
 ﻿// Ignore Spelling: Acc
 
 using Caliburn.Micro;
-using KeeperInfrastructure;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KeeperInfrastructure\KeeperInfrastructure.csproj" />
+    <ProjectReference Include="..\KeeperModels\KeeperModels.csproj" />
     <ProjectReference Include="..\KeeperWpf\KeeperWpf.csproj" />
   </ItemGroup>
 

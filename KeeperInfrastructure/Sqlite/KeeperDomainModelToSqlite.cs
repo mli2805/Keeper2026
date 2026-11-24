@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-public class ToSqlite(IDbContextFactory<KeeperDbContext> factory)
+public class KeeperDomainModelToSqlite(IDbContextFactory<KeeperDbContext> factory)
 {
     // данные, вычитанные из текстовых файлов, сохраняем в БД SQLite
     public async Task SaveModelToDb(KeeperDomainModel keeperDomainModel)

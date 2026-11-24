@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using KeeperInfrastructure;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;

@@ -1,12 +1,10 @@
-﻿using KeeperInfrastructure;
-using System.Collections.Generic;
-using System.Linq;
+﻿using KeeperDomain;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
-public static class ToKeeperDomain
+public static class KeeperDataToKeeperDomain
 {
-    public static KeeperDomainModel From(this KeeperDataModel keeperDataModel)
+    public static KeeperDomainModel FromModel(this KeeperDataModel keeperDataModel)
     {
         var accountPlaneList = keeperDataModel.FlattenAccountTree();
         var bankAccounts = keeperDataModel.AcMoDict.Values

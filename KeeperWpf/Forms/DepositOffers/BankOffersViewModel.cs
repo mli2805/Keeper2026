@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using Caliburn.Micro;
-using KeeperInfrastructure;
 
 namespace KeeperWpf;
 

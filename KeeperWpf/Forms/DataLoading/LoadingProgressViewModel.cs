@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using KeeperInfrastructure;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,7 +7,7 @@ using System.Windows;
 namespace KeeperWpf;
 
 [ExportViewModel(ViewModelLifetime.SingleInstance)]
-public class LoadingProgressViewModel(PathFinder pathFinder, ToSqlite toSqlite) : Screen
+public class LoadingProgressViewModel(PathFinder pathFinder, KeeperDomainModelToSqlite toSqlite) : Screen
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
@@ -51,7 +50,7 @@ public class LoadingProgressViewModel(PathFinder pathFinder, ToSqlite toSqlite) 
         KeeperDomainModel? keeperDomainModel;
         try
         {
-            keeperDomainModel = await TxtLoader.LoadAllFromTextFiles(backupFolder);
+            keeperDomainModel = await KeeperDomainModelFromTxtLoader.LoadAllFromTextFiles(backupFolder);
             if (keeperDomainModel is null)
             {
                 MessageBox.Show("Ошибка при загрузке данных из текстовых файлов.");

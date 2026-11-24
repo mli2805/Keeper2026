@@ -43,15 +43,4 @@ public static class CustomReminderMapper
             Memo = ef.Memo
         };
     }
-
-    public static CustomReminder FromModel(this CustomReminderModel model)
-    {
-        return new CustomReminder
-        {
-            Id = model.Id,
-            TriggerDate = model.TriggerDate,
-            Every = model.Every,
-            Memo = model.Memo
-        };
-    }
 }

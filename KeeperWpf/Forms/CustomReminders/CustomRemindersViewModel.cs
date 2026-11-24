@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using KeeperInfrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 

@@ -47,20 +47,6 @@ public static class BankAccountMemoMapper
         };
     }
 
-    public static BankAccountMemo FromModel(this BankAccountMemoModel model)
-    {
-        return new BankAccountMemo
-        {
-            Id = model.Id,
-            AccountId = model.Account.Id,
-            BalanceLess = model.BalanceLess.IsOn ? model.BalanceLess.LimitValue : null,
-            BalanceMore = model.BalanceMore.IsOn ? model.BalanceMore.LimitValue : null,
-            PaymentsLess = model.PaymentsLess.IsOn ? model.PaymentsLess.LimitValue : null,
-            PaymentsMore = model.PaymentsMore.IsOn ? model.PaymentsMore.LimitValue : null,
-            Comment = model.Comment
-        };
-    }
-
     public static BankAccountMemoEf ToEf(this BankAccountMemoModel model)
     {
         return new BankAccountMemoEf()

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Caliburn.Micro;
 
-namespace KeeperWpf;
+using KeeperDomain;
+
+namespace KeeperModels;
 
 public class KeeperDataModel : PropertyChangedBase
 {

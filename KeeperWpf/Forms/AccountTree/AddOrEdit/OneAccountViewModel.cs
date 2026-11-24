@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
-using KeeperInfrastructure;
 
 namespace KeeperWpf;
 

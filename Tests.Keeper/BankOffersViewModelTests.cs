@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using KeeperInfrastructure;
+using KeeperModels;
 using KeeperWpf;
 using Moq;
 

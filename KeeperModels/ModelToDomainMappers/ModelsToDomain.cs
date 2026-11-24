@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using KeeperDomain;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public static class ModelsToDomain
 {
@@ -296,6 +294,31 @@ public static class ModelsToDomain
             CompletedAt = model.CompletedAt,
             Importance = model.Importance,
             Category = model.Category,
+        };
+    }
+
+    public static BankAccountMemo FromModel(this BankAccountMemoModel model)
+    {
+        return new BankAccountMemo
+        {
+            Id = model.Id,
+            AccountId = model.Account.Id,
+            BalanceLess = model.BalanceLess.IsOn ? model.BalanceLess.LimitValue : null,
+            BalanceMore = model.BalanceMore.IsOn ? model.BalanceMore.LimitValue : null,
+            PaymentsLess = model.PaymentsLess.IsOn ? model.PaymentsLess.LimitValue : null,
+            PaymentsMore = model.PaymentsMore.IsOn ? model.PaymentsMore.LimitValue : null,
+            Comment = model.Comment
+        };
+    }
+
+    public static CustomReminder FromModel(this CustomReminderModel model)
+    {
+        return new CustomReminder
+        {
+            Id = model.Id,
+            TriggerDate = model.TriggerDate,
+            Every = model.Every,
+            Memo = model.Memo
         };
     }
 

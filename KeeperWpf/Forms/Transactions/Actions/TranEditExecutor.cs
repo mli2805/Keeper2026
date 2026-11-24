@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
-using KeeperInfrastructure;
-using MigraDoc.DocumentObjectModel.Tables;
 
 namespace KeeperWpf;
 

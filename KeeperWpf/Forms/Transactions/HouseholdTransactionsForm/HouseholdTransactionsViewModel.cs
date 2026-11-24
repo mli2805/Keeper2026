@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using KeeperInfrastructure;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;

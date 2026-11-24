@@ -28,7 +28,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     BankAccountMemoViewModel bankAccountMemoViewModel, CustomRemindersViewModel customReminderViewModel,
     LargeExpenseThresholdViewModel largeExpenseThresholdViewModel,
     ToDoViewModel toDoViewModel, NotesViewModel notesViewModel,
-    ButtonCollectionBuilderViewModel buttonCollectionBuilderViewModel, ToTxtSaver toTxtSaver)
+    ButtonCollectionBuilderViewModel buttonCollectionBuilderViewModel, KeeperDomainModelToTxtSaver toTxtSaver)
     : PropertyChangedBase
 {
 
@@ -375,7 +375,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         shellPartsBinder.FooterVisibility = Visibility.Visible;
         try
         {
-            var keeperModel = keeperDataModel.From();
+            var keeperModel = keeperDataModel.FromModel();
             var exception = await toTxtSaver.Save(keeperModel);
             if (exception != null)
             {
