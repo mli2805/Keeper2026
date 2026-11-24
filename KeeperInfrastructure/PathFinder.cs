@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using System;
 using System.IO;
 
-namespace KeeperWpf;
+namespace KeeperInfrastructure;
 
 public class PathFinder(IMemoryCache memoryCache)
 {

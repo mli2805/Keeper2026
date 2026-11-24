@@ -1,81 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using KeeperDomain;
 
-namespace KeeperWpf;
+namespace KeeperInfrastructure;
 
 public class ToTxtSaver
 {
     private string _backupFolder;
-    private readonly KeeperDataModel _keeperDataModel;
 
-    public ToTxtSaver(PathFinder pathFinder, KeeperDataModel keeperDataModel)
+    public ToTxtSaver(PathFinder pathFinder)
     {
         var dataFolderPath = pathFinder.GetDataFolder();
         _backupFolder = Path.Combine(dataFolderPath, "backup");
-        _keeperDataModel = keeperDataModel;
     }
 
-    public async Task<Exception?> Save()
+    public async Task<Exception?> Save(KeeperDomainModel keeperDomainModel)
     {
-        var keeperModel = _keeperDataModel.From();
-        return await Task.Factory.StartNew(() => SaveTxtFiles(keeperModel));
+        return await Task.Factory.StartNew(() => SaveTxtFiles(keeperDomainModel));
     }
 
-    private Exception? SaveTxtFiles(KeeperDomainModel keeperModel)
+    private Exception? SaveTxtFiles(KeeperDomainModel keeperDomainModel)
     {
         try
         {
-            WriteFileLines(keeperModel.OfficialRates);
-            WriteFileLines(keeperModel.ExchangeRates);
-            WriteFileLines(keeperModel.MetalRates);
-            WriteFileLines(keeperModel.RefinancingRates);
+            WriteFileLines(keeperDomainModel.OfficialRates);
+            WriteFileLines(keeperDomainModel.ExchangeRates);
+            WriteFileLines(keeperDomainModel.MetalRates);
+            WriteFileLines(keeperDomainModel.RefinancingRates);
 
-            WriteFileLines(keeperModel.TrustAssets);
-            WriteFileLines(keeperModel.TrustAssetRates);
-            WriteFileLines(keeperModel.TrustAccounts);
-            WriteFileLines(keeperModel.TrustTransactions);
+            WriteFileLines(keeperDomainModel.TrustAssets);
+            WriteFileLines(keeperDomainModel.TrustAssetRates);
+            WriteFileLines(keeperDomainModel.TrustAccounts);
+            WriteFileLines(keeperDomainModel.TrustTransactions);
 
 
-            File.WriteAllLines(Path.Combine(_backupFolder, "Accounts.txt"), DumpWithOffsets(keeperModel.AccountPlaneList));
-            WriteFileLines(keeperModel.BankAccounts);
-            WriteFileLines(keeperModel.Deposits);
-            WriteFileLines(keeperModel.PayCards);
+            File.WriteAllLines(Path.Combine(_backupFolder, "Accounts.txt"), DumpWithOffsets(keeperDomainModel.AccountPlaneList));
+            WriteFileLines(keeperDomainModel.BankAccounts);
+            WriteFileLines(keeperDomainModel.Deposits);
+            WriteFileLines(keeperDomainModel.PayCards);
 
-            var transactions = keeperModel.Transactions
+            var transactions = keeperDomainModel.Transactions
                 .OrderBy(t => t.Timestamp)
                 .Select(l => l.Dump());
             WriteTransactionsContent(Path.Combine(_backupFolder, "Transactions.txt"), transactions);
 
-            WriteFileLines(keeperModel.Fuellings);
+            WriteFileLines(keeperDomainModel.Fuellings);
 
-            WriteFileLines(keeperModel.DepositOffers);
-            WriteFileLines(keeperModel.DepositRateLines);
-            WriteFileLines(keeperModel.DepositConditions);
-            WriteFileLines(keeperModel.MoneyBackRules);
-            WriteFileLines(keeperModel.MoneyBackCategories);
-            WriteFileLines(keeperModel.MoneyBackPartners);
+            WriteFileLines(keeperDomainModel.DepositOffers);
+            WriteFileLines(keeperDomainModel.DepositRateLines);
+            WriteFileLines(keeperDomainModel.DepositConditions);
+            WriteFileLines(keeperDomainModel.MoneyBackRules);
+            WriteFileLines(keeperDomainModel.MoneyBackCategories);
+            WriteFileLines(keeperDomainModel.MoneyBackPartners);
 
-            WriteFileLines(keeperModel.Cars);
-            WriteFileLines(keeperModel.CarYearMileages);
-            WriteFileLines(keeperModel.UtilityMeters);
-            WriteFileLines(keeperModel.TodoTasks);
-            WriteFileLines(keeperModel.TodoSubtasks);
+            WriteFileLines(keeperDomainModel.Cars);
+            WriteFileLines(keeperDomainModel.CarYearMileages);
+            WriteFileLines(keeperDomainModel.UtilityMeters);
+            WriteFileLines(keeperDomainModel.TodoTasks);
+            WriteFileLines(keeperDomainModel.TodoSubtasks);
 
-            WriteFileLines(keeperModel.CardBalanceMemos, Path.Combine(_backupFolder, "MemosCardBalance.txt"));
-            WriteFileLines(keeperModel.BankAccountMemos);
+            WriteFileLines(keeperDomainModel.CardBalanceMemos, Path.Combine(_backupFolder, "MemosCardBalance.txt"));
+            WriteFileLines(keeperDomainModel.BankAccountMemos);
 
-            WriteFileLines(keeperModel.CustomReminders);
-            WriteFileLines(keeperModel.ButtonCollections);
-            WriteFileLines(keeperModel.SalaryChanges);
-            WriteFileLines(keeperModel.SalaryPayments);
-            WriteFileLines(keeperModel.LargeExpenseThresholds);
-
-
+            WriteFileLines(keeperDomainModel.CustomReminders);
+            WriteFileLines(keeperDomainModel.ButtonCollections);
+            WriteFileLines(keeperDomainModel.SalaryChanges);
+            WriteFileLines(keeperDomainModel.SalaryPayments);
+            WriteFileLines(keeperDomainModel.LargeExpenseThresholds);
 
             return null;
         }

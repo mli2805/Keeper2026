@@ -375,7 +375,8 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         shellPartsBinder.FooterVisibility = Visibility.Visible;
         try
         {
-            var exception = await toTxtSaver.Save();
+            var keeperModel = keeperDataModel.From();
+            var exception = await toTxtSaver.Save(keeperModel);
             if (exception != null)
             {
                 MessageBox.Show("Ошибка при сохранении резервной копии в текстовые файлы: " + exception.Message);

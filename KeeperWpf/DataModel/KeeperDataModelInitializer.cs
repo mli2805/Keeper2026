@@ -1,5 +1,4 @@
-﻿using KeeperInfrastructure;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,8 @@ namespace KeeperWpf;
 /// <summary>
 /// Модели с которыми работает WPF приложение находятся в отдельном проекте KeeperModels (wpf class library)
 /// EF entities + DbContext + Repositories в проекте KeeperInfrastructure
-/// Мапперы ToEf/FromEf для сущностей в KeeperDomain (старая программа и бэкап)  в проекте KeeperInfrastructure/Sqlite/Mappers
+/// Мапперы ToEf/FromEf для сущностей в KeeperDomain (старая программа и бэкап)  
+/// в проекте KeeperInfrastructure/Sqlite/Mappers
 /// Мапперы из EF entities в модели зашиты в методы репозиториев в проекте KeeperInfrastructure
 /// 
 /// Здесь вызываем методы репозиториев для загрузки данных из БД в общую модель KeeperDataModel

@@ -9,13 +9,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Sqlite\Scripts\**" />
-	  <EmbeddedResource Remove="Sqlite\Scripts\**" />
-	  <None Remove="Sqlite\Scripts\**" />
-	  <Page Remove="Sqlite\Scripts\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.2" />
 		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.12" />
@@ -24,11 +17,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\KeeperDomain\KeeperDomain.csproj" />
 		<ProjectReference Include="..\KeeperModels\KeeperModels.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Sqlite\Migrations\" />
-	  <Folder Include="Sqlite\Scripts\" />
 	</ItemGroup>
 
 </Project>
