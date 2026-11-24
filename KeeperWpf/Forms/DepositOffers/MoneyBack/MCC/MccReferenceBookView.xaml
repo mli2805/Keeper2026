@@ -11,8 +11,11 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" Margin="5" Height="24" Width="300" HorizontalAlignment="Left" VerticalAlignment="Center"
-                 ToolTip="Введите текст для фильтрации по коду, названию или описанию"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
+            <TextBlock Text="Фильтр по коду или тексту: " VerticalAlignment="Center" Margin="5,0"/>
+            <TextBox Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" Margin="5" Height="24" Width="300" HorizontalAlignment="Left" VerticalAlignment="Center"
+                     ToolTip="Введите текст для фильтрации по коду, названию или описанию"/>    
+        </StackPanel>
         <local:MyDataGrid Grid.Row="1" ItemsSource="{Binding RowsFiltered}" AutoGenerateColumns="False" IsReadOnly="True">
             <local:MyDataGrid.Columns>
                 <local:DgCenterAlignedColumn Header="MCC" Width="60" Binding="{Binding Code}"/>
