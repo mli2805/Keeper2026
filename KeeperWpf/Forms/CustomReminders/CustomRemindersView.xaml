@@ -5,29 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeeperWpf"
         xmlns:cal="http://www.caliburnproject.org"
-        mc:Ignorable="d"
+        mc:Ignorable="d" FontSize="14"
         Height="450" Width="800" WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance local:CustomRemindersViewModel}">
     <DockPanel>
-        <DockPanel DockPanel.Dock="Bottom">
-            <Button Content="Add" Name="AddReminder" Height="24" Width="60" HorizontalAlignment="Left" Margin="10,5, 0, 5"/>
-            <Button Content="Close" Name="CloseView" Height="24" Width="60" HorizontalAlignment="Right" Margin="0,5, 10,5"/>
-        </DockPanel>
         <DataGrid ItemsSource="{Binding CustomReminders}" 
                   SelectedItem="{Binding SelectedCustomReminder}"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False"
-                  IsReadOnly="True"
-                  GridLinesVisibility="Horizontal"
-                  HorizontalGridLinesBrush="AliceBlue">
+                  cal:Message.Attach="[Event MouseDoubleClick] = [Action EditReminder]"
+                  AutoGenerateColumns="False" CanUserAddRows="False"  IsReadOnly="True"
+                  GridLinesVisibility="All"
+                  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray"
+                  Margin="5,0,5,5">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Изменить (DoubleClick)" cal:Message.Attach="[Event Click] = [Action EditReminder]"
+                      BorderBrush="{x:Null}" Background="White" />
+                    <MenuItem Header="Удалить (Ctrl+Del)"
+                      cal:Message.Attach="[Event Click] = [Action DeleteReminder]"
+                      BorderBrush="{x:Null}" Background="White" />
+                    <MenuItem Header="Вставить (Insert)"
+                      cal:Message.Attach="[Event Click] = [Action AddReminder]"
+                      BorderBrush="{x:Null}" Background="White" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsTimeToTrigger}" Value="True">
                             <Setter Property="Background" Value="#FFDDEE"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True">
-                            <Setter Property="FontWeight" Value="Bold"/>
                         </DataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
@@ -41,7 +46,7 @@
                                 <Condition Binding="{Binding IsTimeToTrigger}" Value="False"/>
                                 <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter Property="Background" Value="Aqua"/>
+                            <Setter Property="Background" Value="#B6E6FF"/>
                         </MultiDataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -58,24 +63,16 @@
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Header="Вкл." Binding="{Binding Enabled}" Width="50"/>
-                <DataGridTextColumn Header="Дата" Binding="{Binding TriggerDate, StringFormat=dd.MM.yyyy}" Width="100"/>
-                <DataGridTextColumn Header="Период" Binding="{Binding EveryStr}" Width="100"/>
-                <DataGridTextColumn Header="Заметка" Binding="{Binding Memo}" Width="*"/>
-                <DataGridTemplateColumn Header="Действия" Width="100">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="✏️" Width="30" Margin="2" 
-                                        cal:Message.Attach="[Event Click] = [Action EditReminder]"
-                                        ToolTip="Редактировать"/>
-                                <Button Content="🗑️" Width="30" Margin="2"
-                                        cal:Message.Attach="[Event Click] = [Action DeleteReminder]"
-                                        ToolTip="Удалить"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                <local:DgCenterAlignedColumn Header="Дата" Binding="{Binding TriggerDate, StringFormat=dd.MM.yyyy}" Width="80"/>
+                <local:DgCenterAlignedColumn Header="Период" Binding="{Binding EveryStr}" Width="100"/>
+                <DataGridTextColumn Header="Заметка" Binding="{Binding Memo}" Width="*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                            <Setter Property="TextBlock.Margin" Value="5,0,0,0"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
