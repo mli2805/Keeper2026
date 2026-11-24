@@ -4,29 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KeeperWpf"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d" FontSize="14"
+              WindowStartupLocation="CenterScreen">
     <Grid Margin="5">
-        <DataGrid ItemsSource="{Binding Rows}" AutoGenerateColumns="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="MCC" Width="60" Binding="{Binding Code}"/>
-                <DataGridTextColumn Header="Название" Width="250" Binding="{Binding Name}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="TextWrapping" Value="Wrap"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Описание" Width="*" Binding="{Binding Description}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="TextWrapping" Value="Wrap"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBox Grid.Row="0" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" Margin="5" Height="24" Width="300" HorizontalAlignment="Left" VerticalAlignment="Center"
+                 ToolTip="Введите текст для фильтрации по коду, названию или описанию"/>
+        <local:MyDataGrid Grid.Row="1" ItemsSource="{Binding RowsFiltered}" AutoGenerateColumns="False" IsReadOnly="True">
+            <local:MyDataGrid.Columns>
+                <local:DgCenterAlignedColumn Header="MCC" Width="60" Binding="{Binding Code}"/>
+                <local:DgLeftAlignedWrappedColumn Header="Название" Width="250" Binding="{Binding Name}"/>
+                <local:DgLeftAlignedWrappedColumn Header="Описание" Width="*" Binding="{Binding Description}"/>
+            </local:MyDataGrid.Columns>
+        </local:MyDataGrid>
     </Grid>
 </Window>
