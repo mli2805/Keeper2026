@@ -7,7 +7,7 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:keeperWpf="clr-namespace:KeeperWpf"
              cal:Bind.ModelWithoutContext="{Binding .}"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              FontSize="13.5">
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
@@ -36,7 +36,7 @@
         </StackPanel>
 
         <DataGrid ItemsSource="{Binding Rows}" SelectedItem="{Binding SelectedRow, Mode=TwoWay}" 
-                  AutoGenerateColumns="False" IsReadOnly="True"
+                  AutoGenerateColumns="False" IsReadOnly="True" 
                   SelectionMode="Single" Margin="0,0,0,5">
             <i:Interaction.Behaviors>
                 <keeperWpf:ScrollToBottomOnAddBehavior />
@@ -44,25 +44,16 @@
             </i:Interaction.Behaviors>
             <DataGrid.Resources>
                 <DataTemplate x:Key="UsdTemplate" DataType="keeperWpf:OfficialRatesModel">
-                    <StackPanel Orientation="Horizontal" >
-                        <TextBlock Text="{Binding UsdStr}" Width="65" 
+                        <TextBlock Text="{Binding UsdStr}" Width="65" Padding="0,0,5,0"
                                    HorizontalAlignment="Center" Foreground="{Binding UsdBrush}"/>
-                        <TextBlock Text="   "/>
-                    </StackPanel>
                 </DataTemplate>
                 <DataTemplate x:Key="UsdAnnualTemplate" DataType="keeperWpf:OfficialRatesModel">
-                    <StackPanel Orientation="Horizontal" >
-                        <TextBlock Text="{Binding UsdToEndOfYear.Str}" Width="110" 
+                        <TextBlock Text="{Binding UsdToEndOfYear.Str}" Width="110" Padding="0,0,5,0"
                                    Foreground="{Binding UsdToEndOfYear.Brush}" FontSize="12"/>
-                        <TextBlock Text="   "/>
-                    </StackPanel>
                 </DataTemplate>
                 <DataTemplate x:Key="UsdY2YTemplate" DataType="keeperWpf:OfficialRatesModel">
-                    <StackPanel Orientation="Horizontal" >
-                        <TextBlock Text="{Binding UsdY2Y.Str}" Width="110" 
+                        <TextBlock Text="{Binding UsdY2Y.Str}" Width="110" Padding="0,0,5,0" 
                                    Foreground="{Binding UsdY2Y.Brush}" FontSize="12"/>
-                        <TextBlock Text="   "/>
-                    </StackPanel>
                 </DataTemplate>
                 <DataTemplate x:Key="EuroTemplate" DataType="keeperWpf:OfficialRatesModel">
                     <StackPanel Orientation="Horizontal" >
@@ -71,54 +62,38 @@
                     </StackPanel>
                 </DataTemplate>
                 <DataTemplate x:Key="EuroUsdTemplate" DataType="keeperWpf:OfficialRatesModel">
-                    <StackPanel Orientation="Horizontal" >
-                        <TextBlock Text="{Binding EuroUsdStr}" Width="60" FontSize="12" 
+                    <TextBlock Text="{Binding EuroUsdStr}" Width="60" FontSize="12" Padding="0,0,5,0" 
                                    Foreground="Black" />
-                        <TextBlock Text="   "/>
-                    </StackPanel>
                 </DataTemplate>
                 <DataTemplate x:Key="RurTemplate" DataType="keeperWpf:OfficialRatesModel">
-                    <StackPanel Orientation="Horizontal" >
+                    <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding RurUnitStr}" Width="20" FontSize="8"/>
                         <TextBlock Text="{Binding RurStr}" Width="60"/>
-                        <TextBlock Text="   "/>
                     </StackPanel>
                 </DataTemplate>
                 <DataTemplate x:Key="RurUsdTemplate" DataType="keeperWpf:OfficialRatesModel">
-                    <StackPanel Orientation="Horizontal" >
-                        <TextBlock Text="{Binding RurUsdStr}" Width="45" FontSize="12"/>
-                        <TextBlock Text="   "/>
-                    </StackPanel>
+                    <TextBlock Text="{Binding RurUsdStr}" Width="45" FontSize="12" Padding="0,0,5,0"/>
                 </DataTemplate>
                 <DataTemplate x:Key="CnyTemplate" DataType="keeperWpf:OfficialRatesModel">
                     <StackPanel Orientation="Horizontal" >
                         <TextBlock Text="{Binding CnyUnitStr}" Width="15" FontSize="8"/>
                         <TextBlock Text="{Binding CnyStr}" Width="60"/>
-                        <TextBlock Text="   "/>
                     </StackPanel>
                 </DataTemplate>
-
                 <DataTemplate x:Key="BasketTemplate" DataType="keeperWpf:OfficialRatesModel">
                     <StackPanel Orientation="Horizontal" >
                         <TextBlock Text="{Binding BasketNumberStr}" Width="15" FontSize="8"/>
                         <TextBlock Text="{Binding BasketStr}" Width="120" 
                                    HorizontalAlignment="Center" Foreground="{Binding BasketBrush}"/>
-                        <TextBlock Text="   "/>
                     </StackPanel>
                 </DataTemplate>
                 <DataTemplate x:Key="BasketAnnualTemplate" DataType="keeperWpf:OfficialRatesModel">
-                    <StackPanel Orientation="Horizontal" >
-                        <TextBlock Text="{Binding BasketToEndOfYear.Str}" Width="55" 
+                    <TextBlock Text="{Binding BasketToEndOfYear.Str}" Width="55" Padding="0,0,5,0"
                                    Foreground="{Binding BasketToEndOfYear.Brush}" FontSize="12"/>
-                        <TextBlock Text="  "/>
-                    </StackPanel>
                 </DataTemplate>
                 <DataTemplate x:Key="BasketY2YTemplate" DataType="keeperWpf:OfficialRatesModel">
-                    <StackPanel Orientation="Horizontal" >
-                        <TextBlock Text="{Binding BasketY2Y.Str}" Width="55" 
+                    <TextBlock Text="{Binding BasketY2Y.Str}" Width="55" Padding="0,0,5,0"
                                    Foreground="{Binding BasketY2Y.Brush}" FontSize="12"/>
-                        <TextBlock Text="  "/>
-                    </StackPanel>
                 </DataTemplate>
                 <Style TargetType="DataGridCell">
                     <Style.Setters>
@@ -139,7 +114,7 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date"
+                <keeperWpf:DgCenterAlignedColumn Header="Date"
                                     Binding="{Binding Date, StringFormat='{}{0:dd/MM/yyyy ddd}', ConverterCulture=ru-RU}"
                                     Width="95"/>
                 <DataGridTemplateColumn Header="НБРБ USD" CellTemplate="{StaticResource UsdTemplate}"/>

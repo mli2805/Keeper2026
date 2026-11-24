@@ -8,7 +8,7 @@
              xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              cal:Bind.ModelWithoutContext="{Binding .}"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" FontSize="14"
              d:DataContext="{d:DesignData RefinancingRatesViewModel }">
     <DockPanel>
         <DockPanel DockPanel.Dock="Bottom">
@@ -16,39 +16,18 @@
             <Button Name="UpdateRates" Margin="5" Width="380" 
                     Content="Обновить ставки по депозитам привязанным к СР НБ РБ" HorizontalAlignment="Left"/>
         </DockPanel>
-        <DataGrid Height="500" ItemsSource="{Binding Rows}" 
+        <keeperWpf:MyDataGrid Height="512" ItemsSource="{Binding Rows}" 
                   AutoGenerateColumns="False" Margin="5" IsReadOnly="True">
             <i:Interaction.Behaviors>
                 <keeperWpf:ScrollToBottomOnAddBehavior />
                 <keeperWpf:ScrollToBottomOnLoadBehavior />
             </i:Interaction.Behaviors>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="30">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Right" />
-                            <Setter Property="Margin" Value="0,0,5,0" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat='{}{0:d MMM yyyy}', 
-                ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" Width="100">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Right" />
-                            <Setter Property="Margin" Value="0,0,5,0" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Ставка %" Binding="{Binding Value, StringFormat='{}{0:0.00}'}" Width="80">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Right" />
-                            <Setter Property="Margin" Value="0,0,5,0" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>  
-            </DataGrid.Columns>
-        </DataGrid>
+            <keeperWpf:MyDataGrid.Columns>
+                <keeperWpf:DgCenterAlignedColumn Header="№" Binding="{Binding Id}" Width="40"/>
+                <keeperWpf:DgRightAlignedColumn Header="Дата" Binding="{Binding Date, StringFormat='{}{0:d MMM yyyy}', 
+                                ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" Width="110"/>
+                <keeperWpf:DgRightAlignedColumn Header="Ставка %" Binding="{Binding Value, StringFormat='{}{0:0.00}'}" Width="80"/>
+            </keeperWpf:MyDataGrid.Columns>
+        </keeperWpf:MyDataGrid>
     </DockPanel>
 </UserControl>
