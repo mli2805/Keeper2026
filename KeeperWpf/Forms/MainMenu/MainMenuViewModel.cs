@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -8,8 +9,8 @@ using Caliburn.Micro;
 namespace KeeperWpf;
 
 [ExportViewModel(ViewModelLifetime.SingleInstance)]
-public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel keeperDataModel, 
-    ShellPartsBinder shellPartsBinder,
+public class MainMenuViewModel(IWindowManager windowManager, PathFinder pathFinder, 
+    KeeperDataModel keeperDataModel, ShellPartsBinder shellPartsBinder,
     TransactionsViewModel transactionsViewModel, RatesViewModel ratesViewModel,
     MonthAnalysisViewModel monthAnalysisViewModel, BankOffersViewModel bankOffersViewModel,
     // charts:
@@ -28,7 +29,7 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
     BankAccountMemoViewModel bankAccountMemoViewModel, CustomRemindersViewModel customReminderViewModel,
     LargeExpenseThresholdViewModel largeExpenseThresholdViewModel,
     ToDoViewModel toDoViewModel, NotesViewModel notesViewModel,
-    ButtonCollectionBuilderViewModel buttonCollectionBuilderViewModel, KeeperDomainModelToTxtSaver toTxtSaver)
+    ButtonCollectionBuilderViewModel buttonCollectionBuilderViewModel)
     : PropertyChangedBase
 {
 
@@ -376,21 +377,22 @@ public class MainMenuViewModel(IWindowManager windowManager, KeeperDataModel kee
         try
         {
             var keeperModel = keeperDataModel.FromModel();
-            var exception = await toTxtSaver.Save(keeperModel);
+            var backupFolder = Path.Combine(pathFinder.GetDataFolder(), "backup");
+            var exception = await keeperModel.Save(backupFolder);
             if (exception != null)
             {
                 MessageBox.Show("Ошибка при сохранении резервной копии в текстовые файлы: " + exception.Message);
                 return;
             }
 
-            var zipException = await toTxtSaver.ZipTxtFiles();
+            var zipException = await KeeperDomainModelToTxtSaver.ZipTxtFiles(backupFolder);
             if (zipException != null)
             {
                 MessageBox.Show("Ошибка при архивировании текстовых файлов резервной копии: " + zipException.Message);
                 return;
             }
 
-            var deleteException = await toTxtSaver.DeleteTxtFiles();
+            var deleteException = await KeeperDomainModelToTxtSaver.DeleteTxtFiles(backupFolder);
             if (deleteException != null)
             {
                 MessageBox.Show("Ошибка при удалении текстовых файлов резервной копии: " + deleteException.Message);

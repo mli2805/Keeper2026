@@ -5,69 +5,62 @@ using KeeperDomain;
 
 namespace KeeperInfrastructure;
 
-public class KeeperDomainModelToTxtSaver
+public static  class KeeperDomainModelToTxtSaver
 {
-    private string _backupFolder;
-
-    public KeeperDomainModelToTxtSaver(PathFinder pathFinder)
+    public static async Task<Exception?> Save(this KeeperDomainModel keeperDomainModel, string backupFolder)
     {
-        var dataFolderPath = pathFinder.GetDataFolder();
-        _backupFolder = Path.Combine(dataFolderPath, "backup");
+        return await Task.Factory.StartNew(() => SaveTxtFiles(keeperDomainModel, backupFolder));
     }
 
-    public async Task<Exception?> Save(KeeperDomainModel keeperDomainModel)
-    {
-        return await Task.Factory.StartNew(() => SaveTxtFiles(keeperDomainModel));
-    }
-
-    private Exception? SaveTxtFiles(KeeperDomainModel keeperDomainModel)
+    private static Exception? SaveTxtFiles(KeeperDomainModel keeperDomainModel, string backupFolder)
     {
         try
         {
-            WriteFileLines(keeperDomainModel.OfficialRates);
-            WriteFileLines(keeperDomainModel.ExchangeRates);
-            WriteFileLines(keeperDomainModel.MetalRates);
-            WriteFileLines(keeperDomainModel.RefinancingRates);
+            WriteFileLines(keeperDomainModel.OfficialRates, backupFolder);
+            WriteFileLines(keeperDomainModel.ExchangeRates, backupFolder);
+            WriteFileLines(keeperDomainModel.MetalRates, backupFolder);
+            WriteFileLines(keeperDomainModel.RefinancingRates, backupFolder);
 
-            WriteFileLines(keeperDomainModel.TrustAssets);
-            WriteFileLines(keeperDomainModel.TrustAssetRates);
-            WriteFileLines(keeperDomainModel.TrustAccounts);
-            WriteFileLines(keeperDomainModel.TrustTransactions);
+            WriteFileLines(keeperDomainModel.TrustAssets, backupFolder);
+            WriteFileLines(keeperDomainModel.TrustAssetRates, backupFolder);
+            WriteFileLines(keeperDomainModel.TrustAccounts, backupFolder);
+            WriteFileLines(keeperDomainModel.TrustTransactions, backupFolder);
 
-
-            File.WriteAllLines(Path.Combine(_backupFolder, "Accounts.txt"), DumpWithOffsets(keeperDomainModel.AccountPlaneList));
-            WriteFileLines(keeperDomainModel.BankAccounts);
-            WriteFileLines(keeperDomainModel.Deposits);
-            WriteFileLines(keeperDomainModel.PayCards);
+            File.WriteAllLines(
+                Path.Combine(backupFolder, "Accounts.txt"),
+                        DumpWithOffsets(keeperDomainModel.AccountPlaneList, backupFolder));
+            WriteFileLines(keeperDomainModel.BankAccounts, backupFolder);
+            WriteFileLines(keeperDomainModel.Deposits, backupFolder);
+            WriteFileLines(keeperDomainModel.PayCards, backupFolder);
 
             var transactions = keeperDomainModel.Transactions
                 .OrderBy(t => t.Timestamp)
                 .Select(l => l.Dump());
-            WriteTransactionsContent(Path.Combine(_backupFolder, "Transactions.txt"), transactions);
+            WriteTransactionsContent(Path.Combine(backupFolder, "Transactions.txt"), transactions);
 
-            WriteFileLines(keeperDomainModel.Fuellings);
+            WriteFileLines(keeperDomainModel.Fuellings, backupFolder);
 
-            WriteFileLines(keeperDomainModel.DepositOffers);
-            WriteFileLines(keeperDomainModel.DepositRateLines);
-            WriteFileLines(keeperDomainModel.DepositConditions);
-            WriteFileLines(keeperDomainModel.MoneyBackRules);
-            WriteFileLines(keeperDomainModel.MoneyBackCategories);
-            WriteFileLines(keeperDomainModel.MoneyBackPartners);
+            WriteFileLines(keeperDomainModel.DepositOffers, backupFolder);
+            WriteFileLines(keeperDomainModel.DepositRateLines, backupFolder);
+            WriteFileLines(keeperDomainModel.DepositConditions, backupFolder);
+            WriteFileLines(keeperDomainModel.MoneyBackRules, backupFolder);
+            WriteFileLines(keeperDomainModel.MoneyBackCategories, backupFolder);
+            WriteFileLines(keeperDomainModel.MoneyBackPartners, backupFolder);
 
-            WriteFileLines(keeperDomainModel.Cars);
-            WriteFileLines(keeperDomainModel.CarYearMileages);
-            WriteFileLines(keeperDomainModel.UtilityMeters);
-            WriteFileLines(keeperDomainModel.TodoTasks);
-            WriteFileLines(keeperDomainModel.TodoSubtasks);
+            WriteFileLines(keeperDomainModel.Cars, backupFolder);
+            WriteFileLines(keeperDomainModel.CarYearMileages, backupFolder);
+            WriteFileLines(keeperDomainModel.UtilityMeters, backupFolder);
+            WriteFileLines(keeperDomainModel.TodoTasks, backupFolder);
+            WriteFileLines(keeperDomainModel.TodoSubtasks, backupFolder);
 
-            WriteFileLines(keeperDomainModel.CardBalanceMemos, Path.Combine(_backupFolder, "MemosCardBalance.txt"));
-            WriteFileLines(keeperDomainModel.BankAccountMemos);
+            WriteFileLines(keeperDomainModel.CardBalanceMemos, backupFolder, Path.Combine(backupFolder, "MemosCardBalance.txt"));
+            WriteFileLines(keeperDomainModel.BankAccountMemos, backupFolder);
 
-            WriteFileLines(keeperDomainModel.CustomReminders);
-            WriteFileLines(keeperDomainModel.ButtonCollections);
-            WriteFileLines(keeperDomainModel.SalaryChanges);
-            WriteFileLines(keeperDomainModel.SalaryPayments);
-            WriteFileLines(keeperDomainModel.LargeExpenseThresholds);
+            WriteFileLines(keeperDomainModel.CustomReminders, backupFolder);
+            WriteFileLines(keeperDomainModel.ButtonCollections, backupFolder);
+            WriteFileLines(keeperDomainModel.SalaryChanges, backupFolder);
+            WriteFileLines(keeperDomainModel.SalaryPayments, backupFolder);
+            WriteFileLines(keeperDomainModel.LargeExpenseThresholds, backupFolder);
 
             return null;
         }
@@ -77,18 +70,19 @@ public class KeeperDomainModelToTxtSaver
         }
     }
 
-    private void WriteFileLines<T>(List<T> collection, string filename = "") where T : IDumpable
+    private static void WriteFileLines<T>(
+        List<T> collection, string backupFolder, string filename = "") where T : IDumpable
     {
         if (filename == "")
         {
             filename = typeof(T).Name + "s.txt";
-            filename = Path.Combine(_backupFolder, filename);
+            filename = Path.Combine(backupFolder, filename);
         }
         var content = collection.Select(l => l.Dump());
         File.WriteAllLines(filename, content);
     }
 
-    private List<string> DumpWithOffsets(List<Account> accountPlainList)
+    private static List<string> DumpWithOffsets(List<Account> accountPlainList, string backupFolder)
     {
         var result = new List<string>();
         var previousParents = new Stack<(int, int)>();
@@ -125,7 +119,7 @@ public class KeeperDomainModelToTxtSaver
     }
 
     // supposedly it should be faster than File.WriteAllLines because of increased buffer
-    private void WriteTransactionsContent(string filename, IEnumerable<string> content)
+    private static void WriteTransactionsContent(string filename, IEnumerable<string> content)
     {
         if (File.Exists(filename)) File.Delete(filename);
 
@@ -139,14 +133,14 @@ public class KeeperDomainModelToTxtSaver
         }
     }
 
-    public async Task<Exception?> ZipTxtFiles()
+    public static async Task<Exception?> ZipTxtFiles(string backupFolder)
     {
         var archiveName = $"DB{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.zip";
-        var zipFileToCreate = Path.Combine(_backupFolder, archiveName);
+        var zipFileToCreate = Path.Combine(backupFolder, archiveName);
         try
         {
             var zip = await ZipFile.OpenAsync(zipFileToCreate, ZipArchiveMode.Create);
-            var filenames = Directory.GetFiles(_backupFolder, "*.txt"); // note: this does not recurse directories! 
+            var filenames = Directory.GetFiles(backupFolder, "*.txt"); // note: this does not recurse directories! 
             foreach (var filename in filenames)
             {
                 await zip.CreateEntryFromFileAsync(filename, Path.GetFileName(filename), CompressionLevel.Optimal);
@@ -160,15 +154,15 @@ public class KeeperDomainModelToTxtSaver
         }
     }
 
-    public Task<Exception?> DeleteTxtFiles()
+    public static Task<Exception?> DeleteTxtFiles(string backupFolder)
     {
         try
         {
-            if (!Directory.Exists(_backupFolder))
+            if (!Directory.Exists(backupFolder))
             {
                 return Task.FromResult<Exception?>(new Exception("Backup directory does not exist"));
             }
-            var filenames = Directory.GetFiles(_backupFolder, "*.txt"); // note: this does not recurse directories! 
+            var filenames = Directory.GetFiles(backupFolder, "*.txt"); // note: this does not recurse directories! 
             foreach (var filename in filenames)
                 File.Delete(filename);
             return Task.FromResult<Exception?>(null);
