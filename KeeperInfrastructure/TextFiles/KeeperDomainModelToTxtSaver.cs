@@ -132,44 +132,4 @@ public static  class KeeperDomainModelToTxtSaver
             }
         }
     }
-
-    public static async Task<Exception?> ZipTxtFiles(string backupFolder)
-    {
-        var archiveName = $"DB{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.zip";
-        var zipFileToCreate = Path.Combine(backupFolder, archiveName);
-        try
-        {
-            var zip = await ZipFile.OpenAsync(zipFileToCreate, ZipArchiveMode.Create);
-            var filenames = Directory.GetFiles(backupFolder, "*.txt"); // note: this does not recurse directories! 
-            foreach (var filename in filenames)
-            {
-                await zip.CreateEntryFromFileAsync(filename, Path.GetFileName(filename), CompressionLevel.Optimal);
-            }
-            await zip.DisposeAsync();
-            return null;
-        }
-        catch (Exception e)
-        {
-            return e;
-        }
-    }
-
-    public static Task<Exception?> DeleteTxtFiles(string backupFolder)
-    {
-        try
-        {
-            if (!Directory.Exists(backupFolder))
-            {
-                return Task.FromResult<Exception?>(new Exception("Backup directory does not exist"));
-            }
-            var filenames = Directory.GetFiles(backupFolder, "*.txt"); // note: this does not recurse directories! 
-            foreach (var filename in filenames)
-                File.Delete(filename);
-            return Task.FromResult<Exception?>(null);
-        }
-        catch (Exception e)
-        {
-            return Task.FromResult<Exception?>(e);
-        }
-    }
 }

@@ -385,14 +385,14 @@ public class MainMenuViewModel(IWindowManager windowManager, PathFinder pathFind
                 return;
             }
 
-            var zipException = await KeeperDomainModelToTxtSaver.ZipTxtFiles(backupFolder);
+            var zipException = await BackupZipper.ZipFiles(backupFolder, "*.txt");
             if (zipException != null)
             {
                 MessageBox.Show("Ошибка при архивировании текстовых файлов резервной копии: " + zipException.Message);
                 return;
             }
 
-            var deleteException = await KeeperDomainModelToTxtSaver.DeleteTxtFiles(backupFolder);
+            var deleteException = await BackupZipper.DeleteFiles(backupFolder, "*.txt");
             if (deleteException != null)
             {
                 MessageBox.Show("Ошибка при удалении текстовых файлов резервной копии: " + deleteException.Message);
