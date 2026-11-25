@@ -8,31 +8,31 @@
              xmlns:keeperWpf="clr-namespace:KeeperWpf"
              cal:Bind.ModelWithoutContext="{Binding .}"
              mc:Ignorable="d"
-             FontSize="13.5">
+             FontSize="14">
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
             <Button Margin="15, 5" Width="220" Name="Download" Content="Обновить курсы НБРБ и ЦБРФ" IsEnabled="{Binding IsDownloadEnabled}"/>
             <Button Margin="15, 5" Width="220" Name="UpdateCbRf" Content="Заполнить пробелы ЦБРФ"/>
         </StackPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="5, 5,5, 0" >
-            <TextBlock FontSize="13" Text="{Binding DayYearAgo.Date, StringFormat='{}{0:dd/MM/yyyy}'}" Margin="8,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding DayYearAgo.UsdStr}" Margin="228,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding DayYearAgo.EuroBynStr}" Margin="98,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding DayYearAgo.EuroUsdStr}" Margin="36,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding DayYearAgo.RurStr}" Margin="65,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding DayYearAgo.RurUsdStr}" Margin="30,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding DayYearAgo.CnyStr}" Margin="48,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding DayYearAgo.BasketStrWithoutProc}" Margin="245,0,0,0" />
+            <TextBlock Text="{Binding DayYearAgo.Date, StringFormat='{}{0:dd/MM/yyyy}'}" Margin="8,0,0,0" />
+            <TextBlock Text="{Binding DayYearAgo.UsdStr}" Margin="248,0,0,0" />
+            <TextBlock Text="{Binding DayYearAgo.EuroBynStr}" Margin="52,0,0,0" />
+            <TextBlock Text="{Binding DayYearAgo.EuroUsdStr}" Margin="44,0,0,0" />
+            <TextBlock Text="{Binding DayYearAgo.RurStr}" Margin="45,0,0,0" />
+            <TextBlock Text="{Binding DayYearAgo.RurUsdStr}" Margin="30,0,0,0" />
+            <TextBlock Text="{Binding DayYearAgo.CnyStr}" Margin="28,0,0,0" />
+            <TextBlock Text="{Binding DayYearAgo.BasketStrWithoutProc}" Margin="225,0,0,0" />
         </StackPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="5, 5, 5, 5">
-            <TextBlock FontSize="13" Text="{Binding LastDayOfYear.Date, StringFormat='{}{0:dd/MM/yyyy}'}" Margin="8,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding LastDayOfYear.UsdStr}" Margin="104,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding LastDayOfYear.EuroBynStr}" Margin="222,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding LastDayOfYear.EuroUsdStr}" Margin="36,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding LastDayOfYear.RurStr}" Margin="65,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding LastDayOfYear.RurUsdStr}" Margin="30,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding LastDayOfYear.CnyStr}" Margin="48,0,0,0" />
-            <TextBlock FontSize="13" Text="{Binding LastDayOfYear.BasketStrWithoutProc}" Margin="180,0,0,0" />
+            <TextBlock Text="{Binding LastDayOfYear.Date, StringFormat='{}{0:dd/MM/yyyy}'}" Margin="8,0,0,0" />
+            <TextBlock Text="{Binding LastDayOfYear.UsdStr}" Margin="134,0,0,0" />
+            <TextBlock Text="{Binding LastDayOfYear.EuroBynStr}" Margin="166,0,0,0" />
+            <TextBlock Text="{Binding LastDayOfYear.EuroUsdStr}" Margin="44,0,0,0" />
+            <TextBlock Text="{Binding LastDayOfYear.RurStr}" Margin="45,0,0,0" />
+            <TextBlock Text="{Binding LastDayOfYear.RurUsdStr}" Margin="30,0,0,0" />
+            <TextBlock Text="{Binding LastDayOfYear.CnyStr}" Margin="28,0,0,0" />
+            <TextBlock Text="{Binding LastDayOfYear.BasketStrWithoutProc}" Margin="160,0,0,0" />
         </StackPanel>
 
         <DataGrid ItemsSource="{Binding Rows}" SelectedItem="{Binding SelectedRow, Mode=TwoWay}" 

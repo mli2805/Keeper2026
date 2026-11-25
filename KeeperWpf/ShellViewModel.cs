@@ -8,9 +8,12 @@ using System.Threading.Tasks;
 
 namespace KeeperWpf;
 
-public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeperDataModel, AccountRepository accountRepository,
-    KeeperDataModelFromSqliteLoader dataModelInitializer, LoadingProgressViewModel loadingProgressViewModel,
-    ShellPartsBinder shellPartsBinder, MainMenuViewModel mainMenuViewModel, BankAccountMemoViewModel bankAccountMemoViewModel,
+public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeperDataModel, 
+    AccountRepository accountRepository,
+    KeeperDataModelFromSqliteLoader keeperDataModelFromSqliteLoader, 
+    LoadingProgressViewModel loadingProgressViewModel,
+    ShellPartsBinder shellPartsBinder, MainMenuViewModel mainMenuViewModel, 
+    OfficialRatesViewModel officialRatesViewModel, BankAccountMemoViewModel bankAccountMemoViewModel,
     AccountTreeViewModel accountTreeViewModel, BalanceOrTrafficViewModel balanceOrTrafficViewModel,
     TwoSelectorsViewModel twoSelectorsViewModel) : Screen, IShell
 {
@@ -39,7 +42,9 @@ public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeper
             await TryCloseAsync();
             return;
         }
-       
+        // инициализация в фоне, чтобы не тормозить старт программы
+        _ = Task.Run(officialRatesViewModel.Initialize);
+
         var account = keeperDataModel.AccountsTree.First(r => r.Name == "Мои");
         account.IsSelected = true;
 
@@ -53,7 +58,7 @@ public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeper
     {
         // если БД удалили, она будет создана пустая в AppBootstrapper еще до ShellViewModel
         // GetAccountTreeFromDb вернет false, если в БД нет данных
-        if (await dataModelInitializer.GetFullModelFromDb())
+        if (await keeperDataModelFromSqliteLoader.GetFullModelFromDb())
         {
             return true;
         }
@@ -72,7 +77,7 @@ public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeper
             return false;
         }
 
-        await dataModelInitializer.GetFullModelFromDb();
+        await keeperDataModelFromSqliteLoader.GetFullModelFromDb();
         return true;
     }
 
