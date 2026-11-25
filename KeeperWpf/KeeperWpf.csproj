@@ -240,6 +240,51 @@
 		<Compile Update="App.xaml.cs">
 			<SubType>Code</SubType>
 		</Compile>
+		<Compile Update="Forms\AccountTree\LoanPayment\LoanPaymentView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\Apartment\BillsParsing\BillsParsingView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\Apartment\HouseholdBills\HouseholdBillsView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\Apartment\UtilityMeters\OneMonthReadingsView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\Cars\OneCarView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\CustomReminders\CustomRemindersView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\CustomReminders\OneCustomReminderView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\DepositOffers\MoneyBack\MCC\MccReferenceBookView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\DepositOffers\MoneyBack\MoneyBackView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\DepositOffers\MoneyBack\NullableNumericControl\NullableNumericControlView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\DepositOffers\MoneyBack\OneMoneyBackRulesView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\DepositOffers\MoneyBack\PartnersMoneyBackControl.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\Notes\NotesView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\ToDo\ToDoView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Forms\Transactions\HouseholdTransactionsForm\HouseholdTransactionsView.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>

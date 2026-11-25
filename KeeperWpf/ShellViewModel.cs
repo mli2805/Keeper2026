@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace KeeperWpf;
 
 public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeperDataModel, AccountRepository accountRepository,
-    KeeperDataModelInitializer dataModelInitializer, LoadingProgressViewModel loadingProgressViewModel,
+    KeeperDataModelFromSqliteLoader dataModelInitializer, LoadingProgressViewModel loadingProgressViewModel,
     ShellPartsBinder shellPartsBinder, MainMenuViewModel mainMenuViewModel, BankAccountMemoViewModel bankAccountMemoViewModel,
     AccountTreeViewModel accountTreeViewModel, BalanceOrTrafficViewModel balanceOrTrafficViewModel,
     TwoSelectorsViewModel twoSelectorsViewModel) : Screen, IShell

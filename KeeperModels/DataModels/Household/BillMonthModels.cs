@@ -2,8 +2,6 @@
 using System.Runtime.CompilerServices;
 using Caliburn.Micro;
 
-using KeeperDomain;
-
 namespace KeeperModels;
 
 public sealed record BillFooter(DateTime Period, decimal? TotalAccrued = null,

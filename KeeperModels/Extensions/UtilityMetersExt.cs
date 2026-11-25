@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public static class UtilityMetersExt
 {

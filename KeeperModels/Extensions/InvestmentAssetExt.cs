@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public static class InvestmentAssetExt
 {

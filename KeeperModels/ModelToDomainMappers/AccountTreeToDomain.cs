@@ -1,6 +1,4 @@
-﻿using KeeperDomain;
-
-namespace KeeperModels;
+﻿namespace KeeperModels;
 
 public static class AccountTreeToDomain
 {

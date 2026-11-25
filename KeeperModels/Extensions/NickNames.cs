@@ -1,4 +1,4 @@
-﻿namespace KeeperWpf;
+﻿namespace KeeperModels;
 
 public static class NickNames
 {

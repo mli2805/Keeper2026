@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows;
 using Caliburn.Micro;
-using KeeperDomain;
 
 namespace KeeperModels;
 

@@ -1,7 +1,6 @@
 ﻿using System.Windows.Media;
 using System.Globalization;
 using Caliburn.Micro;
-using KeeperDomain;
 
 namespace KeeperModels;
 

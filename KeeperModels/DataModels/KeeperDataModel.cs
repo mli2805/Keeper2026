@@ -1,8 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Caliburn.Micro;
 
-using KeeperDomain;
-
 namespace KeeperModels;
 
 public class KeeperDataModel : PropertyChangedBase

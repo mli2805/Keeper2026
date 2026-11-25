@@ -72,7 +72,7 @@ public sealed class AutofacWpf : Module
 
         // глобальная модель данных приложения
         builder.RegisterType<KeeperDataModel>().InstancePerLifetimeScope();
-        builder.RegisterType<KeeperDataModelInitializer>().InstancePerLifetimeScope();
+        builder.RegisterType<KeeperDataModelFromSqliteLoader>().InstancePerLifetimeScope();
 
         RegisterViewModels(builder);
     }

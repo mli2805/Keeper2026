@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace KeeperWpf;
+namespace KeeperModels;
 
 public static class OperationTypeExtensions
 {

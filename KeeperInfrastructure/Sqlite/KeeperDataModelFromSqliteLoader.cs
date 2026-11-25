@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using KeeperModels;
 
-namespace KeeperWpf;
+namespace KeeperInfrastructure;
 
 /// <summary>
 /// Модели с которыми работает WPF приложение находятся в отдельном проекте KeeperModels (wpf class library)
@@ -16,7 +14,7 @@ namespace KeeperWpf;
 /// Инитим один раз при старте приложения, т.к. данные сильно связанны между собой и для большинства форм
 /// нужны как минимум счета, транзакции и курсы
 /// </summary>
-public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
+public class KeeperDataModelFromSqliteLoader(KeeperDataModel keeperDataModel,
     AccountRepository accountRepository, CarRepository carRepository, DepositOffersRepository depositOffersRepository,
     ExchangeRatesRepository exchangeRatesRepository, OfficialRatesRepository officialRatesRepository,
     MetalRatesRepository metalRatesRepository, RefinancingRatesRepository refinancingRatesRepository,
@@ -28,8 +26,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     LargeExpenseThresholdsRepository largeExpenseThresholdsRepository,
     ButtonCollectionsRepository buttonCollectionsRepository, SalaryChangesRepository salaryChangesRepository,
     SalaryPaymentsRepository salaryPaymentsRepository,
-    TodoTaskRepository todoTaskRepository, HouseholdRepository householdRepository,
-    OfficialRatesViewModel officialRatesViewModel)
+    TodoTaskRepository todoTaskRepository, HouseholdRepository householdRepository)
 {
     public async Task<bool> GetFullModelFromDb()
     {
@@ -66,9 +63,8 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
     {
         // так и показываем на вью
         keeperDataModel.ExchangeRates = exchangeRatesRepository.GetAllExchangeRates().ToDictionary(r => r.Date);
-        // на вью преобразуем в OfficialRatesModel (долгое преобразование с дельтами, в отдельном потоке)
+        // потом на вью преобразуем в OfficialRatesModel (долгое преобразование с дельтами, в отдельном потоке)
         keeperDataModel.OfficialRates = officialRatesRepository.GetAllOfficialRates().ToDictionary(r => r.Date);
-        _ = Task.Run(officialRatesViewModel.Initialize);
         // на вью преобразуем в GoldCoinsModel (это можно было бы делать в репозитории, вместо FromEf)
         keeperDataModel.MetalRates = metalRatesRepository.GetAllMetalRates();
         // так и показываем на вью
@@ -94,10 +90,7 @@ public class KeeperDataModelInitializer(KeeperDataModel keeperDataModel,
         keeperDataModel.Transactions = (await transactionsRepository
             .GetAllTransactionModels(keeperDataModel.AcMoDict)).ToDictionary(t => t.Id);
 
-        var fuellings = fuellingsRepository.GetAllFuellings();
-        // тут не только маппинг, но и вычисление доп. полей в моделях
-        // наверное стоит это выполнять только при необходимости, когда открывается форма заправок или ввода новой заправки
-        keeperDataModel.FuellingJoinTransaction(fuellings);
+        keeperDataModel.FuellingVms = fuellingsRepository.GetAllFuellingModels(keeperDataModel);
     }
 
     private async Task GetOthersFromDb()
