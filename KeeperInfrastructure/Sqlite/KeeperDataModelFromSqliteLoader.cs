@@ -76,11 +76,8 @@ public class KeeperDataModelFromSqliteLoader(KeeperDataModel keeperDataModel,
     private async Task GetTrustDataFromDb(Dictionary<int, AccountItemModel> acMoDict)
     {
         keeperDataModel.TrustAccounts = await trustAccountsRepository.GetAllTrustAccounts();
-
         keeperDataModel.InvestmentAssets = await trustAssetsRepository.GetAllTrustAssetModels(keeperDataModel.TrustAccounts);
-
         keeperDataModel.AssetRates = trustAssetRatesRepository.GetAllTrustAssetRates();
-
         keeperDataModel.InvestTranModels = await trustTransactionsRepository
             .GetAllTrustTransactionModels(acMoDict, keeperDataModel.TrustAccounts, keeperDataModel.InvestmentAssets);
     }
@@ -97,11 +94,16 @@ public class KeeperDataModelFromSqliteLoader(KeeperDataModel keeperDataModel,
     {
         keeperDataModel.SalaryChanges = await salaryChangesRepository.GetAllSalaryChanges();
         keeperDataModel.SalaryPayments = await salaryPaymentsRepository.GetAllSalaryPayments();
-        keeperDataModel.CardBalanceMemoModels = await cardBalanceMemosRepository.GetAllCardBalanceMemos(keeperDataModel.AcMoDict);
-        keeperDataModel.BankAccountMemoModels = await bankAccountMemosRepository.GetAllBankAccountMemos(keeperDataModel.AcMoDict);
-        keeperDataModel.CustomReminderModels = await customRemindersRepository.GetAllCustomReminders();
-        keeperDataModel.LargeExpenseThresholds = largeExpenseThresholdsRepository.GetAllLargeExpenseThresholds();
-        keeperDataModel.ButtonCollections = await buttonCollectionsRepository.GetAllButtonCollections(keeperDataModel.AcMoDict);
+        keeperDataModel.CardBalanceMemoModels = 
+            await cardBalanceMemosRepository.GetAllCardBalanceMemos(keeperDataModel.AcMoDict);
+        keeperDataModel.BankAccountMemoModels = 
+            await bankAccountMemosRepository.GetAllBankAccountMemos(keeperDataModel.AcMoDict);
+        keeperDataModel.CustomReminderModels = 
+            await customRemindersRepository.GetAllCustomReminders();
+        keeperDataModel.LargeExpenseThresholds = 
+            await largeExpenseThresholdsRepository.GetAllLargeExpenseThresholds();
+        keeperDataModel.ButtonCollections = 
+            await buttonCollectionsRepository.GetAllButtonCollections(keeperDataModel.AcMoDict);
         keeperDataModel.UtilityMeters = await householdRepository.GetAllUtilityMeters();
     }
 }

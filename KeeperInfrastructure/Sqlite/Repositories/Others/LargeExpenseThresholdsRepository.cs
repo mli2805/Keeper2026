@@ -6,9 +6,9 @@ namespace KeeperInfrastructure;
 [ExportRepository]
 public class LargeExpenseThresholdsRepository(IDbContextFactory<KeeperDbContext> factory)
 {
-    public List<LargeExpenseThreshold> GetAllLargeExpenseThresholds()
+    public async Task<List<LargeExpenseThreshold>> GetAllLargeExpenseThresholds()
     {
-        using var keeperDbContext = factory.CreateDbContext();
+        await using var keeperDbContext = await factory.CreateDbContextAsync();
         var result = keeperDbContext.LargeExpenseThresholds.Select(let => let.FromEf()).ToList();
         return result;
     }
