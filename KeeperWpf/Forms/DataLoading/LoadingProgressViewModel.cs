@@ -7,7 +7,7 @@ using System.Windows;
 namespace KeeperWpf;
 
 [ExportViewModel(ViewModelLifetime.SingleInstance)]
-public class LoadingProgressViewModel(PathFinder pathFinder, KeeperDomainModelToSqlite toSqlite) : Screen
+public class LoadingProgressViewModel(PathFinder pathFinder, KeeperDomainModelToSqliteSaver toSqlite) : Screen
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
@@ -45,7 +45,7 @@ public class LoadingProgressViewModel(PathFinder pathFinder, KeeperDomainModelTo
 
     private async Task<KeeperDomainModel?> TryLoadAllFromTextFiles()
     {
-        var backupFolder = Path.Combine(pathFinder.GetDataFolder(), "backup");
+        var backupFolder = pathFinder.GetBackupFolder();
 
         KeeperDomainModel? keeperDomainModel;
         try

@@ -36,7 +36,7 @@ public static class DbTestHelper
         var keeperDomainModel =
             await KeeperDomainModelFromTxtLoader.LoadAllFromTextFiles(@"..\..\..\TxtFiles");
 
-        var toSqlite = new KeeperDomainModelToSqlite(new TestDbContextFactory(options));
+        var toSqlite = new KeeperDomainModelToSqliteSaver(new TestDbContextFactory(options));
         await toSqlite.SaveModelToDb(keeperDomainModel!);
 
         var accountRepository = new AccountRepository(new TestDbContextFactory(options));

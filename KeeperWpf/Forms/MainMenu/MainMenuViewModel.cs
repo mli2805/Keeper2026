@@ -377,7 +377,18 @@ public class MainMenuViewModel(IWindowManager windowManager, PathFinder pathFind
         try
         {
             var keeperModel = keeperDataModel.FromModel();
-            var backupFolder = Path.Combine(pathFinder.GetDataFolder(), "backup");
+            var backupFolder = pathFinder.GetBackupFolder();
+
+            var jsonBackupFolder = pathFinder.GetJsonBackupFolder();
+            var jsonException1 = await keeperModel.SaveToJsonFiles(jsonBackupFolder);
+            var zipException1 = await BackupZipper.ZipFiles(jsonBackupFolder, "*.json");
+            var deleteException1 = await BackupZipper.DeleteFiles(jsonBackupFolder, "*.json");
+
+            var csvBackupFolder = pathFinder.GetCsvBackupFolder();
+            var csvException1 = await keeperModel.SaveToCsvFiles(csvBackupFolder);
+            var zipException2 = await BackupZipper.ZipFiles(csvBackupFolder, "*.csv");
+            var deleteException2 = await BackupZipper.DeleteFiles(csvBackupFolder, "*.csv");
+
             var exception = await keeperModel.Save(backupFolder);
             if (exception != null)
             {

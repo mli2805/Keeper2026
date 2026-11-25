@@ -68,7 +68,7 @@ public sealed class AutofacWpf : Module
 
         RegisterRepositories(builder);
 
-        builder.RegisterType<KeeperDomainModelToSqlite>().InstancePerLifetimeScope();
+        builder.RegisterType<KeeperDomainModelToSqliteSaver>().InstancePerLifetimeScope();
 
         // глобальная модель данных приложения
         builder.RegisterType<KeeperDataModel>().InstancePerLifetimeScope();

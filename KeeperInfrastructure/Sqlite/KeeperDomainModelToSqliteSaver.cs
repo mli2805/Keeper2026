@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeeperInfrastructure;
 
-public class KeeperDomainModelToSqlite(IDbContextFactory<KeeperDbContext> factory)
+public class KeeperDomainModelToSqliteSaver(IDbContextFactory<KeeperDbContext> factory)
 {
-    // данные, вычитанные из текстовых файлов, сохраняем в БД SQLite
+    // данные, вычитанные из backup файлов, сохраняем в БД SQLite
     public async Task SaveModelToDb(KeeperDomainModel keeperDomainModel)
     {
         await using var keeperDbContext = await factory.CreateDbContextAsync();
