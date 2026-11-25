@@ -52,7 +52,6 @@ public static  class KeeperDomainModelToTxtSaver
             WriteFileLines(keeperDomainModel.TodoTasks, backupFolder);
             WriteFileLines(keeperDomainModel.TodoSubtasks, backupFolder);
 
-            WriteFileLines(keeperDomainModel.CardBalanceMemos, backupFolder, Path.Combine(backupFolder, "MemosCardBalance.txt"));
             WriteFileLines(keeperDomainModel.BankAccountMemos, backupFolder);
 
             WriteFileLines(keeperDomainModel.CustomReminders, backupFolder);

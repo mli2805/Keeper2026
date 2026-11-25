@@ -21,7 +21,7 @@ public class KeeperDataModelFromSqliteLoader(KeeperDataModel keeperDataModel,
     TrustAccountsRepository trustAccountsRepository, TrustAssetsRepository trustAssetsRepository,
     TrustAssetRatesRepository trustAssetRatesRepository, TrustTransactionsRepository trustTransactionsRepository,
     TransactionsRepository transactionsRepository, FuellingsRepository fuellingsRepository,
-    CardBalanceMemosRepository cardBalanceMemosRepository, BankAccountMemosRepository bankAccountMemosRepository,
+    BankAccountMemosRepository bankAccountMemosRepository,
     CustomRemindersRepository customRemindersRepository,
     LargeExpenseThresholdsRepository largeExpenseThresholdsRepository,
     ButtonCollectionsRepository buttonCollectionsRepository, SalaryChangesRepository salaryChangesRepository,
@@ -94,8 +94,6 @@ public class KeeperDataModelFromSqliteLoader(KeeperDataModel keeperDataModel,
     {
         keeperDataModel.SalaryChanges = await salaryChangesRepository.GetAllSalaryChanges();
         keeperDataModel.SalaryPayments = await salaryPaymentsRepository.GetAllSalaryPayments();
-        keeperDataModel.CardBalanceMemoModels = 
-            await cardBalanceMemosRepository.GetAllCardBalanceMemos(keeperDataModel.AcMoDict);
         keeperDataModel.BankAccountMemoModels = 
             await bankAccountMemosRepository.GetAllBankAccountMemos(keeperDataModel.AcMoDict);
         keeperDataModel.CustomReminderModels = 

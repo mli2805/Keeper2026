@@ -42,7 +42,6 @@ public class KeeperDomainModelToSqliteSaver(IDbContextFactory<KeeperDbContext> f
         keeperDbContext.SalaryChanges.AddRange(keeperDomainModel.SalaryChanges.Select(item => item.ToEf()));
         keeperDbContext.SalaryPayments.AddRange(keeperDomainModel.SalaryPayments.Select(item => item.ToEf()));
         keeperDbContext.LargeExpenseThresholds.AddRange(keeperDomainModel.LargeExpenseThresholds.Select(item => item.ToEf()));
-        keeperDbContext.CardBalanceMemos.AddRange(keeperDomainModel.CardBalanceMemos.Select(item => item.ToEf()));
         keeperDbContext.BankAccountMemos.AddRange(keeperDomainModel.BankAccountMemos.Select(item => item.ToEf()));
         keeperDbContext.CustomReminders.AddRange(keeperDomainModel.CustomReminders.Select(item => item.ToEf()));
         keeperDbContext.ButtonCollections.AddRange(keeperDomainModel.ButtonCollections.Select(item => item.ToEf()));

@@ -4,23 +4,6 @@ using Microsoft.EntityFrameworkCore;
 namespace KeeperInfrastructure;
 
 [ExportRepository]
-public class CardBalanceMemosRepository(IDbContextFactory<KeeperDbContext> factory)
-{
-    public async Task<List<CardBalanceMemoModel>> GetAllCardBalanceMemos(Dictionary<int, AccountItemModel> acMoDict)
-    {
-        await using var keeperDbContext = await factory.CreateDbContextAsync();
-        var result = await keeperDbContext.CardBalanceMemos
-            .Select(cm => new CardBalanceMemoModel
-            {
-                Id = cm.Id,
-                Account = acMoDict[cm.AccountId],
-                BalanceThreshold = cm.BalanceThreshold,
-            }).ToListAsync();
-        return result;
-    }
-}
-
-[ExportRepository]
 public class BankAccountMemosRepository(IDbContextFactory<KeeperDbContext> factory)
 {
     public async Task<List<BankAccountMemoModel>> GetAllBankAccountMemos(Dictionary<int, AccountItemModel> acMoDict)

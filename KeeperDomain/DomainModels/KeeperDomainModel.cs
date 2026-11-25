@@ -46,7 +46,6 @@ public class KeeperDomainModel
     public List<MoneyBackCategory> MoneyBackCategories { get; set; } = null!;
     public List<MoneyBackPartner> MoneyBackPartners { get; set; } = null!;
 
-    public List<CardBalanceMemo> CardBalanceMemos { get; set; } = null!;
     public List<BankAccountMemo> BankAccountMemos { get; set; } = null!;
     public List<CustomReminder> CustomReminders { get; set; } = null!;
 

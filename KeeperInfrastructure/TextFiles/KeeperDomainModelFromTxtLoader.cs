@@ -47,8 +47,6 @@ public static class KeeperDomainModelFromTxtLoader
             SalaryPayments = await ReadFileLines<SalaryPayment>(),
             LargeExpenseThresholds = await ReadFileLines<LargeExpenseThreshold>(),
 
-            CardBalanceMemos = await ReadFileLines<CardBalanceMemo>("MemosCardBalance.txt"),
-
             // этих файлов не было в Keeper2018
             BankAccountMemos = await ReadFileLines<BankAccountMemo>(),
             CustomReminders = await ReadFileLines<CustomReminder>(),

@@ -190,16 +190,6 @@ public static class ModelsToDomain
         };
     }
 
-    public static CardBalanceMemo FromModel(this CardBalanceMemoModel cardBalanceMemoModel)
-    {
-        return new CardBalanceMemo()
-        {
-            Id = cardBalanceMemoModel.Id,
-            AccountId = cardBalanceMemoModel.Account.Id,
-            BalanceThreshold = cardBalanceMemoModel.BalanceThreshold,
-        };
-    }
-
     public static TrustAsset FromModel(this TrustAssetModel asset)
     {
         return new TrustAsset()

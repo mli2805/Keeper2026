@@ -6,6 +6,7 @@
 ## General Guidelines
 - Create new tests only when the task explicitly requests them; otherwise validate changes using existing tests and builds without adding tests.
 - Prefer removing obsolete view-model properties and simplifying related state after UI controls that used them are deleted.
+- When validating that code changes have not broken existing behavior, do not run performance tests, including Tests.Keeper.StoragePerformanceTests.CompareTxtJsonAndCsvSaveLoadPerformance. Exclude performance tests from routine regression validation; run them only when explicitly requested.
 
 ## Input Handling
 - For all user input of decimal numbers in Keeper2026, both in individual TextBoxes and editable DataGrid columns, apply the BankOffers approach: use FlexibleNumericTextBox with TwoWay binding for Value and UpdateSourceTrigger=PropertyChanged; support input with both comma and dot by normalizing to dot and parsing with InvariantCulture; filter input and paste, rejecting NaN/Infinity, and format the value on losing focus. For DataGrid, use a templated column with FlexibleNumericTextBox, avoiding reliance on a single StringFormat or standard conversion of a regular TextBox.

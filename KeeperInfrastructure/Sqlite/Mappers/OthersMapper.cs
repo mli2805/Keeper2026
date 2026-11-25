@@ -27,26 +27,6 @@ public static class OthersMapper
         };
     }
 
-    public static CardBalanceMemoEf ToEf(this CardBalanceMemo domain)
-    {
-        return new CardBalanceMemoEf
-        {
-            Id = domain.Id,
-            AccountId = domain.AccountId,
-            BalanceThreshold = domain.BalanceThreshold
-        };
-    }
-
-    public static CardBalanceMemo FromEf(this CardBalanceMemoEf ef)
-    {
-        return new CardBalanceMemo
-        {
-            Id = ef.Id,
-            AccountId = ef.AccountId,
-            BalanceThreshold = ef.BalanceThreshold
-        };
-    }
-
     public static SalaryChangeEf ToEf(this SalaryChange domain)
     {
         return new SalaryChangeEf

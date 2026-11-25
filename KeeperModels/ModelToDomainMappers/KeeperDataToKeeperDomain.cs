@@ -79,7 +79,6 @@ public static class KeeperDataToKeeperDomain
                         .SelectMany(t => t.Subtasks)
                         .Select(s => s.FromModel()).ToList(),
 
-            CardBalanceMemos = keeperDataModel.CardBalanceMemoModels.Select(cbm => cbm.FromModel()).ToList(),
             BankAccountMemos = keeperDataModel.BankAccountMemoModels.Select(bam => bam.FromModel()).ToList(),
             CustomReminders = keeperDataModel.CustomReminderModels.Select(crm => crm.FromModel()).ToList(),
             ButtonCollections = keeperDataModel.ButtonCollections.Select(bc => bc.FromModel()).ToList(),

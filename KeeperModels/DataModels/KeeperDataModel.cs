@@ -39,8 +39,6 @@ public class KeeperDataModel : PropertyChangedBase
     public List<UtilityMetersModel> UtilityMeters { get; set; } = null!;
     public List<TodoTaskModel> TodoTasks { get; set; } = null!;
 
-    // старая, больше не используется формами
-    public List<CardBalanceMemoModel> CardBalanceMemoModels { get; set; } = null!;
     // новая, используется формой BankAccountMemoViewModel
     public List<BankAccountMemoModel> BankAccountMemoModels { get; set; } = null!;
     public List<CustomReminderModel> CustomReminderModels { get; set; } = null!;
