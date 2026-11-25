@@ -428,3 +428,4 @@ FodyWeavers.xsd
 *.msp
 /Tests.Keeper/TxtFiles
 /Tests.Keeper/JsonFiles
+/Tests.Keeper/CsvFiles
