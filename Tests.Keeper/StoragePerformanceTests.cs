@@ -41,7 +41,7 @@ public sealed class StoragePerformanceTests
 
     [TestMethod]
     [TestCategory("Performance")]
-    public async Task CompareTxtJsonAndCsvSaveLoadPerformance()
+    public async Task CompareJsonAndCsvSaveLoadPerformance()
     {
         var setup = await PrepareAsync();
         Exception? failure = null;
@@ -100,7 +100,6 @@ public sealed class StoragePerformanceTests
         {
             var folder = format switch
             {
-                StorageFormat.TXT => setup.TxtFolder,
                 StorageFormat.JSON => setup.JsonFolder,
                 StorageFormat.CSV => setup.CsvFolder,
                 _ => throw new ArgumentOutOfRangeException(nameof(format))
@@ -149,7 +148,6 @@ public sealed class StoragePerformanceTests
     {
         var model = format switch
         {
-            StorageFormat.TXT => await KeeperDomainModelFromTxtLoader.LoadAllFromTextFiles(folder),
             StorageFormat.JSON => await KeeperDomainModelFromJsonLoader.LoadAllFromJsonFiles(folder),
             StorageFormat.CSV => await KeeperDomainModelFromCsvLoader.LoadAllFromCsvFiles(folder),
             _ => throw new ArgumentOutOfRangeException(nameof(format))
@@ -161,7 +159,6 @@ public sealed class StoragePerformanceTests
     {
         return format switch
         {
-            StorageFormat.TXT => model.Save(folder),
             StorageFormat.JSON => model.SaveToJsonFiles(folder),
             StorageFormat.CSV => model.SaveToCsvFiles(folder),
             _ => throw new ArgumentOutOfRangeException(nameof(format))
@@ -171,25 +168,20 @@ public sealed class StoragePerformanceTests
     private static async Task<BenchmarkSetup> PrepareAsync()
     {
         var projectFolder = FindProjectFolder();
-        var txtFolder = Path.Combine(projectFolder, "TxtFiles");
         var jsonFolder = Path.Combine(projectFolder, "JsonFiles");
         var csvFolder = Path.Combine(projectFolder, "CsvFiles");
-        Assert.IsTrue(Directory.Exists(txtFolder), $"TXT fixture folder not found: {txtFolder}");
         Assert.IsTrue(Directory.Exists(jsonFolder), $"JSON fixture folder not found: {jsonFolder}");
         Assert.IsTrue(Directory.Exists(csvFolder), $"CSV fixture folder not found: {csvFolder}");
-        var fixtureHashes = GetFixtureHashes(txtFolder, jsonFolder, csvFolder);
+        var fixtureHashes = GetFixtureHashes(jsonFolder, csvFolder);
 
-        var txtModel = await KeeperDomainModelFromTxtLoader.LoadAllFromTextFiles(txtFolder);
-        Assert.IsNotNull(txtModel, "The TXT loader returned null.");
         var jsonModel = await KeeperDomainModelFromJsonLoader.LoadAllFromJsonFiles(jsonFolder);
         var csvModel = await KeeperDomainModelFromCsvLoader.LoadAllFromCsvFiles(csvFolder);
         var counts = GetCounts(jsonModel);
-        AssertCounts(counts, txtModel, "TXT and JSON source fixtures");
         AssertCounts(counts, csvModel, "CSV and JSON source fixtures");
 
         var snapshot = JsonSerializer.SerializeToUtf8Bytes(jsonModel, CloneOptions);
         var temporaryFolder = Directory.CreateTempSubdirectory("KeeperStoragePerformance-").FullName;
-        return new BenchmarkSetup(txtFolder, jsonFolder, csvFolder, temporaryFolder, snapshot, counts, fixtureHashes);
+        return new BenchmarkSetup(jsonFolder, csvFolder, temporaryFolder, snapshot, counts, fixtureHashes);
     }
 
     private static string FindProjectFolder()
@@ -235,9 +227,9 @@ public sealed class StoragePerformanceTests
             ?? throw new InvalidDataException("Cannot restore the benchmark's source model.");
     }
 
-    private static Dictionary<string, string> GetFixtureHashes(string txtFolder, string jsonFolder, string csvFolder)
+    private static Dictionary<string, string> GetFixtureHashes(string jsonFolder, string csvFolder)
     {
-        return Directory.GetFiles(txtFolder, "*.txt").Concat(Directory.GetFiles(jsonFolder, "*.json"))
+        return Directory.GetFiles(jsonFolder, "*.json")
             .Concat(Directory.GetFiles(csvFolder, "*.csv"))
             .ToDictionary(path => path, path =>
             {
@@ -248,7 +240,7 @@ public sealed class StoragePerformanceTests
 
     private static void AssertFixturesUnchanged(BenchmarkSetup setup)
     {
-        var hashes = GetFixtureHashes(setup.TxtFolder, setup.JsonFolder, setup.CsvFolder);
+        var hashes = GetFixtureHashes(setup.JsonFolder, setup.CsvFolder);
         Assert.HasCount(setup.FixtureHashes.Count, hashes, "The fixture file set changed during the experiment.");
         foreach (var (path, hash) in setup.FixtureHashes)
         {
@@ -262,17 +254,16 @@ public sealed class StoragePerformanceTests
         var report = new StringBuilder();
         var configuration = typeof(StoragePerformanceTests).Assembly
             .GetCustomAttribute<AssemblyConfigurationAttribute>()?.Configuration ?? "Unknown";
-        report.AppendLine("Keeper TXT / JSON / CSV save and load performance");
+        report.AppendLine("Keeper JSON / CSV save and load performance");
         report.AppendLine(FormattableString.Invariant($"UTC: {DateTime.UtcNow:O}"));
         report.AppendLine($"Runtime: {RuntimeInformation.FrameworkDescription}; {RuntimeInformation.OSDescription}; {RuntimeInformation.ProcessArchitecture}");
         report.AppendLine($"Build: {configuration}; debugger attached: {Debugger.IsAttached}");
         report.AppendLine(FormattableString.Invariant($"Warm-up rounds: {WarmupRounds}; measured rounds per operation/format: {MeasuredRounds}"));
         report.AppendLine(FormattableString.Invariant($"Stopwatch frequency: {Stopwatch.Frequency} ticks/second"));
-        AppendFixtureInfo(report, "TXT", setup.TxtFolder, "*.txt");
         AppendFixtureInfo(report, "JSON", setup.JsonFolder, "*.json");
         AppendFixtureInfo(report, "CSV", setup.CsvFolder, "*.csv");
         report.AppendLine();
-        report.AppendLine("Source list item counts (TXT, JSON and CSV counts match):");
+        report.AppendLine("Source list item counts (JSON and CSV counts match):");
         foreach (var (name, count) in setup.Counts)
         {
             report.AppendLine(FormattableString.Invariant($"  {name,-26} {count,10}"));
@@ -358,12 +349,11 @@ public sealed class StoragePerformanceTests
 
     private enum StorageFormat
     {
-        TXT,
         JSON,
         CSV
     }
 
-    private sealed record BenchmarkSetup(string TxtFolder, string JsonFolder, string CsvFolder, string TemporaryFolder,
+    private sealed record BenchmarkSetup(string JsonFolder, string CsvFolder, string TemporaryFolder,
         byte[] Snapshot, Dictionary<string, int> Counts, Dictionary<string, string> FixtureHashes);
 
     private sealed class Measurement(string operation, StorageFormat format)

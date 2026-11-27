@@ -34,10 +34,10 @@ public static class DbTestHelper
         await ctx.Database.EnsureCreatedAsync();
 
         var keeperDomainModel =
-            await KeeperDomainModelFromTxtLoader.LoadAllFromTextFiles(@"..\..\..\TxtFiles");
+            await KeeperDomainModelFromJsonLoader.LoadAllFromJsonFiles(@"..\..\..\JsonFiles");
 
         var toSqlite = new KeeperDomainModelToSqliteSaver(new TestDbContextFactory(options));
-        await toSqlite.SaveModelToDb(keeperDomainModel!);
+        await toSqlite.SaveModelToDb(keeperDomainModel);
 
         var accountRepository = new AccountRepository(new TestDbContextFactory(options));
         var pair = await accountRepository.GetAccountModelsTreeAndDict();

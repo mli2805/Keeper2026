@@ -1,9 +1,7 @@
-﻿using System.Globalization;
-
-namespace KeeperDomain;
+﻿namespace KeeperDomain;
 
 
-public class OneRate : IDumpable, IParsable<OneRate>
+public class OneRate
 {
     public int Id { get; set; }
     public double Value { get; set; }
@@ -12,18 +10,5 @@ public class OneRate : IDumpable, IParsable<OneRate>
     public OneRate Clone()
     {
         return (OneRate)MemberwiseClone();
-    }
-
-    public string Dump()
-    {
-        return Value.ToString(CultureInfo.GetCultureInfo("en-US")) + " / " + Unit;
-    }
-
-    public OneRate FromString(string s)
-    {
-        var substrings = s.Split('/');
-        Value = double.Parse(substrings[0], CultureInfo.GetCultureInfo("en-US"));
-        Unit = int.Parse(substrings[1]);
-        return this;
     }
 }

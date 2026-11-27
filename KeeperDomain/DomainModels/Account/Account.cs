@@ -2,7 +2,7 @@
 
 namespace KeeperDomain;
 
-public class Account : IDumpable, IParsable<Account>
+public class Account
 {
     public int Id { get; set; }
     [MaxLength(50)] public string Name { get; set; } = null!;
@@ -22,33 +22,4 @@ public class Account : IDumpable, IParsable<Account>
     [MaxLength(5)] public string ButtonName { get; set; } = string.Empty; // face of shortcut button (if exists)
 
     [MaxLength(100)] public string Comment { get; set; } = string.Empty;
-
-    public string Dump()
-    {
-        return Id.ToString().PadLeft(4) + " ; " + Name + " ; " + ParentId + " ; " + 
-               ChildNumber + " ; " + IsFolder + " ; " + IsExpanded + " ; " + 
-               AssociatedIncomeId + " ; " + AssociatedExpenseId + " ; " + AssociatedExternalId + " ; " + AssociatedTagId + " ; " + 
-               MCC + " ; " + ShortName + " ; " + ButtonName + " ; " + 
-               Comment.Replace("\r\n", "|");
-    }
-
-    public Account FromString(string s)
-    {
-        var substrings = s.Split(';');
-        Id = int.Parse(substrings[0]);
-        Name = substrings[1].Trim();
-        ParentId = int.Parse(substrings[2]);
-        ChildNumber = int.Parse(substrings[3]);
-        IsFolder = Convert.ToBoolean(substrings[4]);
-        IsExpanded = Convert.ToBoolean(substrings[5]);
-        AssociatedIncomeId = int.Parse(substrings[6]);
-        AssociatedExpenseId = int.Parse(substrings[7]);
-        AssociatedExternalId = int.Parse(substrings[8]);
-        AssociatedTagId = int.Parse(substrings[9]);
-        MCC = int.Parse(substrings[10]);
-        ShortName = substrings[11].Trim();
-        ButtonName = substrings[12].Trim();
-        Comment = substrings[13].Trim().Replace("|", "\r\n");
-        return this;
-    }
 }

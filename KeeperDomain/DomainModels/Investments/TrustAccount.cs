@@ -1,6 +1,6 @@
 ﻿namespace KeeperDomain;
 
-public class TrustAccount : IDumpable, IParsable<TrustAccount>
+public class TrustAccount
 {
     public int Id { get; set; }
     public string Title { get; set; } = null!;
@@ -11,23 +11,4 @@ public class TrustAccount : IDumpable, IParsable<TrustAccount>
     public string Comment { get; set; } = string.Empty;
 
     public string ToCombo => Title + " - " + Number;
-
-    public string Dump()
-    {
-        return Id + " ; " + Title + " ; " + StockMarket + " ; " + Number + " ; " + 
-            Currency + " ; " + AccountId + " ; " + Comment;
-    }
-
-    public TrustAccount FromString(string s)
-    {
-        var substrings = s.Split(';');
-        Id = int.Parse(substrings[0]);
-        Title = substrings[1].Trim();
-        StockMarket = (StockMarket)Enum.Parse(typeof(StockMarket), substrings[2]);
-        Number = substrings[3].Trim();
-        Currency = (CurrencyCode)Enum.Parse(typeof(CurrencyCode), substrings[4]);
-        AccountId = int.Parse(substrings[5].Trim());
-        Comment = substrings[6].Trim();
-        return this;
-    }
 }

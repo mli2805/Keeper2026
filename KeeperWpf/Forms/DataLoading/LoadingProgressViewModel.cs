@@ -35,7 +35,7 @@ public class LoadingProgressViewModel(PathFinder pathFinder, KeeperDomainModelTo
 
     private async Task<bool> Load()
     {
-        var keeperDomainModel = await TryLoadAllFromTextFiles();
+        var keeperDomainModel = await TryLoadAllFromBackupFiles();
         if (keeperDomainModel == null) return false;
 
         WritingToDbMessage = "Запись в базу данных...";
@@ -43,23 +43,23 @@ public class LoadingProgressViewModel(PathFinder pathFinder, KeeperDomainModelTo
         return true;
     }
 
-    private async Task<KeeperDomainModel?> TryLoadAllFromTextFiles()
+    private async Task<KeeperDomainModel?> TryLoadAllFromBackupFiles()
     {
-        var backupFolder = pathFinder.GetBackupFolder();
+        var backupFolder = pathFinder.GetJsonBackupFolder();
 
         KeeperDomainModel? keeperDomainModel;
         try
         {
-            keeperDomainModel = await KeeperDomainModelFromTxtLoader.LoadAllFromTextFiles(backupFolder);
+            keeperDomainModel = await KeeperDomainModelFromJsonLoader.LoadAllFromJsonFiles(backupFolder);
             if (keeperDomainModel is null)
             {
-                MessageBox.Show("Ошибка при загрузке данных из текстовых файлов.");
+                MessageBox.Show("Ошибка при загрузке данных из JSON файлов.");
                 return null;
             }
         }
         catch (IOException ex)
         {
-            MessageBox.Show($"Ошибка при загрузке данных из текстовых файлов: {ex.Message}");
+            MessageBox.Show($"Ошибка при загрузке данных из JSON файлов: {ex.Message}");
             return null;
         }
 

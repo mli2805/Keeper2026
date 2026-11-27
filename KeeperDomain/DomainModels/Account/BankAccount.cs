@@ -1,8 +1,6 @@
-﻿using System.Globalization;
+﻿namespace KeeperDomain;
 
-namespace KeeperDomain;
-
-public class BankAccount : IDumpable, IParsable<BankAccount>
+public class BankAccount
 {
     public int Id { get; set; } // совпадает с ID Account'a
 
@@ -19,33 +17,4 @@ public class BankAccount : IDumpable, IParsable<BankAccount>
     public DateTime FinishDate { get; set; } // max для расч счетов
 
     public bool IsMine { get; set; } 
-
-
-    public string Dump()
-    {
-        return  Id + " ; " + BankId + " ; " + DepositOfferId + " ; " + 
-                MainCurrency + " ; " + AgreementNumber + " ; " + ReplenishDetails + " ; " + 
-                $"{StartDate.Date:dd/MM/yyyy}" + " ; " + $"{FinishDate.Date:dd/MM/yyyy}" + " ; " + 
-                IsMine;
-    }
-
-    public BankAccount FromString(string s)
-    {
-        var substrings = s.Split(';');
-        Id = int.Parse(substrings[0]);
-
-        BankId = int.Parse(substrings[1]);
-        DepositOfferId = int.Parse(substrings[2]);
-        MainCurrency = (CurrencyCode)Enum.Parse(typeof(CurrencyCode), substrings[3]);
-
-        AgreementNumber = substrings[4].Trim();
-        ReplenishDetails = substrings[5].Trim();
-
-        StartDate = DateTime.ParseExact(substrings[6].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
-        FinishDate = DateTime.ParseExact(substrings[7].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
-        
-        IsMine = Convert.ToBoolean(substrings[8]);
-
-        return this;
-    }
 }

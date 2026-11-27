@@ -2,7 +2,7 @@
 
 namespace KeeperDomain;
 
-public class DepositOffer : IDumpable, IParsable<DepositOffer>
+public class DepositOffer
 {
     public int Id { get; set; } //PK
     [MaxLength(100)] public string Title { get; set; } = null!;
@@ -21,27 +21,4 @@ public class DepositOffer : IDumpable, IParsable<DepositOffer>
     public Duration DepositTerm { get; set; } = null!;
 
     [MaxLength(250)] public string Comment { get; set; } = string.Empty;
-
-    public string Dump()
-    {
-        return Id + " ; " + BankId + " ; " + Title + " ; " + IsNotRevocable + " ; " +
-               RateType + " ; " + IsAddLimited + " ; " + AddLimitInDays + " ; " +
-               MainCurrency + " ; " + DepositTerm.Dump() + " ; " + Comment.Replace("\r\n", "|");
-    }
-
-    public DepositOffer FromString(string s)
-    {
-        var substrings = s.Split(';');
-        Id = int.Parse(substrings[0]);
-        BankId = int.Parse(substrings[1]);
-        Title = substrings[2].Trim();
-        IsNotRevocable = bool.Parse(substrings[3].Trim());
-        RateType = (RateType)Enum.Parse(typeof(RateType), substrings[4]);
-        IsAddLimited = bool.Parse(substrings[5].Trim());
-        AddLimitInDays = int.Parse(substrings[6]);
-        MainCurrency = (CurrencyCode)Enum.Parse(typeof(CurrencyCode), substrings[7]);
-        DepositTerm = new Duration().FromString(substrings[8].Trim());
-        Comment = substrings[9].Trim().Replace("|", "\r\n");
-        return this;
-    }
 }

@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 
 namespace KeeperDomain;
 
-public class Car : IDumpable, IParsable<Car>
+public class Car
 {
     public int Id { get; set; } //PK
     public int CarAccountId { get; set; }
@@ -20,35 +19,4 @@ public class Car : IDumpable, IParsable<Car>
     public double SalePrice { get; set; }
 
     [MaxLength(100)] public string Comment { get; set; } = string.Empty;
-
-    public string Dump()
-    {
-        return Id + " ; " + CarAccountId + " ; " + Title + " ; " + IssueYear + " ; " + Vin + " ; " + StateRegNumber + " ; " 
-               + PurchaseDate.ToString("dd/MM/yyyy") + " ; " + PurchaseMileage + " ; " + PurchasePrice + " ; "
-               + SaleDate.ToString("dd/MM/yyyy") + " ; " + SaleMileage + " ; " + SalePrice + " ; "
-               + Comment.Replace("\r\n", "|");
-    }
-
-    public Car FromString(string s)
-    {
-        var substrings = s.Split(';');
-
-        Id = int.Parse(substrings[0].Trim());
-        CarAccountId = int.Parse(substrings[1].Trim());
-        Title = substrings[2].Trim();
-        IssueYear = int.Parse(substrings[3].Trim());
-        Vin = substrings[4].Trim();
-        StateRegNumber = substrings[5].Trim();
-
-        PurchaseDate = DateTime.ParseExact(substrings[6].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
-        PurchaseMileage = int.Parse(substrings[7].Trim());
-        PurchasePrice = double.Parse(substrings[8].Trim(), CultureInfo.InvariantCulture);
-
-        SaleDate = DateTime.ParseExact(substrings[9].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
-        SaleMileage = int.Parse(substrings[10].Trim());
-        SalePrice = double.Parse(substrings[11].Trim(), CultureInfo.InvariantCulture);
-
-        Comment = substrings[12].Trim().Replace("|", "\r\n");
-        return this;
-    }
 }

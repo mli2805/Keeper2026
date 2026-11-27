@@ -1,15 +1,5 @@
 ﻿namespace KeeperDomain;
 
-public interface IDumpable
-{
-    string Dump();
-}
-
-public interface IParsable<T>
-{
-    T FromString(string s);
-}
-
 public class KeeperDomainModel
 {
     public List<OfficialRates> OfficialRates { get; set; } = null!;

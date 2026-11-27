@@ -23,8 +23,6 @@
 
   <ItemGroup>
     <Folder Include="JsonFiles\" />
-    <Folder Include="TxtFiles\" />
-    <Folder Include="TxtFiles\" />
   </ItemGroup>
 
 </Project>

@@ -64,7 +64,7 @@ public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeper
         }
 
         var mb = new MyMessageBoxViewModel(MessageType.Confirmation,
-            ["База данных пуста!", "Загрузить данные из текстовых файлов?"]);
+            ["База данных пуста!", "", "Загрузить данные из резервных файлов?"]);
         var confirmation = await windowManager.ShowDialogAsync(mb);
         if (confirmation == null || confirmation.Value == false)
         {
@@ -84,7 +84,7 @@ public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeper
     public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
     {
         await accountRepository.UpdateTree(keeperDataModel.FlattenAccountTree());
-        await MainMenuViewModel.SaveInTextFilesForBackup();
+        await MainMenuViewModel.SaveDomainInBackupFiles();
         return await base.CanCloseAsync(cancellationToken);
     }
 }

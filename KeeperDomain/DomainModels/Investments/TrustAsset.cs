@@ -1,8 +1,6 @@
-﻿using System.Globalization;
+﻿namespace KeeperDomain;
 
-namespace KeeperDomain;
-
-public class TrustAsset : IDumpable, IParsable<TrustAsset>
+public class TrustAsset
 {
     public int Id { get; set; }
 
@@ -23,31 +21,4 @@ public class TrustAsset : IDumpable, IParsable<TrustAsset>
     #endregion
 
     public string Comment { get; set; } = string.Empty;
-
-    public string Dump()
-    {
-        return Id + " ; " + TrustAccountId + " ; " + Ticker.Trim() + " ; " + Title.Trim() + " ; " +
-               StockMarket + " ; " + AssetType + " ; " +
-               Nominal + " ; " + BondCouponPeriod.Dump() + " ; " +
-               CouponRate.ToString(new CultureInfo("en-US")) + " ; " + PreviousCouponDate.ToString("dd/MM/yyyy") + " ; " +
-               BondExpirationDate.ToString("dd/MM/yyyy") + " ; " + Comment.Trim();
-    }
-
-    public TrustAsset FromString(string s)
-    {
-        var substrings = s.Split(';');
-        Id = int.Parse(substrings[0]);
-        TrustAccountId = int.Parse(substrings[1]);
-        Ticker = substrings[2].Trim();
-        Title = substrings[3].Trim();
-        StockMarket = (StockMarket)Enum.Parse(typeof(StockMarket), substrings[4]);
-        AssetType = (AssetType)Enum.Parse(typeof(AssetType), substrings[5]);
-        Nominal = decimal.Parse(substrings[6], new CultureInfo("en-US"));
-        BondCouponPeriod = new Duration().FromString(substrings[7].Trim());
-        CouponRate = double.Parse(substrings[8], new CultureInfo("en-US"));
-        PreviousCouponDate = DateTime.ParseExact(substrings[9].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
-        BondExpirationDate = DateTime.ParseExact(substrings[10].Trim(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
-        Comment = substrings[11].Trim();
-        return this;
-    }
 }

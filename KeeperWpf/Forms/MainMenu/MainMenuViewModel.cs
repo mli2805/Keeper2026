@@ -142,7 +142,7 @@ public class MainMenuViewModel(IWindowManager windowManager, PathFinder pathFind
                 await ShowPayCardsForm();
                 break;
             case Key.S:
-                await SaveInTextFilesForBackup();
+                await SaveDomainInBackupFiles();
                 break;
             case Key.E:
                 break;
@@ -178,7 +178,7 @@ public class MainMenuViewModel(IWindowManager windowManager, PathFinder pathFind
             shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
             await bankAccountMemoViewModel.Initialize(); // вот здесь считаются остатки и обороты по счетам
             SetAccountsWithLimitExceededCount();
-            await SaveInTextFilesForBackup();
+            await SaveDomainInBackupFiles();
         }
     }
 
@@ -188,7 +188,7 @@ public class MainMenuViewModel(IWindowManager windowManager, PathFinder pathFind
         await windowManager.ShowDialogAsync(ratesViewModel);
 
         //_shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
-        await SaveInTextFilesForBackup();
+        await SaveDomainInBackupFiles();
     }
 
     public async Task ShowMonthAnalysisForm()
@@ -312,7 +312,7 @@ public class MainMenuViewModel(IWindowManager windowManager, PathFinder pathFind
         investmentTransactionsViewModel.Initialize();
         await windowManager.ShowWindowAsync(investmentTransactionsViewModel);
         shellPartsBinder.JustToForceBalanceRecalculation = DateTime.Now;
-        await SaveInTextFilesForBackup();
+        await SaveDomainInBackupFiles();
     }
 
     public async Task ShowInvestmentAnalysisForm()
@@ -370,42 +370,33 @@ public class MainMenuViewModel(IWindowManager windowManager, PathFinder pathFind
         await windowManager.ShowDialogAsync(buttonCollectionBuilderViewModel);
     }
 
-    public async Task SaveInTextFilesForBackup()
+    public async Task SaveDomainInBackupFiles()
     {
         shellPartsBinder.FooterVisibility = Visibility.Visible;
         try
         {
             var keeperModel = keeperDataModel.FromModel();
-            var backupFolder = pathFinder.GetBackupFolder();
-
             var jsonBackupFolder = pathFinder.GetJsonBackupFolder();
-            var jsonException1 = await keeperModel.SaveToJsonFiles(jsonBackupFolder);
-            var zipException1 = await BackupZipper.ZipFiles(jsonBackupFolder, "*.json");
-            var deleteException1 = await BackupZipper.DeleteFiles(jsonBackupFolder, "*.json");
+           
 
-            var csvBackupFolder = pathFinder.GetCsvBackupFolder();
-            var csvException1 = await keeperModel.SaveToCsvFiles(csvBackupFolder);
-            var zipException2 = await BackupZipper.ZipFiles(csvBackupFolder, "*.csv");
-            var deleteException2 = await BackupZipper.DeleteFiles(csvBackupFolder, "*.csv");
-
-            var exception = await keeperModel.Save(backupFolder);
+            var exception = await keeperModel.SaveToJsonFiles(jsonBackupFolder);
             if (exception != null)
             {
-                MessageBox.Show("Ошибка при сохранении резервной копии в текстовые файлы: " + exception.Message);
+                MessageBox.Show("Ошибка при сохранении резервной копии в JSON файлы: " + exception.Message);
                 return;
             }
 
-            var zipException = await BackupZipper.ZipFiles(backupFolder, "*.txt");
+            var zipException = await BackupZipper.ZipFiles(jsonBackupFolder, "*.json");
             if (zipException != null)
             {
-                MessageBox.Show("Ошибка при архивировании текстовых файлов резервной копии: " + zipException.Message);
+                MessageBox.Show("Ошибка при архивировании JSON файлов резервной копии: " + zipException.Message);
                 return;
             }
 
-            var deleteException = await BackupZipper.DeleteFiles(backupFolder, "*.txt");
+            var deleteException = await BackupZipper.DeleteFiles(jsonBackupFolder, "*.json");
             if (deleteException != null)
             {
-                MessageBox.Show("Ошибка при удалении текстовых файлов резервной копии: " + deleteException.Message);
+                MessageBox.Show("Ошибка при удалении JSON файлов резервной копии: " + deleteException.Message);
             }
         }
         finally
