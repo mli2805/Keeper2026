@@ -48,7 +48,7 @@ public class ShellViewModel(IWindowManager windowManager, KeeperDataModel keeper
         var account = keeperDataModel.AccountsTree.First(r => r.Name == "Мои");
         account.IsSelected = true;
 
-        // зажигает колокольчик если остатки или обороты на счетах exceeded, значит надо их посчитать
+        // зажигает аларм если остатки или обороты на счетах exceeded, значит надо их посчитать
         await bankAccountMemoViewModel.Initialize();
         MainMenuViewModel.Initialize();
         ShellPartsBinder.SelectedAccountItemModel = account;
